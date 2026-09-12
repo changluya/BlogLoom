@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.naccl.mapper.UserMapper">
+    <!--按用户名查询User-->
+    <select id="findByUsername" resultType="top.naccl.entity.User">
+        select * from user where username=#{username} limit 1
+    </select>
+
+    <!--按id查询User，实际上这个User就应该是博主-->
+    <select id="findById" resultType="top.naccl.entity.User">
+        select * from user where id=#{id} limit 1
+    </select>
+
+    <!--按username修改-->
+    <update id="updateUserByUsername">
+        update user set username=#{user.username}, password=#{user.password}, update_time=now() where username=#{username}
+    </update>
+</mapper>
