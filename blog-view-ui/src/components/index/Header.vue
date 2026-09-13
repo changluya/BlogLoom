@@ -6,9 +6,12 @@
 			<div class="bg2" :style="{backgroundImage:'url('+defaultSettings.bg2+')'}"></div>
 			<div class="bg3" :style="{backgroundImage:'url('+defaultSettings.bg3+')'}" v-show="loaded"></div>
 		</div>
-		<div class="text-malfunction" :data-word="defaultSettings.malfunctionText">
-			{{ defaultSettings.malfunctionText }}
-			<div class="line"></div>
+		<div class="hero-overlay"></div>
+		<div class="hero-content">
+			<div class="hero-eyebrow">{{ defaultSettings.heroEyebrow }}</div>
+			<h1>{{ defaultSettings.malfunctionText }}</h1>
+			<p>{{ defaultSettings.heroDescription }}</p>
+			<div class="hero-divider"><span></span></div>
 		</div>
 		<div class="wrapper">
 			<i class="ali-iconfont icon-down" @click="scrollToMain"></i>
@@ -39,11 +42,7 @@
 			}
 		},
 		mounted() {
-			/**
-			 * 因为bg3.jpg比较小，通常会比bg1.jpg先加载，显示出来会有一瞬间bg1显示一半，bg3显示一半，为了解决这个问题，增加这个判断，让bg1加载完毕后再显示bg3
-			 * HTML中使用img标签的原因：我个人想用div作为图片的载体，而只有img标签有图片加载完毕的onload回调，所以用一个display: none的img人柱力来加载图片
-			 * 当img中的src加载完毕后，会把图片缓存到浏览器，后续在div中用background url的形式将直接从浏览器中取出图片，不会下载两次图片
-			 */
+			// 先预加载第一张 Banner，避免多层背景首次渲染时出现短暂拼接或闪烁。
 			this.$refs.imgbg1.onload = () => {
 				this.loaded = true
 			}

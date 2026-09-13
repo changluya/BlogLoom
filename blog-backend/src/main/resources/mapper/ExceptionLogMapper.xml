@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="top.naccl.mapper.ExceptionLogMapper">
+<mapper namespace="com.changlu.blogloom.mapper.ExceptionLogMapper">
 
-    <resultMap id="log" type="top.naccl.entity.ExceptionLog">
+    <resultMap id="log" type="com.changlu.blogloom.entity.ExceptionLog">
         <id property="id" column="id"/>
         <result property="uri" column="uri"/>
         <result property="method" column="method"/>
@@ -29,7 +29,7 @@
     </select>
 
     <!--添加日志-->
-    <insert id="saveExceptionLog" parameterType="top.naccl.entity.ExceptionLog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveExceptionLog" parameterType="com.changlu.blogloom.entity.ExceptionLog" useGeneratedKeys="true" keyProperty="id">
         insert into exception_log (uri, method, param, description, error, ip, ip_source, os, browser, create_time, user_agent)
         values (#{uri}, #{method}, #{param}, #{description}, #{error}, #{ip}, #{ipSource}, #{os}, #{browser}, #{createTime}, #{userAgent})
     </insert>

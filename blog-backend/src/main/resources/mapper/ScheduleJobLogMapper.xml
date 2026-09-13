@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="top.naccl.mapper.ScheduleJobLogMapper">
+<mapper namespace="com.changlu.blogloom.mapper.ScheduleJobLogMapper">
 
-    <resultMap id="log" type="top.naccl.entity.ScheduleJobLog">
+    <resultMap id="log" type="com.changlu.blogloom.entity.ScheduleJobLog">
         <id property="logId" column="log_id"/>
         <result property="jobId" column="job_id"/>
         <result property="beanName" column="bean_name"/>
@@ -24,7 +24,7 @@
         </where>
     </select>
 
-    <insert id="saveJobLog" parameterType="top.naccl.entity.ScheduleJobLog" useGeneratedKeys="true" keyProperty="logId">
+    <insert id="saveJobLog" parameterType="com.changlu.blogloom.entity.ScheduleJobLog" useGeneratedKeys="true" keyProperty="logId">
         insert into schedule_job_log (job_id, bean_name, method_name, params, status, error, times, create_time)
         values (#{jobId}, #{beanName}, #{methodName}, #{params}, #{status}, #{error}, #{times}, #{createTime})
     </insert>

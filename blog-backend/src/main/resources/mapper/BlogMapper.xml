@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.naccl.mapper.BlogMapper">
+<mapper namespace="com.changlu.blogloom.mapper.BlogMapper">
 
-    <resultMap id="blog" type="top.naccl.entity.Blog">
+    <resultMap id="blog" type="com.changlu.blogloom.entity.Blog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="firstPicture" column="first_picture"/>
@@ -19,7 +19,7 @@
         <result property="words" column="words"/>
         <result property="readTime" column="read_time"/>
         <result property="password" column="password"/>
-        <association property="user" javaType="top.naccl.entity.User">
+        <association property="user" javaType="com.changlu.blogloom.entity.User">
             <id property="id" column="user_id"/>
             <result property="username" column="username"/>
             <result property="nickname" column="nickname"/>
@@ -29,11 +29,11 @@
             <result property="updateTime" column="user_update_time"/>
             <result property="role" column="role"/>
         </association>
-        <association property="category" javaType="top.naccl.entity.Category">
+        <association property="category" javaType="com.changlu.blogloom.entity.Category">
             <id property="id" column="category_id"/>
             <result property="name" column="category_name"/>
         </association>
-        <collection property="tags" javaType="top.naccl.entity.Tag">
+        <collection property="tags" javaType="com.changlu.blogloom.entity.Tag">
             <id property="id" column="tag_id"/>
             <result property="name" column="tag_name"/>
             <result property="color" column="color"/>
@@ -57,7 +57,7 @@
         </where>
     </select>
 
-    <resultMap id="searchBlog" type="top.naccl.model.vo.SearchBlog">
+    <resultMap id="searchBlog" type="com.changlu.blogloom.model.vo.SearchBlog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
@@ -71,7 +71,7 @@
         where is_published=true and password='' and content like #{queryPattern}
     </select>
 
-    <resultMap id="blogIdAndTitle" type="top.naccl.model.vo.BlogIdAndTitle">
+    <resultMap id="blogIdAndTitle" type="com.changlu.blogloom.model.vo.BlogIdAndTitle">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
     </resultMap>
@@ -81,7 +81,7 @@
         select id, title from blog order by create_time desc
     </select>
 
-    <resultMap id="newBlog" type="top.naccl.model.vo.NewBlog">
+    <resultMap id="newBlog" type="com.changlu.blogloom.model.vo.NewBlog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="password" column="password"/>
@@ -95,7 +95,7 @@
         order by create_time desc
     </select>
 
-    <resultMap id="blogInfo" type="top.naccl.model.vo.BlogInfo">
+    <resultMap id="blogInfo" type="com.changlu.blogloom.model.vo.BlogInfo">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="description" column="description"/>
@@ -105,7 +105,7 @@
         <result property="readTime" column="read_time"/>
         <result property="top" column="is_top"/>
         <result property="password" column="password"/>
-        <association property="category" javaType="top.naccl.entity.Category">
+        <association property="category" javaType="com.changlu.blogloom.entity.Category">
             <result property="name" column="category_name"/>
         </association>
     </resultMap>
@@ -140,7 +140,7 @@
         order by date_format(create_time, "%Y年%m月") desc
     </select>
 
-    <resultMap id="archiveBlog" type="top.naccl.model.vo.ArchiveBlog">
+    <resultMap id="archiveBlog" type="com.changlu.blogloom.model.vo.ArchiveBlog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="day" column="create_day"/>
@@ -155,7 +155,7 @@
         order by create_time desc
     </select>
 
-    <resultMap id="randomBlog" type="top.naccl.model.vo.RandomBlog">
+    <resultMap id="randomBlog" type="com.changlu.blogloom.model.vo.RandomBlog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="password" column="password"/>
@@ -172,7 +172,7 @@
     </select>
 
     <!--查询所有文章的浏览量-->
-    <select id="getBlogViewsList" resultType="top.naccl.model.dto.BlogView">
+    <select id="getBlogViewsList" resultType="com.changlu.blogloom.model.dto.BlogView">
         select id, views from blog
     </select>
 
@@ -192,7 +192,7 @@
     </insert>
 
     <!--添加博客-->
-    <insert id="saveBlog" parameterType="top.naccl.model.dto.Blog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveBlog" parameterType="com.changlu.blogloom.model.dto.Blog" useGeneratedKeys="true" keyProperty="id">
         insert into blog (title, first_picture, content, description, is_published, is_recommend, is_appreciation, is_comment_enabled,
         is_top, create_time, update_time, views, words, read_time, category_id, user_id, password)
         values (#{title}, #{firstPicture}, #{content}, #{description}, #{published}, #{recommend}, #{appreciation}, #{commentEnabled},
@@ -236,7 +236,7 @@
         select title from blog where id=#{id}
     </select>
 
-    <resultMap id="blogDetail" type="top.naccl.model.vo.BlogDetail">
+    <resultMap id="blogDetail" type="com.changlu.blogloom.model.vo.BlogDetail">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
@@ -249,10 +249,10 @@
         <result property="words" column="words"/>
         <result property="readTime" column="read_time"/>
         <result property="password" column="password"/>
-        <association property="category" javaType="top.naccl.entity.Category">
+        <association property="category" javaType="com.changlu.blogloom.entity.Category">
             <result property="name" column="category_name"/>
         </association>
-        <collection property="tags" javaType="top.naccl.entity.Tag">
+        <collection property="tags" javaType="com.changlu.blogloom.entity.Tag">
             <result property="name" column="tag_name"/>
             <result property="color" column="color"/>
         </collection>
@@ -312,7 +312,7 @@
         select is_published from blog where id=#{blogId}
     </select>
 
-    <resultMap id="categoryBlogCount" type="top.naccl.model.vo.CategoryBlogCount">
+    <resultMap id="categoryBlogCount" type="com.changlu.blogloom.model.vo.CategoryBlogCount">
         <id property="id" column="category_id"/>
         <result property="value" column="blog_count"/>
     </resultMap>

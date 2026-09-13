@@ -3,13 +3,13 @@ export default {
 	 * @type {string}
 	 * @description page title
 	 */
-	title: 'Changlu\'s Blog Admin',
+	title: 'BlogLoom Admin',
 
 	/**
 	 * @type {string}
 	 * @description logo URL
 	 */
-	logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png',
+	logo: '/img/blogloom-admin-logo.png',
 
 	/**
 	 * @type {boolean} true | false

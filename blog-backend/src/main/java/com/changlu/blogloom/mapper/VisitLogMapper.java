@@ -1,0 +1,27 @@
+package com.changlu.blogloom.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+import com.changlu.blogloom.entity.VisitLog;
+import com.changlu.blogloom.model.dto.VisitLogUuidTime;
+
+import java.util.List;
+
+/**
+ * @Description: 访问日志持久层接口
+ * @Author: changlu
+ * @Date: 2026-09-13
+ */
+@Mapper
+@Repository
+public interface VisitLogMapper {
+	List<VisitLog> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate);
+
+	List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday();
+
+	int saveVisitLog(VisitLog log);
+
+	int deleteVisitLogById(Long id);
+
+	int countVisitLogByToday();
+}

@@ -24,7 +24,7 @@
 
 BlogLoom 当前基于开源项目 [Naccl/NBlog](https://github.com/Naccl/NBlog) 进行二次开发，在保留原项目 MIT License 与版权声明的基础上持续演进。
 
-> 当前阶段以稳定继承 NBlog 核心能力为主。数据库名、Java 包名及部分内部结构暂时保持兼容，后续将逐步完成技术栈升级与平台化改造。
+> 当前阶段以稳定继承 NBlog 核心能力为主，数据库名与 Java 包名已完成 BlogLoom 品牌化迁移，后续将继续推进技术栈升级与平台化改造。
 
 ## 我们希望解决什么问题
 
@@ -164,13 +164,13 @@ BlogLoom
 创建 MySQL 数据库：
 
 ```sql
-CREATE DATABASE nblog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE blogloom CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 然后执行：
 
 ```text
-blog-backend/nblog.sql
+blog-backend/blogloom.sql
 ```
 
 完成基础表结构与初始化数据导入。
@@ -213,10 +213,10 @@ npm run dev
 
 ## 默认账号
 
-原始初始化数据中的后台账号为：
+初始化数据中的默认后台账号为：
 
 ```text
-用户名：Admin
+用户名：admin
 密码：123456
 ```
 

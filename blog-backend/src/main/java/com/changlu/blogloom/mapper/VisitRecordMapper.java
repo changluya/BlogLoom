@@ -1,0 +1,20 @@
+package com.changlu.blogloom.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+import com.changlu.blogloom.entity.VisitRecord;
+
+import java.util.List;
+
+/**
+ * @Description: 访问记录持久层接口
+ * @Author: changlu
+ * @Date: 2026-09-13
+ */
+@Mapper
+@Repository
+public interface VisitRecordMapper {
+	List<VisitRecord> getVisitRecordListByLimit(Integer limit);
+
+	int saveVisitRecord(VisitRecord visitRecord);
+}

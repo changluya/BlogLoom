@@ -27,7 +27,7 @@ const routes = [
 				path: 'dashboard',
 				name: 'Dashboard',
 				component: () => import('@/views/dashboard'),
-				meta: {title: 'Dashboard', icon: 'dashboard'}
+				meta: {title: 'Dashboard', icon: 'el-icon-odometer'}
 			}
 		]
 	},
@@ -36,19 +36,19 @@ const routes = [
 		name: 'Blog',
 		redirect: '/blog/write',
 		component: Layout,
-		meta: {title: '博客管理', icon: 'el-icon-menu'},
+		meta: {title: '博客管理', icon: 'el-icon-notebook-2'},
 		children: [
 			{
 				path: 'write',
 				name: 'WriteBlog',
 				component: () => import('@/views/blog/blog/WriteBlog'),
-				meta: {title: '写文章', icon: 'el-icon-edit'}
+				meta: {title: '写文章', icon: 'el-icon-edit-outline'}
 			},
 			{
 				path: 'moment/write',
 				name: 'WriteMoment',
 				component: () => import('@/views/blog/moment/WriteMoment'),
-				meta: {title: '写动态', icon: 'el-icon-edit'}
+				meta: {title: '写动态', icon: 'el-icon-chat-line-square'}
 			},
 			{
 				path: 'edit/:id',
@@ -68,31 +68,31 @@ const routes = [
 				path: 'list',
 				name: 'BlogList',
 				component: () => import('@/views/blog/blog/BlogList'),
-				meta: {title: '文章管理', icon: 'el-icon-s-order'}
+				meta: {title: '文章管理', icon: 'el-icon-document'}
 			},
 			{
 				path: 'moment/list',
 				name: 'MomentList',
 				component: () => import('@/views/blog/moment/MomentList'),
-				meta: {title: '动态管理', icon: 'el-icon-chat-dot-round'}
+				meta: {title: '动态管理', icon: 'el-icon-chat-dot-square'}
 			},
 			{
 				path: 'category/list',
 				name: 'CategoryList',
 				component: () => import('@/views/blog/category/CategoryList'),
-				meta: {title: '分类管理', icon: 'el-icon-s-opportunity'}
+				meta: {title: '分类管理', icon: 'el-icon-folder-opened'}
 			},
 			{
 				path: 'tag/list',
 				name: 'TagList',
 				component: () => import('@/views/blog/tag/TagList'),
-				meta: {title: '标签管理', icon: 'biaoqian'}
+				meta: {title: '标签管理', icon: 'el-icon-collection-tag'}
 			},
 			{
 				path: 'comment/list',
 				name: 'CommentList',
 				component: () => import('@/views/blog/comment/CommentList'),
-				meta: {title: '评论管理', icon: 'el-icon-s-comment'}
+				meta: {title: '评论管理', icon: 'el-icon-chat-round'}
 			},
 		]
 	},
@@ -101,25 +101,25 @@ const routes = [
 		name: 'Page',
 		redirect: '/page/site',
 		component: Layout,
-		meta: {title: '页面管理', icon: 'el-icon-document-copy'},
+		meta: {title: '页面管理', icon: 'el-icon-files'},
 		children: [
 			{
 				path: 'site',
 				name: 'SiteSetting',
 				component: () => import('@/views/page/SiteSetting'),
-				meta: {title: '站点设置', icon: 'bianjizhandian'}
+				meta: {title: '站点设置', icon: 'el-icon-set-up'}
 			},
 			{
 				path: 'friend',
 				name: 'FriendList',
 				component: () => import('@/views/page/FriendList'),
-				meta: {title: '友链管理', icon: 'friend'}
+				meta: {title: '友链管理', icon: 'el-icon-link'}
 			},
 			{
 				path: 'about',
 				name: 'About',
 				component: () => import('@/views/page/About'),
-				meta: {title: '关于我', icon: 'el-icon-tickets'}
+				meta: {title: '关于我', icon: 'el-icon-user'}
 			},
 		]
 	},
@@ -128,7 +128,7 @@ const routes = [
 		name: 'PictureHosting',
 		redirect: '/pictureHosting/setting',
 		component: Layout,
-		meta: {title: '图床管理', icon: 'el-icon-picture'},
+		meta: {title: '图床管理', icon: 'el-icon-picture-outline'},
 		children: [
 			{
 				path: 'setting',
@@ -140,19 +140,19 @@ const routes = [
 				path: 'github',
 				name: 'GithubManage',
 				component: () => import('@/views/pictureHosting/GithubManage'),
-				meta: {title: 'GitHub', icon: 'el-icon-folder-opened'}
+				meta: {title: 'GitHub', icon: 'github'}
 			},
 			{
 				path: 'upyun',
 				name: 'UpyunManage',
 				component: () => import('@/views/pictureHosting/UpyunManage'),
-				meta: {title: '又拍云', icon: 'el-icon-folder-opened'}
+				meta: {title: '又拍云', icon: 'el-icon-upload'}
 			},
 			{
 				path: 'txyun',
 				name: 'TxyunManage',
 				component: () => import('@/views/pictureHosting/TxyunManage'),
-				meta: {title: '腾讯云', icon: 'el-icon-folder-opened'}
+				meta: {title: '腾讯云', icon: 'el-icon-cloudy'}
 			},
 		]
 	},

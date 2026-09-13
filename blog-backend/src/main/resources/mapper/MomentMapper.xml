@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.naccl.mapper.MomentMapper">
+<mapper namespace="com.changlu.blogloom.mapper.MomentMapper">
 
-    <resultMap id="moment" type="top.naccl.entity.Moment">
+    <resultMap id="moment" type="com.changlu.blogloom.entity.Moment">
         <id property="id" column="id"/>
         <result property="content" column="content"/>
         <result property="createTime" column="create_time"/>
@@ -36,7 +36,7 @@
     </delete>
 
     <!--添加动态-->
-    <insert id="saveMoment" parameterType="top.naccl.entity.Moment" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveMoment" parameterType="com.changlu.blogloom.entity.Moment" useGeneratedKeys="true" keyProperty="id">
         insert into moment (content, create_time, likes, is_published) values (#{content}, #{createTime}, #{likes}, #{published})
     </insert>
 

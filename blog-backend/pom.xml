@@ -8,7 +8,7 @@
         <version>2.2.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>top.naccl</groupId>
+    <groupId>com.changlu.blogloom</groupId>
     <artifactId>blog-backend</artifactId>
     <version>0.0.1</version>
     <name>BlogLoom API</name>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="top.naccl.mapper.OperationLogMapper">
+<mapper namespace="com.changlu.blogloom.mapper.OperationLogMapper">
 
-    <resultMap id="log" type="top.naccl.entity.OperationLog">
+    <resultMap id="log" type="com.changlu.blogloom.entity.OperationLog">
         <id property="id" column="id"/>
         <result property="username" column="username"/>
         <result property="uri" column="uri"/>
@@ -30,7 +30,7 @@
     </select>
 
     <!--添加日志-->
-    <insert id="saveOperationLog" parameterType="top.naccl.entity.OperationLog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveOperationLog" parameterType="com.changlu.blogloom.entity.OperationLog" useGeneratedKeys="true" keyProperty="id">
         insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent)
         values (#{username}, #{uri}, #{method}, #{param}, #{description}, #{ip}, #{ipSource}, #{os}, #{browser}, #{times}, #{createTime}, #{userAgent})
     </insert>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="top.naccl.mapper.LoginLogMapper">
+<mapper namespace="com.changlu.blogloom.mapper.LoginLogMapper">
 
-    <resultMap id="log" type="top.naccl.entity.LoginLog">
+    <resultMap id="log" type="com.changlu.blogloom.entity.LoginLog">
         <id property="id" column="id"/>
         <id property="username" column="username"/>
         <result property="ip" column="ip"/>
@@ -27,7 +27,7 @@
     </select>
 
     <!--添加日志-->
-    <insert id="saveLoginLog" parameterType="top.naccl.entity.LoginLog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveLoginLog" parameterType="com.changlu.blogloom.entity.LoginLog" useGeneratedKeys="true" keyProperty="id">
         insert into login_log (username, ip, ip_source, os, browser, status, description, create_time, user_agent)
         values (#{username}, #{ip}, #{ipSource}, #{os}, #{browser}, #{status}, #{description}, #{createTime}, #{userAgent})
     </insert>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.naccl.mapper.CommentMapper">
+<mapper namespace="com.changlu.blogloom.mapper.CommentMapper">
 
-    <resultMap id="comment" type="top.naccl.entity.Comment">
+    <resultMap id="comment" type="com.changlu.blogloom.entity.Comment">
         <id property="id" column="id"/>
         <result property="nickname" column="nickname"/>
         <result property="email" column="email"/>
@@ -17,7 +17,7 @@
         <result property="parentCommentId" column="parent_comment_id"/>
         <result property="website" column="website"/>
         <result property="qq" column="qq"/>
-        <association property="blog" javaType="top.naccl.model.vo.BlogIdAndTitle">
+        <association property="blog" javaType="com.changlu.blogloom.model.vo.BlogIdAndTitle">
             <id property="id" column="blog_id"/>
             <result property="title" column="title"/>
         </association>
@@ -47,7 +47,7 @@
         where c.parent_comment_id=#{parentCommentId}
     </select>
 
-    <resultMap id="pageComment" type="top.naccl.model.vo.PageComment">
+    <resultMap id="pageComment" type="com.changlu.blogloom.model.vo.PageComment">
         <id property="id" column="id"/>
         <result property="nickname" column="nickname"/>
         <result property="content" column="content"/>
