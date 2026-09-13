@@ -1,199 +1,219 @@
-# BlogLoom
+<p align="center">
+  <img src="./assets/blogloom-logo.png" alt="BlogLoom Logo" width="460">
+</p>
+
+<h1 align="center">BlogLoom</h1>
 
 <p align="center">
-  <strong>一套面向内容创作者的博客前后端一体化管理与发布平台</strong>
+  一套面向个人开发者与内容创作者的开源博客平台
 </p>
 
 <p align="center">
-  让博客文章的创作、管理、发布与展示集中在一个平台中完成。
+  从 Markdown 创作、内容管理和站点配置，到博客展示、评论互动与访问统计，集中在一套前后端分离系统中完成。
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/JDK-1.8+-orange">
-  <img src="https://img.shields.io/badge/SpringBoot-2.2.7.RELEASE-brightgreen">
-  <img src="https://img.shields.io/badge/MyBatis-3.5.5-red">
-  <img src="https://img.shields.io/badge/Vue-2.6.11-brightgreen">
-  <img src="https://img.shields.io/badge/license-MIT-blue">
+  <img src="https://img.shields.io/badge/JDK-8+-f89820" alt="JDK 8+">
+  <img src="https://img.shields.io/badge/Spring_Boot-2.2.7.RELEASE-6db33f" alt="Spring Boot 2.2.7.RELEASE">
+  <img src="https://img.shields.io/badge/Vue-2.6.11-42b883" alt="Vue 2.6.11">
+  <img src="https://img.shields.io/badge/Vite-4.5.14-646cff" alt="Vite 4.5.14">
+  <img src="https://img.shields.io/badge/MySQL-blogloom-4479a1" alt="MySQL">
+  <img src="https://img.shields.io/badge/License-MIT-0b7285" alt="MIT License">
 </p>
 
-## 项目介绍
+## 项目简介
 
-**BlogLoom** 是一套基于 **Spring Boot + Vue + MyBatis** 构建的开源博客前后端平台，目标是提供从内容管理到博客发布、前台展示的一站式体验。
+**BlogLoom** 是一套基于 Spring Boot、MyBatis 和 Vue 构建的博客前后端一体化平台。项目由公开博客前台、内容管理后台和后端服务三个主要模块组成，适合用于搭建个人技术博客、开源项目主页或可持续二次开发的内容平台。
 
-它不仅是一个博客页面，更希望成为一套可持续二次开发的博客基础平台：通过统一后台管理文章、分类、标签、评论和站点配置，并通过独立博客前台完成内容发布与展示，让个人开发者和内容创作者能够快速搭建、维护和演进自己的博客系统。
-
-BlogLoom 当前基于开源项目 [Naccl/NBlog](https://github.com/Naccl/NBlog) 进行二次开发，在保留原项目 MIT License 与版权声明的基础上持续演进。
-
-> 当前阶段以稳定继承 NBlog 核心能力为主，数据库名与 Java 包名已完成 BlogLoom 品牌化迁移，后续将继续推进技术栈升级与平台化改造。
-
-## 我们希望解决什么问题
-
-传统个人博客通常存在几个问题：前台与后台割裂、文章发布流程分散、站点配置依赖改代码、后续升级和扩展成本较高。
-
-BlogLoom 希望把这些能力集中起来，形成统一工作流：
+BlogLoom 关注的不只是文章展示，还覆盖从内容生产到站点运营的完整链路：
 
 ```text
-内容创作
-   ↓
-文章管理
-   ↓
-分类 / 标签 / 页面组织
-   ↓
-预览与发布
-   ↓
-博客前台展示
-   ↓
-评论 / 访问 / 内容持续维护
+Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论互动 → 访问分析 → 持续维护
 ```
 
-最终目标是让使用者把精力更多放在 **写内容和运营博客** 上，而不是重复搭建博客基础设施。
+当前版本基于 [Naccl/NBlog](https://github.com/Naccl/NBlog) 二次开发，在遵循原项目 MIT License 的基础上完成 BlogLoom 品牌化、工程整理和界面体验优化，并继续向更易部署、更易维护、更适合扩展的博客平台演进。
 
-## 核心能力
+## 项目特点
 
-### 内容管理
+- **前后端分离**：公开博客、管理后台和 REST API 独立运行、独立构建。
+- **完整内容闭环**：覆盖文章创作、分类标签、评论、页面配置和前台展示。
+- **Markdown 写作体验**：支持 Markdown 编辑、文章描述、目录、代码内容与图片展示。
+- **可配置站点**：站名、头像、首页轮播、社交链接、友链和关于页等内容可集中维护。
+- **运营数据可视化**：管理后台提供 PV、UV、内容数量、分类、标签和访客地域等概览。
+- **多种图片存储方式**：包含本地上传以及 GitHub、又拍云、腾讯云等图床配置入口。
+- **日志与任务管理**：集中查看访问、登录、操作、异常和定时任务执行信息。
+- **适合二次开发**：后端分层清晰，前台与后台管理端职责独立，方便更换主题或扩展接口。
 
-- Markdown 文章编辑与管理
-- 草稿、发布等文章状态管理
-- 分类与标签管理
-- 文章目录与代码高亮
-- 站点基础信息配置
+## 系统组成
+
+| 模块 | 职责 | 默认地址 |
+| --- | --- | --- |
+| `blog-view-ui` | 面向访客的博客门户、文章阅读与互动 | <http://localhost:8080> |
+| `blog-cms-ui` | 面向站长的内容管理与运营后台 | <http://localhost:8079> |
+| `blog-backend` | REST API、认证、业务逻辑、数据访问与任务调度 | <http://localhost:8090> |
+| MySQL | 文章、用户、评论、配置及日志等持久化数据 | 数据库名 `blogloom` |
+| Redis | 登录状态、缓存和临时业务数据 | 默认 `127.0.0.1:6379` |
+
+```text
+┌──────────────────────┐          ┌──────────────────────┐
+│    blog-view-ui      │          │     blog-cms-ui      │
+│  公开博客 / 访客端    │          │  内容管理 / 运营后台   │
+└──────────┬───────────┘          └──────────┬───────────┘
+           │            REST API             │
+           └──────────────┬──────────────────┘
+                          ▼
+               ┌──────────────────────┐
+               │    blog-backend      │
+               │ Spring Boot/MyBatis  │
+               └──────────┬───────────┘
+                          │
+                 ┌────────┴────────┐
+                 ▼                 ▼
+              MySQL              Redis
+```
+
+## 功能范围
 
 ### 博客前台
 
-- 独立博客门户
-- 首页、文章详情、分类与标签页面
-- 响应式页面布局
-- 评论与互动
-- 文章排版、图片预览、音乐等内容展示能力
+- 首页 Banner、站点导航、个人信息卡片和最新内容展示
+- 文章列表、文章详情、Markdown 内容渲染和图片预览
+- 按分类、标签和归档浏览文章
+- 站内文章搜索
+- 动态展示与点赞
+- 评论与回复
+- 友链页面和关于页面
+- 响应式布局、资源懒加载与回到顶部等阅读体验
 
 ### 管理后台
 
-- 文章统一管理
-- 分类、标签、评论管理
-- 博客站点设置
-- 数据统计与内容维护
-- 基于权限认证的后台访问控制
+- 数据仪表盘：PV、UV、文章数、评论数、分类与标签分布、访客地图
+- 文章创作：Markdown 编辑、分类标签、描述、封面和发布配置
+- 内容管理：文章、动态、分类、标签和评论维护
+- 页面管理：站点设置、友链和关于页内容维护
+- 图床管理：上传配置以及 GitHub、又拍云、腾讯云存储设置
+- 系统管理：账号维护和定时任务管理
+- 日志中心：任务、登录、操作、异常和访问日志
+- 访客统计：访问记录与访问行为分析
 
-### 发布能力
+### 后端服务
 
-当前 BlogLoom 已具备从后台管理文章并发布到博客前台的完整链路。
-
-后续会进一步围绕“**一处创作，多处发布**”进行增强，包括：
-
-- SEO 与搜索引擎收录优化
-- Sitemap / RSS
-- 多站点管理
-- 主题与页面配置
-- CSDN、掘金、博客园等内容渠道发布适配
-- Webhook / API 发布能力
-- AI 辅助写作与内容整理
-
-> 上述增强能力中，未完成的部分属于 BlogLoom 后续规划，不代表当前版本已经全部实现。
-
-## 项目结构
-
-```text
-BlogLoom
-├── blog-backend  # Spring Boot 后端服务
-├── blog-cms-ui   # 博客管理后台
-├── blog-view-ui  # 博客公开前台
-├── pic           # README / 项目图片资源
-├── LICENSE       # MIT License
-└── deploy.sh     # 部署脚本
-```
-
-整体采用前后端分离架构：
-
-```text
-┌─────────────────────┐
-│      blog-cms-ui    │
-│   博客管理后台 Vue   │
-└──────────┬──────────┘
-           │
-           │ REST API
-           ▼
-┌─────────────────────┐
-│      blog-backend   │
-│ Spring Boot/MyBatis │
-└──────────┬──────────┘
-           │
-       MySQL / Redis
-           │
-           ▼
-┌─────────────────────┐
-│      blog-view-ui   │
-│   博客公开前台 Vue   │
-└─────────────────────┘
-```
+- Spring Security + JWT 管理端身份认证
+- MyBatis 数据访问与 PageHelper 分页
+- Redis 缓存及临时状态管理
+- Quartz 定时任务
+- CommonMark Markdown 解析
+- 评论通知与邮件发送能力
+- 本地及第三方对象存储上传适配
+- IP 地域解析、客户端与访问来源识别
+- 统一异常处理、操作日志和接口分层
 
 ## 技术栈
 
-### 后端
+| 范围 | 主要技术 |
+| --- | --- |
+| 后端基础 | Java 8、Spring Boot 2.2.7.RELEASE、Spring MVC |
+| 数据与缓存 | MyBatis、PageHelper、MySQL、Redis |
+| 安全与任务 | Spring Security、JWT、Quartz、Spring Retry |
+| 内容与工具 | commonmark-java、ip2region、Yauaa、Hutool |
+| 管理后台 | Vue 2.6.11、Vite 4.5.14、Element UI、Vuex、Vue Router、ECharts、mavon-editor |
+| 博客前台 | Vue 2.6.11、Vite 4.5.14、Semantic UI、Element UI、Vuex、Vue Router |
+| 网络与媒体 | Axios、sanitize-html、v-viewer、vue-lazyload |
 
-- Spring Boot
-- Spring Security
-- MyBatis
-- PageHelper
-- MySQL
-- Redis
-- JWT
-- Quartz
-- commonmark-java
-- ip2region
+## 目录结构
 
-### 前端
-
-当前版本继承 NBlog 原有技术栈：
-
-- Vue 2
-- Vue Router
-- Vuex
-- Element UI
-- Semantic UI
-- Axios
-- PrismJS
-- ECharts
-- mavonEditor
-
-后续 BlogLoom 将逐步推进前端和后端技术栈现代化升级。
+```text
+BlogLoom/
+├── assets/                         # README 与项目品牌资源
+│   └── blogloom-logo.png           # BlogLoom 项目 Logo
+├── blog-backend/                   # Spring Boot 后端
+│   ├── src/main/java/com/changlu/blogloom/
+│   │   ├── controller/             # 公开端与管理端 REST 接口
+│   │   ├── service/                # 业务服务及实现
+│   │   ├── mapper/                 # MyBatis Mapper 接口
+│   │   ├── entity/                 # 数据库实体
+│   │   ├── model/                  # DTO 与 VO
+│   │   ├── config/                 # 安全、Web、Redis 等配置
+│   │   ├── task/                   # 定时任务
+│   │   └── util/                   # Markdown、上传、通知等工具
+│   ├── src/main/resources/         # 配置、Mapper XML 与静态资源
+│   ├── sql/increment/              # 增量数据库脚本
+│   ├── blogloom.sql                # 全量初始化脚本
+│   └── pom.xml
+├── blog-cms-ui/                    # Vue 管理后台
+│   ├── src/                        # 页面、组件、路由、状态和 API
+│   ├── public/                     # 后台静态资源
+│   └── package.json
+├── blog-view-ui/                   # Vue 公开博客前台
+│   ├── src/                        # 页面、组件、路由、状态和 API
+│   ├── public/                     # Banner、头像等站点资源
+│   └── package.json
+├── conf/                           # 外置配置、日志和本地上传目录
+├── LICENSE                         # MIT License
+└── README.md
+```
 
 ## 快速开始
 
+### 环境要求
+
+- JDK 8 或更高版本
+- Maven 3.6+
+- Node.js 16+ 与 npm
+- MySQL 5.7+ 或 MySQL 8
+- Redis 5+
+
 ### 1. 初始化数据库
 
-创建 MySQL 数据库：
+创建数据库：
 
 ```sql
-CREATE DATABASE blogloom CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE blogloom
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
 ```
 
-然后执行：
+导入全量初始化脚本：
 
-```text
-blog-backend/blogloom.sql
+```bash
+mysql -u root -p blogloom < blog-backend/blogloom.sql
 ```
 
-完成基础表结构与初始化数据导入。
+`blog-backend/sql/increment/` 用于保存后续版本的增量 SQL。全新环境通常只需导入已经包含最新初始数据的 `blogloom.sql`；已有环境请按照增量脚本说明执行升级。
 
 ### 2. 配置后端
 
-修改：
+本地开发配置位于：
 
 ```text
 blog-backend/src/main/resources/application-dev.properties
 ```
 
-至少确认以下配置：
+部署时也可以参考根目录下的外置配置：
 
-- MySQL 连接信息
-- Redis 地址
-- `token.secretKey`
-- 邮箱配置（如需评论通知）
-- 博客 API 地址
+```text
+conf/application.properties
+```
+
+启动前至少检查以下项目：
+
+- MySQL 地址、用户名和密码
+- Redis 地址、数据库编号和密码
+- `token.secretKey` 登录令牌密钥
+- `blog.api`、`blog.cms` 与 `blog.view` 的实际访问地址
+- 邮件通知配置（启用评论邮件通知时）
+- 本地上传目录或第三方图床配置
+
+请勿把生产环境的数据库密码、令牌密钥、邮箱授权码或对象存储密钥提交到版本库。
 
 ### 3. 启动后端
 
-启动 `blog-backend` Spring Boot 服务。
+```bash
+cd blog-backend
+mvn spring-boot:run
+```
+
+默认后端端口为 `8090`。
 
 ### 4. 启动管理后台
 
@@ -203,6 +223,8 @@ npm install
 npm run dev
 ```
 
+默认访问地址为 <http://localhost:8079>，开发环境 API 地址由 `blog-cms-ui/.env.development` 中的 `VITE_API_URL` 控制。
+
 ### 5. 启动博客前台
 
 ```bash
@@ -211,49 +233,83 @@ npm install
 npm run dev
 ```
 
-## 默认账号
+默认访问地址为 <http://localhost:8080>，开发环境 API 地址由 `blog-view-ui/.env.development` 中的 `VITE_API_URL` 控制。
 
-初始化数据中的默认后台账号为：
+## 默认管理账号
+
+全量 SQL 初始化后的默认后台账号为：
 
 ```text
 用户名：admin
 密码：123456
 ```
 
-首次部署后请尽快修改默认凭据及 `token.secretKey`，并检查生产环境数据库、Redis、邮件等配置。
+首次登录后请立即修改默认密码，并为生产环境生成足够长且随机的 `token.secretKey`。
 
-## Roadmap
+## 构建发布
 
-BlogLoom 后续将围绕“**博客管理 + 发布 + 分发**”持续演进：
+### 后端
 
-- [ ] JDK 17 / Spring Boot 3 升级
-- [ ] Vue 3 + TypeScript + Vite 管理后台升级
-- [ ] MyBatis / MyBatis-Plus 能力整理
-- [ ] SEO、Sitemap、RSS 完善
-- [ ] 前台 SSR / SSG 能力
-- [ ] 多站点 Blog Site 模型
-- [ ] 主题与页面配置体系
-- [ ] 多渠道文章发布
-- [ ] 媒体资源统一管理
-- [ ] AI 辅助写作与文章整理
-- [ ] Docker Compose 一键部署
+```bash
+cd blog-backend
+mvn clean package
+```
 
-## 开源说明
+### 管理后台
 
-BlogLoom 是一个持续演进中的开源项目，目前在 NBlog 成熟博客能力的基础上进行产品化和平台化改造。
+```bash
+cd blog-cms-ui
+npm install
+npm run build
+```
 
-如果你也希望拥有一套能够自主控制、方便二次开发的博客前后端平台，可以基于 BlogLoom 继续构建自己的博客产品。
+### 博客前台
+
+```bash
+cd blog-view-ui
+npm install
+npm run build
+```
+
+构建生产前端前，请分别检查两个前端模块的 `.env.production`，将 `VITE_API_URL` 修改为实际后端地址。生产部署时建议由 Nginx 托管前端静态资源并反向代理后端 API，同时仅开放必要端口。
+
+## 配置与数据说明
+
+- Java 根包名为 `com.changlu.blogloom`。
+- 默认数据库名为 `blogloom`。
+- 全量数据库脚本为 `blog-backend/blogloom.sql`。
+- 增量升级脚本统一放在 `blog-backend/sql/increment/`。
+- `conf/logs/`、`conf/upload/` 与 `conf/static/` 分别用于运行日志、本地上传和外部静态资源。
+- 前端展示内容可能同时受到数据库站点配置和 Redis 缓存影响；修改初始化数据后，已运行环境还需同步数据库并按需清理缓存。
+
+## 后续规划
+
+- [ ] 升级至现代 JDK 与 Spring Boot 版本
+- [ ] 管理后台迁移至 Vue 3、TypeScript 与新版组件体系
+- [ ] 完善 SEO、Sitemap 和 RSS
+- [ ] 增加前台 SSR/SSG 能力
+- [ ] 建设可配置的主题与页面体系
+- [ ] 支持多站点管理
+- [ ] 扩展 CSDN、掘金、博客园等多渠道发布能力
+- [ ] 增强媒体资源统一管理
+- [ ] 引入 AI 辅助写作、摘要和内容整理能力
+- [ ] 提供 Docker Compose 一键部署方案
+
+> 以上内容属于演进规划，不代表当前版本已实现。
+
+## 参与贡献
+
+欢迎通过 Issue 提交问题、建议或功能需求，也欢迎通过 Pull Request 参与改进。提交代码前建议：
+
+1. 分别验证涉及模块可以正常构建。
+2. 数据库结构或初始数据发生变化时，同步维护全量 SQL 与必要的增量 SQL。
+3. 不提交本地日志、上传文件、真实账号密码和访问密钥。
+4. 在变更说明中写清影响模块、验证方式和兼容性注意事项。
 
 ## 鸣谢
 
-BlogLoom 基于 [Naccl/NBlog](https://github.com/Naccl/NBlog) 进行二次开发。
-
-特别感谢 **Naccl** 以及 NBlog 的所有贡献者提供了优秀的开源博客项目。原项目采用 **MIT License**，BlogLoom 在遵循其许可要求、保留原版权与许可声明的基础上继续开发。
-
-同时感谢 Spring Boot、Vue、MyBatis、Element UI、Semantic UI 以及项目中使用到的所有开源项目和贡献者。
+BlogLoom 基于 [Naccl/NBlog](https://github.com/Naccl/NBlog) 进行二次开发。感谢 Naccl 与 NBlog 的所有贡献者提供了优秀的开源基础，也感谢 Spring Boot、Vue、MyBatis、Element UI、Semantic UI 及项目所使用的其他开源项目。
 
 ## License
 
-BlogLoom 采用 [MIT License](./LICENSE) 开源。
-
-本项目基于同样采用 MIT License 的 [Naccl/NBlog](https://github.com/Naccl/NBlog) 二次开发，并持续保留原项目版权与许可声明。
+BlogLoom 使用 [MIT License](./LICENSE) 开源，并保留原项目许可要求中的版权与许可声明。

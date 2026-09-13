@@ -24,15 +24,15 @@ public class ProxyProperties {
 	/**
 	 * 代理服务器地址
 	 */
-	private String host;
+	private String host = "127.0.0.1";
 	/**
 	 * 代理服务器端口
 	 */
-	private Integer port;
+	private Integer port = 7890;
 	/**
 	 * 连接超时(单位毫秒)，通常不应该为0，0为无限超时时间，-1为系统的默认超时时间
 	 *
 	 * @see SimpleClientHttpRequestFactory#setConnectTimeout(int)
 	 */
-	private Integer timeout;
+	private Integer timeout = 10000;
 }

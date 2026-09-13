@@ -264,8 +264,8 @@ INSERT INTO `site_setting` VALUES (10, 'playlistId', '播放器歌单', '3071528
 INSERT INTO `site_setting` VALUES (11, 'avatar', '头像', '/img/avatar.jpg?v=20260913', 2);
 INSERT INTO `site_setting` VALUES (12, 'name', '昵称', 'changlu', 2);
 INSERT INTO `site_setting` VALUES (13, 'rollText', '滚动个签', '\"每个人都是独一无二的，把握好自己的节奏，跟着自己的心走～\",\"Stay Hungry. Stay Foolish.\"', 2);
-INSERT INTO `site_setting` VALUES (14, 'github', 'GitHub', 'https://github.com/', 2);
-INSERT INTO `site_setting` VALUES (15, 'telegram', 'Telegram', 'https://t.me/changluOfficial', 2);
+INSERT INTO `site_setting` VALUES (14, 'github', 'GitHub', 'https://github.com/changluya/BlogLoom', 2);
+INSERT INTO `site_setting` VALUES (15, 'telegram', 'Telegram', '', 2);
 INSERT INTO `site_setting` VALUES (16, 'qq', 'QQ', '', 2);
 INSERT INTO `site_setting` VALUES (17, 'bilibili', 'bilibili', 'https://space.bilibili.com/481905751?spm_id_from=333.1007.0.0', 2);
 INSERT INTO `site_setting` VALUES (18, 'netease', '网易云音乐', '', 2);

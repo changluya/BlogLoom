@@ -24,25 +24,25 @@ public class TelegramProperties {
 	 * Telegram bot的api，默认是https://api.telegram.org/bot
 	 * 如果使用自己的反代，可以修改它
 	 */
-	private String api;
+	private String api = "https://api.telegram.org/bot";
 	/**
 	 * bot的token，可以从 @BotFather 处获取
 	 */
-	private String token;
+	private String token = "";
 	/**
 	 * 自己账号和bot的聊天会话id
 	 */
-	private String chatId;
+	private String chatId = "";
 	/**
 	 * 是否使用代理
 	 */
-	private Boolean useProxy;
+	private Boolean useProxy = false;
 	/**
 	 * 是否使用反向代理
 	 */
-	private Boolean useReverseProxy;
+	private Boolean useReverseProxy = false;
 	/**
 	 * 反向代理URL
 	 */
-	private String reverseProxyUrl;
+	private String reverseProxyUrl = "";
 }

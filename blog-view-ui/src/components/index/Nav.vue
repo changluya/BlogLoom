@@ -27,9 +27,9 @@
 			<router-link to="/about" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='about'}">
 				<i class="info icon"></i>关于我
 			</router-link>
-			<el-autocomplete v-model="queryString" :fetch-suggestions="debounceQuery" placeholder="Search..."
+			<el-autocomplete v-model="queryString" :fetch-suggestions="debounceQuery" placeholder="搜索文章..."
 			                 class="right item m-search" :class="{'m-mobile-hide': mobileHide}"
-			                 popper-class="m-search-item" @select="handleSelect">
+			                 popper-class="m-search-item" aria-label="搜索文章" @select="handleSelect">
 				<i class="search icon el-input__icon" slot="suffix"></i>
 				<template slot-scope="{ item }">
 					<div class="title">{{ item.title }}</div>
@@ -143,17 +143,83 @@
 
 <style>
 	.ui.fixed.menu .container {
-		width: 1400px !important;
+		width: min(1280px, calc(100% - 48px)) !important;
 		margin-left: auto !important;
 		margin-right: auto !important;
+		display: flex !important;
+		align-items: center;
 	}
 
 	.ui.fixed.menu {
-		transition: .3s ease-out;
+		min-height: 64px;
+		border: 0;
+		background: rgba(13, 20, 31, .92) !important;
+		box-shadow: 0 8px 28px rgba(5, 12, 24, .12);
+		transition: background .3s ease, box-shadow .3s ease;
 	}
 
 	.ui.inverted.pointing.menu.transparent {
+		background: linear-gradient(180deg, rgba(7, 13, 24, .7), rgba(7, 13, 24, .18)) !important;
+		box-shadow: none;
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+	}
+
+	.ui.inverted.menu .item {
+		display: inline-flex;
+		align-items: center;
+		min-height: 42px;
+		margin: 0 2px;
+		padding: 0 14px;
+		border-radius: 8px;
+		font-size: 14px;
+		font-weight: 500;
+		transition: color .2s ease, background .2s ease;
+	}
+
+	.ui.inverted.menu .item::before,
+	.ui.inverted.pointing.menu .active.item::after {
+		display: none !important;
+		content: none !important;
+	}
+
+	.ui.inverted.menu .item > i.icon {
+		width: auto;
+		margin: 0 7px 0 0;
+		opacity: .88;
+	}
+
+	.ui.inverted.menu .item .caret.icon {
+		margin: 0 0 0 4px;
+		font-size: 11px;
+		opacity: .7;
+	}
+
+	.ui.inverted.menu .item:hover,
+	.ui.inverted.menu .active.item {
+		background: rgba(255, 255, 255, .11) !important;
+		color: #fff !important;
+	}
+
+	.ui.inverted.menu .header.item {
+		min-width: 145px;
+		margin: 0 8px 0 0;
+		padding-left: 0;
+		padding-right: 16px;
+		font-size: 17px;
+		font-weight: 700;
+		letter-spacing: -.3px;
+		text-shadow: 0 2px 12px rgba(0, 0, 0, .28);
+	}
+
+	.ui.inverted.menu .header.item:hover {
 		background: transparent !important;
+	}
+
+	.el-dropdown {
+		display: inline-flex;
+		align-self: stretch;
+		align-items: center;
 	}
 
 	.ui.inverted.pointing.menu.transparent .active.item:after {
@@ -197,19 +263,38 @@
 	}
 
 	.m-search {
-		min-width: 220px;
+		min-width: 210px;
+		min-height: 38px !important;
+		margin: 0 0 0 auto !important;
 		padding: 0 !important;
+		border: 1px solid rgba(255, 255, 255, .24) !important;
+		border-radius: 999px !important;
+		background: rgba(255, 255, 255, .1) !important;
+		transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+	}
+
+	.m-search:focus-within {
+		border-color: rgba(70, 216, 255, .8) !important;
+		background: rgba(8, 18, 32, .55) !important;
+		box-shadow: 0 0 0 3px rgba(70, 216, 255, .12);
 	}
 
 	.m-search input {
-		color: rgba(255, 255, 255, .9);;
-		border: 0px !important;
-		background-color: inherit;
-		padding: .67857143em 2.1em .67857143em 1em;
+		height: 38px;
+		color: #fff;
+		border: 0 !important;
+		border-radius: 999px;
+		background: transparent !important;
+		padding: 0 40px 0 16px;
+	}
+
+	.m-search input::placeholder {
+		color: rgba(255, 255, 255, .7);
 	}
 
 	.m-search i {
 		color: rgba(255, 255, 255, .9) !important;
+		line-height: 38px !important;
 	}
 
 	.m-search-item {
@@ -231,5 +316,54 @@
 		text-overflow: ellipsis;
 		font-size: 12px;
 		color: rgba(0, 0, 0, .70);
+	}
+
+	@media (max-width: 1180px) and (min-width: 769px) {
+		.ui.fixed.menu .container {
+			width: calc(100% - 28px) !important;
+		}
+
+		.ui.inverted.menu .header.item {
+			min-width: 128px;
+			margin-right: 2px;
+			font-size: 15px;
+		}
+
+		.ui.inverted.menu .item {
+			padding: 0 9px;
+			font-size: 13px;
+		}
+
+		.m-search {
+			min-width: 175px;
+			width: 175px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.ui.fixed.menu .container {
+			width: 100% !important;
+		}
+
+		.ui.fixed.menu {
+			min-height: 54px;
+			background: rgba(13, 20, 31, .96) !important;
+		}
+
+		.ui.inverted.menu .header.item {
+			min-height: 54px;
+			min-width: 0;
+			margin: 0;
+			padding-left: 16px;
+		}
+
+		.ui.inverted.menu .item {
+			margin: 2px 10px;
+			min-height: 42px;
+		}
+
+		.m-search {
+			margin: 8px 12px 12px !important;
+		}
 	}
 </style>

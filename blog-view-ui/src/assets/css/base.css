@@ -200,20 +200,26 @@ footer {
 }
 
 .m-box {
-    transition: all 0.25s ease 0s, opacity 0.6s cubic-bezier(0.5, 0, 0, 1) 0s !important;
+    overflow: hidden;
+    border: 1px solid rgba(29, 41, 57, 0.09) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.6s cubic-bezier(0.5, 0, 0, 1) !important;
 }
 
 .m-box:hover {
-    box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.2), 0 2px 4px 0px rgba(0, 0, 0, 0.2), 0 4px 8px 0px rgba(0, 0, 0, 0.2), 0 8px 16px 0px rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.11) !important;
 }
 
 .m-box:active {
-    box-shadow: 0 1px 2px 0px rgba(72, 219, 251, 0.3), 0 2px 4px 0px rgba(72, 219, 251, 0.3), 0 4px 8px 0px rgba(72, 219, 251, 0.3), 0 8px 16px 0px rgba(72, 219, 251, 0.3) !important;
+    transform: translateY(0);
+    box-shadow: 0 5px 16px rgba(72, 219, 251, 0.16) !important;
 }
 
 @media (max-width: 768px) {
     .m-box {
-        border-radius: 0 !important;
+        border-radius: 8px !important;
     }
 }
 
@@ -284,49 +290,6 @@ footer {
 
 .m-big-fontsize p, .m-big-fontsize ul, .m-big-fontsize ol {
     font-size: 17px !important;
-}
-
-/*-----------------------Button--------------------------*/
-.color-btn {
-    text-decoration: none;
-    position: relative;
-    top: 10%;
-    margin: 0 auto;
-    font-size: 13px;
-    background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
-    background-size: 400%;
-    width: 7em;
-    height: 3em;
-    line-height: 38px;
-    text-align: center;
-    color: #fff;
-    text-transform: capitalize;
-    border-radius: 50px;
-}
-
-.color-btn::before {
-    content: "";
-    position: absolute;
-    left: -5px;
-    top: -5px;
-    right: -5px;
-    bottom: -5px;
-    background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
-    background-size: 400%;
-    border-radius: 50px;
-    filter: blur(20px);
-    z-index: -1;
-}
-
-.color-btn:hover::before,
-.color-btn:hover {
-    animation: sun 8s infinite;
-}
-
-@keyframes sun {
-    100% {
-        background-position: -400% 0;
-    }
 }
 
 .ui.comments .comment .text img {
