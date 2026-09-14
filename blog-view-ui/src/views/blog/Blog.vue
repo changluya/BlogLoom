@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<div class="ui padded attached segment m-padded-tb-large">
+	<div class="article-page" :class="{'is-loading': loading, 'is-ready': !loading}" v-loading="loading">
+		<div class="ui padded attached segment m-padded-tb-large article-card">
 			<div class="ui large red right corner label" v-if="blog.top">
 				<i class="arrow alternate circle up icon"></i>
 			</div>
@@ -8,11 +8,11 @@
 				<div class="ui grid m-margin-lr">
 					<!--标题-->
 					<div class="row m-padded-tb-small">
-						<h2 class="ui header m-center">{{ blog.title }}</h2>
+						<h1 class="ui header m-center article-title">{{ blog.title }}</h1>
 					</div>
 					<!--文章简要信息-->
 					<div class="row m-padded-tb-small">
-						<div class="ui horizontal link list m-center">
+						<div class="ui horizontal link list m-center article-meta">
 							<div class="item m-datetime">
 								<i class="small calendar icon"></i><span>{{ blog.createTime | dateFormat('YYYY-MM-DD') }}</span>
 							</div>
@@ -25,12 +25,12 @@
 							<div class="item m-common-black">
 								<i class="small clock icon"></i><span>阅读时长≈{{ blog.readTime }}分</span>
 							</div>
-							<a class="item m-common-black" @click.prevent="bigFontSize=!bigFontSize">
+							<a class="item m-common-black article-tool" @click.prevent="bigFontSize=!bigFontSize">
 								<div data-inverted="" data-tooltip="点击切换字体大小" data-position="top center">
 									<i class="font icon"></i>
 								</div>
 							</a>
-							<a class="item m-common-black" @click.prevent="changeFocusMode">
+							<a class="item m-common-black article-tool" @click.prevent="changeFocusMode">
 								<div data-inverted="" data-tooltip="专注模式" data-position="top center">
 									<i class="book icon"></i>
 								</div>
@@ -42,7 +42,7 @@
 						<i class="small folder open icon"></i><span class="m-text-500">{{ blog.category.name }}</span>
 					</router-link>
 					<!--文章Markdown正文-->
-					<div class="typo js-toc-content m-padded-tb-small match-braces rainbow-braces" v-lazy-container="{selector: 'img'}" v-viewer :class="{'m-big-fontsize':bigFontSize}" v-html="blog.content"></div>
+					<div class="typo js-toc-content m-padded-tb-small match-braces rainbow-braces article-content" v-lazy-container="{selector: 'img'}" v-viewer :class="{'m-big-fontsize':bigFontSize}" v-html="blog.content"></div>
 					<!--赞赏-->
 					<div style="margin: 2em auto">
 						<el-popover placement="top" width="220" trigger="click" v-if="blog.appreciation">
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 		<!--博客信息-->
-		<div class="ui attached positive message">
+		<div class="ui attached positive message article-license">
 			<ul class="list">
 				<li>作者：{{ $store.state.introduction.name }}
 					<router-link to="/about">（联系作者）</router-link>
@@ -79,7 +79,7 @@
 			</ul>
 		</div>
 		<!--评论-->
-		<div class="ui bottom teal attached segment threaded comments">
+		<div class="ui bottom teal attached segment threaded comments article-comments">
 			<CommentList :page="0" :blogId="blogId" v-if="blog.commentEnabled"/>
 			<h3 class="ui header" v-else>评论已关闭</h3>
 		</div>
@@ -99,6 +99,7 @@
 			return {
 				blog: {},
 				bigFontSize: false,
+				loading: true,
 			}
 		},
 		computed: {
@@ -143,6 +144,7 @@
 		},
 		methods: {
 			getBlog(id = this.blogId) {
+				this.loading = true
 				//密码保护的文章，需要发送密码验证通过后保存在localStorage的Token
 				const blogToken = window.localStorage.getItem(`blog${id}`)
 				//如果有则发送博主身份Token
@@ -157,11 +159,14 @@
 							Prism.highlightAll()
 							//将文章渲染完成状态置为 true
 							this.$store.commit(SET_IS_BLOG_RENDER_COMPLETE, true)
+							this.loading = false
 						})
 					} else {
+						this.loading = false
 						this.msgError(res.msg)
 					}
 				}).catch(() => {
+					this.loading = false
 					this.msgError("请求失败")
 				})
 			},
@@ -173,6 +178,115 @@
 </script>
 
 <style scoped>
+	.article-page {
+		min-height: 620px;
+		border-radius: 12px;
+	}
+
+	.article-card {
+		padding: 36px 44px 28px !important;
+		border: 1px solid rgba(29, 41, 57, .09) !important;
+		border-radius: 12px 12px 0 0 !important;
+		background: rgba(255, 255, 255, .98) !important;
+		box-shadow: 0 8px 30px rgba(15, 23, 42, .07) !important;
+	}
+
+	.article-page.is-loading .article-card {
+		min-height: 560px;
+	}
+
+	.article-page.is-ready .article-card,
+	.article-page.is-ready .article-license,
+	.article-page.is-ready .article-comments {
+		animation: article-in .38s cubic-bezier(.2, .7, .2, 1) both;
+	}
+
+	.article-page.is-ready .article-license { animation-delay: .06s; }
+	.article-page.is-ready .article-comments { animation-delay: .1s; }
+
+	.article-title {
+		margin: 4px auto 2px !important;
+		color: #182230 !important;
+		font-size: 30px !important;
+		font-weight: 700 !important;
+		letter-spacing: -.02em;
+		line-height: 1.35 !important;
+	}
+
+	.article-meta {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 6px 2px;
+		padding: 7px 14px;
+		border-radius: 10px;
+		background: #f7f9fb;
+		color: #748094 !important;
+		font-size: 13px;
+	}
+
+	.article-meta .item {
+		color: #667085 !important;
+	}
+
+	.article-tool {
+		width: 30px;
+		height: 30px;
+		padding: 7px !important;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: color .2s ease, background .2s ease;
+	}
+
+	.article-tool:hover {
+		background: #e9f8fb;
+		color: #00a7e0 !important;
+	}
+
+	.article-content {
+		padding: 30px 8px 20px !important;
+		color: #344054;
+		font-size: 16px;
+		line-height: 1.9;
+	}
+
+	.article-content::v-deep p,
+	.article-content::v-deep ul,
+	.article-content::v-deep ol {
+		font-size: 16px;
+		line-height: 1.9;
+	}
+
+	.article-content::v-deep img {
+		margin: 24px auto;
+		border-radius: 10px;
+		box-shadow: 0 8px 24px rgba(15, 23, 42, .1);
+	}
+
+	.article-content::v-deep pre {
+		margin: 22px 0;
+		border-radius: 10px;
+		box-shadow: 0 6px 20px rgba(15, 23, 42, .08);
+	}
+
+	.article-license {
+		margin-top: 12px !important;
+		padding: 20px 24px !important;
+		border-color: rgba(23, 183, 165, .16) !important;
+		background: #f3fbf9 !important;
+		color: #52606d !important;
+		line-height: 1.8;
+	}
+
+	.article-comments {
+		margin-top: 12px !important;
+		padding: 26px !important;
+		border: 1px solid rgba(29, 41, 57, .09) !important;
+		border-radius: 12px !important;
+		box-shadow: 0 6px 22px rgba(15, 23, 42, .06) !important;
+	}
+
 	.el-divider {
 		margin: 1rem 0 !important;
 	}
@@ -183,5 +297,29 @@
 		height: 55px;
 		margin-top: -55px;
 		visibility: hidden;
+	}
+
+	@keyframes article-in {
+		from { opacity: 0; transform: translateY(12px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	@media (max-width: 768px) {
+		.article-page { min-height: 480px; }
+		.article-page.is-loading .article-card { min-height: 440px; }
+		.article-card { padding: 24px 17px 20px !important; border-radius: 10px !important; }
+		.article-title { font-size: 24px !important; }
+		.article-meta { padding: 8px; background: transparent; }
+		.article-content { padding: 24px 1px 14px !important; }
+		.article-content::v-deep p,
+		.article-content::v-deep ul,
+		.article-content::v-deep ol { font-size: 15px; line-height: 1.85; }
+		.article-license, .article-comments { padding: 18px 16px !important; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.article-page.is-ready .article-card,
+		.article-page.is-ready .article-license,
+		.article-page.is-ready .article-comments { animation: none; }
 	}
 </style>

@@ -84,12 +84,6 @@
 		computed: {
 			...mapState(['focusMode'])
 		},
-		watch: {
-			//路由改变时，页面滚动至顶部
-			'$route.path'() {
-				this.scrollToTop()
-			}
-		},
 		created() {
 			this.getSite()
 			this.getHitokoto()

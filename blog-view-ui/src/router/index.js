@@ -70,7 +70,16 @@ const routes = [
 const router = new VueRouter({
 	mode: 'history',
 	base: import.meta.env.BASE_URL,
-	routes
+	routes,
+	scrollBehavior(to, from, savedPosition) {
+		if (savedPosition) {
+			return savedPosition
+		}
+		if (to.hash) {
+			return {selector: to.hash, offset: {x: 0, y: 64}}
+		}
+		return {x: 0, y: 0}
+	}
 })
 
 //挂载路由守卫
