@@ -1,0 +1,31 @@
+blog-view-ui/src/router/index.js
+  s_5fb4df0053cb7e::t_03f50bf6764ffe 73-82
+blog-view-ui/src/views/blog/Blog.vue
+  s_5fb4df0053cb7e::t_03f50bf6764ffe 2-3,11,15,28,33,45,71,82,102,147,162,165,169,181-289,301-324
+conf/application.properties.conf
+  s_cdd3bf278b3d35::t_fe7741322ea93c 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "0b78ceeee92e53285ec4ce04023b0e3e09f0e044",
+  "prompts": {},
+  "sessions": {
+    "s_5fb4df0053cb7e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a09a6d-ad13-7983-9500-1482b231405d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_cdd3bf278b3d35": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a09e5b-1906-7140-b4b6-8c5e651e6b7e",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
