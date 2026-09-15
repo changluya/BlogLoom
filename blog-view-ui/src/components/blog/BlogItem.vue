@@ -14,25 +14,24 @@
 					</div>
 					<!--文章简要信息-->
 					<div class="row m-padded-tb-small">
-						<div class="ui horizontal link list m-center">
+						<div class="ui horizontal link list m-center blog-meta">
 							<div class="item m-datetime">
 								<i class="small calendar icon"></i><span>{{ item.createTime | dateFormat('YYYY-MM-DD')}}</span>
 							</div>
 							<div class="item m-views">
 								<i class="small eye icon"></i><span>{{ item.views }}</span>
 							</div>
-							<div class="item m-common-black">
-								<i class="small pencil alternate icon"></i><span>字数≈{{ item.words }}字</span>
+							<div class="item meta-words">
+								<i class="small pencil alternate icon"></i><span>字数 {{ item.words }}字</span>
 							</div>
-							<div class="item m-common-black">
-								<i class="small clock icon"></i><span>阅读时长≈{{ item.readTime }}分</span>
+							<div class="item meta-read-time">
+								<i class="small clock icon"></i><span>阅读时长 {{ item.readTime }} 分钟</span>
 							</div>
+							<router-link v-if="item.category" :to="`/category/${item.category.name}`" class="item category-link">
+								<i class="small folder open icon"></i><span>{{ item.category.name }}</span>
+							</router-link>
 						</div>
 					</div>
-					<!--分类-->
-					<router-link :to="`/category/${item.category.name}`" class="ui orange large ribbon label">
-						<i class="small folder open icon"></i><span class="m-text-500">{{ item.category.name }}</span>
-					</router-link>
 					<!--文章Markdown描述-->
 					<div class="typo m-padded-tb-small line-numbers match-braces rainbow-braces" v-lazy-container="{selector: 'img'}" v-viewer v-html="item.description"></div>
 					<!--阅读全文按钮-->
@@ -89,6 +88,71 @@
 	.blog-card .horizontal.list {
 		color: #7b8794;
 		font-size: 13px;
+	}
+
+	.blog-meta {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 8px 0;
+		width: 100%;
+	}
+
+	.blog-meta .item {
+		display: inline-flex !important;
+		align-items: center;
+		gap: 5px;
+		margin: 0 !important;
+		padding: 0 16px !important;
+		color: #4b5563 !important;
+		font-size: 14px;
+		line-height: 22px;
+	}
+
+	.blog-meta .item + .item {
+		border-left: 1px solid #d9dee7;
+	}
+
+	.blog-meta .item::before {
+		display: none !important;
+	}
+
+	.blog-meta .item .icon {
+		width: 16px;
+		margin: 0 !important;
+		font-size: 14px !important;
+		text-align: center;
+	}
+
+	.blog-meta .m-datetime .icon {
+		color: #00a7e0;
+	}
+
+	.blog-meta .m-views .icon {
+		color: #ff3f1f;
+	}
+
+	.blog-meta .meta-words .icon {
+		color: #374151;
+	}
+
+	.blog-meta .meta-read-time .icon {
+		color: #6b7280;
+	}
+
+	.blog-meta .category-link {
+		color: #d97706 !important;
+		font-weight: 500;
+		transition: color .2s ease;
+	}
+
+	.blog-meta .category-link:hover {
+		color: #f97316 !important;
+	}
+
+	.blog-meta .category-link .icon {
+		color: #f59e0b;
 	}
 
 	.blog-card .typo {
@@ -161,6 +225,9 @@
 	@media (max-width: 768px) {
 		.blog-card { padding: 22px 16px !important; }
 		.blog-card h2.ui.header { font-size: 21px; }
+		.blog-meta { gap: 8px 14px; }
+		.blog-meta .item { padding: 0 !important; font-size: 12px; }
+		.blog-meta .item + .item { border-left: 0; }
 		.read-more-btn { min-width: 112px; height: 38px; }
 	}
 </style>

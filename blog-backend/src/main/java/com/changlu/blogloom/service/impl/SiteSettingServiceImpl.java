@@ -16,6 +16,7 @@ import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.SiteSettingService;
 import com.changlu.blogloom.util.JacksonUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -37,6 +38,15 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	RedisService redisService;
 
 	private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
+
+	/**
+	 * 站点配置可能通过初始化 SQL 或后台服务之外的方式变更，启动时清理旧缓存，
+	 * 避免资料卡继续使用已经删除的社交链接。
+	 */
+	@PostConstruct
+	private void clearSiteInfoCacheOnStartup() {
+		deleteSiteInfoRedisCache();
+	}
 
 	@Override
 	public Map<String, List<SiteSetting>> getList() {
@@ -89,8 +99,8 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 						siteInfo.put(s.getNameEn(), s.getValue());
 					}
 					break;
-				case 2:
-					switch (s.getNameEn()) {
+					case 2:
+						switch (s.getNameEn()) {
 						case SiteSettingConstants.AVATAR:
 							introduction.setAvatar(s.getValue());
 							break;
@@ -98,22 +108,22 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 							introduction.setName(s.getValue());
 							break;
 						case SiteSettingConstants.GITHUB:
-							introduction.setGithub(s.getValue());
+							introduction.setGithub(normalizeOptionalLink(s.getValue()));
 							break;
 						case SiteSettingConstants.TELEGRAM:
-							introduction.setTelegram(s.getValue());
+							introduction.setTelegram(normalizeOptionalLink(s.getValue()));
 							break;
 						case SiteSettingConstants.QQ:
-							introduction.setQq(s.getValue());
+							introduction.setQq(normalizeOptionalLink(s.getValue()));
 							break;
 						case SiteSettingConstants.BILIBILI:
-							introduction.setBilibili(s.getValue());
+							introduction.setBilibili(normalizeOptionalLink(s.getValue()));
 							break;
 						case SiteSettingConstants.NETEASE:
-							introduction.setNetease(s.getValue());
+							introduction.setNetease(normalizeOptionalLink(s.getValue()));
 							break;
 						case SiteSettingConstants.EMAIL:
-							introduction.setEmail(s.getValue());
+							introduction.setEmail(normalizeOptionalLink(s.getValue()));
 							break;
 						case SiteSettingConstants.FAVORITE:
 							Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
@@ -195,5 +205,17 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	 */
 	private void deleteSiteInfoRedisCache() {
 		redisService.deleteCacheByKey(RedisKeyConstants.SITE_INFO_MAP);
+	}
+
+	private String normalizeOptionalLink(String value) {
+		if (value == null) {
+			return null;
+		}
+		String normalized = value.trim();
+		if (normalized.isEmpty() || "#".equals(normalized)
+				|| "null".equalsIgnoreCase(normalized) || "undefined".equalsIgnoreCase(normalized)) {
+			return null;
+		}
+		return normalized;
 	}
 }

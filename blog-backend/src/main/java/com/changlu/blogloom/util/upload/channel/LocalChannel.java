@@ -7,8 +7,9 @@ import com.changlu.blogloom.config.properties.BlogProperties;
 import com.changlu.blogloom.config.properties.UploadProperties;
 import com.changlu.blogloom.util.upload.UploadUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 /**
@@ -34,14 +35,10 @@ public class LocalChannel implements FileUploadChannel {
 	 */
 	@Override
 	public String upload(UploadUtils.ImageResource image) throws Exception {
-		File folder = new File(uploadProperties.getPath());
-		if (!folder.exists()) {
-			folder.mkdirs();
-		}
+		Path folder = Paths.get(uploadProperties.getPath());
+		Files.createDirectories(folder);
 		String fileName = UUID.randomUUID() + "." + image.getType();
-		FileOutputStream fileOutputStream = new FileOutputStream(uploadProperties.getPath() + fileName);
-		fileOutputStream.write(image.getData());
-		fileOutputStream.close();
-		return blogProperties.getApi() + "/image/" + fileName;
+		Files.write(folder.resolve(fileName), image.getData());
+		return blogProperties.getApi() + "/static/" + fileName;
 	}
 }

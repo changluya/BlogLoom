@@ -88,3 +88,13 @@ export function updateBlog(blog) {
 		}
 	})
 }
+
+export function uploadBlogResource(file) {
+	const data = new FormData()
+	data.append('file', file)
+	return axios({
+		url: 'blog/resources',
+		method: 'POST',
+		data
+	})
+}

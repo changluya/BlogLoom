@@ -1,5 +1,5 @@
 <template>
-	<div class="site">
+	<div class="site" :class="{'blog-detail-site': $route.name === 'blog'}">
 		<!--顶部导航-->
 		<Nav :blogName="siteInfo.blogName" :categoryList="categoryList"/>
 		<!--首页大图 只在首页且pc端时显示-->
@@ -133,6 +133,13 @@
 	.main {
 		margin-top: 40px;
 		flex: 1;
+	}
+
+	.blog-detail-site .main {
+		background:
+			radial-gradient(circle at 15% 8%, rgba(45, 212, 191, .08), transparent 25%),
+			radial-gradient(circle at 86% 15%, rgba(56, 189, 248, .08), transparent 22%),
+			linear-gradient(180deg, #f4f7fa 0, #eef2f5 55%, #f3f5f7 100%);
 	}
 
 	.main .ui.container {

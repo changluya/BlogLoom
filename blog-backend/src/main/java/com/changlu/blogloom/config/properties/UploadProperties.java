@@ -1,11 +1,10 @@
 package com.changlu.blogloom.config.properties;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import com.changlu.blogloom.env.SystemPropertyUtil;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * 静态文件上传访问路径配置(目前用于评论中QQ头像的本地存储)
@@ -13,23 +12,33 @@ import org.springframework.context.annotation.Configuration;
  * @author: changlu
  * @date: 2026-09-13
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @Configuration
-@ConfigurationProperties(prefix = "upload.file")
 public class UploadProperties {
-	/**
-	 * 本地文件路径
-	 */
-	private String path;
-	/**
-	 * 请求地址映射
-	 */
-	private String accessPath;
-	/**
-	 * 本地文件路径映射
-	 */
-	private String resourcesLocations;
+	public String getPath() {
+		return SystemPropertyUtil.getLocalUploadFileDir();
+	}
+
+	public String getTempPath() {
+		return getPath("tmp").toString();
+	}
+
+	public String getBlogPath(Long blogId) {
+		return getPath("blogs", String.valueOf(blogId)).toString();
+	}
+
+	public String getAccessPath() {
+		return "/static/**";
+	}
+
+	public String getResourcesLocations() {
+		return "file:" + getPath() + "/";
+	}
+
+	private Path getPath(String... children) {
+		Path path = Paths.get(getPath());
+		for (String child : children) {
+			path = path.resolve(child);
+		}
+		return path.normalize();
+	}
 }

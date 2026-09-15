@@ -20,6 +20,7 @@ import com.changlu.blogloom.model.vo.PageResult;
 import com.changlu.blogloom.model.vo.RandomBlog;
 import com.changlu.blogloom.model.vo.SearchBlog;
 import com.changlu.blogloom.service.BlogService;
+import com.changlu.blogloom.service.BlogResourceService;
 import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.TagService;
 import com.changlu.blogloom.util.JacksonUtils;
@@ -44,6 +45,8 @@ public class BlogServiceImpl implements BlogService {
 	TagService tagService;
 	@Autowired
 	RedisService redisService;
+	@Autowired
+	BlogResourceService blogResourceService;
 	//随机博客显示5条
 	private static final int randomBlogLimitNum = 5;
 	//最新推荐博客显示3条
@@ -277,6 +280,10 @@ public class BlogServiceImpl implements BlogService {
 		if (blogMapper.saveBlog(blog) != 1) {
 			throw new PersistenceException("添加博客失败");
 		}
+		blogResourceService.reconcileBlogResources(blog.getId(), blog);
+		if (blogMapper.updateBlogResources(blog) != 1) {
+			throw new PersistenceException("保存博客资源链接失败");
+		}
 		redisService.saveKVToHash(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId(), 0);
 		deleteBlogRedisCache();
 	}
@@ -376,6 +383,7 @@ public class BlogServiceImpl implements BlogService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateBlog(com.changlu.blogloom.model.dto.Blog blog) {
+		blogResourceService.reconcileBlogResources(blog.getId(), blog);
 		if (blogMapper.updateBlog(blog) != 1) {
 			throw new PersistenceException("更新博客失败");
 		}

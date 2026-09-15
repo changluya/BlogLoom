@@ -15,11 +15,11 @@
 			</el-row>
 
 			<el-form-item label="文章描述" prop="description">
-				<mavon-editor v-model="form.description"/>
+				<mavon-editor ref="descriptionEditor" v-model="form.description" @imgAdd="handleDescriptionImageAdd"/>
 			</el-form-item>
 
 			<el-form-item label="文章正文" prop="content">
-				<mavon-editor v-model="form.content"/>
+				<mavon-editor ref="contentEditor" v-model="form.content" @imgAdd="handleContentImageAdd"/>
 			</el-form-item>
 
 			<el-row :gutter="20">
@@ -102,9 +102,9 @@
 	</div>
 </template>
 
-<script>
+	<script>
 	import Breadcrumb from "@/components/Breadcrumb";
-	import {getCategoryAndTag, saveBlog, getBlogById, updateBlog} from '@/api/blog'
+	import {getCategoryAndTag, saveBlog, getBlogById, updateBlog, uploadBlogResource} from '@/api/blog'
 
 	export default {
 		name: "WriteBlog",
@@ -171,6 +171,20 @@
 				blog.tagList = []
 				blog.tags.forEach(item => {
 					blog.tagList.push(item.id)
+				})
+			},
+			handleDescriptionImageAdd(pos, file) {
+				this.uploadEditorImage('descriptionEditor', pos, file)
+			},
+			handleContentImageAdd(pos, file) {
+				this.uploadEditorImage('contentEditor', pos, file)
+			},
+			uploadEditorImage(editorRef, pos, file) {
+				uploadBlogResource(file).then(res => {
+					const editor = this.$refs[editorRef]
+					if (editor && res.data && res.data.url) {
+						editor.$img2Url(pos, res.data.url)
+					}
 				})
 			},
 			submit() {

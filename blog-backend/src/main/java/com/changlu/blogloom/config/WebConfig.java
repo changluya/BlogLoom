@@ -52,6 +52,10 @@ public class WebConfig implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler(uploadProperties.getAccessPath()).addResourceLocations(uploadProperties.getResourcesLocations());
+		registry.addResourceHandler(uploadProperties.getAccessPath())
+				.addResourceLocations(uploadProperties.getResourcesLocations());
+		// 兼容 1.0.x 之前已经写入 Markdown 的 /image/** 地址。
+		registry.addResourceHandler("/image/**")
+				.addResourceLocations(uploadProperties.getResourcesLocations());
 	}
 }

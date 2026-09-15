@@ -282,6 +282,12 @@
         where id=#{id}
     </update>
 
+    <!--保存博客后，将临时资源链接替换为博客目录中的正式资源链接-->
+    <update id="updateBlogResources">
+        update blog set first_picture=#{firstPicture}, content=#{content}, description=#{description}
+        where id=#{id}
+    </update>
+
     <!--查询博客总数-->
     <select id="countBlog" resultType="java.lang.Integer">
         select count(*) from blog

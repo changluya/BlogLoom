@@ -76,7 +76,15 @@
 		},
 		methods: {
 			hasLink(value) {
-				return typeof value === 'string' && value.trim().length > 0 && value.trim() !== '#'
+				if (typeof value !== 'string') {
+					return false
+				}
+				const link = value.trim()
+				return link.length > 0
+					&& link !== '#'
+					&& link.toLowerCase() !== 'null'
+					&& link.toLowerCase() !== 'undefined'
+					&& !/^javascript:/i.test(link)
 			}
 		}
 	}

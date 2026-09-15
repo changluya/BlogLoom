@@ -15,7 +15,6 @@ import com.changlu.blogloom.service.BlogService;
 import com.changlu.blogloom.service.FriendService;
 import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.UserService;
-import com.changlu.blogloom.util.HashUtils;
 import com.changlu.blogloom.util.IpAddressUtils;
 import com.changlu.blogloom.util.MailUtils;
 import com.changlu.blogloom.util.QQInfoUtils;
@@ -213,18 +212,10 @@ public class CommentUtils {
 	}
 
 	/**
-	 * 对于昵称不是QQ号的评论，根据昵称Hash设置头像
-	 *
-	 * @param comment 当前收到的评论
+	 * 为非 QQ 昵称的匿名访客评论设置统一默认头像。
 	 */
-	private void setCommentRandomAvatar(Comment comment) {
-		//设置随机头像
-		//根据评论昵称取Hash，保证每一个昵称对应一个头像
-		long nicknameHash = HashUtils.getMurmurHash32(comment.getNickname());
-		//计算对应的头像
-		long num = nicknameHash % 6 + 1;
-		String avatar = "/img/comment-avatar/" + num + ".jpg";
-		comment.setAvatar(avatar);
+	private void setCommentAnonymousAvatar(Comment comment) {
+		comment.setAvatar("/img/comment-avatar/default.png");
 	}
 
 	/**
@@ -277,7 +268,7 @@ public class CommentUtils {
 	 */
 	public void setVisitorComment(Comment comment, HttpServletRequest request) {
 		comment.setNickname(comment.getNickname().trim());
-		setCommentRandomAvatar(comment);
+		setCommentAnonymousAvatar(comment);
 
 		//check website
 		if (!isValidUrl(comment.getWebsite())) {

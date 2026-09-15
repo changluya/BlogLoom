@@ -37,15 +37,15 @@ public class EnvironmentContext {
 	}
 
 	public String getUploadFilePath() {
-		return environment.getProperty("upload.file.path", SystemPropertyUtil.getConfDir() + "/upload/");
+		return SystemPropertyUtil.getLocalUploadFileDir();
 	}
 
 	public String getUploadFileAccessPath() {
-		return environment.getProperty("upload.file.access-path", "/image/**");
+		return "/static/**";
 	}
 
 	public String getUploadFileResourcesLocations() {
-		return environment.getProperty("upload.file.resources-locations", "file:" + getUploadFilePath());
+		return "file:" + getUploadFilePath();
 	}
 
 	public String getCommentNotifyChannel() {

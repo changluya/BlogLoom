@@ -61,6 +61,8 @@ public interface BlogMapper {
 
 	int updateViews(Long blogId, Integer views);
 
+	int updateBlogResources(com.changlu.blogloom.model.dto.Blog blog);
+
 	Blog getBlogById(Long id);
 
 	String getTitleByBlogId(Long id);
