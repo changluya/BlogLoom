@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.changlu.blogloom.exception.NotFoundException;
 import com.changlu.blogloom.exception.PersistenceException;
+import com.changlu.blogloom.exception.BadRequestException;
 import com.changlu.blogloom.model.vo.Result;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,5 +72,11 @@ public class ControllerExceptionHandler {
 	public Result exceptionHandler(HttpServletRequest request, Exception e) {
 		logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
 		return Result.create(500, "异常错误");
+	}
+
+	@ExceptionHandler(BadRequestException.class)
+	public Result badRequestExceptionHandler(HttpServletRequest request, BadRequestException e) {
+		logger.warn("Request URL : {}, Bad request: {}", request.getRequestURL(), e.getMessage());
+		return Result.create(400, e.getMessage());
 	}
 }

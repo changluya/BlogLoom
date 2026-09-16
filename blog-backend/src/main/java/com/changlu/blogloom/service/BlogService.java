@@ -61,6 +61,8 @@ public interface BlogService {
 
 	int countBlogByIsPublished();
 
+	long sumViewsByIsPublished();
+
 	int countBlogByCategoryId(Long categoryId);
 
 	int countBlogByTagId(Long tagId);

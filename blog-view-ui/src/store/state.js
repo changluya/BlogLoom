@@ -3,6 +3,9 @@ export default {
 	introduction: {
 		avatar: '',
 		name: '',
+		totalViews: 0,
+		publishedBlogCount: 0,
+		totalBlogViews: 0,
 		rollText: [],
 	},
 	commentQuery: {

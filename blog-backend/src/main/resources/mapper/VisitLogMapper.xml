@@ -60,4 +60,9 @@
     <select id="countVisitLogByToday" resultType="java.lang.Integer">
         select count(*) from visit_log where date(create_time)=curdate()
     </select>
+
+    <!--查询累计总访问量(PV)-->
+    <select id="countVisitLog" resultType="java.lang.Long">
+        select count(*) from visit_log
+    </select>
 </mapper>

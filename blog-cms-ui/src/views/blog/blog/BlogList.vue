@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!--搜索-->
-		<el-row>
+		<el-row type="flex" justify="space-between" align="middle" class="list-toolbar">
 			<el-col :span="8">
 				<el-input placeholder="请输入标题" v-model="queryInfo.title" :clearable="true" @clear="search" @keyup.native.enter="search" size="small" style="min-width: 500px">
 					<el-select v-model="queryInfo.categoryId" slot="prepend" placeholder="请选择分类" :clearable="true" @change="search" style="width: 160px">
@@ -9,6 +9,9 @@
 					</el-select>
 					<el-button slot="append" icon="el-icon-search" @click="search"></el-button>
 				</el-input>
+			</el-col>
+			<el-col :span="8" class="toolbar-actions">
+				<el-button type="primary" size="small" icon="el-icon-edit-outline" @click="goWriteBlogPage">写文章</el-button>
 			</el-col>
 		</el-row>
 
@@ -130,6 +133,9 @@
 			this.getData()
 		},
 		methods: {
+			goWriteBlogPage() {
+				this.$router.push('/blog/write')
+			},
 			getData() {
 				getDataByQuery(this.queryInfo).then(res => {
 					this.blogList = res.data.blogs.list
@@ -227,6 +233,8 @@
 </script>
 
 <style scoped>
+	.list-toolbar { margin-bottom: 16px; }
+	.toolbar-actions { text-align: right; }
 	.el-button + span {
 		margin-left: 10px;
 	}

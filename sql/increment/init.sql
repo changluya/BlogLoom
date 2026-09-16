@@ -1,3 +1,4 @@
+-- BlogLoom 全量初始化脚本：仅用于全新环境，不参与增量升级。
 -- 创建后端默认数据库
 CREATE DATABASE IF NOT EXISTS `blogloom`
   DEFAULT CHARACTER SET utf8mb4
@@ -361,5 +362,24 @@ CREATE TABLE `visitor`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `idx_uuid` (`uuid`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for knowledge_node
+-- ----------------------------
+DROP TABLE IF EXISTS `knowledge_node`;
+CREATE TABLE `knowledge_node` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '节点ID',
+  `parent_id` bigint NOT NULL DEFAULT 0 COMMENT '父节点ID，0表示虚拟根节点',
+  `blog_id` bigint DEFAULT NULL COMMENT 'DOC节点关联的博客ID，DIR节点必须为空',
+  `name` varchar(255) NOT NULL COMMENT '节点显示名',
+  `type` varchar(20) NOT NULL COMMENT '节点类型：DIR目录、DOC文档',
+  `sort` int NOT NULL DEFAULT 0 COMMENT '同级排序值',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='博客知识库节点树';
+
+INSERT INTO `knowledge_node` (`parent_id`,`blog_id`,`name`,`type`,`sort`,`create_time`,`update_time`)
+SELECT 0,b.id,b.title,'DOC',0,NOW(),NOW() FROM `blog` b;
 
 SET FOREIGN_KEY_CHECKS = 1;

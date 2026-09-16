@@ -137,9 +137,11 @@ BlogLoom/
 │   │   ├── task/                   # 定时任务
 │   │   └── util/                   # Markdown、上传、通知等工具
 │   ├── src/main/resources/         # 配置、Mapper XML 与静态资源
-│   ├── sql/increment/              # 增量数据库脚本
-│   ├── blogloom.sql                # 全量初始化脚本
 │   └── pom.xml
+├── sql/
+│   └── increment/
+│       ├── init.sql                # 全量初始化脚本
+│       └── 1.0/                    # 1.0 版本增量数据库脚本
 ├── blog-cms-ui/                    # Vue 管理后台
 │   ├── src/                        # 页面、组件、路由、状态和 API
 │   ├── public/                     # 后台静态资源
@@ -176,10 +178,10 @@ CREATE DATABASE blogloom
 导入全量初始化脚本：
 
 ```bash
-mysql -u root -p blogloom < blog-backend/blogloom.sql
+mysql -u root -p < sql/increment/init.sql
 ```
 
-`blog-backend/sql/increment/` 用于保存后续版本的增量 SQL。全新环境通常只需导入已经包含最新初始数据的 `blogloom.sql`；已有环境请按照增量脚本说明执行升级。
+`sql/increment/<版本>/` 用于保存后续版本的增量 SQL。全新环境通常只需导入已经包含最新结构的 `sql/increment/init.sql`；已有环境可使用 `bin/local/upgrate-sql.sh` 快速升级，该脚本不会执行 `init.sql`。
 
 ### 2. 配置后端
 
@@ -277,8 +279,9 @@ npm run build
 
 - Java 根包名为 `com.changlu.blogloom`。
 - 默认数据库名为 `blogloom`。
-- 全量数据库脚本为 `blog-backend/blogloom.sql`。
-- 增量升级脚本统一放在 `blog-backend/sql/increment/`。
+- 全量数据库脚本为 `sql/increment/init.sql`。
+- 增量升级脚本统一放在 `sql/increment/<版本>/`。
+- 本地增量升级使用 `bin/local/upgrate-sql.sh`。
 - `conf/logs/`、`conf/upload/` 与 `conf/static/` 分别用于运行日志、本地上传和外部静态资源。
 - 前端展示内容可能同时受到数据库站点配置和 Redis 缓存影响；修改初始化数据后，已运行环境还需同步数据库并按需清理缓存。
 

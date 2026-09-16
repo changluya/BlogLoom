@@ -52,6 +52,11 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Override
+	public long countVisitLog() {
+		return visitLogMapper.countVisitLog();
+	}
+
+	@Override
 	public int getBlogCount() {
 		return blogMapper.countBlog();
 	}

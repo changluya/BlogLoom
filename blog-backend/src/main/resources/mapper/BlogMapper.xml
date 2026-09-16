@@ -298,6 +298,11 @@
         select count(*) from blog where is_published=true
     </select>
 
+    <!--查询公开博客ID及数据库阅读量，实时阅读量以Redis为准-->
+    <select id="getBlogViewsListByIsPublished" resultType="com.changlu.blogloom.model.dto.BlogView">
+        select id, views from blog where is_published=true
+    </select>
+
     <!--按分类id查询博客数量-->
     <select id="countBlogByCategoryId" resultType="java.lang.Integer">
         select count(*) from blog where category_id=#{categoryId}

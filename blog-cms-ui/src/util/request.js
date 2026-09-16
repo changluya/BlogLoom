@@ -46,8 +46,9 @@ request.interceptors.request.use(config => {
 
 // 响应拦截
 request.interceptors.response.use(response => {
-		NProgress.done()
-		const res = response.data
+	NProgress.done()
+	if (response.config.responseType === 'blob') return response
+	const res = response.data
 		if (res.code !== 200) {
 			let msg = res.msg || 'Error'
 			Message.error(msg)

@@ -77,6 +77,8 @@ public interface BlogMapper {
 
 	int countBlogByIsPublished();
 
+	List<BlogView> getBlogViewsListByIsPublished();
+
 	int countBlogByCategoryId(Long categoryId);
 
 	int countBlogByTagId(Long tagId);

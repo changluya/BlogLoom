@@ -10,6 +10,7 @@ import com.changlu.blogloom.model.vo.RandomBlog;
 import com.changlu.blogloom.model.vo.Result;
 import com.changlu.blogloom.service.BlogService;
 import com.changlu.blogloom.service.CategoryService;
+import com.changlu.blogloom.service.DashboardService;
 import com.changlu.blogloom.service.SiteSettingService;
 import com.changlu.blogloom.service.TagService;
 
@@ -32,6 +33,8 @@ public class IndexController {
 	CategoryService categoryService;
 	@Autowired
 	TagService tagService;
+	@Autowired
+	DashboardService dashboardService;
 
 	/**
 	 * 获取站点配置信息、最新推荐博客、分类列表、标签云、随机博客
@@ -45,6 +48,9 @@ public class IndexController {
 		List<Category> categoryList = categoryService.getCategoryNameList();
 		List<Tag> tagList = tagService.getTagListNotId();
 		List<RandomBlog> randomBlogList = blogService.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
+		map.put("totalViews", dashboardService.countVisitLog());
+		map.put("publishedBlogCount", blogService.countBlogByIsPublished());
+		map.put("totalBlogViews", blogService.sumViewsByIsPublished());
 		map.put("newBlogList", newBlogList);
 		map.put("categoryList", categoryList);
 		map.put("tagList", tagList);

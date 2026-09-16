@@ -1,12 +1,17 @@
 <template>
 	<div>
 		<div class="ui segments m-box">
-			<div class="ui card">
-				<div class="image">
+			<div class="ui card introduction-card">
+				<div class="image introduction-avatar">
 					<img :src="introduction.avatar">
 				</div>
 				<div class="content" align="center">
 					<div class="header">{{ introduction.name }}</div>
+					<div class="blog-statistics">
+						<span><strong>{{ formatCount(introduction.totalViews) }}</strong><em>总访问量</em></span>
+						<span><strong>{{ formatCount(introduction.publishedBlogCount) }}</strong><em>原创</em></span>
+						<span><strong>{{ formatCount(introduction.totalBlogViews) }}</strong><em>总阅读量</em></span>
+					</div>
 					<div v-if="introduction.rollText.length" class="signature m-margin-top">
 						<p v-for="(line, index) in introduction.rollText" :key="index" class="signature-line">
 							{{ line }}
@@ -75,6 +80,10 @@
 			...mapState(['introduction'])
 		},
 		methods: {
+			formatCount(value) {
+				const count = Number(value)
+				return Number.isFinite(count) ? count.toLocaleString('zh-CN') : '0'
+			},
 			hasLink(value) {
 				if (typeof value !== 'string') {
 					return false
@@ -91,8 +100,86 @@
 </script>
 
 <style scoped>
+	.introduction-card {
+		width: 100% !important;
+		background: #fff !important;
+	}
+
+	.introduction-card .introduction-avatar {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 140px;
+		padding: 16px 12px 8px;
+		box-sizing: border-box;
+		overflow: hidden;
+		background: #fff !important;
+	}
+
+	.introduction-card .introduction-avatar img {
+		width: 112px;
+		height: 112px;
+		object-fit: contain;
+		border: 3px solid #fff;
+		border-radius: 50%;
+		background: #fff;
+		box-shadow: 0 5px 16px rgba(31,45,61,.14);
+	}
+
+	.introduction-card > .content {
+		padding: 6px 12px 10px !important;
+		border-top: 0 !important;
+		background: #fff !important;
+	}
+	.introduction-card > .content .header { font-size: 16px !important; line-height: 1.25; }
+	.blog-statistics {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		margin-top: 10px;
+		color: #7b8491;
+		font-size: 12px;
+		line-height: 1.4;
+	}
+
+	.blog-statistics span {
+		position: relative;
+		min-width: 0;
+		padding: 0 4px;
+	}
+
+	.blog-statistics span + span::before {
+		position: absolute;
+		top: 4px;
+		bottom: 4px;
+		left: 0;
+		width: 1px;
+		background: #e5e7eb;
+		content: '';
+	}
+
+	.blog-statistics strong {
+		display: block;
+		color: #303846;
+		font-size: 14px;
+		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.blog-statistics em {
+		display: block;
+		margin-top: 2px;
+		font-style: normal;
+		white-space: nowrap;
+	}
+	.introduction-card > .extra.content { padding: 10px 8px !important; background: #fff !important; }
+	.introduction-card .m-margin-top { margin-top: 8px !important; }
+
 	.ui.circular.icon.button {
-		width: 38px;
+		width: 34px;
+		height: 34px;
+		padding: 9px !important;
 	}
 
 	.signature {
@@ -105,7 +192,7 @@
 		margin: 0;
 		color: #556070;
 		font-size: 13px;
-		line-height: 1.75;
+		line-height: 1.55;
 		white-space: normal;
 		word-break: break-word;
 		overflow-wrap: anywhere;

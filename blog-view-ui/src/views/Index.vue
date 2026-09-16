@@ -13,7 +13,7 @@
 					<div class="ui stackable grid">
 						<!--左侧-->
 						<div class="three wide column m-mobile-hide">
-							<Introduction :class="{'m-display-none':focusMode}"/>
+							<Introduction :class="{'m-display-none':focusMode, 'article-introduction-sticky': $route.name === 'blog'}"/>
 						</div>
 						<!--中间-->
 						<div class="ten wide column">
@@ -107,6 +107,9 @@
 						this.categoryList = res.data.categoryList
 						this.tagList = res.data.tagList
 						this.randomBlogList = res.data.randomBlogList
+						res.data.introduction.totalViews = res.data.totalViews || 0
+						res.data.introduction.publishedBlogCount = res.data.publishedBlogCount || 0
+						res.data.introduction.totalBlogViews = res.data.totalBlogViews || 0
 						this.$store.commit(SAVE_SITE_INFO, this.siteInfo)
 						this.$store.commit(SAVE_INTRODUCTION, res.data.introduction)
 						document.title = this.$route.meta.title + this.siteInfo.webTitleSuffix
@@ -159,4 +162,19 @@
 	.m-display-none {
 		display: none !important;
 	}
+
+	.article-introduction-sticky {
+		position: sticky;
+		top: 60px;
+		max-height: calc(100vh - 76px);
+		overflow-x: hidden;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-width: thin;
+		scrollbar-color: #cbd5e1 transparent;
+	}
+
+	.article-introduction-sticky::-webkit-scrollbar { width: 5px; }
+	.article-introduction-sticky::-webkit-scrollbar-thumb { border-radius: 999px; background: #cbd5e1; }
+	.article-introduction-sticky::-webkit-scrollbar-track { background: transparent; }
 </style>

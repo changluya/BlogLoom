@@ -8,6 +8,8 @@ import java.util.Map;
 public interface DashboardService {
 	int countVisitLogByToday();
 
+	long countVisitLog();
+
 	int getBlogCount();
 
 	int getCommentCount();

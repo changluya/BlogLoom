@@ -24,4 +24,6 @@ public interface VisitLogMapper {
 	int deleteVisitLogById(Long id);
 
 	int countVisitLogByToday();
+
+	long countVisitLog();
 }

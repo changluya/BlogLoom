@@ -25,6 +25,9 @@ import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.TagService;
 import com.changlu.blogloom.util.JacksonUtils;
 import com.changlu.blogloom.util.markdown.MarkdownUtils;
+import com.changlu.blogloom.module.knowledge.dao.KnowledgeNodeMapper;
+import com.changlu.blogloom.module.knowledge.domain.entity.KnowledgeNode;
+import com.changlu.blogloom.module.knowledge.domain.enums.KnowledgeNodeType;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -47,6 +50,8 @@ public class BlogServiceImpl implements BlogService {
 	RedisService redisService;
 	@Autowired
 	BlogResourceService blogResourceService;
+	@Autowired
+	KnowledgeNodeMapper knowledgeNodeMapper;
 	//随机博客显示5条
 	private static final int randomBlogLimitNum = 5;
 	//最新推荐博客显示3条
@@ -259,6 +264,7 @@ public class BlogServiceImpl implements BlogService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteBlogById(Long id) {
+		knowledgeNodeMapper.deleteByBlogId(id);
 		if (blogMapper.deleteBlogById(id) != 1) {
 			throw new NotFoundException("该博客不存在");
 		}
@@ -269,9 +275,7 @@ public class BlogServiceImpl implements BlogService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteBlogTagByBlogId(Long blogId) {
-		if (blogMapper.deleteBlogTagByBlogId(blogId) == 0) {
-			throw new PersistenceException("维护博客标签关联表失败");
-		}
+		blogMapper.deleteBlogTagByBlogId(blogId);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -284,6 +288,13 @@ public class BlogServiceImpl implements BlogService {
 		if (blogMapper.updateBlogResources(blog) != 1) {
 			throw new PersistenceException("保存博客资源链接失败");
 		}
+		KnowledgeNode node = new KnowledgeNode();
+		node.setParentId(0L);
+		node.setBlogId(blog.getId());
+		node.setName(blog.getTitle());
+		node.setType(KnowledgeNodeType.DOC.name());
+		node.setSort(knowledgeNodeMapper.findMaxSort(0L) + 1);
+		knowledgeNodeMapper.insert(node);
 		redisService.saveKVToHash(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId(), 0);
 		deleteBlogRedisCache();
 	}
@@ -394,6 +405,20 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public int countBlogByIsPublished() {
 		return blogMapper.countBlogByIsPublished();
+	}
+
+	@Override
+	public long sumViewsByIsPublished() {
+		long totalViews = 0L;
+		for (BlogView blogView : blogMapper.getBlogViewsListByIsPublished()) {
+			Object redisViews = redisService.getValueByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blogView.getId());
+			if (redisViews instanceof Number) {
+				totalViews += ((Number) redisViews).longValue();
+			} else if (blogView.getViews() != null) {
+				totalViews += blogView.getViews();
+			}
+		}
+		return totalViews;
 	}
 
 	@Override

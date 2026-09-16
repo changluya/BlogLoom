@@ -34,7 +34,7 @@ const routes = [
 	{
 		path: '/blog',
 		name: 'Blog',
-		redirect: '/blog/write',
+		redirect: '/blog/list',
 		component: Layout,
 		meta: {title: '博客管理', icon: 'el-icon-notebook-2'},
 		children: [
@@ -42,7 +42,8 @@ const routes = [
 				path: 'write',
 				name: 'WriteBlog',
 				component: () => import('@/views/blog/blog/WriteBlog'),
-				meta: {title: '写文章', icon: 'el-icon-edit-outline'}
+				meta: {title: '写文章', icon: 'el-icon-edit-outline'},
+				hidden: true
 			},
 			{
 				path: 'moment/write',
@@ -69,6 +70,12 @@ const routes = [
 				name: 'BlogList',
 				component: () => import('@/views/blog/blog/BlogList'),
 				meta: {title: '文章管理', icon: 'el-icon-document'}
+			},
+			{
+				path: 'knowledge',
+				name: 'KnowledgeManage',
+				component: () => import('@/views/knowledge/KnowledgeManage'),
+				meta: {title: '知识库', icon: 'el-icon-folder-opened'}
 			},
 			{
 				path: 'moment/list',

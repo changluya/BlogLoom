@@ -3,12 +3,14 @@ package com.changlu.blogloom;
 import com.changlu.blogloom.env.SystemPropertyUtil;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootApplication
+@EnableScheduling
 public class BlogApiApplication {
 
 	public static void main(String[] args) {
