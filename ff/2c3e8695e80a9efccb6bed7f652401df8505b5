@@ -1,0 +1,241 @@
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/enums/KnowledgeNodeType.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-5
+blog-backend/src/main/resources/mapper/VisitLogMapper.xml
+  s_ee5c4339a6c142::t_2241f5f1f66d4a 63-67
+blog-view-ui/src/components/sidebar/Introduction.vue
+  s_ee5c4339a6c142::t_3613966d934ab1 10,14,83-86,135,139-141,158-160,162-164,168-169,175
+  s_ee5c4339a6c142::t_3a13213efbe10d 11-13,136-138,142-157,161,165-167,170-174
+  s_ee5c4339a6c142::t_c5efddda2d8ab3 4-5,134,177-178,180-182,195
+  s_ee5c4339a6c142::t_8b0bbce89993d7 103-133,176
+blog-backend/src/main/java/com/changlu/blogloom/service/BlogService.java
+  s_ee5c4339a6c142::t_3a13213efbe10d 64-65
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/dto/KnowledgeDirectoryCreate.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-11
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/dto/KnowledgeImportOptions.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-12
+blog-backend/src/main/resources/mapper/BlogMapper.xml
+  s_ee5c4339a6c142::t_d28d4d4a6786b5 301-303
+  s_ee5c4339a6c142::t_3a13213efbe10d 304-305
+bin/local/README.md
+  s_ee5c4339a6c142::t_3016f0a2941938 1-2,4,7-31
+  s_ee5c4339a6c142::t_e5857c2b8d78fb 3
+  s_ee5c4339a6c142::t_51fb591f2fb52b 5
+  s_ee5c4339a6c142::t_0ee9d682fd67ea 6
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/api/KnowledgeNodeAdminController.java
+  s_ee5c4339a6c142::t_eb4a0a1f53d55d 50-55
+  s_ee5c4339a6c142::t_b92a9c16d029a2 44
+  s_ee5c4339a6c142::t_e1b618948f0337 1-11,14-43,45-47,49,56-62,64,67-76,85
+  s_ee5c4339a6c142::t_14987031725969 63,65-66
+  s_ee5c4339a6c142::t_00384310403d2f 48
+  s_ee5c4339a6c142::t_1b66e561e8ea3f 12-13,77-79
+  s_ee5c4339a6c142::t_a63df86cd8315a 80-84
+blog-cms-ui/src/util/request.js
+  s_ee5c4339a6c142::t_1b66e561e8ea3f 49-51
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/dto/KnowledgeNodeUpdate.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-10
+blog-cms-ui/src/views/blog/blog/WriteBlog.vue
+  s_ee5c4339a6c142::t_579408ded66263 239-251
+  s_ee5c4339a6c142::t_958aa1ef273c88 8-9,12-20,22-54,61-62,64-70,74-75,84,91,112-114,116,122-128,172-181,186,203,207,209,213,216,225-238,253
+  s_ee5c4339a6c142::t_e8b05d8db2d8f0 252,254-258,260-266
+  s_ee5c4339a6c142::t_48c35ce3206fd7 2,4-5
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/vo/KnowledgeImportPreview.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-17
+blog-backend/src/main/java/com/changlu/blogloom/mapper/VisitLogMapper.java
+  s_ee5c4339a6c142::t_2241f5f1f66d4a 27-28
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/dto/KnowledgeNodeMove.java
+  s_ee5c4339a6c142::t_b92a9c16d029a2 10
+  s_ee5c4339a6c142::t_683cbef93a3737 1-9,11
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/vo/KnowledgeTreeNode.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-35
+blog-cms-ui/src/api/knowledge.js
+  s_ee5c4339a6c142::t_3a588c4f237204 15
+  s_ee5c4339a6c142::t_1b66e561e8ea3f 20
+  s_ee5c4339a6c142::t_de7dc578a7a681 7-8
+  s_ee5c4339a6c142::t_a63df86cd8315a 21
+  s_ee5c4339a6c142::t_fd9e6528dda458 1-5,9-14,16-19
+  s_ee5c4339a6c142::t_b92a9c16d029a2 6
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/entity/KnowledgeImportEntry.java
+  s_ee5c4339a6c142::t_950fc27fcae279 1-13
+blog-backend/src/main/java/com/changlu/blogloom/mapper/BlogMapper.java
+  s_ee5c4339a6c142::t_d28d4d4a6786b5 80
+  s_ee5c4339a6c142::t_3a13213efbe10d 81
+"docs/devDocs/release_1.0.x/02、BlogLoom 本地 Markdown 知识库导入导出设计方案.md"
+  s_ee5c4339a6c142::t_f6fd6d92ce7651 431,484-486
+  s_ee5c4339a6c142::t_72b650a20adb16 363,476-477,479-483,487-494,497-501,503-504,507-509,571
+  s_ee5c4339a6c142::t_e2bc719876f429 179
+  s_ee5c4339a6c142::t_cec569cf1c56b6 281,327,345,348-351,389,401,589
+  s_ee5c4339a6c142::t_c11cfaa03c3cea 326
+  s_ee5c4339a6c142::t_5324f52e27cfe1 273
+  s_ee5c4339a6c142::t_143f97779d39f1 72,75,78,87,107,112,117-118,130,514,518
+  s_ee5c4339a6c142::t_58e13ed07b51f5 153-156,195,225,583-584,600,639,658
+  s_d1f06273755314::t_f0bf09f2c6de4e 17,32,91-104,106,108-111,113-116,119-122
+  s_ee5c4339a6c142::t_51fb591f2fb52b 127
+  s_d1f06273755314::t_ee29b064424c1d 328-344,346-347,352-362,364-365,367-368,370-373,375-386,390-393,396,398-400,402,404-423,425,427,439-471
+  s_d1f06273755314::t_f7750abb602fbb 28,67,193-194,586,608
+  s_d1f06273755314::t_850b9cf797541c 1-16,18-27,29-31,33-48,50-66,68-71,73-74,76-77,79-86,88-90,123-126,128-129,131-138,140-146,148-152,157
+  s_ee5c4339a6c142::t_b7d06c9baaab29 426
+  s_ee5c4339a6c142::t_384d4e116567d0 270-271,303,305-325,387-388,394,403
+  s_d1f06273755314::t_e7be669ab4e347 158-178,180-192,196-204,206,208,210-220,222-224,226-269,272,274,276-280,282-302,304
+  s_ee5c4339a6c142::t_5de5d8347c122e 49,275,366,369,374,642
+  s_ee5c4339a6c142::t_ccf1535a1c0801 395,397,428-430,432-438
+  s_ee5c4339a6c142::t_f3e5f1e520b3ef 424
+  s_d1f06273755314::t_3d94c731f5e72d 472-475,478,510-513,515,517,519-531,533,536-541,544-548,550,552-570,572-574,576-582,585,591-597,601-607,609-617,619-638,640-641,645-657
+  s_ee5c4339a6c142::t_af9d4aea774a09 105,139,147,549
+  s_ee5c4339a6c142::t_e2503a6b142a8e 495-496,502,505-506,516,532,534-535,543,551
+  s_d1f06273755314::t_6f713737d8b24d 205,207,209,221
+  s_ee5c4339a6c142::t_94643b52a12c62 575,590,598-599,618,643-644,659
+  s_d1f06273755314::t_4ce3968f314498 542,587-588
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/impl/MarkdownArchiveServiceImpl.java
+  s_ee5c4339a6c142::t_6dea153df20aeb 39,80-81,194-195,201,207
+  s_ee5c4339a6c142::t_d418ef91880852 30,197-200,208-214,239-250
+  s_ee5c4339a6c142::t_e38d0ea5e67c95 67-69
+  s_ee5c4339a6c142::t_14987031725969 51,304,309-310
+  s_ee5c4339a6c142::t_1b66e561e8ea3f 8-10,18,31,48,54,116-134,150-187
+  s_ee5c4339a6c142::t_c7551693b78b04 21-22,203-204,206,257,263-281
+  s_ee5c4339a6c142::t_b9e2e7908217dc 1-7,11-13,15-17,19-20,23,25-29,32-34,36,38,40-47,49-50,52-53,55-60,62-66,70-79,82-115,188-193,196,202,205,215-238,251-256,258-262,282-289,291-294,302-303,305-308,311-313,323-332
+  s_ee5c4339a6c142::t_a63df86cd8315a 24,135-149
+  s_ee5c4339a6c142::t_b7d06c9baaab29 295-301
+  s_ee5c4339a6c142::t_3dfae4577c0fa6 14,290,314-322
+  s_ee5c4339a6c142::t_3a588c4f237204 35,37,61
+blog-backend/src/main/java/com/changlu/blogloom/controller/IndexController.java
+  s_ee5c4339a6c142::t_3613966d934ab1 52
+  s_ee5c4339a6c142::t_2241f5f1f66d4a 13,36-37,51
+  s_ee5c4339a6c142::t_3a13213efbe10d 53
+README.md
+  s_ee5c4339a6c142::t_51fb591f2fb52b 142-144,181,184,282
+  s_ee5c4339a6c142::t_e5857c2b8d78fb 141,283-284
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/entity/KnowledgeNode.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-23
+sql/increment/init.sql
+  s_ee5c4339a6c142::t_51fb591f2fb52b 1,366-384
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/KnowledgeNodeService.java
+  s_ee5c4339a6c142::t_eb4a0a1f53d55d 14
+  s_ee5c4339a6c142::t_b92a9c16d029a2 12
+  s_ee5c4339a6c142::t_e7e6766db9b459 1-11,15-16
+  s_ee5c4339a6c142::t_00384310403d2f 13
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/MarkdownArchiveService.java
+  s_ee5c4339a6c142::t_a63df86cd8315a 14
+  s_ee5c4339a6c142::t_1b66e561e8ea3f 7-9,13
+  s_ee5c4339a6c142::t_b9e2e7908217dc 1-6,10-12,15
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/KnowledgeImportTaskService.java
+  s_ee5c4339a6c142::t_950fc27fcae279 1-12
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/dto/KnowledgeNodeBatchDelete.java
+  s_ee5c4339a6c142::t_eb4a0a1f53d55d 1-12
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/enums/KnowledgeImportTaskStatus.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-5
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/impl/KnowledgeImportWorker.java
+  s_ee5c4339a6c142::t_23f2b48c46822d 1-26,28-92,97-104,106-111,119-152
+  s_ee5c4339a6c142::t_14987031725969 27,105,112-118
+  s_ee5c4339a6c142::t_9bac67f61c746c 93-96
+blog-cms-ui/src/router/index.js
+  s_ee5c4339a6c142::t_462b4b0b91558a 37,45-46
+  s_ee5c4339a6c142::t_02d0244f494b6a 75-79
+  s_ee5c4339a6c142::t_b0942e7d316ba1 74
+blog-backend/src/main/java/com/changlu/blogloom/BlogApiApplication.java
+  s_ee5c4339a6c142::t_e1b618948f0337 6,13
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/entity/KnowledgeImportSession.java
+  s_ee5c4339a6c142::t_950fc27fcae279 1-19
+blog-cms-ui/src/views/knowledge/KnowledgeManage.vue
+  s_ee5c4339a6c142::t_a63df86cd8315a 60,154,161,336-347
+  s_ee5c4339a6c142::t_63db0dc98787a4 166-169,350-352,365-368,400-429
+  s_ee5c4339a6c142::t_0e90e8f803b667 173
+  s_ee5c4339a6c142::t_de7dc578a7a681 14,25,62,245-248,251-252,316-322
+  s_ee5c4339a6c142::t_8263b65679be4d 50,191-212,378,385-387
+  s_ee5c4339a6c142::t_9c239df99e467c 39,171,261-277,293,435-439
+  s_ee5c4339a6c142::t_f325029d00c0e6 16-18,29-30,32,37,215-218,253,382
+  s_ee5c4339a6c142::t_091c7820b9239a 35
+  s_ee5c4339a6c142::t_ae336238e91dfe 377,388-389,392,394
+  s_ee5c4339a6c142::t_a21cf78c28a446 86,309-315,323
+  s_ee5c4339a6c142::t_1c3d46bdd74177 23-24,224-231
+  s_ee5c4339a6c142::t_4aed4597f8b70f 187
+  s_ee5c4339a6c142::t_b92a9c16d029a2 38,288-291,294-307
+  s_ee5c4339a6c142::t_80356b99352bb6 48,78,398
+  s_ee5c4339a6c142::t_584dd528b963f9 41,53-59,61,63-76,174,176-183,282,390-391,393,395
+  s_ee5c4339a6c142::t_43f4a6ba75b12e 89-94,96-110,112-116,121-128,131-139
+  s_ee5c4339a6c142::t_1b66e561e8ea3f 9,326-335,348
+  s_ee5c4339a6c142::t_a7a904cadb86d7 383
+  s_ee5c4339a6c142::t_d4e495cb80aa40 40,83-85,87-88,175,184-186,188-190,278-281,430-434
+  s_ee5c4339a6c142::t_e93e8498a68b95 19-22,26-28,31,34,160,219-223,232-244,249-250,384
+  s_ee5c4339a6c142::t_14987031725969 153,163,170,354
+  s_ee5c4339a6c142::t_d72f910b13af87 162,292,379-381
+  s_ee5c4339a6c142::t_fd9e6528dda458 1-8,10-13,36,42-47,49,51-52,77,79-82,95,111,117-120,129-130,140-152,155-159,164-165,172,283-287,308,324-325,349,353,355-364,369-376,396-397,399,440
+  s_ee5c4339a6c142::t_fbfe423cd2c7da 15,33,213-214,254-260
+blog-backend/src/main/java/com/changlu/blogloom/handler/ControllerExceptionHandler.java
+  s_ee5c4339a6c142::t_559c634e4cee62 76
+  s_ee5c4339a6c142::t_e1b618948f0337 10,77-81
+blog-backend/src/test/java/com/changlu/blogloom/module/knowledge/InMemoryKnowledgeImportTaskServiceTest.java
+  s_ee5c4339a6c142::t_9baf61a7e984b2 1-43
+blog-view-ui/src/store/state.js
+  s_ee5c4339a6c142::t_3613966d934ab1 6-7,47
+  s_ee5c4339a6c142::t_3a13213efbe10d 8
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/BlogServiceImpl.java
+  s_ee5c4339a6c142::t_00384310403d2f 278
+  s_ee5c4339a6c142::t_9bac67f61c746c 28-30,53-54,267,291-297
+  s_ee5c4339a6c142::t_d28d4d4a6786b5 412-421
+  s_ee5c4339a6c142::t_3a13213efbe10d 411,422-423
+  s_ee5c4339a6c142::t_59d1aa98487497 410
+blog-view-ui/src/views/Index.vue
+  s_ee5c4339a6c142::t_19b460de8ae499 16,165-179
+  s_ee5c4339a6c142::t_3613966d934ab1 110-111
+  s_ee5c4339a6c142::t_3a13213efbe10d 112
+bin/local/upgrate-sql.sh
+  s_ee5c4339a6c142::t_3016f0a2941938 1-3,5-65,67,69-141
+  s_ee5c4339a6c142::t_51fb591f2fb52b 4,66,68
+blog-backend/src/main/java/com/changlu/blogloom/service/DashboardService.java
+  s_ee5c4339a6c142::t_2241f5f1f66d4a 11-12
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/impl/KnowledgeNodeServiceImpl.java
+  s_ee5c4339a6c142::t_00384310403d2f 11-12,21-22,24,26-27,88,98,101-102,115-128,141
+  s_ee5c4339a6c142::t_eb4a0a1f53d55d 89-97,99-100,103-110,129-140
+  s_ee5c4339a6c142::t_9bac67f61c746c 37
+  s_ee5c4339a6c142::t_e7e6766db9b459 1-10,13-20,23,25,28-36,38-69,71-78,84-87,111-114,142-178
+  s_ee5c4339a6c142::t_b92a9c16d029a2 70,79-83
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/dao/KnowledgeNodeMapper.java
+  s_ee5c4339a6c142::t_b92a9c16d029a2 53-58
+  s_ee5c4339a6c142::t_9bac67f61c746c 23,29-31
+  s_ee5c4339a6c142::t_e7e6766db9b459 1-22,24-26,39-52,59-69
+  s_ee5c4339a6c142::t_23f2b48c46822d 27-28,32
+  s_ee5c4339a6c142::t_1b66e561e8ea3f 33-35
+  s_ee5c4339a6c142::t_00384310403d2f 36-38
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/DashboardServiceImpl.java
+  s_ee5c4339a6c142::t_2241f5f1f66d4a 55-58
+  s_ee5c4339a6c142::t_f27f8429636b9d 54
+conf/application.properties.conf
+  s_ee5c4339a6c142::t_66c6d0ee0e60db 11-14
+sql/increment/1.0/20260916000000_v1.0.x.sql
+  s_ee5c4339a6c142::t_e5857c2b8d78fb 1-18
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/impl/InMemoryKnowledgeImportTaskService.java
+  s_ee5c4339a6c142::t_950fc27fcae279 1-104
+.gitignore
+  s_ee5c4339a6c142::t_3016f0a2941938 38-39
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/domain/vo/KnowledgeImportProgress.java
+  s_ee5c4339a6c142::t_683cbef93a3737 1-24
+blog-cms-ui/src/views/blog/blog/BlogList.vue
+  s_ee5c4339a6c142::t_072327c9c5cb48 236-237
+  s_ee5c4339a6c142::t_462b4b0b91558a 4,13-15,136-138,241
+bin/local/deploy.conf.example
+  s_ee5c4339a6c142::t_3016f0a2941938 1-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ff2c3e8695e80a9efccb6bed7f652401df8505b5",
+  "prompts": {},
+  "sessions": {
+    "s_d1f06273755314": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0a4de-19a4-7992-9a2e-9076cb4f4349",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_ee5c4339a6c142": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0a608-7976-7b31-b4ce-d64f69538f83",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
