@@ -228,14 +228,7 @@
 		font-size: 13px;
 		line-height: 1.6;
 	}
-
-	@media (max-width: 768px) {
-		.home-toolbar {
-			flex-wrap: wrap;
-		}
-
-		.home-search {
-			width: 100%;
-		}
-	}
 </style>
+
+<!-- 移动端样式（独立文件，单独维护） -->
+<style scoped src="@/styles/mobile/pages/home.mobile.scss" lang="scss"></style>

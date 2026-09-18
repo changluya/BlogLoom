@@ -158,6 +158,10 @@
 
 	.main .ui.container {
 		width: 1400px !important;
+		max-width: 100% !important;
+		box-sizing: border-box;
+		padding-left: 16px;
+		padding-right: 16px;
 		margin-left: auto !important;
 		margin-right: auto !important;
 	}
@@ -189,3 +193,6 @@
 	.article-introduction-sticky::-webkit-scrollbar-thumb { border-radius: 999px; background: #cbd5e1; }
 	.article-introduction-sticky::-webkit-scrollbar-track { background: transparent; }
 </style>
+
+<!-- 移动端样式（独立文件，单独维护） -->
+<style scoped src="@/styles/mobile/pages/index.mobile.scss" lang="scss"></style>

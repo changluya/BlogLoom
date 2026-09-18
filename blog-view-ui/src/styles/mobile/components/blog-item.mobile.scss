@@ -1,0 +1,61 @@
+@import "@/styles/mixins.scss";
+
+// 博客卡片移动端样式（对应 components/blog/BlogItem.vue）
+
+@include mobile {
+  .blog-card {
+    margin-bottom: 10px !important;
+    padding: 14px !important;
+  }
+
+  .blog-card-layout {
+    gap: 13px;
+  }
+
+  .blog-cover {
+    flex-basis: 128px;
+    width: 128px;
+    height: 90px;
+  }
+
+  .blog-title.ui.header {
+    margin-bottom: 5px;
+    font-size: 17px;
+  }
+
+  .blog-description {
+    font-size: 13px;
+    -webkit-line-clamp: 1;
+  }
+
+  .blog-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 6px;
+  }
+
+  .blog-tags {
+    display: none;
+  }
+
+  .blog-meta {
+    justify-content: flex-start;
+    gap: 4px 10px;
+  }
+
+  .blog-meta span:nth-child(n+3) {
+    display: none;
+  }
+}
+
+@include small {
+  .blog-cover {
+    flex-basis: 108px;
+    width: 108px;
+    height: 76px;
+  }
+
+  .blog-description {
+    display: none;
+  }
+}

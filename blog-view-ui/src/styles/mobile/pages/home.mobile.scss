@@ -1,0 +1,42 @@
+@import "@/styles/mixins.scss";
+
+// 首页列表页移动端样式（对应 views/home/Home.vue）
+
+@include mobile {
+  .home-toolbar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .home-filters {
+    flex: 1;
+  }
+
+  .filter-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 7px 10px;
+  }
+
+  .home-search {
+    width: 100%;
+  }
+
+  .search-hit {
+    padding: 12px 14px;
+  }
+}
+
+@include small {
+  .search-hit-title {
+    font-size: 15px;
+  }
+
+  .search-hit-content {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}

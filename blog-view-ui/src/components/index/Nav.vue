@@ -311,52 +311,7 @@
 		color: rgba(0, 0, 0, .70);
 	}
 
-	@media (max-width: 1180px) and (min-width: 769px) {
-		.ui.fixed.menu .container {
-			width: calc(100% - 28px) !important;
-		}
-
-		.ui.inverted.menu .header.item {
-			min-width: 128px;
-			margin-right: 2px;
-			font-size: 15px;
-		}
-
-		.ui.inverted.menu .item {
-			padding: 0 9px;
-			font-size: 13px;
-		}
-
-		.m-search {
-			min-width: 175px;
-			width: 175px;
-		}
-	}
-
-	@media (max-width: 768px) {
-		.ui.fixed.menu .container {
-			width: 100% !important;
-		}
-
-		.ui.fixed.menu {
-			min-height: 54px;
-			background: rgba(13, 20, 31, .96) !important;
-		}
-
-		.ui.inverted.menu .header.item {
-			min-height: 54px;
-			min-width: 0;
-			margin: 0;
-			padding-left: 16px;
-		}
-
-		.ui.inverted.menu .item {
-			margin: 2px 10px;
-			min-height: 42px;
-		}
-
-		.m-search {
-			margin: 8px 12px 12px !important;
-		}
-	}
 </style>
+
+<!-- 移动端样式（独立文件，单独维护） -->
+<style src="@/styles/mobile/components/nav.mobile.scss" lang="scss"></style>

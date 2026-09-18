@@ -1,0 +1,21 @@
+// BlogLoom 全局样式变量
+// 断点统一登记于此，禁止在业务样式中硬编码阈值
+
+$bp-tablet-max: 1024px;
+$bp-tablet-min: 641px;
+$bp-mobile-max: 768px;
+$bp-small-max: 480px;
+
+// 页面留白
+$space-page-x: 16px;
+$space-page-x-mobile: 12px;
+
+// 主题色 / 文本色
+$color-primary: #00a7e0;
+$color-text: #303846;
+$color-text-secondary: #7b8491;
+$color-border: #e5e7eb;
+
+// 导航高度
+$nav-height: 64px;
+$nav-height-mobile: 54px;

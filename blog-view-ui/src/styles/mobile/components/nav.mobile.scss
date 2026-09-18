@@ -1,0 +1,54 @@
+@import "@/styles/mixins.scss";
+
+// 导航栏移动端样式（对应 components/index/Nav.vue，全局样式）
+
+@include tablet {
+  .ui.fixed.menu .container {
+    width: calc(100% - 28px) !important;
+  }
+
+  .ui.inverted.menu .header.item {
+    min-width: 128px;
+    margin-right: 2px;
+    font-size: 15px;
+  }
+
+  .ui.inverted.menu .item {
+    padding: 0 9px;
+    font-size: 13px;
+  }
+
+  .m-search {
+    min-width: 175px;
+    width: 175px;
+  }
+}
+
+@include mobile {
+  .ui.fixed.menu .container {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 0 12px;
+  }
+
+  .ui.fixed.menu {
+    min-height: $nav-height-mobile;
+    background: rgba(13, 20, 31, .96) !important;
+  }
+
+  .ui.inverted.menu .header.item {
+    min-height: $nav-height-mobile;
+    min-width: 0;
+    margin: 0;
+    padding-left: 4px;
+  }
+
+  .ui.inverted.menu .item {
+    margin: 2px 10px;
+    min-height: 42px;
+  }
+
+  .m-search {
+    margin: 8px 12px 12px !important;
+  }
+}

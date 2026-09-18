@@ -98,20 +98,7 @@
 	.blog-meta { display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 6px 14px; color: #8a9199; font-size: 12px; }
 	.blog-meta span { white-space: nowrap; }
 	.blog-meta .icon { margin-right: 4px !important; }
-
-	@media (max-width: 768px) {
-		.blog-card { margin-bottom: 10px !important; padding: 14px !important; }
-		.blog-card-layout { gap: 13px; }
-		.blog-cover { flex-basis: 128px; width: 128px; height: 90px; }
-		.blog-title.ui.header { margin-bottom: 5px; font-size: 17px; }
-		.blog-description { font-size: 13px; -webkit-line-clamp: 1; }
-		.blog-footer { align-items: flex-start; flex-direction: column; padding-top: 6px; }
-		.blog-tags { display: none; }
-		.blog-meta { justify-content: flex-start; gap: 4px 10px; }
-		.blog-meta span:nth-child(n+3) { display: none; }
-	}
-	@media (max-width: 480px) {
-		.blog-cover { flex-basis: 108px; width: 108px; height: 76px; }
-		.blog-description { display: none; }
-	}
 </style>
+
+<!-- 移动端样式（独立文件，单独维护） -->
+<style scoped src="@/styles/mobile/components/blog-item.mobile.scss" lang="scss"></style>

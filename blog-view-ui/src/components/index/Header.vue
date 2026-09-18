@@ -78,6 +78,8 @@
 <style scoped>
 	header {
 		--percentage: 0.5;
+		position: relative;
+		overflow: hidden;
 		user-select: none;
 	}
 
@@ -196,13 +198,6 @@
 		box-shadow: 0 0 18px rgba(39, 217, 255, .65);
 	}
 
-	@media (max-width: 768px) {
-		.hero-content { top: 45%; }
-		.hero-eyebrow { padding: 0 11px; font-size: 9px; letter-spacing: 1.3px; }
-		.hero-content h1 { margin-top: 17px; font-size: 44px; letter-spacing: -1.5px; }
-		.hero-content p { font-size: 14px; }
-	}
-
 	.wrapper {
 		position: absolute;
 		width: 100px;
@@ -255,3 +250,6 @@
 		left: -100px;
 	}
 </style>
+
+<!-- 移动端样式（独立文件，单独维护） -->
+<style scoped src="@/styles/mobile/components/header.mobile.scss" lang="scss"></style>

@@ -1,0 +1,20 @@
+@import "./variables.scss";
+
+// 响应式断点 mixin（统一入口，勿在业务样式内直接写媒体查询）
+@mixin tablet {
+  @media (min-width: #{$bp-tablet-min}) and (max-width: #{$bp-tablet-max}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{$bp-mobile-max}) {
+    @content;
+  }
+}
+
+@mixin small {
+  @media (max-width: #{$bp-small-max}) {
+    @content;
+  }
+}

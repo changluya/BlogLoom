@@ -284,21 +284,9 @@
 
 	.github-badge a { color: #fff; }
 
-	@media (max-width: 900px) {
-		.footer-main {
-			grid-template-columns: 1fr 1fr;
-		}
-		.footer-about {
-			grid-column: 1 / -1;
-		}
-	}
-
-	@media (max-width: 560px) {
-		.site-footer { padding: 32px 0 20px; }
-		.footer-main { grid-template-columns: 1fr; gap: 24px; }
-		.footer-bottom { flex-direction: column; align-items: flex-start; }
-	}
-
 	.compact-footer { margin-top: 0; padding: 14px 0; }
 	.compact-footer .footer-divider { margin: 8px 0 14px; }
 </style>
+
+<!-- 移动端样式（独立文件，单独维护） -->
+<style scoped src="@/styles/mobile/components/footer.mobile.scss" lang="scss"></style>

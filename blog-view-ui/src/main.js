@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 //自定义css
 import './assets/css/base.css'
+//全局样式入口（变量/断点/全局移动端）
+import './styles/index.scss'
 //阿里icon
 import './assets/css/icon/iconfont.css'
 //typo.css

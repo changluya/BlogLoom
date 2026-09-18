@@ -1,0 +1,26 @@
+@import "@/styles/mixins.scss";
+
+// 首页大图移动端样式（对应 components/index/Header.vue）
+// 注：首页在移动端已用 m-mobile-hide 隐藏大图，此处仅保留精简规则
+
+@include mobile {
+  .hero-content {
+    top: 45%;
+  }
+
+  .hero-eyebrow {
+    padding: 0 11px;
+    font-size: 9px;
+    letter-spacing: 1.3px;
+  }
+
+  .hero-content h1 {
+    margin-top: 17px;
+    font-size: 44px;
+    letter-spacing: -1.5px;
+  }
+
+  .hero-content p {
+    font-size: 14px;
+  }
+}

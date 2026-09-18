@@ -144,7 +144,7 @@ footer {
     display: none !important;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
     .m-mobile-hide {
         display: none !important;
     }

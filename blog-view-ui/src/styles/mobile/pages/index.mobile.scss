@@ -1,0 +1,35 @@
+@import "@/styles/mixins.scss";
+
+// 前台整体布局移动端样式（对应 views/Index.vue）
+
+@include tablet {
+  .main .ui.container {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding-left: $space-page-x;
+    padding-right: $space-page-x;
+  }
+}
+
+@include mobile {
+  .main {
+    margin-top: $nav-height-mobile;
+  }
+
+  .main .ui.container {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding-left: $space-page-x;
+    padding-right: $space-page-x;
+  }
+
+  .m-padded-tb-big {
+    padding-top: 1em !important;
+    padding-bottom: 1.5em !important;
+  }
+
+  .ui.grid .ten.column {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
