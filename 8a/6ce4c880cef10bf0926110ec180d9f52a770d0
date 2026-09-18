@@ -1,0 +1,527 @@
+docs-website/v1/en/deploy/nginx.md
+  s_9e3243cb0813db::t_68a5250140edbd 1-46
+docs-website/v1/zh/integration/storage/tencent.md
+  s_9e3243cb0813db::t_5874aa19c6fe8e 1-31
+docs-website/v1/en/guide/reference/authentication.md
+  s_9e3243cb0813db::t_33f1167b44eabb 1-32
+docs-website/v1/en/intro.md
+  s_9e3243cb0813db::t_6494b8c3d7adcb 1-196
+docs-website/v1/zh/guide/quickstart.md
+  s_9e3243cb0813db::t_02db1026807a17 1-27,29-30,32-33,42-67,69-82,84-90
+  s_9e3243cb0813db::t_3a27cb67ca8971 68,83
+  s_9e3243cb0813db::t_8d9f30a84e216f 28,31,34-41
+docs-website/v1/zh/guide/reference/faq.md
+  s_9e3243cb0813db::t_849371301c5a70 1-37
+docs-website/v1/en/deploy/security.md
+  s_9e3243cb0813db::t_06a0068ebd47d7 1-35
+docs-website/v1/en/integration/storage/tencent.md
+  s_9e3243cb0813db::t_a61258bb532950 1-31
+docs-website/README.md
+  s_9e3243cb0813db::t_92e7b409c42497 1-144
+blog-backend/src/main/resources/mapper/BlogMapper.xml
+  s_9d43701a9d4764::t_9a1d3f4bf10955 156,162-164
+  s_42e96a00facdba::t_30c4f4ce220b74 134-142
+docs-website/v1/zh/guide/admin/system.md
+  s_9e3243cb0813db::t_b38581a479eaae 1-37
+docs-website/v1/en/deploy/index.md
+  s_9e3243cb0813db::t_eb141ece562e09 1-34
+docs-website/v1/en/deploy/frontend.md
+  s_9e3243cb0813db::t_e3cc3e2d8ee39f 1-37
+docs-website/v1/en/blogs/v1-release.md
+  s_9e3243cb0813db::t_674aacf6728e47 1-35
+blog-backend/src/main/java/com/changlu/blogloom/entity/Category.java
+  s_9d43701a9d4764::t_84a5c424b01761 23
+docs-website/v1/en/guide/modules/blog-backend.md
+  s_9e3243cb0813db::t_04446599fdcf0b 1-55
+docs-website/v1/zh/integration/utils/ip-region.md
+  s_9e3243cb0813db::t_2581781b2f30df 1-29
+docs-website/v1/en/guide/admin/content.md
+  s_9e3243cb0813db::t_8475d314367298 1-29
+docs-website/v1/zh/deploy/troubleshooting.md
+  s_9e3243cb0813db::t_0a431df8036441 1-44
+docs-website/v1/zh/integration/storage/local.md
+  s_9e3243cb0813db::t_96392d562633f9 1-29
+docs-website/v1/zh/guide/concepts/markdown.md
+  s_9e3243cb0813db::t_ae3c87bd38125f 1-44
+docs-website/v1/zh/intro.md
+  s_9e3243cb0813db::t_2e411d00bec96b 1-196
+docs-website/v1/zh/guide/modules/blog-cms-ui.md
+  s_9e3243cb0813db::t_a07730bdfa1445 1-47
+blog-backend/src/main/resources/mapper/CategoryMapper.xml
+  s_9d43701a9d4764::t_2313e3fccb18f2 10-15,21-27
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/TagServiceImpl.java
+  s_9d43701a9d4764::t_422708261f363f 31-32
+docs-website/v1/en/guide/modules/blog-view-ui.md
+  s_9e3243cb0813db::t_985ea9d8c3884d 1-39
+docs-website/v1/en/integration/data/mysql.md
+  s_9e3243cb0813db::t_adab00d84f62df 1-38
+docs-website/v1/zh/community/contributors.md
+  s_9e3243cb0813db::t_f39a04b53cf281 19,23
+  s_9e3243cb0813db::t_265fc633e2e863 1-18,20-22,24
+docs-website/v1/zh/guide/modules/blog-backend.md
+  s_9e3243cb0813db::t_51a5f33d4f3ff0 1-55
+docs-website/v1/en/deploy/troubleshooting.md
+  s_9e3243cb0813db::t_87462f54967a3f 1-44
+docs-website/v1/en/deploy/configuration.md
+  s_9e3243cb0813db::t_87908dc9264337 1-51
+docs-website/v1/en/blogs/index.md
+  s_9e3243cb0813db::t_f39a04b53cf281 21
+  s_9e3243cb0813db::t_086c0da48a6b10 1-20,22
+docs-website/v1/zh/guide/concepts/comments.md
+  s_9e3243cb0813db::t_88f82f3d7f9853 1-37
+docs-website/v1/zh/deploy/backend.md
+  s_9e3243cb0813db::t_b8827d2bda9ef9 1-45
+blog-view-ui/src/components/index/Footer.vue
+  s_9d43701a9d4764::t_844af4bbff7691 95
+  s_9d43701a9d4764::t_da74724d5cbb07 265-268
+  s_9d43701a9d4764::t_7c3aaedf8c332f 51
+  s_9d43701a9d4764::t_563a436f30982c 2-13,17-43,47,49-50,52-55,57-64,86-90,92-93,97,101-133,139-147,156-174,176-264,269-303
+  s_9d43701a9d4764::t_72998550499cb1 94
+  s_9d43701a9d4764::t_2b0bac43ef6cc9 98-100
+blog-view-ui/src/components/sidebar/Categories.vue
+  s_9d43701a9d4764::t_e628160cf7d6f8 32-33
+  s_9d43701a9d4764::t_35dbf6e9d09923 7
+  s_9d43701a9d4764::t_d89031e5b895c9 4-6
+  s_9d43701a9d4764::t_fc5a29cca311c5 8-10,29-31
+  s_9d43701a9d4764::t_aea521620ca0eb 34-36
+docs-website/v1/zh/guide/admin/media.md
+  s_9e3243cb0813db::t_152cc4f7491b30 1-30
+docs-website/v1/en/integration/storage/github.md
+  s_9e3243cb0813db::t_0e3215b014c860 1-31
+docs-website/v1/zh/deploy/operations.md
+  s_9e3243cb0813db::t_b0f83ad6f923cb 1-36
+docs-website/v1/zh/guide/frontend/moments.md
+  s_9e3243cb0813db::t_a0b77fc91ad055 1-27
+docs-website/v1/zh/integration/notification/email.md
+  s_9e3243cb0813db::t_6e853ea41bdb45 1-33
+docs-website/v1/en/deploy/backend.md
+  s_9e3243cb0813db::t_5c96a5a50590df 1-45
+docs-website/landing.js
+  s_9e3243cb0813db::t_995c31bbb83477 1-41
+docs-website/v1/zh/deploy/database.md
+  s_9e3243cb0813db::t_6ce778dc23d9a9 1-2,4-5,7,9-15,17,22,24,33,35,39,41,44,47,50,55-65
+  s_9e3243cb0813db::t_8eb01087a50e3e 3,6,8,16,18-21,23,25-32,34,36-38,40,42-43,45-46,48-49,51-54
+docs-website/v1/zh/deploy/nginx.md
+  s_9e3243cb0813db::t_cf100dbac90788 1-46
+docs-website/v1/zh/blogs/usecases/index.md
+  s_9e3243cb0813db::t_08df5ea08d9349 1-27
+docs-website/v1/en/guide/reference/faq.md
+  s_9e3243cb0813db::t_c691a37d1e3fe4 1-37
+docs-website/v1/zh/guide/architecture.md
+  s_9e3243cb0813db::t_1449084a37474d 1-53
+docs-website/v1/en/guide/concepts/markdown.md
+  s_9e3243cb0813db::t_dc407bef006255 1-44
+docs-website/v1/en/guide/frontend/home.md
+  s_9e3243cb0813db::t_19383f37cd0240 1-29
+docs-website/v1/en/guide/frontend/moments.md
+  s_9e3243cb0813db::t_2f1d6745b8b0c1 1-27
+blog-cms-ui/src/router/index.js
+  s_9d43701a9d4764::t_a415594beafd56 180
+  s_9e3243cb0813db::t_cf1c62d8cc7f41 8-9,39,54-55,71-91,94-95,98-101
+docs-website/scripts/tests/check-docs.test.mjs
+  s_9e3243cb0813db::t_5ed91c4443f227 1-86
+docs-website/v1/zh/guide/index.md
+  s_9e3243cb0813db::t_2895a4f33fd692 23
+  s_9e3243cb0813db::t_893d56dae31433 1-21,25-45
+  s_9e3243cb0813db::t_07eefd6aefda21 22
+  s_9e3243cb0813db::t_6740f624f798d1 24
+docs-website/v1/en/guide/frontend/archive-search.md
+  s_9e3243cb0813db::t_513372fc707b0c 1-31
+docs-website/v1/zh/deploy/environment.md
+  s_9e3243cb0813db::t_2a9a482898eefb 1-40
+docs-website/v1/zh/blogs/usecases/personal-blog.md
+  s_9e3243cb0813db::t_edb0751eb218ee 1-26
+docs-website/v1/en/guide/frontend/article.md
+  s_9e3243cb0813db::t_4ecf4a81815f5a 1-32
+docs-website/v1/zh/guide/admin/site.md
+  s_9e3243cb0813db::t_b444c448b15524 1-29
+docs-website/v1/zh/deploy/index.md
+  s_9e3243cb0813db::t_b7dbf5a973e6dc 1-34
+blog-backend/src/main/resources/mapper/TagMapper.xml
+  s_9d43701a9d4764::t_f1cfb4b0e63c03 11-17,23-30
+docs-website/v1/en/guide/admin/site.md
+  s_9e3243cb0813db::t_fc04477881cdff 1-29
+docs-website/v1/zh/deploy/configuration.md
+  s_9e3243cb0813db::t_340577dd73bcf7 1-51
+docs-website/docs.json
+  s_9e3243cb0813db::t_13735533f92e51 196
+  s_9e3243cb0813db::t_7319769be9950f 11-14
+  s_9e3243cb0813db::t_f39a04b53cf281 183,348
+  s_9e3243cb0813db::t_832063a3a33499 3-9,19-182,184-186,199-347,349-380,383-385,388
+  s_9e3243cb0813db::t_b86671d2a2190b 1-2
+  s_9e3243cb0813db::t_f9cd53ae6c51ec 10
+  s_9e3243cb0813db::t_2b402f020193d1 15-18
+  s_9e3243cb0813db::t_9bf88f210eebc7 187-189,193-195
+  s_9e3243cb0813db::t_64112727093f27 197-198
+  s_9e3243cb0813db::t_d7b99022b415ab 381-382
+  s_9e3243cb0813db::t_d929fe7a89efe2 386-387
+  s_9e3243cb0813db::t_e6ace24fea57bc 389-391
+docs-website/v1/zh/guide/concepts/content-model.md
+  s_9e3243cb0813db::t_2d3a3641f09c8c 1-41
+docs-website/v1/zh/blogs/v1-release.md
+  s_9e3243cb0813db::t_6af49420c8f69a 1-35
+docs-website/v1/zh/integration/data/redis.md
+  s_9e3243cb0813db::t_20c1cd8846b553 1-33
+docs-website/v1/en/guide/reference/database.md
+  s_9e3243cb0813db::t_e281bad2457b58 1-5,7-11,17-18,22,24,27,30,33,35,39-48,50-55
+  s_9e3243cb0813db::t_aa59b61d20efee 6,12-16,19-21,23,25-26,28-29,31-32,34,36-38,49
+docs-website/.mintignore
+  s_9e3243cb0813db::t_316c729987c2d7 7-8
+  s_9e3243cb0813db::t_424d4fe7858d15 4-6
+docs-website/v1/zh/integration/storage/upyun.md
+  s_9e3243cb0813db::t_8acb2c9cf9ea35 1-30
+docs-website/v1/en/deploy/database.md
+  s_9e3243cb0813db::t_5108e40e58f88b 3,6,8,16,18-21,23,25-32,34,36-38,40,42-43,45-46,48-49,51-54
+  s_9e3243cb0813db::t_a4e19365cc5504 1-2,4-5,7,9-15,17,22,24,33,35,39,41,44,47,50,55-65
+docs-website/v1/en/guide/modules/blog-cms-ui.md
+  s_9e3243cb0813db::t_1584b979937680 1-47
+blog-view-ui/src/views/home/Home.vue
+  s_9d43701a9d4764::t_cb9f58732f4278 3-33,40,50-55,77,91-130,137-179,181-241
+docs-website/v1/en/community/roadmap.md
+  s_9e3243cb0813db::t_8a9c20aa02e446 1-26,28
+  s_9e3243cb0813db::t_f39a04b53cf281 27
+blog-backend/src/main/java/com/changlu/blogloom/controller/BlogController.java
+  s_9d43701a9d4764::t_9b2eb33a84ff0c 40,43,48-50
+docs-website/v1/zh/guide/frontend/article.md
+  s_9e3243cb0813db::t_05420358c110e6 1-32
+docs-website/v1/en/integration/data/redis.md
+  s_9e3243cb0813db::t_16ab718eaf41f4 1-33
+docs-website/package.json
+  s_9e3243cb0813db::t_df63df80c95a33 2-3
+  s_9e3243cb0813db::t_3e0ab9c1cb7c50 1
+  s_9e3243cb0813db::t_757a2436456132 4-6
+  s_9e3243cb0813db::t_a8f8708c99c39d 7-21
+docs-website/v1/en/integration/storage/upyun.md
+  s_9e3243cb0813db::t_d6f0a723b4ee50 1-30
+docs-website/v1/zh/guide/frontend/archive-search.md
+  s_9e3243cb0813db::t_bfbfc7b9074d7e 1-31
+docs-website/v1/zh/guide/reference/database.md
+  s_9e3243cb0813db::t_7bc6c317b8a001 6,12-16,19-21,23,25,28-29,31-32,34,36-38,49
+  s_9e3243cb0813db::t_6152913b637f59 1-5,7-11,17-18,22,24,26-27,30,33,35,39-48,50-55
+docs-website/v1/zh/integration/data/mysql.md
+  s_9e3243cb0813db::t_7943c4e3b7db86 1-38
+docs-website/v1/zh/blogs/usecases/project-home.md
+  s_9e3243cb0813db::t_1774807e836518 1-26
+"docs/devDocs/release_1.0.x/04、BlogLoom 移动端适配与维护规范.md"
+  s_9d43701a9d4764::t_164c35176506fa 1-207
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/BlogServiceImpl.java
+  s_9d43701a9d4764::t_9491b7fec9b860 139-142
+docs-website/v1/en/integration/overview.md
+  s_9e3243cb0813db::t_7aee89775d1b77 1-33
+docs-website/v1/en/deploy/operations.md
+  s_9e3243cb0813db::t_205fa9934fa362 1-36
+blog-backend/src/main/java/com/changlu/blogloom/service/BlogService.java
+  s_9d43701a9d4764::t_b1da7190c4c813 24
+docs-website/v1/zh/guide/admin/content.md
+  s_9e3243cb0813db::t_9fefc72fc4001f 1-29
+blog-view-ui/src/views/archives/Archives.vue
+  s_9d43701a9d4764::t_35291a4040de73 9,13-21,26,52-67,93-97,105-119,121,124-128,131,133-142,145,147,150-155,158-163,167-168,171,179-183,192-196,205-209,218-222,231-235,238
+docs-website/v1/en/guide/admin/media.md
+  s_9e3243cb0813db::t_f060219be52ea6 1-30
+docs-website/v1/en/blogs/usecases/personal-blog.md
+  s_9e3243cb0813db::t_b98dae0da5d964 1-26
+docs-website/scripts/check-docs.mjs
+  s_9e3243cb0813db::t_872c1bd6a5d18b 75
+  s_9e3243cb0813db::t_f820021fde1170 4
+  s_9e3243cb0813db::t_50f074bd8b6471 1,7-44,56-59,73,79
+  s_9e3243cb0813db::t_4833c12aea5643 45
+  s_9e3243cb0813db::t_edb7a4076ac849 2-3
+  s_9e3243cb0813db::t_0ad831701d0f88 5-6
+  s_9e3243cb0813db::t_c64f108b5cc71d 46-48,53-55
+  s_9e3243cb0813db::t_17711883a38edc 60-62,70-72
+  s_9e3243cb0813db::t_e5903cbadb51b8 74
+  s_9e3243cb0813db::t_08ec56768ad4b4 76-78
+  s_9e3243cb0813db::t_51e4fd5b614959 80
+docs-website/v1/en/integration/utils/ip-region.md
+  s_9e3243cb0813db::t_e70f90c7bca25d 1-29
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/CategoryServiceImpl.java
+  s_9d43701a9d4764::t_215b88153958ba 34-35
+sql/increment/1.0/20260918000000_v1.0.x.sql
+  s_9d43701a9d4764::t_de61fd87fda7c6 1-3
+blog-view-ui/src/api/home.js
+  s_9d43701a9d4764::t_2da79400540bfb 3,8-9,12
+docs-website/style.css
+  s_9e3243cb0813db::t_100a8dcdf280ce 162,167-169,171,176,178-189,191-198,200-201
+  s_9e3243cb0813db::t_625eef26b22095 13-16
+  s_9e3243cb0813db::t_622da1009a8722 2-12,21-161,163,165,170,172,174,177,190,199,202,204-447
+  s_9e3243cb0813db::t_5b8e7d37766f75 1
+  s_9e3243cb0813db::t_36cf67f4d6a9ef 17-20
+  s_9e3243cb0813db::t_3f5302beee0632 164
+  s_9e3243cb0813db::t_3db42451def85a 166
+  s_9e3243cb0813db::t_e8df15ed899ce9 173
+  s_9e3243cb0813db::t_166588f70ba247 175
+  s_9e3243cb0813db::t_0665e00c883b38 203
+docs-website/v1/en/community/contributors.md
+  s_9e3243cb0813db::t_165647a71d5ffb 1-18,20-22,24
+  s_9e3243cb0813db::t_f39a04b53cf281 19,23
+docs-website/v1/zh/community/roadmap.md
+  s_9e3243cb0813db::t_8b7d068e99e82f 1-26,28
+  s_9e3243cb0813db::t_f39a04b53cf281 27
+docs-website/v1/en/integration/storage/local.md
+  s_9e3243cb0813db::t_e9c48e246db7ca 1-29
+docs-website/v1/zh/guide/modules/blog-view-ui.md
+  s_9e3243cb0813db::t_252c3c70498513 1-39
+conf/application.properties
+  s_ee5c4339a6c142::t_3a588c4f237204 10-13
+blog-view-ui/src/components/index/Nav.vue
+  s_9d43701a9d4764::t_6d540aa366c7d8 95-98,110,120-121,124
+docs-website/logo.svg
+  s_9e3243cb0813db::t_4f98284b441d5e 2-3
+  s_9e3243cb0813db::t_c405245744e20a 1
+  s_9e3243cb0813db::t_544ac4d6849cdb 4
+blog-backend/src/main/java/com/changlu/blogloom/entity/Tag.java
+  s_9d43701a9d4764::t_d3f78551602fee 24
+docs-website/v1/zh/guide/reference/authentication.md
+  s_9e3243cb0813db::t_08ad96c9b90332 1-32
+docs-website/v1/en/blogs/usecases/index.md
+  s_9e3243cb0813db::t_57a388d675dc54 1-27
+blog-view-ui/src/components/blog/BlogItem.vue
+  s_9d43701a9d4764::t_4aeea01fb2b5ca 20-22
+  s_9d43701a9d4764::t_989b063d215b95 98
+  s_9d43701a9d4764::t_c9987431d5ed7b 65,72,74-97,112
+  s_42e96a00facdba::t_b46640cc03c2ce 3-18,50-51,55-62,64,66-71,99-100,103-111,113-115
+docs-website/v1/zh/deploy/frontend.md
+  s_9e3243cb0813db::t_50aff0d17bcf8c 1-37
+docs-website/v1/en/blogs/usecases/project-home.md
+  s_9e3243cb0813db::t_bf4ca5f78ca188 1-26
+docs-website/v1/en/guide/concepts/comments.md
+  s_9e3243cb0813db::t_7e36d24c20778b 1-37
+blog-view-ui/src/views/Index.vue
+  s_9d43701a9d4764::t_0fcf7317be12b6 119,123-134
+  s_9d43701a9d4764::t_b7d5d82e4bcb82 49
+  s_9d43701a9d4764::t_1b57cfd5f0a47d 54
+  s_9d43701a9d4764::t_1ed795fbcdfe87 88
+  s_9d43701a9d4764::t_f4486a6dea86ca 84
+docs-website/v1/zh/guide/admin/dashboard.md
+  s_9e3243cb0813db::t_6d4602a43f492f 1-30
+docs-website/v1/zh/guide/reference/api.md
+  s_9e3243cb0813db::t_6db455836e17ad 1-40
+docs-website/v1/zh/integration/overview.md
+  s_9e3243cb0813db::t_543914f4f3cee2 1-33
+docs-website/v1/zh/integration/storage/github.md
+  s_9e3243cb0813db::t_078826be80d68c 1-31
+docs-website/v1/en/guide/quickstart.md
+  s_9e3243cb0813db::t_622fac40c9646c 1-54,56-69,71-77
+  s_9e3243cb0813db::t_fe4fe9b0ebeb14 55
+  s_9e3243cb0813db::t_cd6e5d2c4ca953 70
+docs-website/v1/en/integration/notification/email.md
+  s_9e3243cb0813db::t_1d196639567530 1-33
+docs-website/v1/zh/guide/admin/article-editor.md
+  s_9e3243cb0813db::t_c61e29eb89bd7c 1-38
+docs-website/v1/en/deploy/environment.md
+  s_9e3243cb0813db::t_96a318100474e7 1-38
+docs-website/v1/zh/deploy/security.md
+  s_9e3243cb0813db::t_246c24111fa1f5 1-35
+blog-cms-ui/src/views/page/SiteSetting.vue
+  s_9d43701a9d4764::t_f1aa66444953e4 207
+  s_9d43701a9d4764::t_ed6c4bd25465f0 210
+  s_9d43701a9d4764::t_8cd3f0da1dda57 24-38,45-46,66-72,74-76,78,90
+  s_9d43701a9d4764::t_f264e77e298d6d 186,197,308-311,315-317
+  s_9d43701a9d4764::t_c62a7eb728530e 337
+  s_9d43701a9d4764::t_86afa01bbf08e1 3-5
+  s_9d43701a9d4764::t_08e7812563c965 172
+  s_9d43701a9d4764::t_a36d025a3acc22 21-23
+  s_9d43701a9d4764::t_108e56924f902d 39-44
+  s_9d43701a9d4764::t_35c6c50ae84936 47
+  s_9d43701a9d4764::t_788e40168b2fda 63-65
+  s_9d43701a9d4764::t_9e923d5b1e21a8 73
+  s_9d43701a9d4764::t_9a8f91965e9f39 77
+  s_9d43701a9d4764::t_b2dcde4bba279a 79
+  s_9d43701a9d4764::t_077f4a81489aed 87-89
+  s_9d43701a9d4764::t_e0251e86030447 169-171
+  s_9d43701a9d4764::t_ba38a5bd4930cd 173-175,183-185
+  s_9d43701a9d4764::t_63f565837ab46e 187-189
+  s_9d43701a9d4764::t_ac44f3789bb24c 194-196
+  s_9d43701a9d4764::t_eda489df1f21f8 198-200,204-206
+  s_9d43701a9d4764::t_f038dd8c6bee2a 208-209
+  s_9d43701a9d4764::t_f348a11e9a287a 211
+  s_9d43701a9d4764::t_b4cfe0846e0d8c 306-307
+  s_9d43701a9d4764::t_e072fd6280c579 312-314
+  s_9d43701a9d4764::t_04bdc1bbace8c8 318
+  s_9d43701a9d4764::t_c906a109ea444b 338-340
+docs-website/v1/zh/blogs/index.md
+  s_9e3243cb0813db::t_f39a04b53cf281 21
+  s_9e3243cb0813db::t_5db9cebab38b08 1-20,22
+docs-website/v1/en/guide/admin/article-editor.md
+  s_9e3243cb0813db::t_e794e1df75573f 1-38
+docs-website/v1/en/guide/admin/system.md
+  s_9e3243cb0813db::t_c8b5376642cf10 1-37
+docs-website/v1/en/guide/reference/api.md
+  s_9e3243cb0813db::t_239d744cea49c9 1-40
+blog-cms-ui/src/layout/components/Navbar.vue
+  s_9d43701a9d4764::t_7852fd0b979e42 56,67-73
+  s_9d43701a9d4764::t_0e16fc9d1fe4dd 88-109
+  s_9d43701a9d4764::t_9d815991196a13 19-22,30-47
+docs-website/v1/en/guide/admin/dashboard.md
+  s_9e3243cb0813db::t_94bcd610ea419f 1-30
+docs-website/v1/zh/guide/frontend/home.md
+  s_9e3243cb0813db::t_d2c9838142fd89 1-29
+blog-backend/src/main/java/com/changlu/blogloom/model/vo/ArchiveBlog.java
+  s_9d43701a9d4764::t_13d8660c68d168 21
+docs-website/v1/en/guide/index.md
+  s_9e3243cb0813db::t_2b9d7e9bef8fd0 22
+  s_9e3243cb0813db::t_5ab07a765fa988 24
+  s_9e3243cb0813db::t_1cf1297826b343 1-21,25-45
+  s_9e3243cb0813db::t_dd8f5ab2226d31 23
+docs-website/v1/en/guide/architecture.md
+  s_9e3243cb0813db::t_04102cf852fd6e 1-53
+blog-view-ui/src/components/sidebar/Tags.vue
+  s_9d43701a9d4764::t_524b539ba5c447 7
+  s_9d43701a9d4764::t_e83250d0c39173 74-84
+docs-website/v1/en/guide/concepts/content-model.md
+  s_9e3243cb0813db::t_8af7ba20dbe7f5 1-41
+blog-backend/src/main/java/com/changlu/blogloom/config/properties/UploadProperties.java
+  s_5482ddfd091cfc::t_cdd5aa44ab95b6 29-36
+blog-backend/src/main/java/com/changlu/blogloom/constant/SiteSettingConstants.java
+  s_5482ddfd091cfc::t_b511f42321ad03 11
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/MomentAdminController.java
+  s_5482ddfd091cfc::t_03bb47a56d8def 41-42,45
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/SiteSettingAdminController.java
+  s_5482ddfd091cfc::t_a3dda8e70905b6 9-12,59-64
+blog-backend/src/main/java/com/changlu/blogloom/entity/Blog.java
+  s_5482ddfd091cfc::t_1cf1157924eeb6 42
+blog-backend/src/main/java/com/changlu/blogloom/mapper/BlogMapper.java
+  s_5482ddfd091cfc::t_2fc6d9b97dfc1a 40-41
+blog-backend/src/main/java/com/changlu/blogloom/mapper/MomentMapper.java
+  s_5482ddfd091cfc::t_32fbea95d34273 4,19
+blog-backend/src/main/java/com/changlu/blogloom/model/dto/Blog.java
+  s_5482ddfd091cfc::t_3d44d98cbbb1f8 48
+blog-backend/src/main/java/com/changlu/blogloom/model/vo/Copyright.java
+  s_5482ddfd091cfc::t_b76b43cdaa8857 20
+blog-backend/src/main/java/com/changlu/blogloom/module/column/api/ColumnAdminController.java
+  s_5482ddfd091cfc::t_17c9e1b6021c65 1-28
+blog-backend/src/main/java/com/changlu/blogloom/module/column/api/ColumnController.java
+  s_5482ddfd091cfc::t_a2d30c6d766d97 1-15
+blog-backend/src/main/java/com/changlu/blogloom/module/column/dao/BlogColumnMapper.java
+  s_5482ddfd091cfc::t_a225d4b547fd46 1-61
+blog-backend/src/main/java/com/changlu/blogloom/module/column/dao/BlogColumnRelationMapper.java
+  s_5482ddfd091cfc::t_8f899b82da1fb4 1-29
+blog-backend/src/main/java/com/changlu/blogloom/module/column/domain/dto/ColumnMoveRequest.java
+  s_5482ddfd091cfc::t_1851a8b375b06f 1-11
+blog-backend/src/main/java/com/changlu/blogloom/module/column/domain/entity/BlogColumn.java
+  s_5482ddfd091cfc::t_13f7f6596a84e2 1-22
+blog-backend/src/main/java/com/changlu/blogloom/module/column/domain/vo/ColumnTreeVo.java
+  s_5482ddfd091cfc::t_2b887e2c12c3d8 1-15
+blog-backend/src/main/java/com/changlu/blogloom/module/column/service/BlogColumnService.java
+  s_5482ddfd091cfc::t_2384f45b259fe9 1-27
+blog-backend/src/main/java/com/changlu/blogloom/module/column/service/ColumnCoverStorageService.java
+  s_5482ddfd091cfc::t_06359caccc6711 1-55
+blog-backend/src/main/java/com/changlu/blogloom/module/column/service/impl/BlogColumnServiceImpl.java
+  s_5482ddfd091cfc::t_90e6a38a190141 1-149
+blog-backend/src/main/java/com/changlu/blogloom/service/BlogResourceService.java
+  s_5482ddfd091cfc::t_043d0e9b7411f7 31,105-115,129-131
+blog-backend/src/main/java/com/changlu/blogloom/service/LocalResourceStorageService.java
+  s_5482ddfd091cfc::t_4185fde4341a2b 107-134
+blog-backend/src/main/java/com/changlu/blogloom/service/MomentService.java
+  s_5482ddfd091cfc::t_a2659fc59ef450 9
+blog-backend/src/main/java/com/changlu/blogloom/service/SiteImageStorageService.java
+  s_5482ddfd091cfc::t_f767b9f7cd98cb 1-56
+blog-backend/src/main/java/com/changlu/blogloom/service/SiteSettingService.java
+  s_5482ddfd091cfc::t_4c35a50ce99dad 4,18
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/MomentServiceImpl.java
+  s_5482ddfd091cfc::t_78d0be0711f9a4 37-44
+blog-backend/src/main/resources/mapper/MomentMapper.xml
+  s_5482ddfd091cfc::t_c54c064a0d7b5e 18-24
+blog-cms-ui/index.html
+  s_5482ddfd091cfc::t_ab085010d1d6b7 7
+blog-cms-ui/src/api/column.js
+  s_5482ddfd091cfc::t_d68a82d75b4f17 1-14
+blog-cms-ui/src/api/siteSetting.js
+  s_5482ddfd091cfc::t_b3ef73778a6bb5 21-26,32
+blog-cms-ui/src/components/ImageUpload.vue
+  s_5482ddfd091cfc::t_bac4431473206d 1-59
+blog-cms-ui/src/layout/components/Sidebar/Logo.vue
+  s_5482ddfd091cfc::t_dedb6023cb6f34 21-23,67-68
+blog-cms-ui/src/layout/index.vue
+  s_5482ddfd091cfc::t_ca317d3131f9b1 17-18,28-36
+blog-cms-ui/src/settings.js
+  s_5482ddfd091cfc::t_096df28cf7573d 12
+blog-cms-ui/src/util/favicon.js
+  s_5482ddfd091cfc::t_08a74c3eb3bf9e 1-13
+blog-cms-ui/src/views/blog/blog/BlogList.vue
+  s_5482ddfd091cfc::t_01d83dbf9a7e86 5-6,12-13,15,100-109,116-117,121,134-135,152-153,255-256
+blog-cms-ui/src/views/blog/blog/WriteBlog.vue
+  s_5482ddfd091cfc::t_998aab637bcb79 24-32,53-56,94-95,99,104-105,108,126,133,164,179,192-200,260-262,290-293
+blog-cms-ui/src/views/blog/category/CategoryList.vue
+  s_5482ddfd091cfc::t_841ac2deef396f 30,45,65-67,124,136,151,162
+blog-cms-ui/src/views/blog/column/ColumnManage.vue
+  s_5482ddfd091cfc::t_066bf1ffffe2f1 1-187
+blog-cms-ui/src/views/blog/moment/MomentList.vue
+  s_5482ddfd091cfc::t_f4b6aa62476285 3-8,52-53,63-66,102-103,107
+blog-cms-ui/src/views/blog/tag/TagList.vue
+  s_5482ddfd091cfc::t_3060f33980c1ea 36,60,89-91,165,177,190,201
+blog-view-ui/index.html
+  s_5482ddfd091cfc::t_c43cae0419703a 7
+blog-view-ui/src/api/column.js
+  s_5482ddfd091cfc::t_ebf6c068773f57 1-5
+blog-view-ui/src/components/sidebar/Introduction.vue
+  s_5482ddfd091cfc::t_430bcf342e1b2e 69,77,79-81
+blog-view-ui/src/components/sidebar/UserColumns.vue
+  s_5482ddfd091cfc::t_a029cd23780ba4 1-52
+blog-view-ui/src/router/index.js
+  s_5482ddfd091cfc::t_c46325985cf21b 48-53
+blog-view-ui/src/util/favicon.js
+  s_5482ddfd091cfc::t_0876cfc30e9cfc 1-13
+blog-view-ui/src/views/column/Column.vue
+  s_5482ddfd091cfc::t_e9c37481999cc4 3-11,13-14,19-20,22-25,27-28,34-41
+docs-website/.gitignore
+  s_9d43701a9d4764::t_1592100d0e0329 1-2
+docs-website/v1/en/community/how-to-contribute.md
+  s_9e3243cb0813db::t_9001dbc159c639 1-41
+docs-website/v1/zh/community/how-to-contribute.md
+  s_9e3243cb0813db::t_6dd60d6d1e867e 1-41
+docs/standard/backend/BlogLoom-上传文件目录与访问路径规范.md
+  s_5482ddfd091cfc::t_69e62ef7a199f7 1-98
+sql/increment/1.0/20260917000000_v1.0.x.sql
+  s_5482ddfd091cfc::t_5c0981a2fe6923 1-23
+sql/increment/1.0/20260917120000_v1.0.x.sql
+  s_5482ddfd091cfc::t_a0265c679623de 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a6ce4c880cef10bf0926110ec180d9f52a770d0",
+  "prompts": {},
+  "sessions": {
+    "s_42e96a00facdba": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f4d30db88ffeGS28RK4t6JO1z1",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_5482ddfd091cfc": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0a866-e2df-7880-b8b5-99d73628e6a6",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_9d43701a9d4764": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f4cf6221fffeNkRIckBTwlzWcJ",
+        "model": "deepseek-v4-flash-0731"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_9e3243cb0813db": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f4c59871bffe69VYjRVgOrgQzf",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_ee5c4339a6c142": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0a608-7976-7b31-b4ce-d64f69538f83",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
