@@ -21,11 +21,13 @@ public interface BlogService {
 
 	List<NewBlog> getNewBlogListByIsPublished();
 
-	PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum);
+	PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum, String sort);
 
 	PageResult<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum);
 
 	PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum);
+
+	PageResult<BlogInfo> getBlogInfoListByColumnIdAndIsPublished(Long columnId, Integer pageNum);
 
 	Map<String, Object> getArchiveBlogAndCountByIsPublished();
 

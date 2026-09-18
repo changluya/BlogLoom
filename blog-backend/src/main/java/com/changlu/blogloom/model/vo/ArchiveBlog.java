@@ -18,6 +18,7 @@ public class ArchiveBlog {
 	private Long id;
 	private String title;
 	private String day;
+	private String time;
 	private String password;
 	private Boolean privacy;
 }

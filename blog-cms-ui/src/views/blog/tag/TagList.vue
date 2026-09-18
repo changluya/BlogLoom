@@ -33,7 +33,7 @@
 		</el-pagination>
 
 		<!--添加标签对话框-->
-		<el-dialog title="添加标签" width="50%" :visible.sync="addDialogVisible" :close-on-click-modal="false" @close="addDialogClosed">
+		<el-dialog title="添加标签" width="560px" :visible.sync="addDialogVisible" :close-on-click-modal="false" append-to-body @close="addDialogClosed">
 			<!--内容主体-->
 			<el-form :model="addForm" :rules="formRules" ref="addFormRef" label-width="80px">
 				<el-form-item label="标签名称" prop="name">
@@ -57,7 +57,7 @@
 		</el-dialog>
 
 		<!--编辑标签对话框-->
-		<el-dialog title="编辑标签" width="50%" :visible.sync="editDialogVisible" :close-on-click-modal="false" @close="editDialogClosed">
+		<el-dialog title="编辑标签" width="560px" :visible.sync="editDialogVisible" :close-on-click-modal="false" append-to-body @close="editDialogClosed">
 			<!--内容主体-->
 			<el-form :model="editForm" :rules="formRules" ref="editFormRef" label-width="80px">
 				<el-form-item label="标签名称" prop="name">
@@ -86,8 +86,9 @@
 	import Breadcrumb from "@/components/Breadcrumb";
 	import {getData, addTag, editTag, deleteTagById} from '@/api/tag'
 
-	export default {
-		name: "TagList",
+		export default {
+			name: "TagList",
+			props: {embedded: {type: Boolean, default: false}},
 		components: {
 			Breadcrumb
 		},
@@ -161,6 +162,7 @@
 							this.msgSuccess(res.msg)
 							this.addDialogVisible = false
 							this.getData()
+							this.$emit('changed')
 						})
 					}
 				})
@@ -172,6 +174,7 @@
 							this.msgSuccess(res.msg)
 							this.editDialogVisible = false
 							this.getData()
+							this.$emit('changed')
 						})
 					}
 				})
@@ -184,6 +187,7 @@
 				deleteTagById(id).then(res => {
 					this.msgSuccess(res.msg)
 					this.getData()
+					this.$emit('changed')
 				})
 			}
 		}

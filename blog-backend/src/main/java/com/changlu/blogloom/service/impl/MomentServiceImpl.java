@@ -35,6 +35,14 @@ public class MomentServiceImpl implements MomentService {
 	}
 
 	@Override
+	public List<Moment> getMomentListByQuery(String query) {
+		if (query == null || query.trim().isEmpty()) {
+			return momentMapper.getMomentList();
+		}
+		return momentMapper.getMomentListByQuery(query.trim());
+	}
+
+	@Override
 	public List<Moment> getMomentVOList(Integer pageNum, boolean adminIdentity) {
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		List<Moment> moments = momentMapper.getMomentList();

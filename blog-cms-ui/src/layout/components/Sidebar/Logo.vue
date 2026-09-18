@@ -18,9 +18,9 @@
 				required: true
 			}
 		},
-		data() {
-			return {
-				logo: this.$store.state.settings.logo
+		computed: {
+			logo() {
+				return this.$store.state.settings.logo
 			}
 		}
 	}
@@ -64,6 +64,8 @@
 				width: 30px;
 				height: 30px;
 				margin-right: 10px;
+				border-radius: 7px;
+				object-fit: contain;
 				filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .22));
 			}
 

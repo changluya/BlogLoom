@@ -3,13 +3,11 @@ package com.changlu.blogloom.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.changlu.blogloom.constant.RedisKeyConstants;
 import com.changlu.blogloom.entity.Category;
 import com.changlu.blogloom.exception.NotFoundException;
 import com.changlu.blogloom.exception.PersistenceException;
 import com.changlu.blogloom.mapper.CategoryMapper;
 import com.changlu.blogloom.service.CategoryService;
-import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.TagService;
 
 import java.util.List;
@@ -25,8 +23,6 @@ public class CategoryServiceImpl implements CategoryService {
 	CategoryMapper categoryMapper;
 	@Autowired
 	TagService tagService;
-	@Autowired
-	RedisService redisService;
 
 	@Override
 	public List<Category> getCategoryList() {
@@ -35,14 +31,8 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> getCategoryNameList() {
-		String redisKey = RedisKeyConstants.CATEGORY_NAME_LIST;
-		List<Category> categoryListFromRedis = redisService.getListByValue(redisKey);
-		if (categoryListFromRedis != null) {
-			return categoryListFromRedis;
-		}
-		List<Category> categoryList = categoryMapper.getCategoryNameList();
-		redisService.saveListToValue(redisKey, categoryList);
-		return categoryList;
+		//直接查库，实时统计各分类下已发布博客数量
+		return categoryMapper.getCategoryNameList();
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -51,7 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
 		if (categoryMapper.saveCategory(category) != 1) {
 			throw new PersistenceException("分类添加失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstants.CATEGORY_NAME_LIST);
 	}
 
 	@Override
@@ -74,7 +63,6 @@ public class CategoryServiceImpl implements CategoryService {
 		if (categoryMapper.deleteCategoryById(id) != 1) {
 			throw new PersistenceException("删除分类失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstants.CATEGORY_NAME_LIST);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -83,8 +71,5 @@ public class CategoryServiceImpl implements CategoryService {
 		if (categoryMapper.updateCategory(category) != 1) {
 			throw new PersistenceException("分类更新失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstants.CATEGORY_NAME_LIST);
-		//修改了分类名，可能有首页文章关联了分类，也要更新首页缓存
-		redisService.deleteCacheByKey(RedisKeyConstants.HOME_BLOG_INFO_LIST);
 	}
 }

@@ -28,12 +28,18 @@ import com.changlu.blogloom.util.markdown.MarkdownUtils;
 import com.changlu.blogloom.module.knowledge.dao.KnowledgeNodeMapper;
 import com.changlu.blogloom.module.knowledge.domain.entity.KnowledgeNode;
 import com.changlu.blogloom.module.knowledge.domain.enums.KnowledgeNodeType;
+import com.changlu.blogloom.module.column.dao.BlogColumnMapper;
+import com.changlu.blogloom.module.column.dao.BlogColumnRelationMapper;
+import com.changlu.blogloom.exception.BadRequestException;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Date;
 
 /**
  * @Description: 博客文章业务层实现
@@ -52,6 +58,10 @@ public class BlogServiceImpl implements BlogService {
 	BlogResourceService blogResourceService;
 	@Autowired
 	KnowledgeNodeMapper knowledgeNodeMapper;
+	@Autowired
+	BlogColumnMapper blogColumnMapper;
+	@Autowired
+	BlogColumnRelationMapper blogColumnRelationMapper;
 	//随机博客显示5条
 	private static final int randomBlogLimitNum = 5;
 	//最新推荐博客显示3条
@@ -126,22 +136,14 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum) {
-		String redisKey = RedisKeyConstants.HOME_BLOG_INFO_LIST;
-		//redis已有当前页缓存
-		PageResult<BlogInfo> pageResultFromRedis = redisService.getBlogInfoPageResultByHash(redisKey, pageNum);
-		if (pageResultFromRedis != null) {
-			setBlogViewsFromRedisToPageResult(pageResultFromRedis);
-			return pageResultFromRedis;
-		}
-		//redis没有缓存，从数据库查询，并添加缓存
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+	public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum, String sort) {
+		boolean byViews = "views".equalsIgnoreCase(sort);
+		String homeOrderBy = byViews ? "is_top desc, views desc, create_time desc" : orderBy;
+		PageHelper.startPage(pageNum, pageSize, homeOrderBy);
 		List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByIsPublished());
 		PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
 		PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
 		setBlogViewsFromRedisToPageResult(pageResult);
-		//添加首页缓存
-		redisService.saveKVToHash(redisKey, pageNum, pageResult);
 		return pageResult;
 	}
 
@@ -188,6 +190,16 @@ public class BlogServiceImpl implements BlogService {
 	public PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum) {
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByTagNameAndIsPublished(tagName));
+		PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
+		PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
+		setBlogViewsFromRedisToPageResult(pageResult);
+		return pageResult;
+	}
+
+	@Override
+	public PageResult<BlogInfo> getBlogInfoListByColumnIdAndIsPublished(Long columnId, Integer pageNum) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByColumnIdAndIsPublished(columnId));
 		PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
 		PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
 		setBlogViewsFromRedisToPageResult(pageResult);
@@ -265,6 +277,7 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public void deleteBlogById(Long id) {
 		knowledgeNodeMapper.deleteByBlogId(id);
+		blogColumnRelationMapper.deleteByBlogId(id);
 		if (blogMapper.deleteBlogById(id) != 1) {
 			throw new NotFoundException("该博客不存在");
 		}
@@ -295,6 +308,7 @@ public class BlogServiceImpl implements BlogService {
 		node.setType(KnowledgeNodeType.DOC.name());
 		node.setSort(knowledgeNodeMapper.findMaxSort(0L) + 1);
 		knowledgeNodeMapper.insert(node);
+		replaceBlogColumns(blog.getId(), blog.getColumnIds());
 		redisService.saveKVToHash(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId(), 0);
 		deleteBlogRedisCache();
 	}
@@ -361,6 +375,7 @@ public class BlogServiceImpl implements BlogService {
 		 */
 		int view = (int) redisService.getValueByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId());
 		blog.setViews(view);
+		blog.setColumnIds(blogColumnRelationMapper.findColumnIdsByBlogId(id));
 		return blog;
 	}
 
@@ -398,6 +413,7 @@ public class BlogServiceImpl implements BlogService {
 		if (blogMapper.updateBlog(blog) != 1) {
 			throw new PersistenceException("更新博客失败");
 		}
+		replaceBlogColumns(blog.getId(), blog.getColumnIds());
 		deleteBlogRedisCache();
 		redisService.saveKVToHash(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId(), blog.getViews());
 	}
@@ -448,5 +464,19 @@ public class BlogServiceImpl implements BlogService {
 		redisService.deleteCacheByKey(RedisKeyConstants.HOME_BLOG_INFO_LIST);
 		redisService.deleteCacheByKey(RedisKeyConstants.NEW_BLOG_LIST);
 		redisService.deleteCacheByKey(RedisKeyConstants.ARCHIVE_BLOG_MAP);
+	}
+
+	private void replaceBlogColumns(Long blogId, List<Long> columnIds) {
+		blogColumnRelationMapper.deleteByBlogId(blogId);
+		if (columnIds == null || columnIds.isEmpty()) {
+			return;
+		}
+		List<Long> distinctIds = new ArrayList<>(new LinkedHashSet<>(columnIds));
+		for (Long columnId : distinctIds) {
+			if (columnId == null || blogColumnMapper.findById(columnId) == null) {
+				throw new BadRequestException("专栏不存在");
+			}
+		}
+		blogColumnRelationMapper.batchInsert(blogId, distinctIds, new Date());
 	}
 }

@@ -37,6 +37,8 @@ public interface BlogMapper {
 
 	List<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName);
 
+	List<BlogInfo> getBlogInfoListByColumnIdAndIsPublished(Long columnId);
+
 	List<String> getGroupYearMonthByIsPublished();
 
 	List<ArchiveBlog> getArchiveBlogListByYearMonthAndIsPublished(String yearMonth);

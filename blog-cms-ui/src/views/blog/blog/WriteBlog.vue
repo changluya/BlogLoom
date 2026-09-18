@@ -21,8 +21,15 @@
 
 		<el-dialog title="发布设置" custom-class="publish-dialog" width="720px" :visible.sync="dialogVisible" :close-on-click-modal="false">
 			<el-form ref="publishFormRef" :model="form" :rules="publishRules" label-position="top" @submit.native.prevent>
-				<el-form-item label="文章首图 URL" prop="firstPicture">
-					<el-input v-model="form.firstPicture" placeholder="请输入文章首图 URL"/>
+				<el-form-item label="文章封面" prop="firstPicture">
+					<div class="cover-upload-row">
+						<ImageUpload v-model="form.firstPicture" :width="240" :height="135" object-fit="contain"
+						             :loading="coverUploading" @change="handleCoverChange"/>
+						<div class="cover-url-field">
+							<el-input v-model="form.firstPicture" placeholder="上传封面或填写图片 URL"/>
+							<div class="cover-tip">建议使用 16:9 矩形图片；保存文章后归档至 blogs/{blogId}/cover/。</div>
+						</div>
+					</div>
 				</el-form-item>
 				<el-form-item label="文章描述" prop="description">
 					<el-input v-model="form.description" type="textarea" :rows="4" maxlength="500" show-word-limit placeholder="请输入文章摘要或描述"/>
@@ -43,6 +50,10 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
+				<el-form-item label="所属专栏">
+					<el-cascader v-model="form.columnIds" :options="columnOptions" :props="columnProps"
+					             clearable collapse-tags filterable style="width:100%" placeholder="可选择多个专栏"/>
+				</el-form-item>
 				<el-form-item label="文章数据">
 					<div class="publish-stats">
 						<div><strong>{{ form.words || 0 }}</strong><span>正文字符</span></div>
@@ -80,15 +91,21 @@
 
 	<script>
 	import {getCategoryAndTag, saveBlog, getBlogById, updateBlog, uploadBlogResource} from '@/api/blog'
+	import {getColumnOptions} from '@/api/column'
+	import ImageUpload from '@/components/ImageUpload'
 
 		export default {
 		name: "WriteBlog",
+		components: {ImageUpload},
 		data() {
 			return {
 				categoryList: [],
 				tagList: [],
+				columnOptions: [],
+				columnProps: {multiple: true, emitPath: false, checkStrictly: true, value: 'id', label: 'name', children: 'children'},
 				dialogVisible: false,
 				submitting: false,
+				coverUploading: false,
 				radio: 1,
 				form: {
 					title: '',
@@ -106,13 +123,14 @@
 					top: false,
 					published: false,
 					password: '',
+					columnIds: [],
 				},
 				formRules: {
 					title: [{required: true, message: '请输入标题', trigger: 'change'}],
 					content: [{required: true, message: '请输入文章正文', trigger: 'change'}],
 				},
 				publishRules: {
-					firstPicture: [{required: true, message: '请输入首图链接', trigger: 'change'}],
+					firstPicture: [{required: true, message: '请上传或填写文章封面', trigger: 'change'}],
 					description: [{required: true, message: '请输入文章描述', trigger: 'change'}],
 					cate: [{required: true, message: '请选择分类', trigger: 'change'}],
 					tagList: [{required: true, message: '请选择标签', trigger: 'change'}],
@@ -143,6 +161,7 @@
 					this.categoryList = res.data.categories
 					this.tagList = res.data.tags
 				})
+				getColumnOptions().then(res => { this.columnOptions = res.data || [] })
 			},
 			getBlog(id) {
 				getBlogById(id).then(res => {
@@ -157,6 +176,7 @@
 				blog.tags.forEach(item => {
 					blog.tagList.push(item.id)
 				})
+				blog.columnIds = blog.columnIds || []
 			},
 			handleContentImageAdd(pos, file) {
 				this.uploadEditorImage('contentEditor', pos, file)
@@ -168,6 +188,15 @@
 						editor.$img2Url(pos, res.data.url)
 					}
 				})
+			},
+			handleCoverChange(file) {
+				this.coverUploading = true
+				uploadBlogResource(file).then(res => {
+					if (res.data && res.data.url) {
+						this.form.firstPicture = res.data.url
+						this.$nextTick(() => this.$refs.publishFormRef && this.$refs.publishFormRef.validateField('firstPicture'))
+					}
+				}).finally(() => { this.coverUploading = false })
 			},
 			openPublishDialog() {
 				this.$refs.formRef.validate(valid => {
@@ -228,6 +257,9 @@
 	.article-stats { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; color: #909399; font-size: 13px; }
 	.markdown-label { color: #606266; font-weight: 600; }
 	.publish-switches { display: flex; flex-wrap: wrap; gap: 18px 28px; padding: 12px 14px; background: #f7f9fc; border-radius: 6px; }
+	.cover-upload-row { display: flex; align-items: center; gap: 18px; }
+	.cover-url-field { flex: 1; min-width: 0; }
+	.cover-tip { margin-top: 8px; color: #909399; font-size: 12px; line-height: 1.5; }
 	.publish-stats { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border: 1px solid #ebeef5; border-radius: 7px; background: #f8fafc; }
 	.publish-stats > div { padding: 15px 10px; text-align: center; border-right: 1px solid #ebeef5; }
 	.publish-stats > div:last-child { border-right: 0; }
@@ -254,6 +286,10 @@
 	.content-editor ::v-deep .v-note-show { min-height: 0; }
 	@media (max-height: 760px) {
 		.content-editor:not(.fullscreen) { height: 500px; }
+	}
+	@media (max-width: 640px) {
+		.cover-upload-row { align-items: flex-start; flex-direction: column; }
+		.cover-url-field { width: 100%; }
 	}
 </style>
 

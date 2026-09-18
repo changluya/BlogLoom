@@ -5,6 +5,8 @@ import Layout from '@/layout/index.vue'
 
 Vue.use(VueRouter)
 
+const RouterView = {render: h => h('router-view')}
+
 const routes = [
 	{
 		path: '/404',
@@ -34,7 +36,7 @@ const routes = [
 	{
 		path: '/blog',
 		name: 'Blog',
-		redirect: '/blog/list',
+		redirect: '/blog/knowledge/manage',
 		component: Layout,
 		meta: {title: '博客管理', icon: 'el-icon-notebook-2'},
 		children: [
@@ -49,7 +51,8 @@ const routes = [
 				path: 'moment/write',
 				name: 'WriteMoment',
 				component: () => import('@/views/blog/moment/WriteMoment'),
-				meta: {title: '写动态', icon: 'el-icon-chat-line-square'}
+				meta: {title: '写动态', icon: 'el-icon-chat-line-square'},
+				hidden: true
 			},
 			{
 				path: 'edit/:id',
@@ -66,34 +69,42 @@ const routes = [
 				hidden: true
 			},
 			{
-				path: 'list',
-				name: 'BlogList',
-				component: () => import('@/views/blog/blog/BlogList'),
-				meta: {title: '文章管理', icon: 'el-icon-document'}
+				path: 'knowledge',
+				name: 'Knowledge',
+				component: RouterView,
+				redirect: '/blog/knowledge/manage',
+				meta: {title: '知识库', icon: 'el-icon-folder-opened'},
+				children: [
+					{
+						path: 'manage',
+						name: 'KnowledgeManage',
+						component: () => import('@/views/knowledge/KnowledgeManage'),
+						meta: {title: '知识库管理', icon: 'el-icon-folder-opened'}
+					},
+					{
+						path: 'articles',
+						name: 'BlogList',
+						component: () => import('@/views/blog/blog/BlogList'),
+						meta: {title: '文章管理', icon: 'el-icon-document'}
+					}
+				]
 			},
 			{
-				path: 'knowledge',
-				name: 'KnowledgeManage',
-				component: () => import('@/views/knowledge/KnowledgeManage'),
-				meta: {title: '知识库', icon: 'el-icon-folder-opened'}
+				path: 'list',
+				redirect: '/blog/knowledge/articles',
+				hidden: true
+			},
+			{
+				path: 'column/list',
+				name: 'ColumnManage',
+				component: () => import('@/views/blog/column/ColumnManage'),
+				meta: {title: '专栏管理', icon: 'el-icon-collection'}
 			},
 			{
 				path: 'moment/list',
 				name: 'MomentList',
 				component: () => import('@/views/blog/moment/MomentList'),
 				meta: {title: '动态管理', icon: 'el-icon-chat-dot-square'}
-			},
-			{
-				path: 'category/list',
-				name: 'CategoryList',
-				component: () => import('@/views/blog/category/CategoryList'),
-				meta: {title: '分类管理', icon: 'el-icon-folder-opened'}
-			},
-			{
-				path: 'tag/list',
-				name: 'TagList',
-				component: () => import('@/views/blog/tag/TagList'),
-				meta: {title: '标签管理', icon: 'el-icon-collection-tag'}
 			},
 			{
 				path: 'comment/list',
@@ -166,16 +177,10 @@ const routes = [
 	{
 		path: '/system',
 		name: 'System',
-		redirect: '/system/account',
+		redirect: '/system/job',
 		component: Layout,
 		meta: {title: '系统管理', icon: 'el-icon-s-tools'},
 		children: [
-			{
-				path: 'account',
-				name: 'Account',
-				component: () => import('@/views/system/Account'),
-				meta: {title: '修改账户', icon: 'el-icon-user-solid'}
-			},
 			{
 				path: 'job',
 				name: 'JobList',

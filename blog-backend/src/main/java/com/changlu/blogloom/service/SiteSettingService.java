@@ -1,6 +1,7 @@
 package com.changlu.blogloom.service;
 
 import com.changlu.blogloom.entity.SiteSetting;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,4 +15,5 @@ public interface SiteSettingService {
 	String getWebTitleSuffix();
 
 	void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds);
+	Map<String, String> uploadImage(Integer id, MultipartFile file);
 }

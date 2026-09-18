@@ -7,14 +7,24 @@
         <result property="name" column="category_name"/>
     </resultMap>
 
+    <resultMap id="categoryWithCount" type="com.changlu.blogloom.entity.Category">
+        <id property="id" column="id"/>
+        <result property="name" column="category_name"/>
+        <result property="blogCount" column="blog_count"/>
+    </resultMap>
+
     <!--获取所有分类List-->
     <select id="getCategoryList" resultMap="category">
         select id, category_name from category order by id desc
     </select>
 
-    <!--获取所有分类List不查询id-->
-    <select id="getCategoryNameList" resultMap="category">
-        select category_name from category order by id desc
+    <!--获取所有分类及各自已发布博客数量（含数量为0的分类）-->
+    <select id="getCategoryNameList" resultMap="categoryWithCount">
+        select c.id, c.category_name, count(b.id) as blog_count
+        from category c
+        left join blog b on b.category_id = c.id and b.is_published = true
+        group by c.id, c.category_name
+        order by c.id desc
     </select>
 
     <!--添加分类-->

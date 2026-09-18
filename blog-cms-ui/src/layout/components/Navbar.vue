@@ -16,6 +16,10 @@
 							<span>GitHub</span>
 						</el-dropdown-item>
 					</a>
+					<el-dropdown-item @click.native="openPasswordDialog">
+						<SvgIcon icon-class="password" class-name="svg"/>
+						<span>修改密码</span>
+					</el-dropdown-item>
 					<el-dropdown-item @click.native="logout">
 						<SvgIcon icon-class="logout" class-name="svg"/>
 						<span>退出</span>
@@ -23,6 +27,24 @@
 				</el-dropdown-menu>
 			</el-dropdown>
 		</div>
+
+		<el-dialog title="修改密码" :visible.sync="pwdDialogVisible" width="420px" append-to-body>
+			<el-form :model="pwdForm" label-width="80px">
+				<el-form-item label="账号">
+					<el-input v-model="pwdForm.username" disabled></el-input>
+				</el-form-item>
+				<el-form-item label="新密码">
+					<el-input v-model="pwdForm.password" type="password" show-password placeholder="请输入新密码"></el-input>
+				</el-form-item>
+				<el-form-item label="确认密码">
+					<el-input v-model="pwdForm.confirm" type="password" show-password placeholder="请再次输入新密码"></el-input>
+				</el-form-item>
+			</el-form>
+			<span slot="footer">
+				<el-button @click="pwdDialogVisible = false">取消</el-button>
+				<el-button type="primary" :loading="pwdSaving" @click="submitPassword">确定</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -31,6 +53,7 @@
 	import Breadcrumb from '@/components/Breadcrumb'
 	import Hamburger from '@/components/Hamburger'
 	import SvgIcon from '@/components/SvgIcon'
+	import {changeAccount} from '@/api/account'
 
 	export default {
 		components: {
@@ -41,6 +64,13 @@
 		data() {
 			return {
 				user: null,
+				pwdDialogVisible: false,
+				pwdSaving: false,
+				pwdForm: {
+					username: '',
+					password: '',
+					confirm: ''
+				}
 			}
 		},
 		computed: {
@@ -54,6 +84,28 @@
 		methods: {
 			toggleSideBar() {
 				this.$store.dispatch('app/toggleSideBar')
+			},
+			openPasswordDialog() {
+				this.pwdForm = {
+					username: (this.user && this.user.username) || '',
+					password: '',
+					confirm: ''
+				}
+				this.pwdDialogVisible = true
+			},
+			submitPassword() {
+				if (!this.pwdForm.password) return this.msgError('请输入新密码')
+				if (this.pwdForm.password !== this.pwdForm.confirm) return this.msgError('两次输入的密码不一致')
+				this.pwdSaving = true
+				changeAccount({username: this.pwdForm.username, password: this.pwdForm.password}).then(res => {
+					this.pwdDialogVisible = false
+					this.msgSuccess(res.msg || '修改成功，请重新登录')
+					window.localStorage.removeItem('token')
+					window.localStorage.removeItem('user')
+					this.$router.push('/login')
+				}).finally(() => {
+					this.pwdSaving = false
+				})
 			},
 			getUserInfo() {
 				this.user = JSON.parse(window.localStorage.getItem('user') || null)

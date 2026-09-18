@@ -1,0 +1,447 @@
+/* ================================================================
+   BlogLoom landing page styles
+   Scoped under .blogloom-landing so they never leak into Mintlify chrome.
+   ================================================================ */
+.blogloom-landing {
+  --bl-fg: #1b1b2f;
+  --bl-muted: #5a5a75;
+  --bl-surface: #f5f5fc;
+  --bl-surface-2: #ffffff;
+  --bl-border: #e0e0f0;
+  --bl-accent: #5b5bd6;
+  --bl-accent-soft: #ececfa;
+  --bl-code-bg: #f6f7fb;
+  --bl-code-fg: #1e2235;
+  --bl-tabs-bg: #eceef8;
+  --bl-tab-muted: #70708e;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', ui-monospace, monospace;
+
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--bl-fg);
+  overflow-x: hidden;
+
+  /* Center the landing content and keep it from hugging the viewport edges */
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 40px 64px;
+}
+
+/* Dark mode — Mintlify adds `.dark` to <html> */
+.dark .blogloom-landing {
+  --bl-fg: #eeeefb;
+  --bl-muted: #a8a8c4;
+  --bl-surface: #17172b;
+  --bl-surface-2: #1d1d33;
+  --bl-border: #2f2f4d;
+  --bl-accent: #9a9af0;
+  --bl-accent-soft: #23233d;
+  --bl-code-bg: #101021;
+  --bl-code-fg: #e4e4f2;
+  --bl-tabs-bg: #17172b;
+  --bl-tab-muted: #6d6d8f;
+}
+
+.blogloom-landing * {
+  box-sizing: border-box;
+}
+
+.blogloom-landing h1,
+.blogloom-landing h2,
+.blogloom-landing h3 {
+  color: var(--bl-fg);
+  margin-top: 0;
+  letter-spacing: -0.025em;
+}
+
+.blogloom-landing p {
+  color: var(--bl-muted);
+  margin-bottom: 0;
+}
+
+.blogloom-landing a {
+  color: inherit;
+}
+
+/* ================================================================
+   Hero
+   ================================================================ */
+.blogloom-landing .hs-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+  padding: 72px 0 48px;
+}
+
+.blogloom-landing .hs-hero__headline {
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 800;
+  margin: 0 0 20px;
+}
+
+.blogloom-landing .hs-hero__accent {
+  color: var(--bl-accent);
+  background: linear-gradient(120deg, #5b5bd6, #8b7bf0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .blogloom-landing .hs-hero__accent {
+  background: linear-gradient(120deg, #9a9af0, #c4b5fd);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.blogloom-landing .hs-hero__desc {
+  font-size: 1.125rem;
+  max-width: 46ch;
+  margin: 0 0 28px;
+}
+
+/* ================================================================
+   Buttons
+   ================================================================ */
+.blogloom-landing .hs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.blogloom-landing .hs-btn--primary {
+  background: var(--bl-accent);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(91, 91, 214, 0.25);
+}
+
+.dark .blogloom-landing .hs-btn--primary {
+  background: var(--bl-accent);
+  color: #101021;
+  box-shadow: 0 6px 18px rgba(154, 154, 240, 0.3);
+}
+
+.blogloom-landing .hs-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(91, 91, 214, 0.35);
+}
+
+.blogloom-landing .hs-btn--secondary {
+  background: var(--bl-surface-2);
+  color: var(--bl-fg);
+  border: 1px solid var(--bl-border);
+}
+
+.blogloom-landing .hs-btn--secondary:hover {
+  border-color: var(--bl-accent);
+  color: var(--bl-accent);
+}
+
+.blogloom-landing .hs-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ================================================================
+   Code window + tabs
+   ================================================================ */
+.blogloom-landing .hs-window {
+  border: 1px solid var(--bl-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bl-code-bg);
+  box-shadow: 0 16px 40px rgba(23, 23, 43, 0.12);
+}
+
+.blogloom-landing .hs-tabs {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--bl-tabs-bg);
+  border-bottom: 1px solid var(--bl-border);
+}
+
+.blogloom-landing .hs-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--bl-tab-muted);
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.blogloom-landing .hs-tab:hover {
+  color: var(--bl-fg);
+}
+
+.blogloom-landing .hs-tab.active {
+  color: var(--bl-accent);
+  background: var(--bl-surface-2);
+  border-color: var(--bl-border);
+  box-shadow: 0 1px 3px rgba(23, 23, 43, 0.08);
+}
+
+.dark .blogloom-landing .hs-tab.active {
+  color: var(--bl-accent);
+  background: var(--bl-code-bg);
+  border-color: var(--bl-border);
+  box-shadow: none;
+}
+
+.blogloom-landing .hs-code-panel {
+  padding: 18px 20px 20px;
+  color: var(--bl-code-fg);
+}
+
+.blogloom-landing .hs-code-panel pre {
+  background: transparent !important;
+  margin: 0;
+}
+
+.blogloom-landing .hs-code-panel code {
+  font-family: var(--font-mono);
+}
+
+/* ================================================================
+   Sections
+   ================================================================ */
+.blogloom-landing .hs-section {
+  padding: 40px 0;
+  border-top: 1px solid var(--bl-border);
+  max-width: 760px;
+}
+
+.blogloom-landing .hs-section h2 {
+  font-size: 1.9rem;
+  margin: 0 0 16px;
+}
+
+.blogloom-landing .hs-section p {
+  margin-bottom: 20px;
+}
+
+.blogloom-landing .hs-section ul {
+  padding-left: 20px;
+  margin: 0 0 24px;
+  color: var(--bl-muted);
+}
+
+.blogloom-landing .hs-section li {
+  margin-bottom: 10px;
+}
+
+/* ================================================================
+   Chip
+   ================================================================ */
+.blogloom-landing .hs-chip {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--bl-accent-soft);
+  color: var(--bl-accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+}
+
+/* ================================================================
+   Adoption / stats bar
+   ================================================================ */
+.blogloom-landing .hs-adoption {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  padding: 32px 0;
+  border-top: 1px solid var(--bl-border);
+}
+
+.blogloom-landing .hs-adoption__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--bl-fg);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.blogloom-landing .hs-adoption__eyebrow-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  animation: bl-pulse 2.2s ease-out infinite;
+}
+
+@keyframes bl-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+  70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.blogloom-landing .hs-adoption__stats {
+  display: flex;
+  gap: 48px;
+  flex: 1;
+}
+
+.blogloom-landing .hs-stat__val {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--bl-fg);
+}
+
+.blogloom-landing .hs-stat__label {
+  display: block;
+  color: var(--bl-muted);
+  font-size: 0.9rem;
+}
+
+/* ================================================================
+   Feature cards
+   ================================================================ */
+.blogloom-landing .hs-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 8px 0 8px;
+}
+
+.blogloom-landing .hs-card {
+  border: 1px solid var(--bl-border);
+  border-radius: 12px;
+  padding: 20px;
+  background: var(--bl-surface-2);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.blogloom-landing .hs-card:hover {
+  border-color: var(--bl-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(23, 23, 43, 0.08);
+}
+
+.dark .blogloom-landing .hs-card:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.blogloom-landing .hs-card h3 {
+  font-size: 1.05rem;
+  margin: 0 0 8px;
+}
+
+.blogloom-landing .hs-card p {
+  font-size: 0.92rem;
+  margin-bottom: 12px;
+}
+
+.blogloom-landing .hs-card a {
+  color: var(--bl-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.blogloom-landing .hs-card a:hover {
+  text-decoration: underline;
+}
+
+/* ================================================================
+   FAQ
+   ================================================================ */
+.blogloom-landing .hs-faq {
+  padding: 40px 0;
+  border-top: 1px solid var(--bl-border);
+  max-width: 760px;
+}
+
+.blogloom-landing .hs-faq h2 {
+  font-size: 1.9rem;
+  margin: 0 0 20px;
+}
+
+.blogloom-landing .hs-faq-item {
+  border: 1px solid var(--bl-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  background: var(--bl-surface-2);
+}
+
+.blogloom-landing .hs-faq-item summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--bl-fg);
+}
+
+.blogloom-landing .hs-faq-item p {
+  margin-top: 12px;
+}
+
+/* ================================================================
+   Responsive
+   ================================================================ */
+@media (max-width: 820px) {
+  .blogloom-landing .hs-hero {
+    grid-template-columns: 1fr;
+    padding-top: 40px;
+  }
+  .blogloom-landing .hs-hero__headline {
+    font-size: 2.2rem;
+  }
+  .blogloom-landing .hs-cards {
+    grid-template-columns: 1fr;
+  }
+  .blogloom-landing .hs-adoption {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .blogloom-landing .hs-adoption__stats {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+/* ================================================================
+   Dark mode refinements
+   ================================================================ */
+.dark .blogloom-landing .hs-window {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.dark .blogloom-landing .hs-chip {
+  background: var(--bl-accent-soft);
+  color: var(--bl-accent);
+}
+
+.dark .blogloom-landing .hs-adoption__eyebrow-dot {
+  background: #4ade80;
+  box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5);
+}
+
+.dark .blogloom-landing .hs-adoption__eyebrow-dot {
+  animation: bl-pulse-dark 2.2s ease-out infinite;
+}
+
+@keyframes bl-pulse-dark {
+  0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
+  70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}

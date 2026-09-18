@@ -14,6 +14,8 @@
 <script>
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import { getSiteSettingData } from '@/api/siteSetting'
+import { setFavicon } from '@/util/favicon'
 
 export default {
   name: 'Layout',
@@ -23,6 +25,15 @@ export default {
     AppMain
   },
   mixins: [ResizeMixin],
+  created() {
+    getSiteSettingData().then(res => {
+      const favicon = (res.data.type1 || []).find(item => item.nameEn === 'favicon')
+      setFavicon(favicon && favicon.value)
+      if (favicon && favicon.value) {
+        this.$store.dispatch('settings/changeSetting', { key: 'logo', value: favicon.value })
+      }
+    })
+  },
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar

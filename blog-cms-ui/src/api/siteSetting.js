@@ -18,6 +18,12 @@ export function update(settings, deleteIds) {
 	})
 }
 
+export function uploadSiteImage(id, file) {
+	const data = new FormData()
+	data.append('file', file)
+	return axios({url: `siteSettings/${id}/image`, method: 'POST', data})
+}
+
 export function getWebTitleSuffix() {
 	return axios({
 		url: 'webTitleSuffix',

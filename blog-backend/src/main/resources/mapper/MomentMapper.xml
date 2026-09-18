@@ -15,6 +15,13 @@
         select id, content, create_time, likes, is_published from moment
     </select>
 
+	<!--后台按动态内容搜索-->
+	<select id="getMomentListByQuery" resultMap="moment">
+		select id, content, create_time, likes, is_published
+		from moment
+		where content like concat('%', #{query}, '%')
+	</select>
+
     <!--给动态点赞-->
     <update id="addLikeByMomentId">
         update moment set likes=likes+1 where id=#{momentId}

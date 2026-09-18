@@ -4,7 +4,7 @@
 		<div class="ui secondary segment"><i class="tags icon"></i>标签云</div>
 		<div class="ui yellow segment m-padding-small content-segment">
 			<router-link v-if="tagList.length" :to="`/tag/${tag.name}`" class="ui label m-text-500" :class="tag.color" v-for="(tag,index) in tagList" :key="index">
-				{{ tag.name }}
+				{{ tag.name }}<span class="tag-count">{{ tag.blogCount || 0 }}</span>
 			</router-link>
 			<div v-if="!tagList.length" class="empty-state">
 				<div class="empty-icon"><i class="tags icon"></i></div>
@@ -70,5 +70,16 @@
 
 	.label {
 		margin: 3px !important;
+	}
+
+	.tag-count {
+		display: inline-block;
+		margin-left: 5px;
+		padding: 0 6px;
+		border-radius: 999px;
+		background: rgba(0, 0, 0, .1);
+		font-size: 11px;
+		line-height: 16px;
+		vertical-align: 1px;
 	}
 </style>

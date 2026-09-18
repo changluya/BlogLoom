@@ -3,12 +3,10 @@ package com.changlu.blogloom.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.changlu.blogloom.constant.RedisKeyConstants;
 import com.changlu.blogloom.entity.Tag;
 import com.changlu.blogloom.exception.NotFoundException;
 import com.changlu.blogloom.exception.PersistenceException;
 import com.changlu.blogloom.mapper.TagMapper;
-import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.TagService;
 
 import java.util.List;
@@ -22,8 +20,6 @@ import java.util.List;
 public class TagServiceImpl implements TagService {
 	@Autowired
 	TagMapper tagMapper;
-	@Autowired
-	RedisService redisService;
 
 	@Override
 	public List<Tag> getTagList() {
@@ -32,14 +28,8 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	public List<Tag> getTagListNotId() {
-		String redisKey = RedisKeyConstants.TAG_CLOUD_LIST;
-		List<Tag> tagListFromRedis = redisService.getListByValue(redisKey);
-		if (tagListFromRedis != null) {
-			return tagListFromRedis;
-		}
-		List<Tag> tagList = tagMapper.getTagListNotId();
-		redisService.saveListToValue(redisKey, tagList);
-		return tagList;
+		//直接查库，实时统计各标签下已发布博客数量
+		return tagMapper.getTagListNotId();
 	}
 
 	@Override
@@ -53,7 +43,6 @@ public class TagServiceImpl implements TagService {
 		if (tagMapper.saveTag(tag) != 1) {
 			throw new PersistenceException("标签添加失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstants.TAG_CLOUD_LIST);
 	}
 
 	@Override
@@ -76,7 +65,6 @@ public class TagServiceImpl implements TagService {
 		if (tagMapper.deleteTagById(id) != 1) {
 			throw new PersistenceException("标签删除失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstants.TAG_CLOUD_LIST);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -85,8 +73,5 @@ public class TagServiceImpl implements TagService {
 		if (tagMapper.updateTag(tag) != 1) {
 			throw new PersistenceException("标签更新失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstants.TAG_CLOUD_LIST);
-		//修改了标签名或颜色，可能有首页文章关联了标签，也要更新首页缓存
-		redisService.deleteCacheByKey(RedisKeyConstants.HOME_BLOG_INFO_LIST);
 	}
 }

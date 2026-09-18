@@ -1,6 +1,7 @@
 package com.changlu.blogloom.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.changlu.blogloom.entity.Moment;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Repository
 public interface MomentMapper {
 	List<Moment> getMomentList();
+	List<Moment> getMomentListByQuery(@Param("query") String query);
 
 	int addLikeByMomentId(Long momentId);
 

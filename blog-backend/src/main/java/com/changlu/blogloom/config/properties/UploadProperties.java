@@ -26,6 +26,14 @@ public class UploadProperties {
 		return getPath("blogs", String.valueOf(blogId)).toString();
 	}
 
+	public String getBlogColumnPath(Long columnId) {
+		return getPath("blogColumn", String.valueOf(columnId)).toString();
+	}
+
+	public String getSitePath() {
+		return getPath("site").toString();
+	}
+
 	public String getAccessPath() {
 		return "/static/**";
 	}

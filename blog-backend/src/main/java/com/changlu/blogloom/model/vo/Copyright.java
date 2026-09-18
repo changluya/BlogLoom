@@ -17,4 +17,5 @@ import lombok.ToString;
 public class Copyright {
 	private String title;
 	private String siteName;
+	private String siteUrl;
 }

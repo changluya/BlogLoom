@@ -7,14 +7,6 @@
 			<router-link to="/home" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='home'}">
 				<i class="home icon"></i>首页
 			</router-link>
-			<el-dropdown trigger="click" @command="categoryRoute">
-				<span class="el-dropdown-link item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='category'}">
-					<i class="idea icon"></i>分类<i class="caret down icon"></i>
-				</span>
-				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item :command="category.name" v-for="(category,index) in categoryList" :key="index">{{ category.name }}</el-dropdown-item>
-				</el-dropdown-menu>
-			</el-dropdown>
 			<router-link to="/archives" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='archives'}">
 				<i class="clone icon"></i>归档
 			</router-link>
@@ -52,10 +44,6 @@
 		props: {
 			blogName: {
 				type: String,
-				required: true
-			},
-			categoryList: {
-				type: Array,
 				required: true
 			},
 		},
@@ -102,11 +90,12 @@
 			toggle() {
 				this.mobileHide = !this.mobileHide
 			},
-			categoryRoute(name) {
-				this.$router.push(`/category/${name}`)
-			},
 			debounceQuery(queryString, callback) {
 				this.timer && clearTimeout(this.timer)
+				if (queryString == null || queryString.trim() === '') {
+					callback([])
+					return
+				}
 				this.timer = setTimeout(() => this.querySearchAsync(queryString, callback), 1000)
 			},
 			querySearchAsync(queryString, callback) {
@@ -118,6 +107,7 @@
 						|| queryString.indexOf('#') !== -1
 						|| queryString.indexOf('*') !== -1
 						|| queryString.trim().length > 20) {
+					callback([])
 					return
 				}
 				getSearchBlogList(queryString).then(res => {
@@ -127,8 +117,11 @@
 							this.queryResult.push({title: '无相关搜索结果'})
 						}
 						callback(this.queryResult)
+					} else {
+						callback([])
 					}
 				}).catch(() => {
+					callback([])
 					this.msgError("请求失败")
 				})
 			},

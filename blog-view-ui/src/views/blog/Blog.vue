@@ -1,9 +1,6 @@
 <template>
 	<div class="article-page" :class="{'is-loading': loading, 'is-ready': !loading}" v-loading="loading">
 		<div class="ui padded attached segment m-padded-tb-large article-card">
-			<div class="ui large teal right corner label" v-if="blog.top">
-				<i class="arrow alternate circle up icon"></i>
-			</div>
 			<header class="article-header">
 				<router-link :to="`/category/${blog.category.name}`" class="article-category" v-if="blog.category">
 					<i class="small folder open icon"></i><span>{{ blog.category.name }}</span>

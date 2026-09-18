@@ -14,6 +14,7 @@ import com.changlu.blogloom.model.vo.Favorite;
 import com.changlu.blogloom.model.vo.Introduction;
 import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.SiteSettingService;
+import com.changlu.blogloom.service.SiteImageStorageService;
 import com.changlu.blogloom.util.JacksonUtils;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Description: 站点设置业务层实现
@@ -36,6 +38,8 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	SiteSettingMapper siteSettingMapper;
 	@Autowired
 	RedisService redisService;
+	@Autowired
+	SiteImageStorageService siteImageStorageService;
 
 	private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
 
@@ -78,11 +82,6 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 
 	@Override
 	public Map<String, Object> getSiteInfo() {
-		String redisKey = RedisKeyConstants.SITE_INFO_MAP;
-		Map<String, Object> siteInfoMapFromRedis = redisService.getMapByValue(redisKey);
-		if (siteInfoMapFromRedis != null) {
-			return siteInfoMapFromRedis;
-		}
 		List<SiteSetting> siteSettings = siteSettingMapper.getList();
 		Map<String, Object> siteInfo = new HashMap<>(2);
 		List<Badge> badges = new ArrayList<>();
@@ -153,7 +152,6 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		map.put("introduction", introduction);
 		map.put("siteInfo", siteInfo);
 		map.put("badges", badges);
-		redisService.saveMapToValue(redisKey, map);
 		return map;
 	}
 
@@ -180,6 +178,27 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 			}
 		}
 		deleteSiteInfoRedisCache();
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public Map<String, String> uploadImage(Integer id, MultipartFile file) {
+		SiteSetting setting = siteSettingMapper.getList().stream()
+				.filter(item -> id.equals(item.getId()))
+				.findFirst()
+				.orElseThrow(() -> new com.changlu.blogloom.exception.NotFoundException("站点配置不存在"));
+		if (!("footerImgUrl".equals(setting.getNameEn()) || "reward".equals(setting.getNameEn())
+				|| SiteSettingConstants.FAVICON.equals(setting.getNameEn())
+				|| SiteSettingConstants.AVATAR.equals(setting.getNameEn()))) {
+			throw new com.changlu.blogloom.exception.BadRequestException("该配置项不支持图片上传");
+		}
+		String url = siteImageStorageService.save(file);
+		setting.setValue(url);
+		updateOneSiteSetting(setting);
+		deleteSiteInfoRedisCache();
+		Map<String, String> result = new LinkedHashMap<>();
+		result.put("url", url);
+		return result;
 	}
 
 	public void saveOneSiteSetting(SiteSetting siteSetting) {

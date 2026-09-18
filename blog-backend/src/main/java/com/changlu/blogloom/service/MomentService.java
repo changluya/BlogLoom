@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface MomentService {
 	List<Moment> getMomentList();
+	List<Moment> getMomentListByQuery(String query);
 
 	List<Moment> getMomentVOList(Integer pageNum, boolean adminIdentity);
 

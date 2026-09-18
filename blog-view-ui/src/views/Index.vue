@@ -1,7 +1,7 @@
 <template>
 	<div class="site" :class="{'blog-detail-site': $route.name === 'blog'}">
 		<!--顶部导航-->
-		<Nav :blogName="siteInfo.blogName" :categoryList="categoryList"/>
+		<Nav :blogName="siteInfo.blogName"/>
 		<!--首页大图 只在首页且pc端时显示-->
 		<div class="m-mobile-hide">
 			<Header v-if="$route.name==='home'"/>
@@ -24,6 +24,7 @@
 						<!--右侧-->
 						<div class="three wide column m-mobile-hide">
 							<RandomBlog :randomBlogList="randomBlogList" :class="{'m-display-none':focusMode}"/>
+							<Categories :categoryList="categoryList" :class="{'m-display-none':focusMode}"/>
 							<Tags :tagList="tagList" :class="{'m-display-none':focusMode}"/>
 							<!--只在文章页面显示目录-->
 							<Tocbot v-if="$route.name==='blog'"/>
@@ -45,26 +46,28 @@
 			<img src="/img/paper-plane.png" style="width: 40px;height: 40px;">
 		</el-backtop>
 		<!--底部footer-->
-		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :hitokoto="hitokoto"/>
+		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :categoryList="categoryList" :introduction="introduction" :hitokoto="hitokotoText" :compact="$route.name === 'column'"/>
 	</div>
 </template>
 
 <script>
-	import {getHitokoto, getSite} from '@/api/index'
+	import {getSite} from '@/api/index'
 	import Nav from "@/components/index/Nav";
 	import Header from "@/components/index/Header";
 	import Footer from "@/components/index/Footer";
 	import Introduction from "@/components/sidebar/Introduction";
+	import Categories from "@/components/sidebar/Categories";
 	import Tags from "@/components/sidebar/Tags";
 	import RandomBlog from "@/components/sidebar/RandomBlog";
 	import Tocbot from "@/components/sidebar/Tocbot";
 	import BlogPasswordDialog from "@/components/index/BlogPasswordDialog";
 	import {mapState} from 'vuex'
 	import {SAVE_CLIENT_SIZE, SAVE_INTRODUCTION, SAVE_SITE_INFO, RESTORE_COMMENT_FORM} from "@/store/mutations-types";
+	import {setFavicon} from '@/util/favicon'
 
 	export default {
 		name: "Index",
-		components: {Header, BlogPasswordDialog, Tocbot, RandomBlog, Tags, Nav, Footer, Introduction},
+		components: {Header, BlogPasswordDialog, Tocbot, RandomBlog, Categories, Tags, Nav, Footer, Introduction},
 		data() {
 			return {
 				siteInfo: {
@@ -78,15 +81,14 @@
 				randomBlogList: [],
 				badges: [],
 				newBlogList: [],
-				hitokoto: {},
+				hitokotoText: '',
 			}
 		},
 		computed: {
-			...mapState(['focusMode'])
+			...mapState(['focusMode', 'introduction'])
 		},
 		created() {
 			this.getSite()
-			this.getHitokoto()
 			//从localStorage恢复之前的评论信息
 			this.$store.commit(RESTORE_COMMENT_FORM)
 		},
@@ -111,16 +113,25 @@
 						res.data.introduction.publishedBlogCount = res.data.publishedBlogCount || 0
 						res.data.introduction.totalBlogViews = res.data.totalBlogViews || 0
 						this.$store.commit(SAVE_SITE_INFO, this.siteInfo)
+						setFavicon(this.siteInfo.favicon)
 						this.$store.commit(SAVE_INTRODUCTION, res.data.introduction)
 						document.title = this.$route.meta.title + this.siteInfo.webTitleSuffix
+						this.hitokotoText = this.pickHitokotoText(this.siteInfo.hitokotoTexts)
 					}
 				})
 			},
-			//获取一言
-			getHitokoto() {
-				getHitokoto().then(res => {
-					this.hitokoto = res
-				})
+			parseHitokotoTexts(value) {
+				const texts = []
+				const pattern = /"(.*?)"/g
+				let match
+				while ((match = pattern.exec(value || '')) !== null) texts.push(match[1])
+				if (!texts.length && value) texts.push(value)
+				return texts
+			},
+			pickHitokotoText(value) {
+				const texts = this.parseHitokotoTexts(value)
+				if (!texts.length) return ''
+				return texts[Math.floor(Math.random() * texts.length)]
 			}
 		}
 	}

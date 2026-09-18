@@ -8,6 +8,7 @@ package com.changlu.blogloom.constant;
  */
 public class SiteSettingConstants {
 	public static final String COPYRIGHT = "copyright";
+	public static final String FAVICON = "favicon";
 	public static final String AVATAR = "avatar";
 	public static final String NAME = "name";
 	public static final String GITHUB = "github";

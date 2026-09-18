@@ -38,10 +38,11 @@ public class MomentAdminController {
 	 */
 	@GetMapping("/moments")
 	public Result moments(@RequestParam(defaultValue = "1") Integer pageNum,
-	                      @RequestParam(defaultValue = "10") Integer pageSize) {
+	                      @RequestParam(defaultValue = "10") Integer pageSize,
+	                      @RequestParam(required = false) String query) {
 		String orderBy = "create_time desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
-		PageInfo<Moment> pageInfo = new PageInfo<>(momentService.getMomentList());
+		PageInfo<Moment> pageInfo = new PageInfo<>(momentService.getMomentListByQuery(query));
 		return Result.ok("请求成功", pageInfo);
 	}
 

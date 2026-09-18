@@ -1,11 +1,12 @@
 import axios from '@/plugins/axios'
 
-export function getBlogList(pageNum) {
+export function getBlogList(pageNum, sort) {
 	return axios({
 		url: 'blogs',
 		method: 'GET',
 		params: {
-			pageNum
+			pageNum,
+			sort
 		}
 	})
 }

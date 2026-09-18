@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
 import com.changlu.blogloom.annotation.OperationLogger;
 import com.changlu.blogloom.entity.SiteSetting;
 import com.changlu.blogloom.model.vo.Result;
@@ -50,6 +54,12 @@ public class SiteSettingAdminController {
 		List<Integer> deleteIds = (List<Integer>) map.get("deleteIds");
 		siteSettingService.updateSiteSetting(siteSettings, deleteIds);
 		return Result.ok("更新成功");
+	}
+
+	@OperationLogger("上传站点设置图片")
+	@PostMapping(value = "/siteSettings/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public Result uploadImage(@PathVariable Integer id, @RequestParam("file") MultipartFile file) {
+		return Result.ok("上传成功", siteSettingService.uploadImage(id, file));
 	}
 
 	/**

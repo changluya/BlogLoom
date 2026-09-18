@@ -46,6 +46,12 @@ const routes = [
 				meta: {title: '分类'}
 			},
 			{
+				path: '/column/:id',
+				name: 'column',
+				component: () => import('@/views/column/Column'),
+				meta: {title: '专栏'}
+			},
+			{
 				path: '/moments',
 				name: 'moments',
 				component: () => import('@/views/moments/Moments'),

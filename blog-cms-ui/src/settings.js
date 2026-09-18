@@ -9,7 +9,7 @@ export default {
 	 * @type {string}
 	 * @description logo URL
 	 */
-	logo: '/img/blogloom-admin-logo.png',
+	logo: '/img/site-favicon.png',
 
 	/**
 	 * @type {boolean} true | false

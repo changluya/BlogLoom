@@ -66,6 +66,7 @@
 						</el-collapse-item>
 					</el-collapse>
 				</div>
+				<UserColumns/>
 			</div>
 		</div>
 	</div>
@@ -73,9 +74,11 @@
 
 <script>
 	import {mapState} from 'vuex'
+	import UserColumns from '@/components/sidebar/UserColumns'
 
-	export default {
-		name: "Introduction",
+		export default {
+			name: "Introduction",
+			components: {UserColumns},
 		computed: {
 			...mapState(['introduction'])
 		},

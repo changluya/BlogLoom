@@ -2,15 +2,17 @@
 	<div>
 		<!--搜索-->
 		<el-row type="flex" justify="space-between" align="middle" class="list-toolbar">
-			<el-col :span="8">
-				<el-input placeholder="请输入标题" v-model="queryInfo.title" :clearable="true" @clear="search" @keyup.native.enter="search" size="small" style="min-width: 500px">
+			<el-col :span="18" class="search-and-manage">
+				<el-input class="blog-search" placeholder="请输入标题" v-model="queryInfo.title" :clearable="true" @clear="search" @keyup.native.enter="search" size="small">
 					<el-select v-model="queryInfo.categoryId" slot="prepend" placeholder="请选择分类" :clearable="true" @change="search" style="width: 160px">
 						<el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
 					</el-select>
 					<el-button slot="append" icon="el-icon-search" @click="search"></el-button>
 				</el-input>
+				<el-button size="small" icon="el-icon-folder-opened" @click="categoryDialogVisible=true">分类管理</el-button>
+				<el-button size="small" icon="el-icon-collection-tag" @click="tagDialogVisible=true">标签管理</el-button>
 			</el-col>
-			<el-col :span="8" class="toolbar-actions">
+			<el-col :span="6" class="toolbar-actions">
 				<el-button type="primary" size="small" icon="el-icon-edit-outline" @click="goWriteBlogPage">写文章</el-button>
 			</el-col>
 		</el-row>
@@ -95,16 +97,28 @@
 				<el-button type="primary" @click="saveVisibility">保存</el-button>
 			</span>
 		</el-dialog>
+
+		<el-dialog title="分类管理" width="860px" :visible.sync="categoryDialogVisible" :close-on-click-modal="false" append-to-body>
+			<CategoryList v-if="categoryDialogVisible" embedded @changed="handleCategoryChanged"/>
+			<span slot="footer"><el-button @click="categoryDialogVisible=false">关闭</el-button></span>
+		</el-dialog>
+
+		<el-dialog title="标签管理" width="920px" :visible.sync="tagDialogVisible" :close-on-click-modal="false" append-to-body>
+			<TagList v-if="tagDialogVisible" embedded @changed="handleTagChanged"/>
+			<span slot="footer"><el-button @click="tagDialogVisible=false">关闭</el-button></span>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
 	import Breadcrumb from "@/components/Breadcrumb";
 	import {getDataByQuery, deleteBlogById, updateTop, updateRecommend, updateVisibility} from '@/api/blog'
+	import CategoryList from '@/views/blog/category/CategoryList'
+	import TagList from '@/views/blog/tag/TagList'
 
 	export default {
 		name: "BlogList",
-		components: {Breadcrumb},
+		components: {Breadcrumb, CategoryList, TagList},
 		data() {
 			return {
 				queryInfo: {
@@ -117,6 +131,8 @@
 				categoryList: [],
 				total: 0,
 				dialogVisible: false,
+				categoryDialogVisible: false,
+				tagDialogVisible: false,
 				blogId: 0,
 				radio: 1,
 				visForm: {
@@ -133,6 +149,8 @@
 			this.getData()
 		},
 		methods: {
+			handleCategoryChanged() { this.getData() },
+			handleTagChanged() {},
 			goWriteBlogPage() {
 				this.$router.push('/blog/write')
 			},
@@ -234,6 +252,8 @@
 
 <style scoped>
 	.list-toolbar { margin-bottom: 16px; }
+	.search-and-manage { display:flex; align-items:center; gap:10px; }
+	.blog-search { width:500px; flex:0 0 500px; }
 	.toolbar-actions { text-align: right; }
 	.el-button + span {
 		margin-left: 10px;

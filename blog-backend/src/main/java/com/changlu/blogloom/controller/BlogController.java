@@ -37,15 +37,17 @@ public class BlogController {
 	UserServiceImpl userService;
 
 	/**
-	 * 按置顶、创建时间排序 分页查询博客简要信息列表
+	 * 按置顶、创建时间/访问量排序 分页查询博客简要信息列表
 	 *
 	 * @param pageNum 页码
+	 * @param sort    排序方式：createTime（默认，按发布时间）| views（按访问量）
 	 * @return
 	 */
 	@VisitLogger(VisitBehavior.INDEX)
 	@GetMapping("/blogs")
-	public Result blogs(@RequestParam(defaultValue = "1") Integer pageNum) {
-		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByIsPublished(pageNum);
+	public Result blogs(@RequestParam(defaultValue = "1") Integer pageNum,
+	                    @RequestParam(defaultValue = "createTime") String sort) {
+		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByIsPublished(pageNum, sort);
 		return Result.ok("请求成功", pageResult);
 	}
 

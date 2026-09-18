@@ -28,7 +28,7 @@ public class BlogResourceService {
 	public void reconcileBlogResources(Long blogId, Blog blog) {
 		// 同一个临时资源可能同时出现在首图、描述和正文中，使用 Set 统一收集并去重。
 		Set<String> temporaryResources = new HashSet<>();
-		blog.setFirstPicture(rewriteUrl(blog.getFirstPicture(), blogId, temporaryResources));
+		blog.setFirstPicture(rewriteCoverUrl(blog.getFirstPicture(), blogId, temporaryResources));
 		blog.setDescription(rewriteContent(blog.getDescription(), blogId, temporaryResources));
 		blog.setContent(rewriteContent(blog.getContent(), blogId, temporaryResources));
 		// 只有 copyToBlog 成功后才会记录临时资源，所有引用重写完成后再统一删除源文件。
@@ -102,6 +102,17 @@ public class BlogResourceService {
 	 * @return 归档后的访问 URL；非受管资源或源文件不存在时返回原 URL
 	 */
 	private String rewriteUrl(String url, Long blogId, Set<String> temporaryResources) {
+		return rewriteUrl(url, blogId, temporaryResources, false);
+	}
+
+	/**
+	 * 将文章首图归档到独立的 cover 子目录，便于与正文图片、附件区分。
+	 */
+	private String rewriteCoverUrl(String url, Long blogId, Set<String> temporaryResources) {
+		return rewriteUrl(url, blogId, temporaryResources, true);
+	}
+
+	private String rewriteUrl(String url, Long blogId, Set<String> temporaryResources, boolean cover) {
 		if (url == null || url.isEmpty()) {
 			return url;
 		}
@@ -115,7 +126,9 @@ public class BlogResourceService {
 			return url;
 		}
 		// 步骤 3：从 uploadRoot/{managedPath} 复制到 uploadRoot/blogs/{blogId}/**。
-		String archivedPath = localResourceStorageService.copyToBlog(blogId, managedPath);
+		String archivedPath = cover
+				? localResourceStorageService.copyToBlogCover(blogId, managedPath)
+				: localResourceStorageService.copyToBlog(blogId, managedPath);
 		if (archivedPath == null) {
 			return url;
 		}

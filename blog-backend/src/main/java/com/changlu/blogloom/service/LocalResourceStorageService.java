@@ -105,6 +105,34 @@ public class LocalResourceStorageService {
 	}
 
 	/**
+	 * 将文章封面归档到 {@code blogs/{blogId}/cover/{fileName}}。
+	 * 文件名沿用上传阶段生成的 UUID，封面与正文资源在目录层面保持隔离。
+	 */
+	public String copyToBlogCover(Long blogId, String sourceRelativePath) {
+		Path source = resolveUnderUploadRoot(sourceRelativePath);
+		if (source == null || !Files.isRegularFile(source)) {
+			return null;
+		}
+
+		Path blogDirectory = Paths.get(uploadProperties.getBlogPath(blogId)).toAbsolutePath().normalize();
+		Path coverDirectory = blogDirectory.resolve("cover").normalize();
+		Path target = coverDirectory.resolve(source.getFileName().toString()).normalize();
+		if (!target.startsWith(coverDirectory)) {
+			throw new BadRequestException("资源路径不合法");
+		}
+
+		try {
+			Files.createDirectories(coverDirectory);
+			if (!source.toAbsolutePath().normalize().equals(target)) {
+				Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+			}
+		} catch (IOException e) {
+			throw new PersistenceException("归档博客封面失败", e);
+		}
+		return "blogs/" + blogId + "/cover/" + source.getFileName().toString();
+	}
+
+	/**
 	 * 删除已经成功归档的临时资源。这里只允许删除 upload/tmp 目录下的文件。
 	 */
 	public void deleteTemporaryResource(String sourceRelativePath) {

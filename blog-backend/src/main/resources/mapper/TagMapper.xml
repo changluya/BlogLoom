@@ -8,14 +8,26 @@
         <result property="color" column="color"/>
     </resultMap>
 
+    <resultMap id="tagWithCount" type="com.changlu.blogloom.entity.Tag">
+        <id property="id" column="id"/>
+        <result property="name" column="tag_name"/>
+        <result property="color" column="color"/>
+        <result property="blogCount" column="blog_count"/>
+    </resultMap>
+
     <!--获取所有标签List-->
     <select id="getTagList" resultMap="tag">
         select id, tag_name, color from tag order by id desc
     </select>
 
-    <!--获取所有标签List不查询id-->
-    <select id="getTagListNotId" resultMap="tag">
-        select tag_name, color from tag order by id desc
+    <!--获取所有标签及各自已发布博客数量（含数量为0的标签）-->
+    <select id="getTagListNotId" resultMap="tagWithCount">
+        select t.id, t.tag_name, t.color, count(b.id) as blog_count
+        from tag t
+        left join blog_tag bt on bt.tag_id = t.id
+        left join blog b on b.id = bt.blog_id and b.is_published = true
+        group by t.id, t.tag_name, t.color
+        order by t.id desc
     </select>
 
     <!--按博客id查询List-->

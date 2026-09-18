@@ -1,5 +1,11 @@
 <template>
 	<div>
+		<div class="moment-toolbar">
+			<el-input v-model.trim="queryInfo.query" clearable placeholder="搜索动态内容" prefix-icon="el-icon-search" @keyup.enter.native="searchMoments" @clear="searchMoments">
+				<el-button slot="append" icon="el-icon-search" @click="searchMoments">搜索</el-button>
+			</el-input>
+			<el-button type="primary" icon="el-icon-edit-outline" @click="$router.push('/blog/moment/write')">写动态</el-button>
+		</div>
 		<el-table :data="momentList">
 			<el-table-column label="序号" type="index" width="50"></el-table-column>
 			<el-table-column label="内容" prop="content" show-overflow-tooltip></el-table-column>
@@ -43,7 +49,8 @@
 			return {
 				queryInfo: {
 					pageNum: 1,
-					pageSize: 10
+					pageSize: 10,
+					query: ''
 				},
 				momentList: [],
 				total: 0,
@@ -53,6 +60,10 @@
 			this.getMomentList()
 		},
 		methods: {
+			searchMoments() {
+				this.queryInfo.pageNum = 1
+				this.getMomentList()
+			},
 			getMomentList() {
 				getMomentListByQuery(this.queryInfo).then(res => {
 					this.momentList = res.data.list
@@ -88,6 +99,8 @@
 </script>
 
 <style scoped>
+	.moment-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
+	.moment-toolbar .el-input { width:500px; max-width:calc(100% - 120px); }
 	.el-button + span {
 		margin-left: 10px;
 	}
