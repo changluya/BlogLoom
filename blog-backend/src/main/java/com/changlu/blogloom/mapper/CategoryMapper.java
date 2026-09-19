@@ -18,6 +18,8 @@ public interface CategoryMapper {
 
 	List<Category> getCategoryNameList();
 
+	int countCategory();
+
 	int saveCategory(Category category);
 
 	Category getCategoryById(Long id);

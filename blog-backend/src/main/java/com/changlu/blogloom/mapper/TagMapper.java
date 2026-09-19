@@ -1,6 +1,7 @@
 package com.changlu.blogloom.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.changlu.blogloom.entity.Tag;
 import com.changlu.blogloom.model.vo.TagBlogCount;
@@ -32,4 +33,10 @@ public interface TagMapper {
 	int updateTag(Tag tag);
 
 	List<TagBlogCount> getTagBlogCount();
+
+	List<TagBlogCount> getTopTagBlogCount(@Param("limit") int limit);
+
+	int countTag();
+
+	int countUsedTag();
 }

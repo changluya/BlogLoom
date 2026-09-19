@@ -57,6 +57,22 @@ class KnowledgeArticleMetadataParserTest {
 	}
 
 	@Test
+	void shouldParseKnowledgeBasePath() {
+		String markdown = "```json\n{\"title\":\"SqlParser解析器快速入门\",\"knowledgeBasePath\":\"/a/bb/cc\"}\n```\n正文";
+		ParsedArticle parsed = KnowledgeArticleMetadataParser.parse(markdown);
+		assertNotNull(parsed.getMetadata());
+		assertEquals("/a/bb/cc", parsed.getMetadata().getKnowledgeBasePath());
+	}
+
+	@Test
+	void shouldParseKnowledgeBasePathAlias() {
+		String markdown = "```json\n{\"knowledge_base_path\":\"/数据库/MySQL\"}\n```\n正文";
+		ParsedArticle parsed = KnowledgeArticleMetadataParser.parse(markdown);
+		assertNotNull(parsed.getMetadata());
+		assertEquals("/数据库/MySQL", parsed.getMetadata().getKnowledgeBasePath());
+	}
+
+	@Test
 	void shouldIgnoreNonJsonFirstBlock() {
 		String markdown = "```java\nSystem.out.println(1);\n```\n正文";
 		ParsedArticle parsed = KnowledgeArticleMetadataParser.parse(markdown);

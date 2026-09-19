@@ -22,7 +22,7 @@
 						<el-image class="column-logo" :src="scope.row.cover" fit="cover">
 							<div slot="error" class="logo-fallback"><i class="el-icon-collection"></i></div>
 						</el-image>
-						<div><strong>{{ scope.row.name }}</strong><p>{{ scope.row.description || '暂无简介' }}</p></div>
+						<div class="column-copy"><strong>{{ scope.row.name }}</strong><p>{{ scope.row.description || '暂无简介' }}</p></div>
 					</div>
 				</template>
 			</el-table-column>
@@ -271,6 +271,8 @@ export default {
 .child-column-cell { min-height:48px; padding-left:52px; }
 .drag-handle { display:inline-flex; width:18px; height:32px; flex:0 0 18px; align-items:center; justify-content:center; color:#c0c4cc; font-size:15px; cursor:grab; }
 .column-drag-row:hover .drag-handle { color:#909399; }
+.column-copy { min-width:0; flex:1; text-align:left; }
+.column-copy strong,.column-copy p { display:block; text-align:left; }
 .column-cell p { margin:4px 0 0; color:#909399; font-size:12px; }
 .column-logo { width:42px; height:42px; flex:0 0 42px; border-radius:9px; background:#f2f4f7; box-shadow:0 2px 7px rgba(31,45,61,.08); }
 .child-column-cell .column-logo { width:36px; height:36px; flex-basis:36px; border-radius:8px; }

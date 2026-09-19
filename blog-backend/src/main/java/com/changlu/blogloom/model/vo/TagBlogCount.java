@@ -14,8 +14,5 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class TagBlogCount {
-	private Long id;
-	private String name;//标签名
-	private Integer value;//标签下博客数量
+public class TagBlogCount extends CategoryBlogCount {
 }

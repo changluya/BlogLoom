@@ -8,6 +8,7 @@ import com.changlu.blogloom.module.knowledge.service.MarkdownArchiveService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.Collections;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -69,6 +70,21 @@ public class KnowledgeNodeAdminController {
 		options.setTargetParentId(targetParentId); options.setPublished(published);
 		options.setConflictPolicy(conflictPolicy.toUpperCase());
 		return Result.ok("预检完成", archiveService.preview(file, options));
+	}
+
+	/**
+	 * 一键导入第 1 步（非 ZIP）：上传单个/多个 Markdown 文件预检。
+	 * 目录由每篇 Markdown 元数据中的 knowledgeBasePath 决定（为空则落在导入根目录），缺失目录导入时逐级创建。
+	 */
+	@PostMapping("/import/preview/files")
+	public Result previewFiles(@RequestParam("files") MultipartFile[] files,
+	                           @RequestParam(defaultValue = "0") Long targetParentId,
+	                           @RequestParam(defaultValue = "true") Boolean published,
+	                           @RequestParam(defaultValue = "SKIP") String conflictPolicy) {
+		KnowledgeImportOptions options = new KnowledgeImportOptions();
+		options.setTargetParentId(targetParentId); options.setPublished(published);
+		options.setConflictPolicy(conflictPolicy.toUpperCase());
+		return Result.ok("预检完成", archiveService.previewDocuments(Arrays.asList(files), options));
 	}
 
 	/** 一键导入第 2 步：凭预检 token 提交异步导入任务，返回 taskId */

@@ -15,6 +15,13 @@ export function previewImport(file, options) {
 	return axios({url: 'knowledge/import/preview', method: 'POST', data, timeout: 600000})
 }
 
+export function previewImportFiles(files, options) {
+	const data = new FormData()
+	Array.from(files).forEach(file => data.append('files', file))
+	Object.keys(options).forEach(key => data.append(key, options[key]))
+	return axios({url: 'knowledge/import/preview/files', method: 'POST', data, timeout: 600000})
+}
+
 export const executeImport = token => axios({url: `knowledge/import/${token}/execute`, method: 'POST'})
 export const getImportProgress = taskId => axios({url: `knowledge/import/tasks/${taskId}`, method: 'GET'})
 export const exportKnowledge = () => axios({url: 'knowledge/export', method: 'GET', responseType: 'blob', timeout: 60000})

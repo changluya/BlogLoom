@@ -6,3 +6,11 @@ export function getDashboard() {
 		method: 'GET'
 	})
 }
+
+export function getDashboardRanking(type) {
+	return axios({
+		url: 'dashboard/ranking',
+		method: 'GET',
+		params: {type}
+	})
+}

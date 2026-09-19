@@ -3,6 +3,7 @@ package com.changlu.blogloom.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.changlu.blogloom.constant.RedisKeyConstants;
 import com.changlu.blogloom.entity.CityVisitor;
@@ -33,8 +34,8 @@ public class DashboardAdminController {
 		int todayUV = redisService.countBySet(RedisKeyConstants.IDENTIFICATION_SET);
 		int blogCount = dashboardService.getBlogCount();
 		int commentCount = dashboardService.getCommentCount();
-		Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
-		Map<String, List> tagBlogCountMap = dashboardService.getTagBlogCountMap();
+		Map<String, Object> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
+		Map<String, Object> tagBlogCountMap = dashboardService.getTagBlogCountMap();
 		Map<String, List> visitRecordMap = dashboardService.getVisitRecordMap();
 		List<CityVisitor> cityVisitorList = dashboardService.getCityVisitorList();
 
@@ -48,5 +49,13 @@ public class DashboardAdminController {
 		map.put("visitRecord", visitRecordMap);
 		map.put("cityVisitor", cityVisitorList);
 		return Result.ok("获取成功", map);
+	}
+
+	@GetMapping("/dashboard/ranking")
+	public Result distributionRanking(@RequestParam String type) {
+		if (!"category".equals(type) && !"tag".equals(type)) {
+			return Result.error("排行类型参数有误");
+		}
+		return Result.ok("获取成功", dashboardService.getDistributionRanking(type));
 	}
 }

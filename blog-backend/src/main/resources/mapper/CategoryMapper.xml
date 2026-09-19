@@ -18,6 +18,10 @@
         select id, category_name from category order by id desc
     </select>
 
+	<select id="countCategory" resultType="int">
+		select count(*) from category
+	</select>
+
     <!--获取所有分类及各自已发布博客数量（含数量为0的分类）-->
     <select id="getCategoryNameList" resultMap="categoryWithCount">
         select c.id, c.category_name, count(b.id) as blog_count

@@ -10,6 +10,9 @@ import com.changlu.blogloom.module.knowledge.domain.entity.KnowledgeNode;
 import com.changlu.blogloom.module.knowledge.domain.enums.KnowledgeNodeType;
 import com.changlu.blogloom.module.knowledge.service.KnowledgeImportTaskService;
 import com.changlu.blogloom.module.knowledge.service.MarkdownArchiveService;
+import com.changlu.blogloom.module.knowledge.support.KnowledgeArticleMetadataParser;
+import com.changlu.blogloom.module.knowledge.support.KnowledgeArticleMetadataParser.ParsedArticle;
+import com.changlu.blogloom.module.knowledge.support.KnowledgeBasePathSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,13 +34,14 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
- * @Description: 知识库 ZIP 导入导出的入口服务。
+ * @Description: 知识库导入导出的入口服务，支持 ZIP 归档与单个/多个 Markdown 文件两种导入来源。
  * <p>
  * 导入分为两个阶段：
  * <ol>
- *     <li>preview：上传 ZIP -> 校验并扫描 Entry -> 生成一次性 token 与预检结果（不落库）；</li>
+ *     <li>preview：上传 ZIP 或 Markdown 文件 -> 校验并解析 Entry -> 生成一次性 token 与预检结果（不落库）；</li>
  *     <li>execute：凭 token 取回会话 -> 创建进度任务 -> 单线程异步执行 {@link KnowledgeImportWorker}。</li>
  * </ol>
+ * 其中 ZIP 按压缩包目录结构还原并忽略 knowledgeBasePath；Markdown 文件按元数据 knowledgeBasePath 定位目录。
  *
  * @Author: changlu
  * @Date: 2026-09-19
@@ -48,6 +52,8 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 	private static final long MAX_ENTRY_SIZE = 5L * 1024 * 1024;
 	private static final long MAX_TOTAL_SIZE = 2L * 1024 * 1024 * 1024;
 	private static final int MAX_ENTRIES = 2000;
+	/** 多文件导入的 Markdown 总大小上限（内容缓存在内存中，需小于 ZIP 模式） */
+	private static final long MAX_DOCUMENT_TOTAL_SIZE = 100L * 1024 * 1024;
 	private static final int MAX_ARCHIVE_ENTRIES = 10000;
 	private static final int MAX_DEPTH = 20;
 
@@ -105,11 +111,67 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 	}
 
 	/**
+	 * 预检阶段（非 ZIP）：逐个校验并解析 Markdown 文件，按元数据 knowledgeBasePath 计算目标知识库路径。
+	 * <p>
+	 * 与 ZIP 导入的区别：ZIP 的目录结构由压缩包决定、忽略 knowledgeBasePath；
+	 * 而多文件导入没有目录结构，目录完全由每篇 Markdown 的 knowledgeBasePath 决定
+	 * （为空则落在导入根目录），缺失目录会在执行阶段逐级创建。文件内容缓存在会话中，执行阶段直接读取。
+	 */
+	@Override
+	public KnowledgeImportPreview previewDocuments(List<MultipartFile> files, KnowledgeImportOptions options) {
+		validateOptions(options);
+		if (files == null || files.isEmpty()) throw new BadRequestException("请选择 Markdown 文件");
+		if (files.size() > MAX_ENTRIES) throw new BadRequestException("单次最多导入 " + MAX_ENTRIES + " 个 Markdown 文件");
+		Map<String, byte[]> documents = new LinkedHashMap<>();
+		List<KnowledgeImportEntry> accepted = new ArrayList<>();
+		Set<String> usedPaths = new HashSet<>();
+		long total = 0;
+		for (MultipartFile file : files) {
+			// 步骤1：校验文件类型与大小
+			if (file == null || file.isEmpty()) continue;
+			String filename = file.getOriginalFilename();
+			if (filename == null || !filename.toLowerCase(Locale.ROOT).endsWith(".md")) {
+				throw new BadRequestException("仅支持 .md 文件: " + (filename == null ? "未知文件" : filename));
+			}
+			if (file.getSize() > MAX_ENTRY_SIZE) throw new BadRequestException("Markdown 文件不能超过 5 MB: " + filename);
+			byte[] bytes;
+			try {
+				bytes = file.getBytes();
+			} catch (IOException e) {
+				throw new BadRequestException("Markdown 文件读取失败: " + filename, e);
+			}
+			if (bytes.length > MAX_ENTRY_SIZE) throw new BadRequestException("Markdown 文件不能超过 5 MB: " + filename);
+			total += bytes.length;
+			if (total > MAX_DOCUMENT_TOTAL_SIZE) throw new BadRequestException("Markdown 总大小超过 100 MB，请改用 ZIP 导入");
+			validateUtf8(bytes, filename);
+			// 步骤2：解析顶部元数据，严格校验并归一化 knowledgeBasePath（为空表示根目录）
+			ParsedArticle parsed = KnowledgeArticleMetadataParser.parse(new String(bytes, StandardCharsets.UTF_8));
+			String basePath = parsed.getMetadata() == null ? ""
+					: KnowledgeBasePathSupport.normalize(parsed.getMetadata().getKnowledgeBasePath());
+			// 步骤3：文档节点名先按文件名占位（导入时会被元数据 title 覆盖），路径 = 知识库目录 + 文件名
+			String docName = filename(filename.replace('\\', '/'));
+			if (docName.isEmpty()) throw new BadRequestException("Markdown 文件名不合法: " + filename);
+			String path = uniqueDocumentPath(basePath.isEmpty() ? docName : basePath + "/" + docName, usedPaths);
+			documents.put(path, bytes);
+			accepted.add(new KnowledgeImportEntry(filename, path, false, bytes.length));
+		}
+		if (accepted.isEmpty()) throw new BadRequestException("没有可导入的 Markdown 文件");
+		// 步骤4：补齐父目录并排序，生成预检会话（一次性 token，30 分钟有效）
+		List<KnowledgeImportEntry> entries = buildOrderedEntries(accepted);
+		int dirs = (int) entries.stream().filter(KnowledgeImportEntry::isDirectory).count();
+		List<String> paths = new ArrayList<>();
+		for (KnowledgeImportEntry entry : entries) paths.add(entry.getPath());
+		String token = UUID.randomUUID().toString();
+		sessions.put(token, new KnowledgeImportSession(token, documents, entries, copy(options), LocalDateTime.now().plusMinutes(30)));
+		return new KnowledgeImportPreview(token, dirs, entries.size() - dirs, 0, total, paths);
+	}
+
+	/**
 	 * 执行阶段：凭预检 token 提交异步导入任务，立即返回 taskId 供前端轮询进度。
 	 * 步骤1 取出并校验会话（一次性、有过期时间）；
 	 * 步骤2 用 running 标志保证同一时刻仅有一个导入任务；
 	 * 步骤3 创建进度任务并投递到单线程执行器；
-	 * 步骤4 执行成功/失败分别更新任务状态，最后清理临时 ZIP 并释放标志。
+	 * 步骤4 执行成功/失败分别更新任务状态，最后清理临时资源并释放标志。
 	 */
 	@Override
 	public String execute(String token) {
@@ -209,6 +271,19 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 		return value.isEmpty() ? "untitled" : value;
 	}
 
+	/** 同一知识库路径下文件名重复时，追加 " (n)" 后缀，避免多文件导入时路径冲突 */
+	private String uniqueDocumentPath(String path, Set<String> usedPaths) {
+		if (usedPaths.add(path.toLowerCase(Locale.ROOT))) return path;
+		int slash = path.lastIndexOf('/');
+		String dir = slash < 0 ? "" : path.substring(0, slash + 1);
+		String name = slash < 0 ? path : path.substring(slash + 1);
+		String base = name.toLowerCase(Locale.ROOT).endsWith(".md") ? name.substring(0, name.length() - 3) : name;
+		for (int i = 1; ; i++) {
+			String candidate = dir + base + " (" + i + ").md";
+			if (usedPaths.add(candidate.toLowerCase(Locale.ROOT))) return candidate;
+		}
+	}
+
 	private String uniqueExportPath(String path, Set<String> usedPaths, boolean directory) {
 		String key = path.toLowerCase(Locale.ROOT);
 		if (usedPaths.add(key)) return path;
@@ -253,6 +328,17 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 		}
 		if (accepted.isEmpty()) throw new BadRequestException("ZIP 中没有可导入的 Markdown 或目录");
 		stripSingleRoot(accepted);
+		List<KnowledgeImportEntry> entries = buildOrderedEntries(accepted);
+		int dirs = (int) entries.stream().filter(KnowledgeImportEntry::isDirectory).count();
+		List<String> paths = new ArrayList<>();
+		for (KnowledgeImportEntry entry : entries) paths.add(entry.getPath());
+		return new ScanResult(entries, dirs, entries.size() - dirs, ignored, total, paths);
+	}
+
+	/**
+	 * 把文档/目录 Entry 归一化为“父目录先于子节点”的有序列表：自动补齐缺失的父目录，按深度升序、同深度按路径排序。
+	 */
+	private List<KnowledgeImportEntry> buildOrderedEntries(List<KnowledgeImportEntry> accepted) {
 		LinkedHashMap<String, KnowledgeImportEntry> all = new LinkedHashMap<>();
 		for (KnowledgeImportEntry entry : accepted) {
 			String[] segments = entry.getPath().split("/");
@@ -266,10 +352,7 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 		}
 		List<KnowledgeImportEntry> entries = new ArrayList<>(all.values());
 		entries.sort(Comparator.comparingInt((KnowledgeImportEntry e) -> depth(e.getPath())).thenComparing(KnowledgeImportEntry::getPath));
-		int dirs = (int) entries.stream().filter(KnowledgeImportEntry::isDirectory).count();
-		List<String> paths = new ArrayList<>();
-		for (KnowledgeImportEntry entry : entries) paths.add(entry.getPath());
-		return new ScanResult(entries, dirs, entries.size() - dirs, ignored, total, paths);
+		return entries;
 	}
 
 	private byte[] readMarkdown(ZipFile zip, ZipEntry entry, String path) throws IOException {
@@ -334,6 +417,8 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 		return false;
 	}
 	private int depth(String path) { return path.isEmpty() ? 0 : path.split("/").length; }
+	/** 取路径中的文件名部分（忽略目录前缀） */
+	private String filename(String path) { int index = path.lastIndexOf('/'); return index < 0 ? path : path.substring(index + 1); }
 	private void validateOptions(KnowledgeImportOptions options) {
 		if (options == null) throw new BadRequestException("导入参数不能为空");
 		if (!"SKIP".equals(options.getConflictPolicy()) && !"RENAME".equals(options.getConflictPolicy())) throw new BadRequestException("冲突策略不正确");

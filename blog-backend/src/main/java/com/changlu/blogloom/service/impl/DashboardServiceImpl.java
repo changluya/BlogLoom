@@ -2,9 +2,7 @@ package com.changlu.blogloom.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.changlu.blogloom.entity.Category;
 import com.changlu.blogloom.entity.CityVisitor;
-import com.changlu.blogloom.entity.Tag;
 import com.changlu.blogloom.entity.VisitRecord;
 import com.changlu.blogloom.mapper.BlogMapper;
 import com.changlu.blogloom.mapper.CategoryMapper;
@@ -45,6 +43,8 @@ public class DashboardServiceImpl implements DashboardService {
 	CityVisitorMapper cityVisitorMapper;
 	//查询最近30天的记录
 	private static final int visitRecordLimitNum = 30;
+	private static final int CATEGORY_RANK_LIMIT = 10;
+	private static final int TAG_RANK_LIMIT = 15;
 
 	@Override
 	public int countVisitLogByToday() {
@@ -67,93 +67,41 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Override
-	public Map<String, List> getCategoryBlogCountMap() {
-		//查询分类id对应的博客数量
-		List<CategoryBlogCount> categoryBlogCountList = blogMapper.getCategoryBlogCountList();
-		//查询所有分类的id和名称
-		List<Category> categoryList = categoryMapper.getCategoryList();
-		//所有分类名称的List
-		List<String> legend = new ArrayList<>();
-		for (Category category : categoryList) {
-			legend.add(category.getName());
-		}
-		//分类对应的博客数量List
-		List<CategoryBlogCount> series = new ArrayList<>();
-		if (categoryBlogCountList.size() == categoryList.size()) {
-			Map<Long, String> m = new HashMap<>(16);
-			for (Category c : categoryList) {
-				m.put(c.getId(), c.getName());
-			}
-			for (CategoryBlogCount c : categoryBlogCountList) {
-				c.setName(m.get(c.getId()));
-				series.add(c);
-			}
-		} else {
-			Map<Long, Integer> m = new HashMap<>(16);
-			for (CategoryBlogCount c : categoryBlogCountList) {
-				m.put(c.getId(), c.getValue());
-			}
-			for (Category c : categoryList) {
-				CategoryBlogCount categoryBlogCount = new CategoryBlogCount();
-				categoryBlogCount.setName(c.getName());
-				Integer count = m.get(c.getId());
-				if (count == null) {
-					categoryBlogCount.setValue(0);
-				} else {
-					categoryBlogCount.setValue(count);
-				}
-				series.add(categoryBlogCount);
-			}
-		}
-		Map<String, List> map = new HashMap<>(4);
-		map.put("legend", legend);
+	public Map<String, Object> getCategoryBlogCountMap() {
+		List<CategoryBlogCount> series = blogMapper.getTopCategoryBlogCountList(CATEGORY_RANK_LIMIT);
+		int total = categoryMapper.countCategory();
+		Map<String, Object> map = new HashMap<>(8);
+		map.put("total", total);
+		map.put("displayed", series.size());
+		map.put("remaining", Math.max(total - series.size(), 0));
 		map.put("series", series);
 		return map;
 	}
 
 	@Override
-	public Map<String, List> getTagBlogCountMap() {
-		//查询标签id对应的博客数量
-		List<TagBlogCount> tagBlogCountList = tagMapper.getTagBlogCount();
-		//查询所有标签的id和名称
-		List<Tag> tagList = tagMapper.getTagList();
-		//所有标签名称的List
-		List<String> legend = new ArrayList<>();
-		for (Tag tag : tagList) {
-			legend.add(tag.getName());
-		}
-		//标签对应的博客数量List
-		List<TagBlogCount> series = new ArrayList<>();
-		if (tagBlogCountList.size() == tagList.size()) {
-			Map<Long, String> m = new HashMap<>(64);
-			for (Tag t : tagList) {
-				m.put(t.getId(), t.getName());
-			}
-			for (TagBlogCount t : tagBlogCountList) {
-				t.setName(m.get(t.getId()));
-				series.add(t);
-			}
-		} else {
-			Map<Long, Integer> m = new HashMap<>(64);
-			for (TagBlogCount t : tagBlogCountList) {
-				m.put(t.getId(), t.getValue());
-			}
-			for (Tag t : tagList) {
-				TagBlogCount tagBlogCount = new TagBlogCount();
-				tagBlogCount.setName(t.getName());
-				Integer count = m.get(t.getId());
-				if (count == null) {
-					tagBlogCount.setValue(0);
-				} else {
-					tagBlogCount.setValue(count);
-				}
-				series.add(tagBlogCount);
-			}
-		}
-		Map<String, List> map = new HashMap<>(4);
-		map.put("legend", legend);
+	public Map<String, Object> getTagBlogCountMap() {
+		List<TagBlogCount> series = tagMapper.getTopTagBlogCount(TAG_RANK_LIMIT);
+		int total = tagMapper.countTag();
+		int used = tagMapper.countUsedTag();
+		Map<String, Object> map = new HashMap<>(8);
+		map.put("total", total);
+		map.put("used", used);
+		map.put("unused", Math.max(total - used, 0));
+		map.put("displayed", series.size());
+		map.put("remaining", Math.max(total - series.size(), 0));
 		map.put("series", series);
 		return map;
+	}
+
+	@Override
+	public List<? extends CategoryBlogCount> getDistributionRanking(String type) {
+		if ("category".equals(type)) {
+			return blogMapper.getTopCategoryBlogCountList(categoryMapper.countCategory());
+		}
+		if ("tag".equals(type)) {
+			return tagMapper.getTopTagBlogCount(tagMapper.countTag());
+		}
+		throw new IllegalArgumentException("不支持的排行类型");
 	}
 
 	@Override

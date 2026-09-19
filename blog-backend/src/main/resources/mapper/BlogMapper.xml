@@ -374,6 +374,7 @@
 
     <resultMap id="categoryBlogCount" type="com.changlu.blogloom.model.vo.CategoryBlogCount">
         <id property="id" column="category_id"/>
+		<result property="name" column="category_name"/>
         <result property="value" column="blog_count"/>
     </resultMap>
 
@@ -381,4 +382,14 @@
     <select id="getCategoryBlogCountList" resultMap="categoryBlogCount">
         select category_id, count(category_id) as blog_count from blog where is_deleted=0 group by category_id
     </select>
+
+	<!--仪表盘只查询文章数量最多的分类，避免把全部分类交给图表渲染-->
+	<select id="getTopCategoryBlogCountList" resultMap="categoryBlogCount">
+		select c.id as category_id, c.category_name, count(b.id) as blog_count
+		from category c
+		left join blog b on b.category_id = c.id and b.is_deleted = 0
+		group by c.id, c.category_name
+		order by blog_count desc, c.id desc
+		limit #{limit}
+	</select>
 </mapper>
