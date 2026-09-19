@@ -22,5 +22,6 @@ public class RandomBlog {
 	private String firstPicture;//文章首图，用于随机文章展示
 	private Date createTime;//创建时间
 	private String password;//文章密码
+	private Integer views;//阅读量
 	private Boolean privacy;//是否私密文章
 }

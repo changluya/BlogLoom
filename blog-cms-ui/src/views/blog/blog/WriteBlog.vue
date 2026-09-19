@@ -232,13 +232,13 @@
 							this.submitting = true
 							updateBlog(this.form).then(res => {
 								this.msgSuccess(res.msg)
-								this.$router.push('/blog/list')
+								this.$router.push('/blog/content/articles')
 							}).finally(() => { this.submitting = false })
 						} else {
 							this.submitting = true
 							saveBlog(this.form).then(res => {
 								this.msgSuccess(res.msg)
-								this.$router.push('/blog/list')
+								this.$router.push('/blog/content/articles')
 							}).finally(() => { this.submitting = false })
 						}
 					} else {

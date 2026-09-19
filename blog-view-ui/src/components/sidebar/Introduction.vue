@@ -2,9 +2,9 @@
 	<div>
 		<div class="ui segments m-box">
 			<div class="ui card introduction-card">
-				<div class="image introduction-avatar">
-					<img :src="introduction.avatar">
-				</div>
+				<router-link to="/home" class="image introduction-avatar" title="返回首页">
+					<img :src="introduction.avatar" alt="返回首页">
+				</router-link>
 				<div class="content" align="center">
 					<div class="header">{{ introduction.name }}</div>
 					<div class="blog-statistics">
@@ -66,9 +66,9 @@
 						</el-collapse-item>
 					</el-collapse>
 				</div>
-				<UserColumns/>
 			</div>
 		</div>
+		<UserColumns/>
 	</div>
 </template>
 
@@ -117,6 +117,7 @@
 		box-sizing: border-box;
 		overflow: hidden;
 		background: #fff !important;
+		cursor: pointer;
 	}
 
 	.introduction-card .introduction-avatar img {
@@ -127,6 +128,12 @@
 		border-radius: 50%;
 		background: #fff;
 		box-shadow: 0 5px 16px rgba(31,45,61,.14);
+		transition: transform .2s, box-shadow .2s;
+	}
+
+	.introduction-card .introduction-avatar:hover img {
+		transform: translateY(-2px) scale(1.03);
+		box-shadow: 0 8px 20px rgba(31,45,61,.2);
 	}
 
 	.introduction-card > .content {

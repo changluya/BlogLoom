@@ -35,6 +35,7 @@ public class Blog {
 	private Integer words;//文章字数
 	private Integer readTime;//阅读时长(分钟)
 	private String password;//密码保护
+	private Boolean deleted;//逻辑删除标记：false未删除，true已删除（回收站）
 
 	private User user;//文章作者(因为是个人博客，也可以不加作者字段，暂且加上)
 	private Category category;//文章分类

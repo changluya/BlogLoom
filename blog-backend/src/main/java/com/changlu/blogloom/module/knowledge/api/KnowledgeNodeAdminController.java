@@ -56,10 +56,14 @@ public class KnowledgeNodeAdminController {
 	@PostMapping("/repair")
 	public Result repair() { return Result.ok("修复完成", Collections.singletonMap("created", nodeService.repairMissingBlogs())); }
 
+	/**
+	 * 一键导入第 1 步：上传 ZIP 预检。
+	 * published 默认 true，即默认按“公开”导入；conflictPolicy 默认 SKIP（同名文档跳过）。
+	 */
 	@PostMapping("/import/preview")
 	public Result preview(@RequestParam MultipartFile file,
 	                      @RequestParam(defaultValue = "0") Long targetParentId,
-	                      @RequestParam(defaultValue = "false") Boolean published,
+	                      @RequestParam(defaultValue = "true") Boolean published,
 	                      @RequestParam(defaultValue = "SKIP") String conflictPolicy) {
 		KnowledgeImportOptions options = new KnowledgeImportOptions();
 		options.setTargetParentId(targetParentId); options.setPublished(published);
@@ -67,11 +71,13 @@ public class KnowledgeNodeAdminController {
 		return Result.ok("预检完成", archiveService.preview(file, options));
 	}
 
+	/** 一键导入第 2 步：凭预检 token 提交异步导入任务，返回 taskId */
 	@PostMapping("/import/{token}/execute")
 	public Result execute(@PathVariable String token) {
 		return Result.ok("导入任务已提交", Collections.singletonMap("taskId", archiveService.execute(token)));
 	}
 
+	/** 一键导入第 3 步：按 taskId 轮询导入进度与结果 */
 	@GetMapping("/import/tasks/{taskId}")
 	public Result progress(@PathVariable String taskId) { return Result.ok("获取成功", taskService.get(taskId)); }
 

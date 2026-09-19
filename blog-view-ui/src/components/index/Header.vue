@@ -1,10 +1,7 @@
 <template>
 	<header ref="header">
 		<div class="view">
-			<img ref="imgbg1" :src="defaultSettings.bg1" style="display: none;">
-			<div class="bg1" :style="{backgroundImage:'url('+defaultSettings.bg1+')'}"></div>
-			<div class="bg2" :style="{backgroundImage:'url('+defaultSettings.bg2+')'}"></div>
-			<div class="bg3" :style="{backgroundImage:'url('+defaultSettings.bg3+')'}" v-show="loaded"></div>
+			<div class="bg" :style="{backgroundImage:'url('+defaultSettings.banner+')'}"></div>
 		</div>
 		<div class="hero-overlay"></div>
 		<div class="hero-content">
@@ -29,7 +26,6 @@
 		name: "Header",
 		data() {
 			return {
-				loaded: false,
 				defaultSettings
 			}
 		},
@@ -42,10 +38,6 @@
 			}
 		},
 		mounted() {
-			// 先预加载第一张 Banner，避免多层背景首次渲染时出现短暂拼接或闪烁。
-			this.$refs.imgbg1.onload = () => {
-				this.loaded = true
-			}
 			this.setHeaderHeight()
 			let startingPoint
 			const header = this.$refs.header
@@ -102,6 +94,10 @@
 		height: 100%;
 	}
 
+	.view .bg {
+		z-index: 10;
+	}
+
 	.hero-overlay {
 		position: absolute;
 		inset: 0;
@@ -112,29 +108,11 @@
 		pointer-events: none;
 	}
 
-	.view .bg1 {
-		z-index: 10;
-		opacity: calc(1 - (var(--percentage) - 0.5) / 0.5);
-	}
-
-	.view .bg2 {
-		z-index: 20;
-		opacity: calc(1 - (var(--percentage) - 0.25) / 0.25);
-	}
-
-	.view .bg3 {
-		left: -10%;
-	}
-
-	header .view,
-	header .bg1,
-	header .bg2 {
+	header .view {
 		transition: .2s all ease-in;
 	}
 
-	header.moving .view,
-	header.moving .bg1,
-	header.moving .bg2 {
+	header.moving .view {
 		transition: none;
 	}
 

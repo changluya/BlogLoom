@@ -12,3 +12,13 @@ export function uploadColumnCover(id, file) {
 	data.append('file', file)
 	return axios({url: `column/${id}/cover`, method: 'POST', data})
 }
+
+export function previewColumnImport(file, options) {
+	const data = new FormData()
+	data.append('file', file)
+	Object.keys(options).forEach(key => data.append(key, options[key]))
+	return axios({url: 'columns/import/preview', method: 'POST', data, timeout: 120000})
+}
+
+export const executeColumnImport = token => axios({url: `columns/import/${token}/execute`, method: 'POST', timeout: 120000})
+export const exportColumns = () => axios({url: 'columns/export', method: 'GET', responseType: 'blob', timeout: 60000})

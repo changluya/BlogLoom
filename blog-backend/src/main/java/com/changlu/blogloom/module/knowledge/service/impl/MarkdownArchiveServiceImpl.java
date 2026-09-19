@@ -30,6 +30,18 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * @Description: 知识库 ZIP 导入导出的入口服务。
+ * <p>
+ * 导入分为两个阶段：
+ * <ol>
+ *     <li>preview：上传 ZIP -> 校验并扫描 Entry -> 生成一次性 token 与预检结果（不落库）；</li>
+ *     <li>execute：凭 token 取回会话 -> 创建进度任务 -> 单线程异步执行 {@link KnowledgeImportWorker}。</li>
+ * </ol>
+ *
+ * @Author: changlu
+ * @Date: 2026-09-19
+ */
 @Service
 public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 	private static final long MAX_ZIP_SIZE = 500L * 1024 * 1024;
@@ -54,8 +66,14 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 		this.nodeMapper = nodeMapper;
 	}
 
+	/**
+	 * 预检阶段：仅校验与扫描，不写入数据库。
+	 * 步骤1 校验参数与文件；步骤2 落临时 ZIP；步骤3 扫描 Entry；
+	 * 步骤4 生成 30 分钟有效的一次性 token 并缓存会话；步骤5 返回预检统计给前端确认。
+	 */
 	@Override
 	public KnowledgeImportPreview preview(MultipartFile file, KnowledgeImportOptions options) {
+		// 步骤1：校验导入参数与上传文件（非空、大小、扩展名）
 		validateOptions(options);
 		if (file == null || file.isEmpty()) throw new BadRequestException("请选择 ZIP 文件");
 		if (file.getSize() > MAX_ZIP_SIZE) throw new BadRequestException("ZIP 文件不能超过 500 MB");
@@ -63,13 +81,17 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 		if (filename == null || !filename.toLowerCase(Locale.ROOT).endsWith(".zip")) throw new BadRequestException("仅支持 ZIP 文件");
 		Path temp = null;
 		try {
+			// 步骤2：把上传流拷贝到临时文件，后续扫描与执行都基于该文件
 			temp = Files.createTempFile("blogloom-knowledge-", ".zip");
 			try (InputStream input = file.getInputStream()) {
 				Files.copy(input, temp, StandardCopyOption.REPLACE_EXISTING);
 			}
+			// 步骤3：扫描 ZIP，得到去重、排序后的目录/文档 Entry 列表
 			ScanResult result = scan(temp);
+			// 步骤4：生成一次性 token，缓存会话（含临时文件路径、Entry、参数、过期时间）
 			String token = UUID.randomUUID().toString();
 			sessions.put(token, new KnowledgeImportSession(token, temp, result.entries, copy(options), LocalDateTime.now().plusMinutes(30)));
+			// 步骤5：返回预检统计（目录数、文档数、忽略数、总大小、路径列表）
 			return new KnowledgeImportPreview(token, result.directoryCount, result.documentCount, result.ignoredCount,
 					result.totalBytes, result.paths);
 		} catch (BadRequestException e) {
@@ -82,27 +104,39 @@ public class MarkdownArchiveServiceImpl implements MarkdownArchiveService {
 		}
 	}
 
+	/**
+	 * 执行阶段：凭预检 token 提交异步导入任务，立即返回 taskId 供前端轮询进度。
+	 * 步骤1 取出并校验会话（一次性、有过期时间）；
+	 * 步骤2 用 running 标志保证同一时刻仅有一个导入任务；
+	 * 步骤3 创建进度任务并投递到单线程执行器；
+	 * 步骤4 执行成功/失败分别更新任务状态，最后清理临时 ZIP 并释放标志。
+	 */
 	@Override
 	public String execute(String token) {
+		// 步骤1：会话是一次性的，remove 后即失效；校验存在性与过期时间
 		KnowledgeImportSession session = sessions.remove(token);
 		if (session == null || session.getExpiresAt().isBefore(LocalDateTime.now())) {
 			if (session != null) deleteQuietly(session.getZipPath());
 			throw new BadRequestException("预检会话已过期或已提交");
 		}
+		// 步骤2：通过 CAS 抢占运行标志，避免并发导入相互干扰；失败则归还会话
 		if (!running.compareAndSet(false, true)) {
 			sessions.put(token, session);
 			throw new BadRequestException("当前已有知识库导入任务");
 		}
+		// 步骤3：按 Entry 总数创建进度任务，并把实际导入交给单线程执行器异步处理
 		String taskId = taskService.create(session.getEntries().size());
 		try {
 			executor.execute(() -> {
 				try {
 					taskService.start(taskId);
+					// 核心导入逻辑：目录/文档创建 + 博客与标签/分类/专栏关联
 					worker.execute(session, taskId);
 					taskService.succeed(taskId);
 				} catch (Exception e) {
 					taskService.fail(taskId, e.getMessage(), taskService.get(taskId).getCurrentPath());
 				} finally {
+					// 步骤4：无论成功失败都清理临时文件并释放运行标志
 					deleteQuietly(session.getZipPath());
 					running.set(false);
 				}

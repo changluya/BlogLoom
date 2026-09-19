@@ -1,8 +1,9 @@
 <template>
-	<div v-if="columns.length" class="column-panel">
-		<div class="panel-title">TA 的专栏</div>
+	<div v-if="columns.length" class="ui segments m-box">
+		<div class="ui secondary segment"><i class="columns icon"></i>TA 的专栏</div>
+		<div class="ui segment column-panel">
 		<div class="column-tree">
-		<div v-for="column in columns" :key="column.id" class="column-group">
+		<div v-for="column in visibleColumns" :key="column.id" class="column-group">
 			<div class="column-row root-row" @click="go(column.id)">
 				<span class="root-branch" aria-hidden="true"></span>
 				<img v-if="column.cover && !failed[column.id]" :src="column.cover" class="column-logo" @error="imageFailed(column.id)">
@@ -19,14 +20,37 @@
 			</div>
 		</div>
 		</div>
+		<div v-if="overflow" class="column-toggle" :title="expanded ? '收起专栏' : '展开全部专栏'" @click="expanded = !expanded">
+			<i :class="expanded ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+			<span>{{ expanded ? '收起' : '展开全部' }}</span>
+		</div>
+		</div>
 	</div>
 </template>
 
 <script>
 import {getColumnTree} from '@/api/column'
+const MAX_VISIBLE_ROWS = 8
 export default {
 	name: 'UserColumns',
-	data() { return {columns: [], failed: {}} },
+	data() { return {columns: [], failed: {}, expanded: false} },
+	computed: {
+		overflow() {
+			return this.columns.reduce((total, column) => total + 1 + (column.children ? column.children.length : 0), 0) > MAX_VISIBLE_ROWS
+		},
+		visibleColumns() {
+			if (this.expanded || !this.overflow) return this.columns
+			const rows = []
+			let count = 0
+			for (const column of this.columns) {
+				const size = 1 + (column.children ? column.children.length : 0)
+				if (count > 0 && count + size > MAX_VISIBLE_ROWS) break
+				rows.push(column)
+				count += size
+			}
+			return rows
+		}
+	},
 	created() { getColumnTree().then(res => { this.columns = res.data || [] }) },
 	methods: {
 		go(id) { this.$router.push(`/column/${id}`) },
@@ -40,8 +64,8 @@ export default {
 </script>
 
 <style scoped>
-.column-panel { border-top:1px solid #ebeef5; padding:13px 12px 12px; background:#fff; }
-.panel-title { margin:0 4px 10px; color:#303846; font-size:14px; font-weight:600; }
+.secondary.segment { padding:10px; }
+.column-panel { padding:13px 12px 12px; }
 .column-tree { position:relative; padding-left:16px; }
 .column-tree::before { position:absolute; top:17px; bottom:17px; left:4px; border-left:1px dotted #cbd2dc; content:''; }
 .column-group { position:relative; }
@@ -60,4 +84,7 @@ export default {
 .child-row { min-height:34px; padding-left:28px; }
 .child-branch { position:absolute; top:50%; left:-12px; width:36px; border-top:1px dotted #cbd2dc; }
 .child-row:hover .column-name, .root-row:hover .column-name { color:#409eff; }
+.column-toggle { display:flex; width:fit-content; align-items:center; justify-content:center; gap:4px; margin:9px auto 0; padding:3px 14px; color:#969eaa; font-size:12px; line-height:18px; background:#f2f4f7; border-radius:12px; cursor:pointer; transition:color .18s, background .18s; }
+.column-toggle:hover { color:#409eff; background:#eaf2fd; }
+.column-toggle i { font-size:12px; }
 </style>

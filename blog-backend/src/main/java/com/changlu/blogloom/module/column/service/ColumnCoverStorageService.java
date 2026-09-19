@@ -30,8 +30,17 @@ public class ColumnCoverStorageService {
 
 	public String save(Long columnId, MultipartFile file) {
 		if (file == null || file.isEmpty()) throw new BadRequestException("专栏图片不能为空");
-		if (file.getSize() > MAX_SIZE) throw new BadRequestException("专栏图片不能超过 5MB");
-		String extension = extension(file.getOriginalFilename());
+		try {
+			return save(columnId, file.getOriginalFilename(), file.getBytes());
+		} catch (IOException e) {
+			throw new PersistenceException("保存专栏图片失败", e);
+		}
+	}
+
+	public String save(Long columnId, String originalFilename, byte[] content) {
+		if (content == null || content.length == 0) throw new BadRequestException("专栏图片不能为空");
+		if (content.length > MAX_SIZE) throw new BadRequestException("专栏图片不能超过 5MB");
+		String extension = extension(originalFilename);
 		if (!EXTENSIONS.contains(extension)) throw new BadRequestException("仅支持 jpg、jpeg、png、webp 图片");
 		String fileName = UUID.randomUUID().toString() + "." + extension;
 		Path directory = Paths.get(uploadProperties.getBlogColumnPath(columnId)).toAbsolutePath().normalize();
@@ -39,7 +48,7 @@ public class ColumnCoverStorageService {
 		if (!target.startsWith(directory)) throw new BadRequestException("专栏图片路径不合法");
 		try {
 			Files.createDirectories(directory);
-			file.transferTo(target.toFile());
+			Files.write(target, content);
 		} catch (IOException e) {
 			throw new PersistenceException("保存专栏图片失败", e);
 		}

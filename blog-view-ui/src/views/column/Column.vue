@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="column-page">
 		<div class="ui segment column-header">
 			<div class="header-main">
 				<img v-if="column.cover && !imageError" :src="column.cover" @error="imageError=true">
@@ -31,6 +31,10 @@ export default {
 </script>
 
 <style scoped>
+/* 桌面端：作为中栏弹性容器，让空列表与左侧专栏区等高 */
+@media (min-width: 768px) {
+	.column-page { display:flex; flex:1; flex-direction:column; min-height:0; }
+}
 .column-header { padding:22px 26px !important; border-radius:8px !important; box-shadow:0 2px 8px rgba(31,45,61,.08) !important; }
 .header-main { display:flex; align-items:center; gap:18px; }
 .header-main img,.header-logo { width:72px; height:72px; flex:0 0 72px; border-radius:14px; object-fit:cover; background:#eef4ff; }

@@ -9,7 +9,6 @@ import com.changlu.blogloom.module.knowledge.domain.enums.KnowledgeNodeType;
 import com.changlu.blogloom.module.knowledge.domain.vo.KnowledgeTreeNode;
 import com.changlu.blogloom.module.knowledge.service.KnowledgeNodeService;
 import com.changlu.blogloom.service.BlogService;
-import com.changlu.blogloom.service.CommentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +18,10 @@ import java.util.*;
 public class KnowledgeNodeServiceImpl implements KnowledgeNodeService {
 	private final KnowledgeNodeMapper mapper;
 	private final BlogService blogService;
-	private final CommentService commentService;
 
-	public KnowledgeNodeServiceImpl(KnowledgeNodeMapper mapper, BlogService blogService, CommentService commentService) {
+	public KnowledgeNodeServiceImpl(KnowledgeNodeMapper mapper, BlogService blogService) {
 		this.mapper = mapper;
 		this.blogService = blogService;
-		this.commentService = commentService;
 	}
 
 	@Override
@@ -119,8 +116,7 @@ public class KnowledgeNodeServiceImpl implements KnowledgeNodeService {
 			deleteRecursively(child, children, visiting);
 		}
 		if (KnowledgeNodeType.DOC.name().equals(node.getType()) && node.getBlogId() != null && mapper.countBlog(node.getBlogId()) > 0) {
-			blogService.deleteBlogTagByBlogId(node.getBlogId());
-			commentService.deleteCommentsByBlogId(node.getBlogId());
+			// 逻辑删除博客（移入回收站）：保留知识库节点、标签/专栏关联与评论，便于回收站恢复
 			blogService.deleteBlogById(node.getBlogId());
 		} else {
 			mapper.delete(node.getId());

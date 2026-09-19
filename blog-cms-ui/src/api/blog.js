@@ -20,6 +20,48 @@ export function deleteBlogById(id) {
 	})
 }
 
+export function getRecycleDataByQuery(queryInfo) {
+	return axios({
+		url: 'blogs/recycle',
+		method: 'GET',
+		params: {
+			...queryInfo
+		}
+	})
+}
+
+export function restoreBlogById(id) {
+	return axios({
+		url: 'blog/recycle/restore',
+		method: 'PUT',
+		params: {id}
+	})
+}
+
+export function deleteBlogPermanentlyById(id) {
+	return axios({
+		url: 'blog/recycle',
+		method: 'DELETE',
+		params: {id}
+	})
+}
+
+export function restoreBlogBatch(ids) {
+	return axios({
+		url: 'blog/recycle/restore',
+		method: 'POST',
+		data: ids
+	})
+}
+
+export function deleteBlogBatchPermanently(ids) {
+	return axios({
+		url: 'blog/recycle/delete',
+		method: 'POST',
+		data: ids
+	})
+}
+
 export function getCategoryAndTag() {
 	return axios({
 		url: 'categoryAndTag',

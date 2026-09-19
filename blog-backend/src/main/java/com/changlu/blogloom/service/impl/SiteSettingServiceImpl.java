@@ -10,6 +10,7 @@ import com.changlu.blogloom.exception.PersistenceException;
 import com.changlu.blogloom.mapper.SiteSettingMapper;
 import com.changlu.blogloom.model.vo.Badge;
 import com.changlu.blogloom.model.vo.Copyright;
+import com.changlu.blogloom.model.vo.CustomModule;
 import com.changlu.blogloom.model.vo.Favorite;
 import com.changlu.blogloom.model.vo.Introduction;
 import com.changlu.blogloom.service.RedisService;
@@ -58,7 +59,13 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		List<SiteSetting> type1 = new ArrayList<>();
 		List<SiteSetting> type2 = new ArrayList<>();
 		List<SiteSetting> type3 = new ArrayList<>();
+		List<SiteSetting> type5 = new ArrayList<>();
 		for (SiteSetting s : siteSettings) {
+			// 自定义模块固定归入独立分组，避免历史上被当作资料卡记录展示
+			if (SiteSettingConstants.CUSTOM_MODULE.equals(s.getNameEn())) {
+				type5.add(s);
+				continue;
+			}
 			switch (s.getType()) {
 				case 1:
 					type1.add(s);
@@ -77,6 +84,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		map.put("type1", type1);
 		map.put("type2", type2);
 		map.put("type3", type3);
+		map.put("type5", type5);
 		return map;
 	}
 
@@ -89,6 +97,14 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		List<Favorite> favorites = new ArrayList<>();
 		List<String> rollTexts = new ArrayList<>();
 		for (SiteSetting s : siteSettings) {
+			// 自定义模块：按名称识别，与 type 值无关
+			if (SiteSettingConstants.CUSTOM_MODULE.equals(s.getNameEn())) {
+				CustomModule customModule = JacksonUtils.readValue(s.getValue(), CustomModule.class);
+				if (customModule != null) {
+					siteInfo.put(SiteSettingConstants.CUSTOM_MODULE, customModule);
+				}
+				continue;
+			}
 			switch (s.getType()) {
 				case 1:
 					if (SiteSettingConstants.COPYRIGHT.equals(s.getNameEn())) {
