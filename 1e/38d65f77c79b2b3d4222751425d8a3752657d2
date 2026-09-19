@@ -1,0 +1,160 @@
+blog-cms-ui/src/router/index.js
+  s_e73053ad9ccbb0::t_46bba66597d694 133-146
+  s_e73053ad9ccbb0::t_984a0df6859de4 132
+blog-backend/src/main/java/com/changlu/blogloom/model/dto/ImageHostTestRequest.java
+  s_e73053ad9ccbb0::t_9266d8296ad12f 8-9,16
+  s_e73053ad9ccbb0::t_4933b71182c397 1-7,10-15,17
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/impl/KnowledgeImportWorker.java
+  s_e73053ad9ccbb0::t_ab8dbf60dc15ed 61
+  s_e73053ad9ccbb0::t_81eed8ee1ad689 257
+  s_e73053ad9ccbb0::t_3a225847ab4d29 271,273,275
+"docs/工程化开发模块设计思路产物/front/BlogLoom 前台外部图床图片防盗链优化方案.md"
+  s_439d19d6120770::t_3ad1563c0bdbbb 1-150
+blog-backend/src/main/java/com/changlu/blogloom/service/SiteImageStorageService.java
+  s_e73053ad9ccbb0::t_739aa67964503b 5-6,14-16,21-22,25-30,32,34,36,38-40,46-48
+docs/prd/核心功能业务逻辑/后台快速迁移导入逻辑/知识库-博客迁移导入标准逻辑.md
+  s_e73053ad9ccbb0::t_fe265bef1c5467 19
+  s_e73053ad9ccbb0::t_9a819c5e59b85b 150
+  s_e73053ad9ccbb0::t_6156f7bdbc44d5 355
+  s_e73053ad9ccbb0::t_33b6c62cfe3e3a 277-279
+blog-view-ui/src/views/home/Home.vue
+  s_439d19d6120770::t_76ab90ec53f665 30-31
+  s_439d19d6120770::t_9991ef746c515e 132-160
+  s_439d19d6120770::t_239d35babff189 339-346
+blog-backend/src/main/java/com/changlu/blogloom/util/upload/UploadUtils.java
+  s_e73053ad9ccbb0::t_60468996994a6e 11-14
+  s_e73053ad9ccbb0::t_0927b3fdadfc1b 46,52-54
+  s_e73053ad9ccbb0::t_215a7b228750db 25,33-34
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/SiteSettingAdminController.java
+  s_e73053ad9ccbb0::t_0e5bd86d60942b 34-35
+  s_e73053ad9ccbb0::t_674361fc6bb550 70-71,73-78,80-81
+  s_e73053ad9ccbb0::t_3e7f2eb3022ad0 15,18
+  s_e73053ad9ccbb0::t_36b01892a71e3c 72,79
+  s_e73053ad9ccbb0::t_5e0d0b27ed959c 69
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/SiteSettingServiceImpl.java
+  s_e73053ad9ccbb0::t_b296829b8405ca 63,80-82,92
+blog-view-ui/src/views/Index.vue
+  s_e73053ad9ccbb0::t_522a28a4605053 92-97
+  s_e73053ad9ccbb0::t_a89802107b1414 2-4
+  s_e73053ad9ccbb0::t_15b00d8cc74477 181-185,191-192,194,197-199
+docs/prd/产品功能文档-CMS系统.md
+  s_e73053ad9ccbb0::t_45c98079c516a5 10
+  s_e73053ad9ccbb0::t_153adc3ad55c5e 130,133,136,139,143,157-159
+  s_e73053ad9ccbb0::t_6943ef1ef2c527 116,119,121
+  s_e73053ad9ccbb0::t_78cd5e0ca7e52d 88
+  s_e73053ad9ccbb0::t_ec57d21852478b 101,110-115,117-118,120,122-124,128
+  s_e73053ad9ccbb0::t_3d6828f353592e 20,28
+  s_e73053ad9ccbb0::t_e3c01b8dc4e377 29
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/ImageHostConfigService.java
+  s_e73053ad9ccbb0::t_9dcaac425d82d8 1-39
+"docs/开发文档留存/release_1.0.x/02、BlogLoom 本地 Markdown 知识库导入导出设计方案.md"
+  s_e73053ad9ccbb0::t_d22523b86a3a39 282
+  s_e73053ad9ccbb0::t_9f88534a798d79 367-368
+blog-backend/src/main/java/com/changlu/blogloom/service/ResourceStorageService.java
+  s_e73053ad9ccbb0::t_bfb116ecafd252 5-6,17,19-20,23,25,36,38,40,42-43,45-47,52,54-55,57,60-61,65,68-69,73,79,83,86-90,107-112
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/AliyunOssConfig.java
+  s_e73053ad9ccbb0::t_fb0257c435c24b 1-21
+docs/工程化开发模块设计思路产物/backend/BlogLoom-站点设置与图床配置项参数说明.md
+  s_e73053ad9ccbb0::t_4c65ea70847969 4,6-7
+  s_e73053ad9ccbb0::t_41284f9fe89e68 134-135,140,142
+  s_e73053ad9ccbb0::t_0d72fd05b29288 148,152-203,219,232
+  s_e73053ad9ccbb0::t_b4fdbb68743cb9 100-120
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/ImageHostConnectivityService.java
+  s_e73053ad9ccbb0::t_a264182c23bf5c 5-6,12,23-27,32-34,39-41
+  s_e73053ad9ccbb0::t_6782cc27a38f37 1-4,7-11,13-22,28-31,35-36,38,42-44,46-52
+  s_e73053ad9ccbb0::t_fe838c0bb40793 37
+  s_e73053ad9ccbb0::t_f6e7a05d1a6e0b 45
+docs/prd/产品功能文档-博客前台.md
+  s_e73053ad9ccbb0::t_efa81d0abb8333 115-121
+  s_e73053ad9ccbb0::t_40c6eedb944acd 144
+  s_e73053ad9ccbb0::t_eca91441485d21 27
+blog-view-ui/src/components/index/Nav.vue
+  s_439d19d6120770::t_7e39891c97b836 55
+  s_439d19d6120770::t_fb189999cb06cf 343-350
+  s_439d19d6120770::t_40262dd11e6ea1 27-28
+  s_439d19d6120770::t_878be85d0e4424 114,130-156
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/UploadChannelManager.java
+  s_e73053ad9ccbb0::t_e8e97ff4babc5a 1-38
+blog-cms-ui/src/api/imageHost.js
+  s_e73053ad9ccbb0::t_a55fc7abf951ad 1-19
+  s_e73053ad9ccbb0::t_54e06955f13c0b 20-27
+sql/increment/1.0/20260919220000_v1.0.x.sql
+  s_e73053ad9ccbb0::t_ff8d80b5a89ce8 1-10
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/UploadChannel.java
+  s_e73053ad9ccbb0::t_a960da4bf6f2fc 1-47
+"code/Redis 组件相关功能梳理与移除评估.md"
+  s_a985bebdadbaf2::t_e9ce773b85c3ee 1-115
+blog-backend/src/main/java/com/changlu/blogloom/service/BlogResourceService.java
+  s_e73053ad9ccbb0::t_de6c4f6b5e3d19 137-138,142
+  s_e73053ad9ccbb0::t_353c3b17810170 128-129
+  s_e73053ad9ccbb0::t_665f074b22501d 21
+  s_e73053ad9ccbb0::t_9dfbb9c30b76e5 34
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/AliyunUploadChannel.java
+  s_e73053ad9ccbb0::t_e45a3dceb37949 109-112
+  s_e73053ad9ccbb0::t_32357afdc52998 1-28,31-33,58-71,73-108,113-224
+  s_e73053ad9ccbb0::t_96562626aa78cd 29-30,34-57
+  s_e73053ad9ccbb0::t_48cf59386c547e 72
+blog-view-ui/index.html
+  s_439d19d6120770::t_19f118bf8e1e68 7-8
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/UploadedResource.java
+  s_e73053ad9ccbb0::t_93143c274b08f9 1-15
+blog-backend/src/main/java/com/changlu/blogloom/constant/SiteSettingConstants.java
+  s_e73053ad9ccbb0::t_542c1a48bf7731 23-24
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/BlogResourceAdminController.java
+  s_e73053ad9ccbb0::t_67ec388c39fa1a 20,24
+  s_e73053ad9ccbb0::t_81c0ae0097fc8f 4
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/StoragePaths.java
+  s_e73053ad9ccbb0::t_a25dcc5d25e57a 1-29
+blog-backend/src/main/java/com/changlu/blogloom/module/column/service/ColumnCoverStorageService.java
+  s_e73053ad9ccbb0::t_7ad421ec611dde 5,15-17,23-26,30-32,36,41-46,48-49,51-53,57-59
+blog-backend/src/main/java/com/changlu/blogloom/mapper/SiteSettingMapper.java
+  s_e73053ad9ccbb0::t_3757edb7402b56 19-20
+blog-backend/src/main/resources/mapper/SiteSettingMapper.xml
+  s_e73053ad9ccbb0::t_06c080e86e5389 10-14
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/LocalUploadChannel.java
+  s_e73053ad9ccbb0::t_c07440f2ea4534 1,7-8,10-12,16,19,22,25-27,30-32,48-148
+  s_e73053ad9ccbb0::t_9c71aa991af8cf 28-29,33,36,38-47
+blog-backend/pom.xml
+  s_e73053ad9ccbb0::t_886ba871271af3 159-164
+blog-cms-ui/src/views/imageHost/ImageHostSetting.vue
+  s_e73053ad9ccbb0::t_3af28076132595 34-35
+  s_e73053ad9ccbb0::t_c3ca1d7f1c5849 192-195
+  s_e73053ad9ccbb0::t_eff79ac51c9f73 72
+  s_e73053ad9ccbb0::t_c9c5efc4ad0ca2 111,113,115-120
+  s_e73053ad9ccbb0::t_6fbe9d4c35e7d9 1-23,26-33,36-60,62-71,73-110,121-191,196-205
+  s_e73053ad9ccbb0::t_be810a46f6dc49 24-25
+  s_e73053ad9ccbb0::t_09492e14877d81 61
+  s_e73053ad9ccbb0::t_183b453630e259 112,114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1e38d65f77c79b2b3d4222751425d8a3752657d2",
+  "prompts": {},
+  "sessions": {
+    "s_439d19d6120770": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f460693dbffeIxEKd52yw6vLuZ",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_a985bebdadbaf2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f457357f3ffeqbodJFdM4q6ztm",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_e73053ad9ccbb0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f4604e800ffepZNMC3bA4JBQh9",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
