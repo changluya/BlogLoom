@@ -3,6 +3,10 @@
 		<!--搜索-->
 		<el-row type="flex" justify="space-between" align="middle" class="list-toolbar">
 			<el-col :span="18" class="search-and-manage">
+				<PageTip title="文章管理">
+					<p>这里集中管理所有文章：按标题/分类搜索，一键<strong>置顶、推荐</strong>，修改<strong>可见性</strong>（公开 / 私密 / 密码保护），编辑或删除文章。</p>
+					<p>删除的文章会先进入<strong>回收站</strong>，可随时恢复；文章的分类、标签、专栏可在此快捷维护。</p>
+				</PageTip>
 				<el-input class="blog-search" placeholder="请输入标题" v-model="queryInfo.title" :clearable="true" @clear="search" @keyup.native.enter="search" size="small">
 					<el-select v-model="queryInfo.categoryId" slot="prepend" placeholder="请选择分类" :clearable="true" @change="search" style="width: 160px">
 						<el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
@@ -13,6 +17,7 @@
 				<el-button size="small" icon="el-icon-collection-tag" @click="tagDialogVisible=true">标签管理</el-button>
 			</el-col>
 			<el-col :span="6" class="toolbar-actions">
+				<el-button size="small" icon="el-icon-upload2" @click="importVisible = true">快捷导入</el-button>
 				<el-button type="primary" size="small" icon="el-icon-edit-outline" @click="goWriteBlogPage">写文章</el-button>
 			</el-col>
 		</el-row>
@@ -107,18 +112,23 @@
 			<TagList v-if="tagDialogVisible" embedded @changed="handleTagChanged"/>
 			<span slot="footer"><el-button @click="tagDialogVisible=false">关闭</el-button></span>
 		</el-dialog>
+
+		<!--快捷导入：与知识库「迁移本地博客」同一套逻辑-->
+		<KnowledgeImportDialog :visible.sync="importVisible" @success="getData"/>
 	</div>
 </template>
 
 <script>
 	import Breadcrumb from "@/components/Breadcrumb";
+	import PageTip from "@/components/PageTip";
+	import KnowledgeImportDialog from "@/components/KnowledgeImportDialog";
 	import {getDataByQuery, deleteBlogById, updateTop, updateRecommend, updateVisibility} from '@/api/blog'
 	import CategoryList from '@/views/blog/category/CategoryList'
 	import TagList from '@/views/blog/tag/TagList'
 
 	export default {
 		name: "BlogList",
-		components: {Breadcrumb, CategoryList, TagList},
+		components: {Breadcrumb, PageTip, KnowledgeImportDialog, CategoryList, TagList},
 		data() {
 			return {
 				queryInfo: {
@@ -133,6 +143,7 @@
 				dialogVisible: false,
 				categoryDialogVisible: false,
 				tagDialogVisible: false,
+				importVisible: false,
 				blogId: 0,
 				radio: 1,
 				visForm: {
@@ -229,8 +240,8 @@
 				this.$router.push(`/blog/edit/${id}`)
 			},
 			deleteBlogById(id) {
-				this.$confirm('此操作将永久删除该博客<strong style="color: red">及其所有评论</strong>，是否删除?<br>建议将博客置为<strong style="color: red">私密</strong>状态！', '提示', {
-					confirmButtonText: '确定',
+				this.$confirm('此操作将把该博客移入<strong style="color: red">回收站</strong>，可在回收站中恢复或彻底删除。是否继续?', '提示', {
+					confirmButtonText: '移入回收站',
 					cancelButtonText: '取消',
 					type: 'warning',
 					dangerouslyUseHTMLString: true

@@ -27,5 +27,5 @@ export default {
 	 * @type {Array}
 	 * @description 默认展开的父级菜单
 	 */
-	defaultOpeneds: ['/blog', '/page', '/pictureHosting', '/system', '/log', '/statistics']
+	defaultOpeneds: ['/blog', '/blog/knowledge', '/blog/content', '/page', '/pictureHosting', '/system', '/log', '/statistics']
 }

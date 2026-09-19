@@ -1,6 +1,7 @@
 package com.changlu.blogloom.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.changlu.blogloom.entity.Blog;
 import com.changlu.blogloom.model.dto.BlogView;
@@ -25,13 +26,15 @@ import java.util.List;
 public interface BlogMapper {
 	List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId);
 
+	List<Blog> getDeletedListByTitleAndCategoryId(String title, Integer categoryId);
+
 	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
 
 	List<Blog> getIdAndTitleList();
 
 	List<NewBlog> getNewBlogListByIsPublished();
 
-	List<BlogInfo> getBlogInfoListByIsPublished();
+	List<BlogInfo> getBlogInfoListByIsPublished(@Param("topOnly") boolean topOnly);
 
 	List<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName);
 
@@ -48,6 +51,10 @@ public interface BlogMapper {
 	List<BlogView> getBlogViewsList();
 
 	int deleteBlogById(Long id);
+
+	int softDeleteBlogById(Long id);
+
+	int restoreBlogById(Long id);
 
 	int deleteBlogTagByBlogId(Long blogId);
 
@@ -66,6 +73,8 @@ public interface BlogMapper {
 	int updateBlogResources(com.changlu.blogloom.model.dto.Blog blog);
 
 	Blog getBlogById(Long id);
+
+	Integer getBlogViewsById(Long id);
 
 	String getTitleByBlogId(Long id);
 

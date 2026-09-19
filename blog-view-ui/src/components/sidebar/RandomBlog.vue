@@ -1,21 +1,19 @@
 <template>
-	<!--随机文章-->
+	<!--推荐文章-->
 	<div class="ui segments m-box">
-		<div class="ui secondary segment"><i class="bookmark icon"></i>随机文章</div>
+		<div class="ui secondary segment"><i class="bookmark icon"></i>推荐文章</div>
 		<div class="ui yellow segment content-segment">
-			<div v-if="randomBlogList.length" class="ui divided items">
-				<div class="m-item" v-for="blog in randomBlogList" :key="blog.id" @click.prevent="toBlog(blog)">
-					<div class="img" :style="{'background-image':'url(' + blog.firstPicture + ')'}"></div>
-					<div class="info">
-						<div class="date">{{ blog.createTime | dateFormat('YYYY-MM-DD') }}</div>
-						<div class="title">{{ blog.title }}</div>
-					</div>
-				</div>
-			</div>
+			<ul v-if="randomBlogList.length" class="recommend-list">
+				<li v-for="(blog, index) in randomBlogList" :key="blog.id" @click="toBlog(blog)" :title="blog.title">
+					<span class="rank" :class="'rank-' + (index + 1)">{{ index + 1 }}</span>
+					<span class="title">{{ blog.title }}</span>
+					<span class="views"><i class="eye outline icon"></i>{{ formatViews(blog.views) }}</span>
+				</li>
+			</ul>
 			<div v-else class="empty-state">
 				<div class="empty-icon"><i class="file alternate outline icon"></i></div>
-				<div class="empty-title">暂无随机文章</div>
-				<div class="empty-description">发布更多文章后将在这里展示推荐内容</div>
+				<div class="empty-title">暂无推荐文章</div>
+				<div class="empty-description">将文章设为「推荐」后将在这里展示</div>
 			</div>
 		</div>
 	</div>
@@ -33,6 +31,10 @@
 		methods: {
 			toBlog(blog) {
 				this.$store.dispatch('goBlogPage', blog)
+			},
+			formatViews(value) {
+				const count = Number(value) || 0
+				return count.toLocaleString('zh-CN')
 			}
 		}
 	}
@@ -44,7 +46,81 @@
 	}
 
 	.content-segment {
-		padding: 12px !important;
+		padding: 6px 12px !important;
+		max-height: 210px;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.content-segment::-webkit-scrollbar { width: 5px; }
+	.content-segment::-webkit-scrollbar-thumb { border-radius: 999px; background: #cbd5e1; }
+	.content-segment::-webkit-scrollbar-track { background: transparent; }
+
+	.recommend-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.recommend-list li {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		padding: 8px 2px;
+		border-bottom: 1px dashed #eef0f3;
+		cursor: pointer;
+	}
+
+	.recommend-list li:last-child {
+		border-bottom: none;
+	}
+
+	.rank {
+		flex: 0 0 18px;
+		height: 18px;
+		line-height: 18px;
+		margin-top: 1px;
+		border-radius: 4px;
+		background: #eef2f7;
+		color: #8a94a3;
+		font-size: 12px;
+		font-weight: 600;
+		text-align: center;
+	}
+
+	.rank-1 { background: #f5222d; color: #fff; }
+	.rank-2 { background: #fa8c16; color: #fff; }
+	.rank-3 { background: #facc15; color: #5a4600; }
+
+	.title {
+		flex: 1;
+		min-width: 0;
+		color: #4b5563;
+		font-size: 13px;
+		line-height: 1.5;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		word-break: break-word;
+		transition: color .2s;
+	}
+
+	.views {
+		flex: 0 0 auto;
+		display: inline-flex;
+		align-items: center;
+		margin-top: 2px;
+		color: #a0a8b3;
+		font-size: 11px;
+		white-space: nowrap;
+	}
+
+	.views .icon { margin: 0 2px 0 0 !important; }
+
+	.recommend-list li:hover .title {
+		color: #00a7e0;
 	}
 
 	.empty-state {
@@ -74,51 +150,4 @@
 	.empty-icon i { margin: 0; }
 	.empty-title { color: #606b79; font-size: 14px; font-weight: 600; }
 	.empty-description { margin-top: 5px; font-size: 12px; line-height: 1.6; }
-
-	.ui.divided.items .m-item:first-child {
-		margin-top: 0;
-	}
-
-	.ui.divided.items .m-item {
-		margin-top: 1rem;
-		height: 7rem;
-		position: relative;
-		overflow: hidden;
-		border-radius: 5px;
-		cursor: pointer;
-		user-select: none;
-	}
-
-	.ui.divided.items .m-item .img {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		object-fit: cover;
-		background-position-x: center;
-		background-position-y: center;
-		background-size: cover;
-	}
-
-	.ui.divided.items .m-item .info {
-		z-index: 1;
-		background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		padding: .5rem !important;
-		font-size: 12px;
-		color: white;
-	}
-
-	.ui.divided.items .m-item .info .title {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 1;
-		word-break: break-word;
-	}
 </style>

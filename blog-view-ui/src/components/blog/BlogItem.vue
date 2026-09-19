@@ -12,13 +12,16 @@
 					<div class="blog-description" v-html="item.description"></div>
 					<div class="blog-footer">
 						<div class="blog-meta">
+							<span v-if="item.top" class="blog-top-tag">
+								<svg class="top-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg>置顶
+							</span>
 							<span><i class="calendar outline icon"></i>{{ item.createTime | dateFormat('YYYY-MM-DD') }}</span>
 							<span><i class="eye outline icon"></i>{{ item.views }} 阅读</span>
 							<span v-if="item.category"><i class="folder open outline icon"></i>{{ item.category.name }}</span>
 							<span><i class="clock outline icon"></i>{{ item.readTime || 0 }} 分钟</span>
 						</div>
 						<div class="blog-tags">
-							<router-link :to="`/tag/${tag.name}`" class="ui mini label m-text-500" :class="tag.color"
+							<router-link :to="`/tag/${tag.name}`" class="ui mini label m-text-500" :class="tagColor(tag)"
 							             v-for="(tag,index) in item.tags" :key="index">{{ tag.name }}</router-link>
 						</div>
 					</div>
@@ -40,6 +43,15 @@
 		methods: {
 			toBlog(blog) {
 				this.$store.dispatch('goBlogPage', blog)
+			},
+			// 标签有配置颜色则用配置；否则按名称稳定取一个颜色，避免全部落在默认灰色
+			tagColor(tag) {
+				if (tag && tag.color) return tag.color
+				const palette = ['red', 'orange', 'green', 'blue', 'violet', 'purple', 'pink', 'teal', 'olive', 'brown', 'black']
+				const name = (tag && tag.name) || ''
+				let hash = 0
+				for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0
+				return palette[hash % palette.length]
 			}
 		}
 	}
@@ -82,22 +94,25 @@
 		transition: opacity .2s, transform .2s;
 	}
 	.blog-tags .label:hover { opacity: .88; transform: translateY(-1px); }
-	.blog-tags .label.red { background: #e05555 !important; }
-	.blog-tags .label.orange { background: #e8853a !important; }
-	.blog-tags .label.yellow { background: #f0c419 !important; color: #5a4600 !important; }
-	.blog-tags .label.olive { background: #9bbf3f !important; color: #33430a !important; }
-	.blog-tags .label.green { background: #34b37a !important; }
-	.blog-tags .label.teal { background: #26a69a !important; }
-	.blog-tags .label.blue { background: #4a90e2 !important; }
-	.blog-tags .label.violet { background: #8b7bd8 !important; }
-	.blog-tags .label.purple { background: #9b59b6 !important; }
-	.blog-tags .label.pink { background: #ec6fa6 !important; }
-	.blog-tags .label.brown { background: #a0785a !important; }
+	.blog-tags .label.red { background: #e06a6a !important; }
+	.blog-tags .label.orange { background: #e89a4e !important; }
+	.blog-tags .label.yellow { background: #e6c85a !important; color: #5a4600 !important; }
+	.blog-tags .label.olive { background: #a8bd5c !important; color: #3a440f !important; }
+	.blog-tags .label.green { background: #4fbf85 !important; }
+	.blog-tags .label.teal { background: #45b3a6 !important; }
+	.blog-tags .label.blue { background: #6a9fe0 !important; }
+	.blog-tags .label.violet { background: #8f83dd !important; }
+	.blog-tags .label.purple { background: #ab7dd0 !important; }
+	.blog-tags .label.pink { background: #e585ac !important; }
+	.blog-tags .label.brown { background: #ab8a68 !important; }
 	.blog-tags .label.grey { background: #9aa5b1 !important; }
-	.blog-tags .label.black { background: #4b5563 !important; }
+	.blog-tags .label.black { background: #55606f !important; }
 	.blog-meta { display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 6px 14px; color: #8a9199; font-size: 12px; }
 	.blog-meta span { white-space: nowrap; }
 	.blog-meta .icon { margin-right: 4px !important; }
+	/* 置顶标记：位于发布时间左侧 */
+	.blog-meta .blog-top-tag { display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px; border-radius: 4px; background: #fef0f0; color: #f56c6c; font-size: 12px; font-weight: 600; line-height: 1.4; }
+	.blog-meta .blog-top-tag .top-icon { width: 12px; height: 12px; flex: 0 0 auto; fill: currentColor; }
 </style>
 
 <!-- 移动端样式（独立文件，单独维护） -->

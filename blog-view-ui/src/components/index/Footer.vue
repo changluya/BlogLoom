@@ -25,16 +25,6 @@
 				</div>
 
 				<div class="footer-col">
-					<h4 class="footer-title">文章分类</h4>
-					<ul class="footer-list">
-						<li v-for="category in categoryList" :key="category.id">
-							<router-link :to="`/category/${encodeURIComponent(category.name)}`">{{ category.name }}</router-link>
-						</li>
-						<li v-if="!categoryList.length" class="footer-empty">暂无分类</li>
-					</ul>
-				</div>
-
-				<div class="footer-col">
 					<h4 class="footer-title">快捷链接</h4>
 					<ul class="footer-list">
 						<li v-for="link in quickLinks" :key="link.path">
@@ -82,10 +72,6 @@
 			newBlogList: {
 				type: Array,
 				required: true
-			},
-			categoryList: {
-				type: Array,
-				default: () => []
 			},
 			introduction: {
 				type: Object,
@@ -170,7 +156,7 @@
 
 	.footer-main {
 		display: grid;
-		grid-template-columns: 2.2fr 1.4fr 1fr 1fr;
+		grid-template-columns: 2.2fr 1.4fr 1fr;
 		gap: 32px;
 	}
 

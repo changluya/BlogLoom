@@ -22,7 +22,7 @@
     <select id="getCategoryNameList" resultMap="categoryWithCount">
         select c.id, c.category_name, count(b.id) as blog_count
         from category c
-        left join blog b on b.category_id = c.id and b.is_published = true
+        left join blog b on b.category_id = c.id and b.is_published = true and b.is_deleted = 0
         group by c.id, c.category_name
         order by c.id desc
     </select>

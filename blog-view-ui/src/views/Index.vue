@@ -14,6 +14,7 @@
 						<!--左侧-->
 						<div class="three wide column m-mobile-hide">
 							<Introduction :class="{'m-display-none':focusMode, 'article-introduction-sticky': $route.name === 'blog'}"/>
+							<CustomModule :module="siteInfo.customModule" :class="{'m-display-none':focusMode}"/>
 						</div>
 						<!--中间-->
 						<div class="ten wide column">
@@ -46,7 +47,7 @@
 			<img src="/img/paper-plane.png" style="width: 40px;height: 40px;">
 		</el-backtop>
 		<!--底部footer-->
-		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :categoryList="categoryList" :introduction="introduction" :hitokoto="hitokotoText" :compact="$route.name === 'column'"/>
+		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :introduction="introduction" :hitokoto="hitokotoText" :compact="$route.name === 'column'"/>
 	</div>
 </template>
 
@@ -56,6 +57,7 @@
 	import Header from "@/components/index/Header";
 	import Footer from "@/components/index/Footer";
 	import Introduction from "@/components/sidebar/Introduction";
+	import CustomModule from "@/components/sidebar/CustomModule";
 	import Categories from "@/components/sidebar/Categories";
 	import Tags from "@/components/sidebar/Tags";
 	import RandomBlog from "@/components/sidebar/RandomBlog";
@@ -67,7 +69,7 @@
 
 	export default {
 		name: "Index",
-		components: {Header, BlogPasswordDialog, Tocbot, RandomBlog, Categories, Tags, Nav, Footer, Introduction},
+		components: {Header, BlogPasswordDialog, Tocbot, RandomBlog, Categories, Tags, Nav, Footer, Introduction, CustomModule},
 		data() {
 			return {
 				siteInfo: {
@@ -172,6 +174,14 @@
 
 	.ui.grid .ten.column {
 		padding-top: 0;
+	}
+
+	/* 桌面端：中栏撑满行高，使空列表卡片可与左侧栏（专栏展开）等高 */
+	@media (min-width: 768px) {
+		.main .ui.stackable.grid > .ten.column {
+			display: flex;
+			flex-direction: column;
+		}
 	}
 
 	.m-display-none {

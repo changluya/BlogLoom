@@ -21,6 +21,7 @@ import com.changlu.blogloom.model.vo.RandomBlog;
 import com.changlu.blogloom.model.vo.SearchBlog;
 import com.changlu.blogloom.service.BlogService;
 import com.changlu.blogloom.service.BlogResourceService;
+import com.changlu.blogloom.service.CommentService;
 import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.TagService;
 import com.changlu.blogloom.util.JacksonUtils;
@@ -62,12 +63,14 @@ public class BlogServiceImpl implements BlogService {
 	BlogColumnMapper blogColumnMapper;
 	@Autowired
 	BlogColumnRelationMapper blogColumnRelationMapper;
+	@Autowired
+	CommentService commentService;
 	//随机博客显示5条
 	private static final int randomBlogLimitNum = 5;
 	//最新推荐博客显示3条
 	private static final int newBlogPageSize = 3;
 	//每页显示5条博客简介
-	private static final int pageSize = 5;
+	private static final int pageSize = 15;
 	//博客简介列表排序方式
 	private static final String orderBy = "is_top desc, create_time desc";
 	//私密博客提示
@@ -90,6 +93,11 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId) {
 		return blogMapper.getListByTitleAndCategoryId(title, categoryId);
+	}
+
+	@Override
+	public List<Blog> getDeletedListByTitleAndCategoryId(String title, Integer categoryId) {
+		return blogMapper.getDeletedListByTitleAndCategoryId(title, categoryId);
 	}
 
 	@Override
@@ -137,10 +145,16 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum, String sort) {
+		boolean topOnly = "top".equalsIgnoreCase(sort);
 		boolean byViews = "views".equalsIgnoreCase(sort);
-		String homeOrderBy = byViews ? "is_top desc, views desc, create_time desc" : orderBy;
+		boolean byCreateTime = "createTime".equalsIgnoreCase(sort);
+		// 默认（未选择筛选）：置顶优先，其次更新时间靠前
+		String homeOrderBy;
+		if (byViews) homeOrderBy = "is_top desc, views desc, create_time desc";
+		else if (byCreateTime) homeOrderBy = "is_top desc, create_time desc";
+		else homeOrderBy = "is_top desc, update_time desc";
 		PageHelper.startPage(pageNum, pageSize, homeOrderBy);
-		List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByIsPublished());
+		List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByIsPublished(topOnly));
 		PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
 		PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
 		setBlogViewsFromRedisToPageResult(pageResult);
@@ -273,11 +287,44 @@ public class BlogServiceImpl implements BlogService {
 		return blogViewsMap;
 	}
 
+	/**
+	 * 逻辑删除博客：仅标记 is_deleted=1 移入回收站。
+	 * 知识库节点、标签关联、专栏关联、评论均保留，便于回收站恢复；不再物理删除任何关联数据。
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteBlogById(Long id) {
+		if (blogMapper.softDeleteBlogById(id) != 1) {
+			throw new NotFoundException("该博客不存在");
+		}
+		deleteBlogRedisCache();
+		redisService.deleteByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, id);
+	}
+
+	/**
+	 * 从回收站恢复博客：清除 is_deleted 标记，并把浏览量回填到 Redis，避免首页列表读取浏览量时出现空值。
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void restoreBlogById(Long id) {
+		if (blogMapper.restoreBlogById(id) != 1) {
+			throw new NotFoundException("该博客不存在");
+		}
+		Integer views = blogMapper.getBlogViewsById(id);
+		redisService.saveKVToHash(RedisKeyConstants.BLOG_VIEWS_MAP, id, views == null ? 0 : views);
+		deleteBlogRedisCache();
+	}
+
+	/**
+	 * 彻底删除博客（仅回收站使用）：物理删除博客及其知识库节点、标签关联、专栏关联、评论等全部关联数据。
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteBlogPermanentlyById(Long id) {
+		commentService.deleteCommentsByBlogId(id);
 		knowledgeNodeMapper.deleteByBlogId(id);
 		blogColumnRelationMapper.deleteByBlogId(id);
+		blogMapper.deleteBlogTagByBlogId(id);
 		if (blogMapper.deleteBlogById(id) != 1) {
 			throw new NotFoundException("该博客不存在");
 		}

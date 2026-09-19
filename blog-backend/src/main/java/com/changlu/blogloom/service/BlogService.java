@@ -15,6 +15,8 @@ import java.util.Map;
 public interface BlogService {
 	List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId);
 
+	List<Blog> getDeletedListByTitleAndCategoryId(String title, Integer categoryId);
+
 	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
 
 	List<Blog> getIdAndTitleList();
@@ -34,6 +36,10 @@ public interface BlogService {
 	List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
 
 	void deleteBlogById(Long id);
+
+	void restoreBlogById(Long id);
+
+	void deleteBlogPermanentlyById(Long id);
 
 	void deleteBlogTagByBlogId(Long blogId);
 

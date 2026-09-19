@@ -69,48 +69,63 @@ const routes = [
 				hidden: true
 			},
 			{
+				path: 'column/list',
+				name: 'ColumnManage',
+				component: () => import('@/views/blog/column/ColumnManage'),
+				meta: {title: '专栏', icon: 'el-icon-collection'}
+			},
+			{
 				path: 'knowledge',
-				name: 'Knowledge',
+				name: 'KnowledgeStructure',
 				component: RouterView,
 				redirect: '/blog/knowledge/manage',
-				meta: {title: '知识库', icon: 'el-icon-folder-opened'},
+				meta: {title: '知识结构', icon: 'el-icon-folder-opened'},
 				children: [
 					{
 						path: 'manage',
 						name: 'KnowledgeManage',
 						component: () => import('@/views/knowledge/KnowledgeManage'),
-						meta: {title: '知识库管理', icon: 'el-icon-folder-opened'}
-					},
+						meta: {title: '知识库', icon: 'el-icon-folder-opened'}
+					}
+				]
+			},
+			{
+				path: 'content',
+				name: 'ContentGroup',
+				component: RouterView,
+				redirect: '/blog/content/articles',
+				meta: {title: '内容', icon: 'el-icon-document'},
+				children: [
 					{
 						path: 'articles',
 						name: 'BlogList',
 						component: () => import('@/views/blog/blog/BlogList'),
-						meta: {title: '文章管理', icon: 'el-icon-document'}
+						meta: {title: '文章', icon: 'el-icon-document'}
+					},
+					{
+						path: 'moments',
+						name: 'MomentList',
+						component: () => import('@/views/blog/moment/MomentList'),
+						meta: {title: '动态', icon: 'el-icon-chat-dot-square'}
+					},
+					{
+						path: 'comments',
+						name: 'CommentList',
+						component: () => import('@/views/blog/comment/CommentList'),
+						meta: {title: '评论', icon: 'el-icon-chat-round'}
+					},
+					{
+						path: 'recycle',
+						name: 'RecycleBin',
+						component: () => import('@/views/blog/recycle/RecycleBin'),
+						meta: {title: '回收站', icon: 'el-icon-delete'}
 					}
 				]
 			},
 			{
 				path: 'list',
-				redirect: '/blog/knowledge/articles',
+				redirect: '/blog/content/articles',
 				hidden: true
-			},
-			{
-				path: 'column/list',
-				name: 'ColumnManage',
-				component: () => import('@/views/blog/column/ColumnManage'),
-				meta: {title: '专栏管理', icon: 'el-icon-collection'}
-			},
-			{
-				path: 'moment/list',
-				name: 'MomentList',
-				component: () => import('@/views/blog/moment/MomentList'),
-				meta: {title: '动态管理', icon: 'el-icon-chat-dot-square'}
-			},
-			{
-				path: 'comment/list',
-				name: 'CommentList',
-				component: () => import('@/views/blog/comment/CommentList'),
-				meta: {title: '评论管理', icon: 'el-icon-chat-round'}
 			},
 		]
 	},

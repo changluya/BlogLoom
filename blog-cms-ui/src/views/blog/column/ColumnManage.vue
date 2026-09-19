@@ -1,7 +1,18 @@
 <template>
 	<div class="column-manage">
 		<div class="toolbar">
-			<el-button type="primary" size="small" icon="el-icon-plus" @click="openCreate(0)">新建一级专栏</el-button>
+			<div class="toolbar-left">
+				<PageTip title="专栏管理">
+					<p>专栏用于把<strong>系列文章聚合在一起</strong>，最多支持两级（一级专栏 + 子专栏）。</p>
+					<p>可以手动新建、拖拽调整顺序与层级，也可以<strong>批量导入专栏</strong>或<strong>导出专栏备份</strong>。</p>
+					<p>专栏会展示在<strong>博客首页</strong>左侧的「TA 的专栏」中，读者可点击进入专栏连续阅读。</p>
+				</PageTip>
+				<el-button type="primary" size="small" icon="el-icon-plus" @click="openCreate(0)">新建一级专栏</el-button>
+			</div>
+			<div class="toolbar-right">
+				<el-button size="small" icon="el-icon-upload2" @click="openImport">批量导入专栏</el-button>
+				<el-button size="small" icon="el-icon-download" :loading="exporting" @click="exportZip">导出专栏备份</el-button>
+			</div>
 		</div>
 		<el-table ref="columnTable" class="column-tree-table" :data="flatColumns" row-key="id" :row-class-name="rowClassName">
 			<el-table-column label="专栏" min-width="300">
@@ -50,16 +61,63 @@
 			<el-form label-width="90px"><el-form-item label="目标父专栏"><el-select v-model="moveForm.targetParentId" style="width:100%"><el-option label="根级（一级专栏）" :value="0"/><el-option v-for="item in moveParents" :key="item.id" :label="item.name" :value="item.id"/></el-select></el-form-item><el-form-item label="排序"><el-input-number v-model="moveForm.targetSort" :min="0"/></el-form-item></el-form>
 			<span slot="footer"><el-button @click="moveVisible=false">取消</el-button><el-button type="primary" @click="submitMove">确定</el-button></span>
 		</el-dialog>
+
+		<el-dialog title="批量导入专栏" :visible.sync="importVisible" width="640px" :close-on-click-modal="false" @closed="resetImport">
+			<template v-if="importStep === 'form'">
+				<el-upload ref="importUpload" drag action="#" accept=".zip,application/zip" :auto-upload="false" :limit="1"
+				           :on-change="onImportChange" :on-remove="onImportRemove" :on-exceed="onImportExceed">
+					<i class="el-icon-upload"></i>
+					<div class="el-upload__text">将 columns.zip 拖到这里，或 <em>点击选择文件</em></div>
+					<div slot="tip" class="el-upload__tip">压缩包内需包含 columns.json 与 icons 图标目录，最大支持 100MB，可先<el-link type="primary" :underline="false" @click="downloadTemplate">下载模板 ZIP</el-link>参考</div>
+				</el-upload>
+				<el-form label-width="100px" class="import-options">
+					<el-form-item label="同名专栏">
+						<el-radio-group v-model="importForm.conflictPolicy">
+							<el-radio label="SKIP">跳过已有</el-radio>
+							<el-radio label="RENAME">自动重命名</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="前台展示"><el-switch v-model="importForm.published"/></el-form-item>
+				</el-form>
+			</template>
+			<template v-else-if="importStep === 'preview'">
+				<el-alert title="预检通过，可以开始导入" type="success" :closable="false" show-icon/>
+				<div class="preview-stats">
+					<div><strong>{{ preview.rootCount || 0 }}</strong><span>一级专栏</span></div>
+					<div><strong>{{ preview.childCount || 0 }}</strong><span>子专栏</span></div>
+					<div><strong>{{ preview.iconCount || 0 }}</strong><span>图标</span></div>
+					<div><strong>{{ preview.missingIconCount || 0 }}</strong><span>缺失图标</span></div>
+				</div>
+				<div class="preview-title">即将导入的专栏</div>
+				<el-scrollbar class="preview-list"><div v-for="path in preview.paths" :key="path" class="preview-path"><i class="el-icon-collection"></i>{{ path }}</div></el-scrollbar>
+			</template>
+			<template v-else>
+				<div class="import-result">
+					<i class="el-icon-success"></i>
+					<h3>导入完成</h3>
+					<p>新增一级专栏 {{ importResult.createdRootCount || 0 }} 个，子专栏 {{ importResult.createdChildCount || 0 }} 个，导入图标 {{ importResult.importedIconCount || 0 }} 个，跳过 {{ importResult.skippedCount || 0 }} 个。</p>
+				</div>
+			</template>
+			<span slot="footer">
+				<el-button v-if="importStep === 'form'" @click="importVisible=false">取消</el-button>
+				<el-button v-if="importStep === 'form'" type="primary" :loading="previewing" @click="doPreview">开始预检</el-button>
+				<el-button v-if="importStep === 'preview'" @click="importStep='form'">上一步</el-button>
+				<el-button v-if="importStep === 'preview'" type="primary" :loading="importing" @click="doExecute">确认导入</el-button>
+				<el-button v-if="importStep === 'result'" type="primary" @click="importVisible=false">完成</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
-import {getColumnTree, saveColumn, updateColumn, moveColumn, updateColumnPublished, deleteColumn, uploadColumnCover} from '@/api/column'
+import {getColumnTree, saveColumn, updateColumn, moveColumn, updateColumnPublished, deleteColumn, uploadColumnCover, previewColumnImport, executeColumnImport, exportColumns} from '@/api/column'
+import PageTip from '@/components/PageTip'
 
 const emptyForm = () => ({id: null, parentId: 0, name: '', description: '', cover: '', sort: 0, published: true})
 export default {
 	name: 'ColumnManage',
-	data() { return {tree: [], draggingColumn: null, publishedUpdatingId: null, editVisible: false, moveVisible: false, saving: false, form: emptyForm(), coverFile: null, coverPreview: '', moveTarget: null, moveForm: {targetParentId: 0, targetSort: 0}, rules: {name: [{required: true, message: '请输入专栏名称', trigger: 'blur'}]}} },
+	components: {PageTip},
+	data() { return {tree: [], draggingColumn: null, publishedUpdatingId: null, editVisible: false, moveVisible: false, saving: false, form: emptyForm(), coverFile: null, coverPreview: '', moveTarget: null, moveForm: {targetParentId: 0, targetSort: 0}, importVisible: false, importStep: 'form', importFile: null, previewing: false, importing: false, exporting: false, preview: {}, importResult: {}, importForm: {conflictPolicy: 'SKIP', published: true}, rules: {name: [{required: true, message: '请输入专栏名称', trigger: 'blur'}]}} },
 	computed: {
 		rootOptions() { return this.tree.filter(item => item.parentId === 0) },
 		moveParents() { return this.rootOptions.filter(item => !this.moveTarget || item.id !== this.moveTarget.id) },
@@ -158,13 +216,49 @@ export default {
 		submit() { this.$refs.formRef.validate(async valid => { if (!valid) return; this.saving = true; try { const res = this.form.id ? await updateColumn(this.form) : await saveColumn(this.form); const id = this.form.id || (res.data && res.data.id); if (this.coverFile && id) await uploadColumnCover(id, this.coverFile); this.msgSuccess(res.msg); this.editVisible = false; this.load() } finally { this.saving = false } }) },
 		submitMove() { moveColumn(this.moveTarget.id, this.moveForm).then(res => { this.msgSuccess(res.msg); this.moveVisible = false; this.load() }) },
 		remove(id) { deleteColumn(id).then(res => { this.msgSuccess(res.msg); this.load() }) },
-		resetForm() { if (this.coverPreview) URL.revokeObjectURL(this.coverPreview); this.coverPreview = ''; this.coverFile = null; this.form = emptyForm() }
+		resetForm() { if (this.coverPreview) URL.revokeObjectURL(this.coverPreview); this.coverPreview = ''; this.coverFile = null; this.form = emptyForm() },
+		openImport() { this.importVisible = true },
+		onImportChange(file) { this.importFile = file.raw || null },
+		onImportRemove() { this.importFile = null },
+		onImportExceed() { this.msgError('每次只能选择一个 ZIP 文件，请先移除当前文件') },
+		doPreview() {
+			if (!this.importFile) return this.msgError('请选择 ZIP 文件')
+			this.previewing = true
+			previewColumnImport(this.importFile, this.importForm).then(res => { this.preview = res.data; this.importStep = 'preview' }).finally(() => { this.previewing = false })
+		},
+		doExecute() {
+			this.importing = true
+			executeColumnImport(this.preview.token).then(res => { this.importResult = res.data || {}; this.importStep = 'result'; this.load() }).finally(() => { this.importing = false })
+		},
+		exportZip() {
+			this.exporting = true
+			exportColumns().then(response => {
+				const url = window.URL.createObjectURL(response.data)
+				const link = document.createElement('a')
+				link.href = url
+				link.download = 'columns.zip'
+				document.body.appendChild(link); link.click(); document.body.removeChild(link)
+				window.URL.revokeObjectURL(url)
+			}).finally(() => { this.exporting = false })
+		},
+		downloadTemplate() {
+			const link = document.createElement('a')
+			link.href = `${import.meta.env.BASE_URL}columns-template.zip`
+			link.download = 'columns-template.zip'
+			document.body.appendChild(link); link.click(); document.body.removeChild(link)
+		},
+		resetImport() {
+			this.importStep = 'form'; this.importFile = null; this.preview = {}; this.importResult = {}
+			if (this.$refs.importUpload) this.$refs.importUpload.clearFiles()
+		}
 	}
 }
 </script>
 
 <style scoped>
-.toolbar { margin-bottom: 16px; }
+.toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.toolbar-left { display: flex; align-items: center; gap: 8px; }
+.toolbar-right { display: flex; gap: 8px; }
 .column-tree-table ::v-deep th.el-table__cell { height:44px; background:#f7f8fa; color:#909399; font-weight:500; }
 .column-tree-table ::v-deep .el-table__row { height:76px; transition:background-color .2s, opacity .2s, box-shadow .2s; }
 .column-tree-table ::v-deep .column-drag-row { cursor:grab; }
@@ -184,4 +278,17 @@ export default {
 .cover-picker { display:flex; width:120px; height:120px; align-items:center; justify-content:center; overflow:hidden; border:1px dashed #d9d9d9; border-radius:8px; color:#8c939d; font-size:28px; }
 .cover-picker img { width:100%; height:100%; object-fit:cover; }
 .upload-tip { color:#909399; font-size:12px; }
+.import-options { margin-top:20px; }
+.preview-stats { display:flex; gap:12px; margin:18px 0; }
+.preview-stats > div { flex:1; display:flex; flex-direction:column; align-items:center; padding:14px 0; background:#f5f7fa; border-radius:8px; }
+.preview-stats strong { font-size:22px; color:#303133; }
+.preview-stats span { margin-top:4px; color:#909399; font-size:12px; }
+.preview-title { margin-bottom:8px; color:#303133; font-weight:600; }
+.preview-list { height:220px; border:1px solid #ebeef5; border-radius:6px; padding:8px 12px; }
+.preview-path { display:flex; align-items:center; gap:8px; padding:5px 0; color:#606266; font-size:13px; }
+.preview-path i { color:#409eff; }
+.import-result { padding:26px 0; text-align:center; }
+.import-result i { color:#67c23a; font-size:48px; }
+.import-result h3 { margin:12px 0 8px; color:#303133; }
+.import-result p { margin:0; color:#909399; font-size:13px; }
 </style>

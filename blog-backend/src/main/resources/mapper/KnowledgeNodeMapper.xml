@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.changlu.blogloom.module.knowledge.dao.KnowledgeNodeMapper">
+
+    <!--查询全部知识库节点（DIR 节点、博客缺失的 DOC 节点、未逻辑删除的博客 DOC 节点）-->
+    <select id="findAll" resultType="com.changlu.blogloom.module.knowledge.domain.entity.KnowledgeNode">
+        select kn.*, b.title blog_title,
+               case when kn.blog_id is null or b.id is not null then true else false end blog_exists
+        from knowledge_node kn
+        left join blog b on b.id=kn.blog_id
+        where kn.blog_id is null or b.id is null or b.is_deleted=0
+        order by kn.parent_id, kn.sort, kn.id
+    </select>
+
+    <!--按id查询节点-->
+    <select id="findById" resultType="com.changlu.blogloom.module.knowledge.domain.entity.KnowledgeNode">
+        select * from knowledge_node where id=#{id}
+    </select>
+
+    <!--查询子节点数量-->
+    <select id="countChildren" resultType="int">
+        select count(*) from knowledge_node where parent_id=#{parentId}
+    </select>
+
+    <!--同父级同类型同名节点数量-->
+    <select id="countSameName" resultType="int">
+        select count(*) from knowledge_node
+        where parent_id=#{parentId} and name=#{name} and type=#{type}
+        and (#{excludeId} is null or id != #{excludeId})
+    </select>
+
+    <!--按父级、名称、类型查询节点-->
+    <select id="findSameName" resultType="com.changlu.blogloom.module.knowledge.domain.entity.KnowledgeNode">
+        select * from knowledge_node
+        where parent_id=#{parentId} and name=#{name} and type=#{type}
+        order by id limit 1
+    </select>
+
+    <!--按博客id查询节点-->
+    <select id="findByBlogId" resultType="com.changlu.blogloom.module.knowledge.domain.entity.KnowledgeNode">
+        select * from knowledge_node where blog_id=#{blogId} order by id limit 1
+    </select>
+
+    <!--查询博客正文-->
+    <select id="findBlogContent" resultType="java.lang.String">
+        select content from blog where id=#{blogId}
+    </select>
+
+    <!--统计未逻辑删除的博客数量-->
+    <select id="countBlog" resultType="int">
+        select count(*) from blog where id=#{blogId} and is_deleted=0
+    </select>
+
+    <!--查询同级最大排序值-->
+    <select id="findMaxSort" resultType="int">
+        select coalesce(max(sort), -1) from knowledge_node where parent_id=#{parentId}
+    </select>
+
+    <!--新增节点-->
+    <insert id="insert" parameterType="com.changlu.blogloom.module.knowledge.domain.entity.KnowledgeNode"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into knowledge_node(parent_id,blog_id,name,type,sort,create_time,update_time)
+        values(#{parentId},#{blogId},#{name},#{type},#{sort},now(),now())
+    </insert>
+
+    <!--更新节点名称-->
+    <update id="updateName">
+        update knowledge_node set name=#{name},update_time=now() where id=#{id}
+    </update>
+
+    <!--移动节点-->
+    <update id="move">
+        update knowledge_node set parent_id=#{parentId},sort=#{sort},update_time=now() where id=#{id}
+    </update>
+
+    <!--查询子节点id列表-->
+    <select id="findChildIds" resultType="java.lang.Long">
+        select id from knowledge_node where parent_id=#{parentId} order by sort,id
+    </select>
+
+    <!--更新节点排序-->
+    <update id="updateSort">
+        update knowledge_node set sort=#{sort},update_time=now() where id=#{id}
+    </update>
+
+    <!--按id删除节点-->
+    <delete id="delete">
+        delete from knowledge_node where id=#{id}
+    </delete>
+
+    <!--按博客id删除节点-->
+    <delete id="deleteByBlogId">
+        delete from knowledge_node where blog_id=#{blogId}
+    </delete>
+
+    <!--为尚未建立映射且未逻辑删除的博客补建根级 DOC 节点-->
+    <insert id="backfillBlogs">
+        insert into knowledge_node(parent_id,blog_id,name,type,sort,create_time,update_time)
+        select 0,b.id,b.title,'DOC',0,now(),now() from blog b
+        left join knowledge_node kn on kn.blog_id=b.id
+        where kn.id is null and b.is_deleted=0
+    </insert>
+</mapper>

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="list-page">
 		<div class="ui top segment" style="text-align: center">
 			<h2 class="m-text-500">标签 {{ tagName }} 下的文章</h2>
 		</div>
@@ -57,5 +57,8 @@
 </script>
 
 <style scoped>
-
+/* 桌面端：作为中栏弹性容器，让空列表与左侧专栏区等高 */
+@media (min-width: 768px) {
+	.list-page { display:flex; flex:1; flex-direction:column; min-height:0; }
+}
 </style>

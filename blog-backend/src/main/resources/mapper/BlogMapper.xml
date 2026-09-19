@@ -19,6 +19,7 @@
         <result property="words" column="words"/>
         <result property="readTime" column="read_time"/>
         <result property="password" column="password"/>
+        <result property="deleted" column="is_deleted"/>
         <association property="user" javaType="com.changlu.blogloom.entity.User">
             <id property="id" column="user_id"/>
             <result property="username" column="username"/>
@@ -48,8 +49,27 @@
         c.id as category_id, c.category_name
         from blog as b left join category as c on b.category_id=c.id
         <where>
+            b.is_deleted=0
             <if test="title!=null and title!=''">
-                b.title like #{titlePattern}
+                and b.title like #{titlePattern}
+            </if>
+            <if test="categoryId!=null">
+                and b.category_id=#{categoryId}
+            </if>
+        </where>
+    </select>
+
+    <!--回收站：按标题和分类查询已逻辑删除的博客List-->
+    <select id="getDeletedListByTitleAndCategoryId" resultMap="blog">
+        <bind name="titlePattern" value="'%' + title + '%'"/>
+        select b.id, b.title, b.first_picture, b.create_time, b.update_time, b.is_published, b.is_recommend, b.is_appreciation,
+        b.is_comment_enabled, b.is_top, b.password, b.is_deleted,
+        c.id as category_id, c.category_name
+        from blog as b left join category as c on b.category_id=c.id
+        <where>
+            b.is_deleted=1
+            <if test="title!=null and title!=''">
+                and b.title like #{titlePattern}
             </if>
             <if test="categoryId!=null">
                 and b.category_id=#{categoryId}
@@ -68,7 +88,7 @@
         <bind name="queryPattern" value="'%' + query + '%'"/>
         select id, title, content
         from blog
-        where is_published=true and password='' and content like #{queryPattern}
+        where is_published=true and is_deleted=0 and password='' and content like #{queryPattern}
     </select>
 
     <resultMap id="blogIdAndTitle" type="com.changlu.blogloom.model.vo.BlogIdAndTitle">
@@ -78,7 +98,7 @@
 
     <!--查询所有博客id和title-->
     <select id="getIdAndTitleList" resultMap="blogIdAndTitle">
-        select id, title from blog order by create_time desc
+        select id, title from blog where is_deleted=0 order by create_time desc
     </select>
 
     <resultMap id="newBlog" type="com.changlu.blogloom.model.vo.NewBlog">
@@ -91,7 +111,7 @@
     <select id="getNewBlogListByIsPublished" resultMap="newBlog">
         select id, title, password
         from blog
-        where is_published=true
+        where is_published=true and is_deleted=0
         order by create_time desc
     </select>
 
@@ -110,25 +130,26 @@
         </association>
     </resultMap>
 
-    <!--查询公开博客的简要信息-->
+    <!--查询公开博客的简要信息；topOnly=true 时仅返回置顶文章-->
     <select id="getBlogInfoListByIsPublished" resultMap="blogInfo">
         select b.id, b.title, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
         from blog as b left join category as c on b.category_id=c.id
-        where b.is_published=true
+        where b.is_published=true and b.is_deleted=0
+        <if test="topOnly"> and b.is_top=true </if>
     </select>
 
     <!--根据分类name查询公开博客List-->
     <select id="getBlogInfoListByCategoryNameAndIsPublished" resultMap="blogInfo">
         select b.id, b.title, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
         from category as c left join blog as b on b.category_id=c.id
-        where c.category_name=#{categoryName} and b.is_published=true
+        where c.category_name=#{categoryName} and b.is_published=true and b.is_deleted=0
     </select>
 
     <!--根据标签name查询公开博客List-->
     <select id="getBlogInfoListByTagNameAndIsPublished" resultMap="blogInfo">
         select b.id, b.title, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
         from (((tag as t left join blog_tag as bt on t.id=bt.tag_id) left join blog as b on bt.blog_id=b.id) left join category as c on b.category_id=c.id)
-        where t.tag_name=#{tagName} and b.is_published=true
+        where t.tag_name=#{tagName} and b.is_published=true and b.is_deleted=0
     </select>
 
     <select id="getBlogInfoListByColumnIdAndIsPublished" resultMap="blogInfo">
@@ -136,7 +157,7 @@
         from blog_column_relation bcr
         join blog b on bcr.blog_id=b.id
         left join category c on b.category_id=c.id
-        where bcr.column_id=#{columnId} and b.is_published=true
+        where bcr.column_id=#{columnId} and b.is_published=true and b.is_deleted=0
         order by bcr.sort asc, b.create_time desc
     </select>
 
@@ -144,7 +165,7 @@
     <select id="getGroupYearMonthByIsPublished" resultType="java.lang.String">
         select date_format(create_time, "%Y年%m月")
         from blog
-        where is_published=true
+        where is_published=true and is_deleted=0
         group by date_format(create_time, "%Y年%m月")
         order by date_format(create_time, "%Y年%m月") desc
     </select>
@@ -163,7 +184,7 @@
                date_format(create_time, "%d日") as create_day,
                date_format(create_time, "%H:%i") as create_hhmm
         from blog
-        where date_format(create_time, "%Y年%m月")=#{yearMonth} and is_published=true
+        where date_format(create_time, "%Y年%m月")=#{yearMonth} and is_published=true and is_deleted=0
         order by create_time desc
     </select>
 
@@ -173,25 +194,36 @@
         <result property="password" column="password"/>
         <result property="createTime" column="create_time"/>
         <result property="firstPicture" column="first_picture"/>
+        <result property="views" column="views"/>
     </resultMap>
 
     <!--查询随机的公开且推荐文章-->
     <select id="getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend" resultMap="randomBlog">
-        select id, title, password, create_time, first_picture
+        select id, title, password, create_time, first_picture, views
         from blog
-        where is_published=true and is_recommend=true
+        where is_published=true and is_recommend=true and is_deleted=0
         order by rand() limit #{limitNum}
     </select>
 
-    <!--查询所有文章的浏览量-->
+    <!--查询所有未删除文章的浏览量-->
     <select id="getBlogViewsList" resultType="com.changlu.blogloom.model.dto.BlogView">
-        select id, views from blog
+        select id, views from blog where is_deleted=0
     </select>
 
-    <!--按id删除博客-->
+    <!--按id删除博客（物理删除，仅回收站彻底删除使用）-->
     <delete id="deleteBlogById">
         delete from blog where id=#{id}
     </delete>
+
+    <!--逻辑删除博客（移入回收站）-->
+    <update id="softDeleteBlogById">
+        update blog set is_deleted=1, update_time=now() where id=#{id}
+    </update>
+
+    <!--从回收站恢复博客-->
+    <update id="restoreBlogById">
+        update blog set is_deleted=0, update_time=now() where id=#{id}
+    </update>
 
     <!--维护 blog_tag 表(删除)-->
     <delete id="deleteBlogTagByBlogId">
@@ -213,24 +245,24 @@
 
     <!--更新博客推荐状态-->
     <update id="updateBlogRecommendById">
-        update blog set is_recommend=#{recommend} where id=#{blogId}
+        update blog set is_recommend=#{recommend} where id=#{blogId} and is_deleted=0
     </update>
 
     <!--更新博客置顶状态-->
     <update id="updateBlogTopById">
-        update blog set is_top=#{top} where id=#{blogId}
+        update blog set is_top=#{top} where id=#{blogId} and is_deleted=0
     </update>
 
     <!--更新博客可见性状态-->
     <update id="updateBlogVisibilityById">
         update blog set is_appreciation=#{bv.appreciation}, is_recommend=#{bv.recommend}, is_comment_enabled=#{bv.commentEnabled},
         is_top=#{bv.top}, is_published=#{bv.published}, password=#{bv.password}
-        where id=#{blogId}
+        where id=#{blogId} and is_deleted=0
     </update>
 
     <!--更新博客阅读次数-->
     <update id="updateViews">
-        update blog set views=#{views} where id=#{blogId}
+        update blog set views=#{views} where id=#{blogId} and is_deleted=0
     </update>
 
     <!--按id查询博客-->
@@ -240,12 +272,17 @@
         c.id as category_id, c.category_name,
         bt.tag_id as tag_id, t.tag_name as tag_name, t.color
         from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id)
-        where b.id=#{id}
+        where b.id=#{id} and b.is_deleted=0
+    </select>
+
+    <!--按id查询博客浏览量（含已删除，用于回收站恢复时回填 Redis）-->
+    <select id="getBlogViewsById" resultType="java.lang.Integer">
+        select views from blog where id=#{id}
     </select>
 
     <!--按id查询博客标题-->
     <select id="getTitleByBlogId" resultType="java.lang.String">
-        select title from blog where id=#{id}
+        select title from blog where id=#{id} and is_deleted=0
     </select>
 
     <resultMap id="blogDetail" type="com.changlu.blogloom.model.vo.BlogDetail">
@@ -277,12 +314,12 @@
         c.category_name,
         t.tag_name as tag_name, t.color
         from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id)
-        where b.id=#{id} and b.is_published=true
+        where b.id=#{id} and b.is_published=true and b.is_deleted=0
     </select>
 
     <!--查询受密码保护文章密码-->
     <select id="getBlogPassword" resultType="java.lang.String">
-        select password from blog where id=#{blogId}
+        select password from blog where id=#{blogId} and is_deleted=0
     </select>
 
     <!--更新博客-->
@@ -291,7 +328,7 @@
         is_recommend=#{recommend}, is_published=#{published}, is_appreciation=#{appreciation}, is_comment_enabled=#{commentEnabled},
         is_top=#{top}, create_time=#{createTime}, update_time=#{updateTime}, views=#{views},
         words=#{words}, read_time=#{readTime}, category_id=#{category.id}, password=#{password}
-        where id=#{id}
+        where id=#{id} and is_deleted=0
     </update>
 
     <!--保存博客后，将临时资源链接替换为博客目录中的正式资源链接-->
@@ -300,39 +337,39 @@
         where id=#{id}
     </update>
 
-    <!--查询博客总数-->
+    <!--查询博客总数（不含回收站）-->
     <select id="countBlog" resultType="java.lang.Integer">
-        select count(*) from blog
+        select count(*) from blog where is_deleted=0
     </select>
 
-    <!--查询公开博客总数-->
+    <!--查询公开博客总数（不含回收站）-->
     <select id="countBlogByIsPublished" resultType="java.lang.Integer">
-        select count(*) from blog where is_published=true
+        select count(*) from blog where is_published=true and is_deleted=0
     </select>
 
     <!--查询公开博客ID及数据库阅读量，实时阅读量以Redis为准-->
     <select id="getBlogViewsListByIsPublished" resultType="com.changlu.blogloom.model.dto.BlogView">
-        select id, views from blog where is_published=true
+        select id, views from blog where is_published=true and is_deleted=0
     </select>
 
-    <!--按分类id查询博客数量-->
+    <!--按分类id查询博客数量（不含回收站）-->
     <select id="countBlogByCategoryId" resultType="java.lang.Integer">
-        select count(*) from blog where category_id=#{categoryId}
+        select count(*) from blog where category_id=#{categoryId} and is_deleted=0
     </select>
 
-    <!--按标签id查询博客数量-->
+    <!--按标签id查询博客数量（不含回收站）-->
     <select id="countBlogByTagId" resultType="java.lang.Integer">
-        select count(*) from blog_tag where tag_id=#{tagId}
+        select count(*) from blog_tag bt join blog b on b.id=bt.blog_id and b.is_deleted=0 where bt.tag_id=#{tagId}
     </select>
 
     <!--查询博客是否启用评论-->
     <select id="getCommentEnabledByBlogId" resultType="java.lang.Boolean">
-        select is_comment_enabled from blog where id=#{blogId}
+        select is_comment_enabled from blog where id=#{blogId} and is_deleted=0
     </select>
 
     <!--查询博客是否公开-->
     <select id="getPublishedByBlogId" resultType="java.lang.Boolean">
-        select is_published from blog where id=#{blogId}
+        select is_published from blog where id=#{blogId} and is_deleted=0
     </select>
 
     <resultMap id="categoryBlogCount" type="com.changlu.blogloom.model.vo.CategoryBlogCount">
@@ -340,8 +377,8 @@
         <result property="value" column="blog_count"/>
     </resultMap>
 
-    <!--查询每个分类的博客数量-->
+    <!--查询每个分类的博客数量（不含回收站）-->
     <select id="getCategoryBlogCountList" resultMap="categoryBlogCount">
-        select category_id, count(category_id) as blog_count from blog group by category_id
+        select category_id, count(category_id) as blog_count from blog where is_deleted=0 group by category_id
     </select>
 </mapper>

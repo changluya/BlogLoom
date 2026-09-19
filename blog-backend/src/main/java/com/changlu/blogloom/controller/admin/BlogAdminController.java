@@ -21,7 +21,6 @@ import com.changlu.blogloom.model.dto.BlogVisibility;
 import com.changlu.blogloom.model.vo.Result;
 import com.changlu.blogloom.service.BlogService;
 import com.changlu.blogloom.service.CategoryService;
-import com.changlu.blogloom.service.CommentService;
 import com.changlu.blogloom.service.TagService;
 import com.changlu.blogloom.util.StringUtils;
 
@@ -45,8 +44,6 @@ public class BlogAdminController {
 	CategoryService categoryService;
 	@Autowired
 	TagService tagService;
-	@Autowired
-	CommentService commentService;
 
 	/**
 	 * 获取博客文章列表
@@ -73,7 +70,7 @@ public class BlogAdminController {
 	}
 
 	/**
-	 * 删除博客文章、删除博客文章下的所有评论、同时维护 blog_tag 表
+	 * 删除博客文章（逻辑删除，移入回收站）
 	 *
 	 * @param id 文章id
 	 * @return
@@ -81,10 +78,94 @@ public class BlogAdminController {
 	@OperationLogger("删除博客")
 	@DeleteMapping("/blog")
 	public Result delete(@RequestParam Long id) {
-		blogService.deleteBlogTagByBlogId(id);
 		blogService.deleteBlogById(id);
-		commentService.deleteCommentsByBlogId(id);
-		return Result.ok("删除成功");
+		return Result.ok("已移入回收站");
+	}
+
+	/**
+	 * 回收站列表：查询已逻辑删除的博客
+	 *
+	 * @param title      按标题模糊查询
+	 * @param categoryId 按分类id查询
+	 * @param pageNum    页码
+	 * @param pageSize   每页个数
+	 * @return
+	 */
+	@GetMapping("/blogs/recycle")
+	public Result recycleBlogs(@RequestParam(defaultValue = "") String title,
+	                           @RequestParam(defaultValue = "") Integer categoryId,
+	                           @RequestParam(defaultValue = "1") Integer pageNum,
+	                           @RequestParam(defaultValue = "10") Integer pageSize) {
+		String orderBy = "update_time desc";
+		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageInfo<Blog> pageInfo = new PageInfo<>(blogService.getDeletedListByTitleAndCategoryId(title, categoryId));
+		List<Category> categories = categoryService.getCategoryList();
+		Map<String, Object> map = new HashMap<>(4);
+		map.put("blogs", pageInfo);
+		map.put("categories", categories);
+		return Result.ok("请求成功", map);
+	}
+
+	/**
+	 * 从回收站恢复单篇博客
+	 *
+	 * @param id 文章id
+	 * @return
+	 */
+	@OperationLogger("恢复博客")
+	@PutMapping("/blog/recycle/restore")
+	public Result restore(@RequestParam Long id) {
+		blogService.restoreBlogById(id);
+		return Result.ok("恢复成功");
+	}
+
+	/**
+	 * 从回收站彻底删除单篇博客（不可恢复）
+	 *
+	 * @param id 文章id
+	 * @return
+	 */
+	@OperationLogger("彻底删除博客")
+	@DeleteMapping("/blog/recycle")
+	public Result deletePermanently(@RequestParam Long id) {
+		blogService.deleteBlogPermanentlyById(id);
+		return Result.ok("彻底删除成功");
+	}
+
+	/**
+	 * 从回收站批量恢复博客
+	 *
+	 * @param ids 文章id列表
+	 * @return
+	 */
+	@OperationLogger("批量恢复博客")
+	@PostMapping("/blog/recycle/restore")
+	public Result restoreBatch(@RequestBody List<Long> ids) {
+		if (ids == null || ids.isEmpty()) {
+			return Result.error("请选择要恢复的博客");
+		}
+		for (Long id : ids) {
+			blogService.restoreBlogById(id);
+		}
+		return Result.ok("恢复成功");
+	}
+
+	/**
+	 * 从回收站批量彻底删除博客（不可恢复）
+	 *
+	 * @param ids 文章id列表
+	 * @return
+	 */
+	@OperationLogger("批量彻底删除博客")
+	@PostMapping("/blog/recycle/delete")
+	public Result deletePermanentlyBatch(@RequestBody List<Long> ids) {
+		if (ids == null || ids.isEmpty()) {
+			return Result.error("请选择要删除的博客");
+		}
+		for (Long id : ids) {
+			blogService.deleteBlogPermanentlyById(id);
+		}
+		return Result.ok("彻底删除成功");
 	}
 
 	/**

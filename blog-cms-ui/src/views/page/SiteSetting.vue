@@ -7,7 +7,7 @@
 			<el-col :span="12">
 				<el-card>
 					<div slot="header">
-						<span>基础设置</span>
+						<span class="card-title">基础设置</span>
 					</div>
 					<el-form label-position="right" label-width="100px">
 						<el-form-item v-for="item in basicSettings" :key="item.id">
@@ -52,7 +52,7 @@
 			<el-col :span="12">
 				<el-card>
 					<div slot="header">
-						<span>资料卡</span>
+						<span class="card-title">资料卡</span>
 					</div>
 					<el-form label-position="right" label-width="100px">
 						<el-form-item v-for="item in typeMap.type2" :key="item.id">
@@ -101,7 +101,7 @@
 		<el-row style="margin-top: 20px">
 			<el-card>
 				<div slot="header">
-					<span>页脚徽标</span>
+					<span class="card-title">页脚徽标</span>
 				</div>
 				<el-form :inline="true" v-for="badge in typeMap.type3" :key="badge.id">
 					<el-form-item label="title">
@@ -126,6 +126,30 @@
 				<el-button type="primary" size="mini" icon="el-icon-plus" @click="addBadge">添加 badge</el-button>
 			</el-card>
 		</el-row>
+
+		<el-row style="margin-top: 20px">
+			<el-card>
+				<div slot="header">
+					<span class="card-title">自定义前台展示模块</span>
+					<span class="image-tip" style="margin-left:10px">在博客前台侧栏展示一个自定义模块</span>
+				</div>
+				<el-form label-position="top" v-for="item in typeMap.type5" :key="item.id">
+					<el-form-item label="栏目标题">
+						<el-input v-model="item.customModule.title" size="small" placeholder="如：技术交流群"></el-input>
+					</el-form-item>
+					<el-form-item label="栏目内容（支持自定义 HTML）">
+						<el-input v-model="item.customModule.content" type="textarea" :rows="10"
+						          placeholder="粘贴自定义 HTML，例如公告、群号、公众号等"></el-input>
+					</el-form-item>
+					<div class="custom-module-footer">
+						<span>是否开启</span>
+						<el-switch v-model="item.customModule.enabled"></el-switch>
+						<span class="image-tip">开启后将在博客前台侧栏展示</span>
+					</div>
+				</el-form>
+				<div v-if="!typeMap.type5 || !typeMap.type5.length" class="image-tip">暂无自定义模块配置</div>
+			</el-card>
+		</el-row>
 	</div>
 </template>
 
@@ -144,7 +168,7 @@
 				deleteIds: [],
 				uploadingId: null,
 				draggingRollTextIndex: null,
-				typeMap: {},
+				typeMap: {type1: [], type2: [], type3: [], type5: []},
 			}
 		},
 		created() {
@@ -170,6 +194,7 @@
 				if (item.nameEn === 'footerImgUrl') return '用于前台页脚展示，通常为手机访问本站的二维码'
 				if (item.nameEn === 'rollText') return '多条个签请使用英文逗号分隔，并分别用双引号包裹，例如："第一条个签","第二条个签"'
 				if (item.nameEn === 'hitokotoTexts') return '前台页脚每次刷新随机展示其中一句，多条请使用英文逗号分隔，并分别用双引号包裹'
+				if (item.nameEn === 'customModule') return '自定义模块：填写栏目标题与栏目内容（支持 HTML），开启后展示在博客前台侧栏'
 				return ''
 			},
 			isImageSetting(item) {
@@ -211,6 +236,11 @@
 					})
 					res.data.type3.forEach(item => {
 						item.value = JSON.parse(item.value)
+					})
+					;(res.data.type5 || []).forEach(item => {
+						let value = {}
+						try { value = JSON.parse(item.value || '{}') } catch (e) { value = {} }
+						this.$set(item, 'customModule', {title: value.title || '', content: value.content || '', enabled: !!value.enabled})
 					})
 				})
 			},
@@ -319,10 +349,17 @@
 				result.type3.forEach(item => {
 					item.value = JSON.stringify(item.value)
 				})
+				;(result.type5 || []).forEach(item => {
+					if (item.nameEn === 'customModule') {
+						item.value = JSON.stringify(item.customModule || {title: '', content: '', enabled: false})
+						delete item.customModule
+					}
+				})
 				let updateArr = []
 				updateArr.push(...result.type1)
 				updateArr.push(...result.type2)
 				updateArr.push(...result.type3)
+				updateArr.push(...(result.type5 || []))
 				update(updateArr, this.deleteIds).then(res => {
 					this.deleteIds = []
 					this.getData()
@@ -335,12 +372,16 @@
 
 <style scoped>
 	.page-actions { display:flex; align-items:center; justify-content:flex-end; margin-bottom:12px; }
+	.card-title { color:#303133; font-size:15px; font-weight:700; letter-spacing:.3px; }
 	.site-image-editor { display:flex; align-items:center; gap:12px; }
 	.site-image-editor > div:last-child { flex:1; min-width:0; }
 	.copyright-editor { display:flex; flex-direction:column; gap:8px; }
 	.copyright-editor ::v-deep .el-input-group__prepend { width:64px; padding:0 12px; text-align:center; }
 	.image-tip { display:block; margin-top:6px; color:#909399; font-size:12px; line-height:1.4; }
 	.setting-tip-icon { margin-left:4px; color:#909399; cursor:help; }
+	.custom-module-editor { display:flex; flex-direction:column; gap:8px; }
+	.custom-module-editor ::v-deep .el-input-group__prepend { width:64px; padding:0 12px; text-align:center; }
+	.custom-module-switch { display:flex; align-items:center; gap:10px; color:#606266; font-size:13px; }
 	.roll-text-editor { display:flex; flex-direction:column; gap:8px; }
 	.roll-text-row { display:flex; align-items:center; gap:8px; }
 	.roll-text-row.is-dragging { opacity:.5; }

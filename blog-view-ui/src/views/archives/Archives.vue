@@ -11,12 +11,21 @@
 						<a class="ui large label m-text-500">{{ key }}</a>
 					</div>
 					<div class="tl-day" v-for="(blogs,day) in dayMap" :key="day">
-						<div class="tl-day-label">{{ day }}</div>
+						<div class="tl-day-label">
+							{{ day }}
+							<span v-if="blogs.length > dayLimit" class="tl-day-count">{{ blogs.length }} 篇</span>
+						</div>
 						<div class="tl-day-body">
-							<div class="tl-item" v-for="blog in blogs" :key="blog.id">
+							<div class="tl-item" v-for="blog in visibleBlogs(key, day, blogs)" :key="blog.id">
 								<span class="tl-time">{{ blog.time || '' }}</span>
 								<a href="javascript:;" @click.prevent="toBlog(blog)">
 									<div class="ui left pointing label tl-title">{{ blog.title }}</div>
+								</a>
+							</div>
+							<div class="tl-more" v-if="blogs.length > dayLimit">
+								<a href="javascript:;" @click.prevent="toggleDay(key, day)">
+									<i :class="isExpanded(key, day) ? 'angle up icon' : 'angle down icon'"></i>
+									{{ isExpanded(key, day) ? '收起' : `展开剩余 ${blogs.length - dayLimit} 篇` }}
 								</a>
 							</div>
 						</div>
@@ -40,6 +49,9 @@
 			return {
 				blogMap: {},
 				count: 0,
+				// 单天超过该数量则折叠，点击展开
+				dayLimit: 5,
+				expandedDays: {},
 				colorObj: {
 					0: 'tl-blue',
 					1: 'tl-dark',
@@ -83,6 +95,18 @@
 			},
 			toBlog(blog) {
 				this.$store.dispatch('goBlogPage', blog)
+			},
+			isExpanded(month, day) {
+				return !!this.expandedDays[`${month}|${day}`]
+			},
+			toggleDay(month, day) {
+				const key = `${month}|${day}`
+				this.$set(this.expandedDays, key, !this.expandedDays[key])
+			},
+			// 单天文章过多时只显示前 dayLimit 篇，展开后显示全部
+			visibleBlogs(month, day, blogs) {
+				if (blogs.length <= this.dayLimit || this.isExpanded(month, day)) return blogs
+				return blogs.slice(0, this.dayLimit)
 			}
 		}
 	}
@@ -119,6 +143,36 @@
 		font-weight: 600;
 		text-align: right;
 		white-space: nowrap;
+	}
+
+	.tl-day-count {
+		display: block;
+		margin-top: 2px;
+		color: #a3adb9;
+		font-size: 11px;
+		font-weight: 400;
+	}
+
+	.tl-more {
+		padding: 4px 0 2px;
+	}
+
+	.tl-more a {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		color: #5b8ff9;
+		font-size: 13px;
+		cursor: pointer;
+		transition: color .2s;
+	}
+
+	.tl-more a:hover {
+		color: #23b7e5;
+	}
+
+	.tl-more i {
+		margin: 0 !important;
 	}
 
 	.tl-day-body {

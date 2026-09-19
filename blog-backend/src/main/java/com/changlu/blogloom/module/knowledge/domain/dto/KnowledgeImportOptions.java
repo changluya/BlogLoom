@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class KnowledgeImportOptions {
 	private Long targetParentId = 0L;
-	private Boolean published = false;
+	private Boolean published = true;
 	private String conflictPolicy = "SKIP";
 }

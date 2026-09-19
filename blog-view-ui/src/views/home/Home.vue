@@ -1,8 +1,11 @@
 <template>
-	<div>
+	<div class="home-page">
 		<!--工具栏：左侧排序，右侧搜索-->
 		<div class="home-toolbar">
 			<div class="home-filters">
+				<span class="filter-tab" :class="{active: sort === 'top' && !searching}" @click="changeSort('top')">
+					<svg class="filter-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg>置顶文章
+				</span>
 				<span class="filter-tab" :class="{active: sort === 'createTime' && !searching}" @click="changeSort('createTime')">
 					<i class="clock outline icon"></i>按发布时间
 				</span>
@@ -48,7 +51,7 @@
 				blogList: [],
 				totalPage: 0,
 				getBlogListFinish: false,
-				sort: 'createTime',
+				sort: '',
 				keyword: '',
 				lastKeyword: '',
 				searching: false,
@@ -90,8 +93,10 @@
 				})
 			},
 			changeSort(sort) {
-				if (this.sort === sort && !this.searching) return
-				this.sort = sort
+				// 再次点击已选中的选项则取消选中，回到默认排序（置顶优先、更新时间靠前）
+				const next = this.sort === sort ? '' : sort
+				if (this.sort === next && !this.searching) return
+				this.sort = next
 				this.clearSearch()
 				this.$store.commit(SET_IS_BLOG_TO_HOME, false)
 				this.getBlogList()
@@ -134,6 +139,16 @@
 </script>
 
 <style scoped>
+	/* 桌面端：作为中栏弹性容器，让列表区撑满剩余高度 */
+	@media (min-width: 768px) {
+		.home-page {
+			display: flex;
+			flex: 1;
+			flex-direction: column;
+			min-height: 0;
+		}
+	}
+
 	.home-toolbar {
 		display: flex;
 		align-items: center;
@@ -176,6 +191,13 @@
 
 	.filter-tab .icon {
 		margin: 0 !important;
+	}
+
+	.filter-icon {
+		width: 1em;
+		height: 1em;
+		flex: 0 0 auto;
+		fill: currentColor;
 	}
 
 	.home-search {

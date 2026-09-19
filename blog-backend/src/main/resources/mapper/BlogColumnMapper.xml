@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.changlu.blogloom.module.column.dao.BlogColumnMapper">
+
+    <!--后台专栏列表（含专栏下未逻辑删除的博客数量）-->
+    <select id="findAdminRows" resultType="com.changlu.blogloom.module.column.domain.vo.ColumnTreeVo">
+        select c.id,c.parent_id,c.name,c.description,c.cover,c.sort,c.is_published published,c.create_time,c.update_time,
+        (select count(*) from blog_column_relation r join blog b on b.id=r.blog_id and b.is_deleted=0 where r.column_id=c.id) blog_count
+        from blog_column c order by c.parent_id,c.sort,c.id
+    </select>
+
+    <!--前台公开专栏列表（含公开且未逻辑删除的博客数量）-->
+    <select id="findPublicRows" resultType="com.changlu.blogloom.module.column.domain.vo.ColumnTreeVo">
+        select c.id,c.parent_id,c.name,c.description,c.cover,c.sort,c.is_published published,c.create_time,c.update_time,
+        (select count(distinct b.id) from blog_column_relation r
+        join blog b on b.id=r.blog_id and b.is_published=true and b.is_deleted=0 where r.column_id=c.id) blog_count
+        from blog_column c left join blog_column p on p.id=c.parent_id
+        where c.is_published=true and (c.parent_id=0 or p.is_published=true)
+        order by c.parent_id,c.sort,c.id
+    </select>
+
+    <!--按id查询专栏-->
+    <select id="findById" resultType="com.changlu.blogloom.module.column.domain.entity.BlogColumn">
+        select id,parent_id,name,description,cover,sort,is_published published,create_time,update_time
+        from blog_column where id=#{id}
+    </select>
+
+    <!--查询子专栏数量-->
+    <select id="countChildren" resultType="int">
+        select count(*) from blog_column where parent_id=#{parentId}
+    </select>
+
+    <!--同父级同名专栏数量-->
+    <select id="countSameName" resultType="int">
+        select count(*) from blog_column where parent_id=#{parentId} and name=#{name}
+        and (#{excludeId} is null or id != #{excludeId})
+    </select>
+
+    <!--按父级与名称查询专栏-->
+    <select id="findByName" resultType="com.changlu.blogloom.module.column.domain.entity.BlogColumn">
+        select id,parent_id,name,description,cover,sort,is_published published,create_time,update_time
+        from blog_column where parent_id=#{parentId} and name=#{name} limit 1
+    </select>
+
+    <!--在所有层级中按名称匹配专栏（含二级专栏），用于迁移时匹配已有专栏-->
+    <select id="findByNameAnyLevel" resultType="com.changlu.blogloom.module.column.domain.entity.BlogColumn">
+        select id,parent_id,name,description,cover,sort,is_published published,create_time,update_time
+        from blog_column where name=#{name} order by id limit 1
+    </select>
+
+    <!--查询同级最大排序值-->
+    <select id="findMaxSort" resultType="int">
+        select coalesce(max(sort),0) from blog_column where parent_id=#{parentId}
+    </select>
+
+    <!--新增专栏-->
+    <insert id="insert" parameterType="com.changlu.blogloom.module.column.domain.entity.BlogColumn"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into blog_column(parent_id,name,description,cover,sort,is_published,create_time,update_time)
+        values(#{parentId},#{name},#{description},#{cover},#{sort},#{published},#{createTime},#{updateTime})
+    </insert>
+
+    <!--更新专栏-->
+    <update id="update">
+        update blog_column set parent_id=#{parentId},name=#{name},description=#{description},cover=#{cover},
+        sort=#{sort},is_published=#{published},update_time=#{updateTime} where id=#{id}
+    </update>
+
+    <!--移动专栏-->
+    <update id="move">
+        update blog_column set parent_id=#{parentId},sort=#{sort},update_time=now() where id=#{id}
+    </update>
+
+    <!--更新专栏封面-->
+    <update id="updateCover">
+        update blog_column set cover=#{cover},update_time=now() where id=#{id}
+    </update>
+
+    <!--更新专栏前台展示状态-->
+    <update id="updatePublished">
+        update blog_column set is_published=#{published},update_time=now() where id=#{id}
+    </update>
+
+    <!--按id删除专栏-->
+    <delete id="delete">
+        delete from blog_column where id=#{id}
+    </delete>
+</mapper>

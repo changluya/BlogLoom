@@ -2,11 +2,16 @@
 	<div class="knowledge-page">
 		<el-card shadow="never">
 			<div slot="header" class="toolbar">
-				<div>
+				<div class="toolbar-left">
+					<PageTip title="知识库管理">
+						<p>知识库是<strong>所有博客的统一目录视图</strong>：每一篇博客都会在知识库中有对应位置，就像本地电脑里的文件夹知识库一样。</p>
+						<p>你可以创建目录、拖拽归类、重命名、删除，点击文档即可预览或编辑。</p>
+						<p>删除博客会先移入<strong>回收站</strong>，可随时恢复；「迁移本地博客」支持批量导入本地 Markdown 并自动归类。</p>
+					</PageTip>
 					<el-button type="primary" size="small" icon="el-icon-folder-add" @click="createDir">新建目录</el-button>
-					<el-button size="small" icon="el-icon-upload2" @click="openImport">导入 ZIP</el-button>
+					<el-button size="small" icon="el-icon-upload2" @click="openImport">迁移本地博客</el-button>
 					<el-button size="small" icon="el-icon-refresh" @click="repair">修复未映射博客</el-button>
-					<el-button size="small" icon="el-icon-download" :loading="exporting" @click="exportZip">导出 ZIP</el-button>
+					<el-button size="small" icon="el-icon-download" :loading="exporting" @click="exportZip">备份知识库</el-button>
 				</div>
 				<el-button size="small" icon="el-icon-refresh" @click="loadTree">刷新</el-button>
 			</div>
@@ -86,89 +91,28 @@
 			<div class="context-menu-item danger" @click="contextDelete"><i class="el-icon-delete"></i>删除</div>
 		</div>
 
-		<el-dialog title="导入 Markdown ZIP" custom-class="knowledge-import-dialog" :visible.sync="importVisible" width="680px" :close-on-click-modal="false" @closed="resetImport">
-			<el-steps :active="importStepIndex" finish-status="success" align-center class="import-steps">
-				<el-step title="选择文件" description="配置导入规则"/>
-				<el-step title="内容预检" description="确认目录与文档"/>
-				<el-step title="执行导入" description="实时查看进度"/>
-			</el-steps>
-			<template v-if="importStep === 'form'">
-				<div class="import-section">
-					<div class="import-section-title"><i class="el-icon-folder-opened"></i>选择知识库压缩包</div>
-					<el-upload ref="importUpload" drag action="#" accept=".zip,application/zip" :auto-upload="false"
-					           :limit="1" :on-change="onUploadChange" :on-remove="onUploadRemove" :on-exceed="onUploadExceed">
-						<i class="el-icon-upload"></i>
-						<div class="el-upload__text">将 ZIP 文件拖到这里，或 <em>点击选择文件</em></div>
-						<div slot="tip" class="el-upload__tip">仅处理文件夹和 .md 文档，其他文件会自动过滤，最大支持 500MB</div>
-					</el-upload>
-				</div>
-				<el-form label-position="top" class="import-options">
-					<el-form-item label="同名文档处理方式">
-						<el-radio-group v-model="importForm.conflictPolicy" class="conflict-options">
-							<el-radio-button label="SKIP"><i class="el-icon-remove-outline"></i> 跳过已有文档</el-radio-button>
-							<el-radio-button label="RENAME"><i class="el-icon-copy-document"></i> 自动重命名</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item class="publish-option">
-						<div class="option-line">
-							<div><strong>导入后直接发布</strong><p>关闭时将以私密文章保存，可稍后编辑发布。</p></div>
-							<el-switch v-model="importForm.published"/>
-						</div>
-					</el-form-item>
-				</el-form>
-			</template>
-			<template v-else-if="importStep === 'preview'">
-				<el-alert title="预检通过，可以开始导入" type="success" :closable="false" show-icon/>
-				<div class="preview-stats">
-					<div><strong>{{ preview.directoryCount }}</strong><span>目录</span></div>
-					<div><strong>{{ preview.documentCount }}</strong><span>Markdown 文档</span></div>
-					<div><strong>{{ preview.ignoredCount }}</strong><span>已过滤项目</span></div>
-				</div>
-				<div class="preview-title">即将导入的内容</div>
-				<el-scrollbar class="preview-list"><div v-for="path in preview.paths" :key="path" class="preview-path"><i :class="path.toLowerCase().endsWith('.md') ? 'el-icon-document' : 'el-icon-folder'"></i>{{ path }}</div></el-scrollbar>
-			</template>
-			<template v-else>
-				<div class="import-progress-card">
-					<el-progress type="circle" :width="126" :percentage="progress.progress" :status="progress.status === 'FAILED' ? 'exception' : (progress.status === 'SUCCESS' ? 'success' : null)"/>
-					<div class="progress-detail">
-						<h3>{{ progress.message || '正在准备导入...' }}</h3>
-						<p>已处理 {{ progress.processed || 0 }}/{{ progress.total || 0 }}</p>
-						<div class="progress-counts"><span>博客 {{ progress.createdBlogCount || 0 }}</span><span>目录 {{ progress.createdDirectoryCount || 0 }}</span><span>跳过 {{ progress.skippedCount || 0 }}</span></div>
-						<p v-if="progress.currentPath" class="current-path" :title="progress.currentPath">当前：{{ progress.currentPath }}</p>
-					</div>
-				</div>
-			</template>
-			<span slot="footer">
-				<el-button v-if="importStep === 'form'" @click="importVisible=false">取消</el-button>
-				<el-button v-if="importStep === 'form'" type="primary" :loading="previewing" @click="doPreview">开始预检</el-button>
-				<el-button v-if="importStep === 'preview'" @click="importStep='form'">上一步</el-button>
-				<el-button v-if="importStep === 'preview'" type="primary" @click="doExecute">确认导入</el-button>
-				<el-button v-if="terminal" type="primary" @click="importVisible=false">完成</el-button>
-			</span>
-		</el-dialog>
+		<KnowledgeImportDialog :visible.sync="importVisible" @success="loadTree"/>
 	</div>
 </template>
 
 <script>
 	import {getBlogById} from '@/api/blog'
-	import {batchDeleteNodes, createDirectory, deleteNode, executeImport, exportKnowledge, exportKnowledgeDocument, getImportProgress, getKnowledgeTree, moveNode, previewImport, renameNode, repairKnowledge} from '@/api/knowledge'
+	import {batchDeleteNodes, createDirectory, deleteNode, exportKnowledge, exportKnowledgeDocument, getKnowledgeTree, moveNode, renameNode, repairKnowledge} from '@/api/knowledge'
+	import PageTip from '@/components/PageTip'
+	import KnowledgeImportDialog from '@/components/KnowledgeImportDialog'
 
 	export default {
 		name: 'KnowledgeManage',
+		components: {PageTip, KnowledgeImportDialog},
 		data() {
 			return {
-				tree: [], treeKeyword: '', batchMode: false, selected: null, selectedBlog: null, blogLoading: false, importVisible: false, importStep: 'form', importFile: null,
-				previewing: false, exporting: false, documentDownloading: false, deleting: false, preview: {}, progress: {progress: 0}, pollTimer: null,
-				contextMenu: {visible: false, x: 0, y: 0, node: null}, leftWidth: Number(window.localStorage.getItem('knowledge-tree-width')) || 380, resizing: false, treeDragging: false,
-				importForm: {targetParentId: 0, published: false, conflictPolicy: 'SKIP'}
+				tree: [], treeKeyword: '', batchMode: false, selected: null, selectedBlog: null, blogLoading: false, importVisible: false,
+				exporting: false, documentDownloading: false, deleting: false,
+				contextMenu: {visible: false, x: 0, y: 0, node: null}, leftWidth: Number(window.localStorage.getItem('knowledge-tree-width')) || 380, resizing: false, treeDragging: false
 			}
 		},
-		computed: {
-			terminal() { return this.importStep === 'progress' && ['SUCCESS', 'FAILED'].includes(this.progress.status) },
-			importStepIndex() { return this.importStep === 'form' ? 0 : (this.importStep === 'preview' ? 1 : 2) }
-		},
 		created() { this.loadTree(); document.addEventListener('click', this.closeContextMenu) },
-		beforeDestroy() { this.stopPolling(); document.removeEventListener('click', this.closeContextMenu); this.stopResize(); this.removeDragGhost() },
+		beforeDestroy() { document.removeEventListener('click', this.closeContextMenu); this.stopResize(); this.removeDragGhost() },
 		methods: {
 			loadTree() { return getKnowledgeTree().then(res => { this.tree = res.data || []; this.selected = null; this.selectedBlog = null; this.$nextTick(() => this.filterTree(this.treeKeyword)) }) },
 			selectNode(node) {
@@ -311,8 +255,8 @@
 				if (!this.selected) return
 				const documentCount = this.countDocuments(this.selected)
 				const message = this.selected.type === 'DOC'
-					? `确定删除文档“${this.selected.name}.md”及其对应博客吗？此操作不可恢复。`
-					: `确定删除目录“${this.selected.name}”吗？其下全部子目录、${documentCount} 篇文档及对应博客都会被删除，此操作不可恢复。`
+					? `确定删除文档“${this.selected.name}.md”吗？对应博客将移入回收站，可稍后恢复。`
+					: `确定删除目录“${this.selected.name}”吗？其下 ${documentCount} 篇文档对应的博客将移入回收站，目录结构不保留。`
 				this.$confirm(message, '删除确认', {type: 'warning', confirmButtonText: '确定删除'}).then(() => {
 					this.deleting = true
 					return deleteNode(this.selected.id)
@@ -347,25 +291,6 @@
 				}).finally(() => { this.documentDownloading = false })
 			},
 			openImport() { this.importVisible = true },
-			onUploadChange(file) { this.importFile = file.raw || null },
-			onUploadRemove() { this.importFile = null },
-			onUploadExceed() { this.msgError('每次只能选择一个 ZIP 文件，请先移除当前文件') },
-			doPreview() {
-				if (!this.importFile) return this.msgError('请选择 ZIP 文件')
-				this.previewing = true
-				previewImport(this.importFile, this.importForm).then(res => { this.preview = res.data; this.importStep = 'preview' }).finally(() => { this.previewing = false })
-			},
-			doExecute() { executeImport(this.preview.token).then(res => { this.importStep = 'progress'; this.poll(res.data.taskId) }) },
-			poll(taskId) {
-				this.stopPolling()
-				const load = () => getImportProgress(taskId).then(res => { this.progress = res.data; if (this.terminal) { this.stopPolling(); if (this.progress.status === 'SUCCESS') this.loadTree() } }).catch(() => this.stopPolling())
-				load(); this.pollTimer = window.setInterval(load, 1000)
-			},
-			stopPolling() { if (this.pollTimer) window.clearInterval(this.pollTimer); this.pollTimer = null },
-			resetImport() {
-				this.stopPolling(); this.importStep = 'form'; this.importFile = null; this.preview = {}; this.progress = {progress: 0}
-				if (this.$refs.importUpload) this.$refs.importUpload.clearFiles()
-			}
 		}
 	}
 </script>
@@ -374,6 +299,7 @@
 	.knowledge-page { padding: 20px; }
 	.toolbar, .content, .tree-row { display: flex; align-items: center; }
 	.toolbar { justify-content: space-between; }
+	.toolbar-left { display: flex; align-items: center; gap: 8px; }
 	.content { align-items: stretch; height: calc(100vh - 190px); min-height: 520px; overflow: hidden; }
 	.tree-panel { flex: 0 0 auto; min-width: 260px; padding: 12px 16px 12px 0; overflow: auto; }
 	.tree-panel ::v-deep .el-tree-node__content, .tree-panel ::v-deep .tree-row { cursor: move; }
@@ -396,37 +322,6 @@
 	.tree-row { gap: 7px; }
 	.muted { color: #909399; }
 	.empty-tip { color: #909399; padding: 60px 20px; text-align: center; }
-	.preview-list { height: 260px; margin-top: 12px; border: 1px solid #ebeef5; padding: 10px; line-height: 26px; }
-	.import-steps { margin: -4px 0 28px; }
-	.import-section { padding: 18px; background: #f8fafc; border: 1px solid #ebeef5; border-radius: 8px; }
-	.import-section-title { margin-bottom: 14px; color: #303133; font-weight: 600; }
-	.import-section-title i { margin-right: 7px; color: #409eff; }
-	.import-section ::v-deep .el-upload, .import-section ::v-deep .el-upload-dragger { width: 100%; }
-	.import-section ::v-deep .el-upload-dragger { height: 156px; padding-top: 20px; border-radius: 7px; background: #fff; }
-	.import-section ::v-deep .el-upload-dragger .el-icon-upload { margin: 16px 0 10px; font-size: 54px; }
-	.import-section ::v-deep .el-upload-list__item { margin-top: 10px; background: #fff; border: 1px solid #e4e7ed; border-radius: 5px; }
-	.import-options { margin-top: 20px; }
-	.conflict-options { width: 100%; display: flex; }
-	.conflict-options ::v-deep .el-radio-button { flex: 1; }
-	.conflict-options ::v-deep .el-radio-button__inner { width: 100%; padding: 13px 16px; }
-	.publish-option { margin-bottom: 0; padding: 14px 16px; border: 1px solid #ebeef5; border-radius: 7px; }
-	.option-line { display: flex; align-items: center; justify-content: space-between; }
-	.option-line p { margin: 5px 20px 0 0; color: #909399; line-height: 1.5; }
-	.preview-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
-	.preview-stats > div { padding: 18px 12px; text-align: center; background: #f7f9fc; border-radius: 7px; }
-	.preview-stats strong, .preview-stats span { display: block; }
-	.preview-stats strong { color: #409eff; font-size: 26px; line-height: 1.2; }
-	.preview-stats span { margin-top: 6px; color: #909399; font-size: 13px; }
-	.preview-title { color: #303133; font-weight: 600; }
-	.preview-path { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-	.preview-path i { margin-right: 7px; color: #409eff; }
-	.import-progress-card { min-height: 240px; display: flex; align-items: center; justify-content: center; gap: 38px; padding: 24px; background: #f8fafc; border-radius: 8px; }
-	.progress-detail { min-width: 0; width: 340px; }
-	.progress-detail h3 { margin: 0 0 14px; color: #303133; }
-	.progress-detail p { color: #606266; }
-	.progress-counts { display: flex; gap: 10px; margin: 14px 0; }
-	.progress-counts span { padding: 6px 10px; color: #409eff; background: #ecf5ff; border-radius: 4px; font-size: 13px; }
-	.current-path { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #909399 !important; }
 	.node-context-menu { position: fixed; z-index: 3000; min-width: 140px; padding: 6px 0; background: #fff; border: 1px solid #ebeef5; border-radius: 4px; box-shadow: 0 4px 14px rgba(0,0,0,.14); }
 	.context-menu-item { padding: 9px 16px; cursor: pointer; color: #303133; font-size: 14px; }
 	.context-menu-item:hover { background: #f5f7fa; }

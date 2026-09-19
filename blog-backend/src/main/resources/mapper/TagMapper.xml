@@ -25,7 +25,7 @@
         select t.id, t.tag_name, t.color, count(b.id) as blog_count
         from tag t
         left join blog_tag bt on bt.tag_id = t.id
-        left join blog b on b.id = bt.blog_id and b.is_published = true
+        left join blog b on b.id = bt.blog_id and b.is_published = true and b.is_deleted = 0
         group by t.id, t.tag_name, t.color
         order by t.id desc
     </select>
@@ -69,6 +69,8 @@
 
     <!--查询每个标签的博客数量-->
     <select id="getTagBlogCount" resultMap="tagBlogCount">
-        select tag_id, count(tag_id) as blog_count from blog_tag group by tag_id
+        select bt.tag_id, count(bt.tag_id) as blog_count
+        from blog_tag bt join blog b on b.id=bt.blog_id and b.is_deleted=0
+        group by bt.tag_id
     </select>
 </mapper>

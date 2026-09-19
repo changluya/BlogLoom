@@ -1,11 +1,9 @@
 export default {
 	/**
 	 * @type {string}
-	 * @description 首页三张背景图
+	 * @description 首页 Banner 背景图（单张）
 	 */
-	bg1: '/img/banner/home-banner-01.png',
-	bg2: '/img/banner/home-banner-02.png',
-	bg3: '/img/banner/home-banner-03.png',
+	banner: '/img/banner/home-banner.png',
 
 	/**
 	 * @type {string}
