@@ -34,9 +34,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * @Description: 知识库 ZIP 导入的核心执行器。
+ * @Description: 知识库导入的核心执行器，支持两种来源：
+ * <ul>
+ *     <li>ZIP 归档：目录与 Markdown 按压缩包结构还原（忽略元数据 knowledgeBasePath）；</li>
+ *     <li>Markdown 文件：目录由每篇元数据 knowledgeBasePath 决定，缺失目录逐级创建。</li>
+ * </ul>
  * <p>
- * 核心描述：把 ZIP 内的目录与 Markdown 原样还原成知识库树，并把每篇 Markdown 转成一篇博客。
+ * 核心描述：把目录与 Markdown 还原成知识库树，并把每篇 Markdown 转成一篇博客。
  * 目录按层级复用/创建；每篇文档解析顶部 JSON 元数据后，标题取 title、描述取 articleSummary、
  * 首图取正文第一个图片链接；标签、分类遵循“先查库 -> 不存在则新建 -> 再关联”，
  * 专栏则只匹配已存在的并关联（不自动创建）；默认以“公开”状态入库。整个过程在一个事务内完成，任一文档失败即整体回滚。
@@ -105,7 +109,7 @@ public class KnowledgeImportWorker {
 	 * 说明：方法整体处于事务中，任一文件导入失败会回滚本次所有数据库写入，
 	 * 保证“知识库树 + 博客 + 关联关系”的一致性。
 	 *
-	 * @param session 预检阶段构建的导入会话（包含临时 ZIP 路径与已排序的 Entry 列表）
+	 * @param session 预检阶段构建的导入会话（ZIP 模式含临时压缩包路径，文件模式含文档字节；均含已排序 Entry 列表）
 	 * @param taskId  内存级进度任务 ID，用于前端轮询导入进度
 	 */
 	@Transactional(rollbackFor = Exception.class)
@@ -117,16 +121,50 @@ public class KnowledgeImportWorker {
 			KnowledgeNode root = mapper.findById(rootId);
 			if (root == null || !KnowledgeNodeType.DIR.name().equals(root.getType())) throw new BadRequestException("导入目标目录不存在");
 		}
-		// 步骤2：directoryIds 维护“ZIP 内目录路径 -> 已创建/复用的知识库目录节点 ID”映射，空路径即导入根目录
+		// 步骤2：directoryIds 维护“导入路径 -> 已创建/复用的知识库目录节点 ID”映射，空路径即导入根目录
 		Map<String, Long> directoryIds = new HashMap<>();
 		directoryIds.put("", rootId);
 		// 步骤3：逐个处理 Entry。Entry 已按目录深度升序排序，因此父目录一定先于子目录/文档被创建
-		try (ZipFile zip = new ZipFile(session.getZipPath().toFile(), StandardCharsets.UTF_8)) {
-			for (KnowledgeImportEntry entry : session.getEntries()) {
-				if (entry.isDirectory()) importDirectory(entry, options, directoryIds, taskId);
-				else importDocument(zip, entry, options, directoryIds, taskId);
+		// ZIP 模式从压缩包 Entry 读取正文；Markdown 文件模式从会话缓存的文档字节读取正文
+		if (session.isArchive()) {
+			try (ZipFile zip = new ZipFile(session.getZipPath().toFile(), StandardCharsets.UTF_8)) {
+				processEntries(session, entry -> readZipDocument(zip, entry), options, directoryIds, taskId);
 			}
+		} else {
+			processEntries(session, entry -> readSessionDocument(session, entry), options, directoryIds, taskId);
 		}
+	}
+
+	/**
+	 * 按 Entry 顺序处理整个导入会话：目录先建、文档后建。
+	 */
+	private void processEntries(KnowledgeImportSession session, DocumentContentReader reader,
+	                            KnowledgeImportOptions options, Map<String, Long> directoryIds,
+	                            String taskId) throws IOException {
+		for (KnowledgeImportEntry entry : session.getEntries()) {
+			if (entry.isDirectory()) importDirectory(entry, options, directoryIds, taskId);
+			else importDocument(reader, entry, options, directoryIds, taskId);
+		}
+	}
+
+	/** 从 ZIP Entry 读取文档正文 */
+	private String readZipDocument(ZipFile zip, KnowledgeImportEntry entry) throws IOException {
+		ZipEntry source = zip.getEntry(entry.getSourceName());
+		if (source == null) throw new BadRequestException("ZIP Entry 不存在: " + entry.getPath());
+		return readUtf8(zip, source);
+	}
+
+	/** 从会话缓存的 Markdown 文件读取正文 */
+	private String readSessionDocument(KnowledgeImportSession session, KnowledgeImportEntry entry) {
+		byte[] bytes = session.getDocuments() == null ? null : session.getDocuments().get(entry.getPath());
+		if (bytes == null) throw new BadRequestException("导入文档内容不存在: " + entry.getPath());
+		return new String(bytes, StandardCharsets.UTF_8);
+	}
+
+	/** 文档正文读取器：屏蔽 ZIP / 文件两种来源差异 */
+	@FunctionalInterface
+	private interface DocumentContentReader {
+		String read(KnowledgeImportEntry entry) throws IOException;
 	}
 
 	/**
@@ -158,15 +196,13 @@ public class KnowledgeImportWorker {
 	/**
 	 * 处理 Markdown 文档 Entry：解析元数据 -> 构建并保存博客 -> 关联标签/分类/专栏 -> 挂载为知识库文档节点。
 	 */
-	private void importDocument(ZipFile zip, KnowledgeImportEntry entry, KnowledgeImportOptions options,
+	private void importDocument(DocumentContentReader reader, KnowledgeImportEntry entry, KnowledgeImportOptions options,
 	                            Map<String, Long> directoryIds, String taskId) throws IOException {
 		// 步骤1：解析文档所属父目录
 		Long parentId = requireParent(directoryIds, parent(entry.getPath()));
-		ZipEntry source = zip.getEntry(entry.getSourceName());
-		if (source == null) throw new BadRequestException("ZIP Entry 不存在: " + entry.getPath());
 
 		// 步骤2：解析 Markdown 顶部的 JSON 元数据代码块，得到 metadata 与移除该代码块后的正文 content
-		ParsedArticle parsed = KnowledgeArticleMetadataParser.parse(readUtf8(zip, source));
+		ParsedArticle parsed = KnowledgeArticleMetadataParser.parse(reader.read(entry));
 		KnowledgeArticleMetadata metadata = parsed.getMetadata();
 		String content = parsed.getContent();
 

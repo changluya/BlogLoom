@@ -1,19 +1,37 @@
 <template>
 	<div>
-		<el-dialog title="导入 Markdown ZIP" custom-class="knowledge-import-dialog" :visible.sync="dialogVisible" width="680px" :close-on-click-modal="false" @closed="resetImport">
+		<el-dialog title="导入 Markdown 到知识库" custom-class="knowledge-import-dialog" :visible.sync="dialogVisible" width="680px" :close-on-click-modal="false" @closed="resetImport">
 			<el-steps :active="importStepIndex" finish-status="success" align-center class="import-steps">
 				<el-step title="选择文件" description="配置导入规则"/>
 				<el-step title="内容预检" description="确认目录与文档"/>
 				<el-step title="执行导入" description="实时查看进度"/>
 			</el-steps>
 			<template v-if="importStep === 'form'">
-				<div class="import-section">
+				<div class="import-mode">
+					<el-radio-group v-model="importMode" size="small" @change="onModeChange">
+						<el-radio-button label="zip"><i class="el-icon-folder-opened"></i> 知识库 ZIP</el-radio-button>
+						<el-radio-button label="files"><i class="el-icon-document"></i> Markdown 文件</el-radio-button>
+					</el-radio-group>
+					<span class="import-mode-tip">{{ importModeTip }}</span>
+				</div>
+
+				<div v-if="importMode === 'zip'" class="import-section">
 					<div class="import-section-title"><i class="el-icon-folder-opened"></i>选择知识库压缩包</div>
 					<el-upload ref="importUpload" drag action="#" accept=".zip,application/zip" :auto-upload="false"
 					           :limit="1" :on-change="onUploadChange" :on-remove="onUploadRemove" :on-exceed="onUploadExceed">
 						<i class="el-icon-upload"></i>
 						<div class="el-upload__text">将 ZIP 文件拖到这里，或 <em>点击选择文件</em></div>
-						<div slot="tip" class="el-upload__tip">仅处理文件夹和 .md 文档，其他文件会自动过滤，最大支持 500MB</div>
+						<div slot="tip" class="el-upload__tip">仅处理文件夹和 .md 文档，其他文件会自动过滤，最大支持 500MB；目录按压缩包结构还原，忽略 knowledgeBasePath</div>
+					</el-upload>
+				</div>
+
+				<div v-else class="import-section">
+					<div class="import-section-title"><i class="el-icon-document"></i>选择 Markdown 文件（单个或多个）</div>
+					<el-upload ref="filesUpload" drag action="#" accept=".md,text/markdown" :auto-upload="false" multiple
+					           :on-change="onFilesChange" :on-remove="onFilesChange">
+						<i class="el-icon-upload"></i>
+						<div class="el-upload__text">将 .md 文件拖到这里，或 <em>点击选择文件</em></div>
+						<div slot="tip" class="el-upload__tip">按每篇 Markdown 顶部的 knowledgeBasePath 定位知识库目录；为空则落在知识库根目录，缺失目录会自动逐级创建；单篇 ≤ 5MB，总计 ≤ 100MB</div>
 					</el-upload>
 				</div>
 
@@ -21,7 +39,7 @@
 					<div class="meta-entry">
 						<div class="meta-entry-text">
 							<i class="el-icon-info"></i>
-							<span>支持在每篇 Markdown 顶部声明<strong>标签、分类、专栏、时间</strong>：标签/分类不存在会自动创建，专栏仅关联已存在的。</span>
+							<span>支持在每篇 Markdown 顶部声明<strong>标签、分类、专栏、时间、知识库路径</strong>：标签/分类不存在会自动创建，专栏仅关联已存在的。</span>
 						</div>
 						<div class="meta-entry-actions">
 							<el-button size="mini" type="primary" plain icon="el-icon-view" @click="metaDrawerVisible = true">查看示例与说明</el-button>
@@ -88,8 +106,12 @@
 		<el-drawer title="Markdown 导入示例与说明" :visible.sync="metaDrawerVisible" direction="rtl" size="560px" custom-class="knowledge-meta-drawer">
 			<div class="meta-drawer-body">
 				<p class="meta-help-desc">
-					在每篇 <code>.md</code> 的<strong>最顶部</strong>放一个 <code>```json</code> 代码块，即可声明标题、标签、分类、摘要、专栏与创建/更新时间。
-					导入时<strong>标签、分类不存在会自动创建并关联</strong>；<strong>专栏只匹配已存在的（含二级专栏）并关联，不会自动创建</strong>。ZIP 内支持多级文件夹，文件夹会自动映射为知识库目录。
+					在每篇 <code>.md</code> 的<strong>最顶部</strong>放一个 <code>```json</code> 代码块，即可声明标题、标签、分类、摘要、专栏、创建/更新时间与知识库路径。
+					导入时<strong>标签、分类不存在会自动创建并关联</strong>；<strong>专栏只匹配已存在的（含二级专栏）并关联，不会自动创建</strong>。
+				</p>
+				<p class="meta-help-desc">
+					<strong>ZIP 导入</strong>：目录按压缩包内的多级文件夹自动映射为知识库目录，<strong>忽略 knowledgeBasePath</strong>。<br/>
+					<strong>Markdown 文件导入</strong>：没有文件夹结构，目录由每篇的 <code>knowledgeBasePath</code> 决定（格式 <code>/a/bb/cc</code>，以 / 开头、末尾不带 /）；为空则落在知识库根目录，缺失目录会自动逐级创建。
 				</p>
 				<div class="meta-drawer-actions">
 					<el-button size="small" type="primary" icon="el-icon-download" @click="downloadSampleZip">下载示例 ZIP</el-button>
@@ -118,7 +140,7 @@
 </template>
 
 <script>
-	import {executeImport, getImportProgress, previewImport} from '@/api/knowledge'
+	import {executeImport, getImportProgress, previewImport, previewImportFiles} from '@/api/knowledge'
 
 	export default {
 		name: 'KnowledgeImportDialog',
@@ -134,7 +156,7 @@
 		},
 		data() {
 			return {
-				importStep: 'form', importFile: null, previewing: false,
+				importStep: 'form', importMode: 'zip', importFile: null, importFiles: [], previewing: false,
 				preview: {}, progress: {progress: 0}, pollTimer: null,
 				importForm: {targetParentId: 0, published: true, conflictPolicy: 'SKIP'},
 				metaDrawerVisible: false,
@@ -158,7 +180,8 @@
 							'  "articleSummary": "BlogLoom 1.0 是项目首个正式版本，完成三端分离、内容闭环与站点配置等能力，本文介绍版本范围与升级注意事项。",',
 							'  "columns": "更新日志",',
 							'  "createTime": "2026-09-19 14:30:00",',
-							'  "updateTime": "2026-09-19 14:30:00"',
+							'  "updateTime": "2026-09-19 14:30:00",',
+							'  "knowledgeBasePath": "/版本发布"',
 							'}',
 							'```'
 						].join('\n')
@@ -174,7 +197,8 @@
 							'  "articleSummary": "以 BlogLoom 搭建自主可控的个人技术博客，用文章与专栏沉淀内容，并兼顾评论互动与访问统计。",',
 							'  "columns": "使用场景, 建站指南",',
 							'  "createTime": "2026-09-18 09:00:00",',
-							'  "updateTime": "2026-09-18 09:00:00"',
+							'  "updateTime": "2026-09-18 09:00:00",',
+							'  "knowledgeBasePath": "/使用场景"',
 							'}',
 							'```'
 						].join('\n')
@@ -190,7 +214,8 @@
 							'  "articleSummary": "用 BlogLoom 承载开源项目介绍、更新日志与使用文档，并通过评论收集使用反馈。",',
 							'  "columns": "使用场景",',
 							'  "createTime": "2026-09-17 20:15:00",',
-							'  "updateTime": "2026-09-17 20:15:00"',
+							'  "updateTime": "2026-09-17 20:15:00",',
+							'  "knowledgeBasePath": "/使用场景"',
 							'}',
 							'```'
 						].join('\n')
@@ -203,7 +228,8 @@
 					{field: 'articleSummary', desc: '文章摘要（150 字以内），对应文章描述'},
 					{field: 'columns', desc: '所属专栏，多个，逗号分隔；仅关联已存在的专栏（含二级专栏），不会自动创建'},
 					{field: 'createTime', desc: '创建时间，格式 YYYY-MM-DD HH:mm:ss；缺省为导入时间'},
-					{field: 'updateTime', desc: '更新时间，格式 YYYY-MM-DD HH:mm:ss；缺省同创建时间'}
+					{field: 'updateTime', desc: '更新时间，格式 YYYY-MM-DD HH:mm:ss；缺省同创建时间'},
+					{field: 'knowledgeBasePath', desc: '知识库目录路径，格式 /a/bb/cc，以 / 开头且末尾不带 /。仅「Markdown 文件」导入时生效；ZIP 导入按压缩包目录结构并忽略该字段。为空时落在知识库根目录'}
 				]
 			}
 		},
@@ -214,6 +240,11 @@
 			},
 			terminal() { return this.importStep === 'progress' && ['SUCCESS', 'FAILED'].includes(this.progress.status) },
 			importStepIndex() { return this.importStep === 'form' ? 0 : (this.importStep === 'preview' ? 1 : 2) },
+			importModeTip() {
+				return this.importMode === 'zip'
+					? '按压缩包文件夹结构还原知识库目录，忽略 knowledgeBasePath'
+					: '按每篇 Markdown 的 knowledgeBasePath 定位目录，缺失目录自动创建'
+			},
 			previewTree() {
 				const roots = []
 				const nodes = {}
@@ -251,10 +282,26 @@
 			onUploadChange(file) { this.importFile = file.raw || null },
 			onUploadRemove() { this.importFile = null },
 			onUploadExceed() { this.msgError('每次只能选择一个 ZIP 文件，请先移除当前文件') },
+			onModeChange() { this.clearSelectedFiles() },
+			onFilesChange(file, fileList) {
+				this.importFiles = (fileList || []).map(item => item.raw).filter(Boolean)
+			},
+			clearSelectedFiles() {
+				this.importFile = null
+				this.importFiles = []
+				if (this.$refs.importUpload) this.$refs.importUpload.clearFiles()
+				if (this.$refs.filesUpload) this.$refs.filesUpload.clearFiles()
+			},
 			doPreview() {
-				if (!this.importFile) return this.msgError('请选择 ZIP 文件')
+				if (this.importMode === 'zip') {
+					if (!this.importFile) return this.msgError('请选择 ZIP 文件')
+					this.previewing = true
+					previewImport(this.importFile, this.importForm).then(res => { this.preview = res.data; this.importStep = 'preview' }).finally(() => { this.previewing = false })
+					return
+				}
+				if (!this.importFiles.length) return this.msgError('请选择 Markdown 文件')
 				this.previewing = true
-				previewImport(this.importFile, this.importForm).then(res => { this.preview = res.data; this.importStep = 'preview' }).finally(() => { this.previewing = false })
+				previewImportFiles(this.importFiles, this.importForm).then(res => { this.preview = res.data; this.importStep = 'preview' }).finally(() => { this.previewing = false })
 			},
 			doExecute() { executeImport(this.preview.token).then(res => { this.importStep = 'progress'; this.poll(res.data.taskId) }) },
 			poll(taskId) {
@@ -270,8 +317,8 @@
 			},
 			stopPolling() { if (this.pollTimer) window.clearInterval(this.pollTimer); this.pollTimer = null },
 			resetImport() {
-				this.stopPolling(); this.importStep = 'form'; this.importFile = null; this.preview = {}; this.progress = {progress: 0}
-				if (this.$refs.importUpload) this.$refs.importUpload.clearFiles()
+				this.stopPolling(); this.importStep = 'form'; this.importMode = 'zip'; this.preview = {}; this.progress = {progress: 0}
+				this.clearSelectedFiles()
 			},
 			downloadSampleZip() {
 				const link = document.createElement('a')
@@ -318,6 +365,8 @@
 	.preview-tree-node i.el-icon-folder { color: #e6a23c; }
 	.preview-tree-label { white-space: nowrap; }
 	.import-steps { margin: -4px 0 28px; }
+	.import-mode { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+	.import-mode-tip { color: #909399; font-size: 12px; line-height: 1.5; }
 	.import-section { padding: 18px; background: #f8fafc; border: 1px solid #ebeef5; border-radius: 8px; }
 	.import-section-title { margin-bottom: 14px; color: #303133; font-weight: 600; }
 	.import-section-title i { margin-right: 7px; color: #409eff; }

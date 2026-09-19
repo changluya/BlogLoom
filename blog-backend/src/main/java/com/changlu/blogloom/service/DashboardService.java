@@ -1,6 +1,7 @@
 package com.changlu.blogloom.service;
 
 import com.changlu.blogloom.entity.CityVisitor;
+import com.changlu.blogloom.model.vo.CategoryBlogCount;
 
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,11 @@ public interface DashboardService {
 
 	int getCommentCount();
 
-	Map<String, List> getCategoryBlogCountMap();
+	Map<String, Object> getCategoryBlogCountMap();
 
-	Map<String, List> getTagBlogCountMap();
+	Map<String, Object> getTagBlogCountMap();
+
+	List<? extends CategoryBlogCount> getDistributionRanking(String type);
 
 	Map<String, List> getVisitRecordMap();
 

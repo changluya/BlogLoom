@@ -1,8 +1,5 @@
 <template>
 	<header ref="header">
-		<div class="view">
-			<div class="bg" :style="{backgroundImage:'url('+defaultSettings.banner+')'}"></div>
-		</div>
 		<div class="hero-overlay"></div>
 		<div class="hero-content">
 			<div class="hero-eyebrow">{{ defaultSettings.heroEyebrow }}</div>
@@ -39,20 +36,6 @@
 		},
 		mounted() {
 			this.setHeaderHeight()
-			let startingPoint
-			const header = this.$refs.header
-			header.addEventListener('mouseenter', (e) => {
-				startingPoint = e.clientX
-			})
-			header.addEventListener('mouseout', (e) => {
-				header.classList.remove('moving')
-				header.style.setProperty('--percentage', 0.5)
-			})
-			header.addEventListener('mousemove', (e) => {
-				let percentage = (e.clientX - startingPoint) / window.outerWidth + 0.5
-				header.style.setProperty('--percentage', percentage)
-				header.classList.add('moving')
-			})
 		},
 		methods: {
 			//根据可视窗口高度，动态改变首图大小
@@ -69,35 +52,12 @@
 
 <style scoped>
 	header {
-		--percentage: 0.5;
 		position: relative;
 		overflow: hidden;
 		user-select: none;
 	}
 
-	.view {
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		display: flex;
-		justify-content: center;
-		transform: translatex(calc(var(--percentage) * 100px));
-	}
-
-	.view div {
-		background-position: center center;
-		background-size: cover;
-		position: absolute;
-		width: 110%;
-		height: 100%;
-	}
-
-	.view .bg {
-		z-index: 10;
-	}
-
+	/* 背景图由 Index 的固定层提供，这里只负责首屏文字遮罩 */
 	.hero-overlay {
 		position: absolute;
 		inset: 0;
@@ -106,14 +66,6 @@
 			linear-gradient(180deg, rgba(8, 15, 28, .48) 0%, rgba(8, 15, 28, .08) 35%, rgba(8, 15, 28, .28) 100%),
 			radial-gradient(circle at center, transparent 20%, rgba(4, 9, 18, .2) 100%);
 		pointer-events: none;
-	}
-
-	header .view {
-		transition: .2s all ease-in;
-	}
-
-	header.moving .view {
-		transition: none;
 	}
 
 	.hero-content {

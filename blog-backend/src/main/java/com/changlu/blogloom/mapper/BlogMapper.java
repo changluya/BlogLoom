@@ -2,6 +2,7 @@ package com.changlu.blogloom.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.changlu.blogloom.entity.Blog;
 import com.changlu.blogloom.model.dto.BlogView;
@@ -99,4 +100,6 @@ public interface BlogMapper {
 	Boolean getPublishedByBlogId(Long blogId);
 
 	List<CategoryBlogCount> getCategoryBlogCountList();
+
+	List<CategoryBlogCount> getTopCategoryBlogCountList(@Param("limit") int limit);
 }

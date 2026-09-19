@@ -25,7 +25,8 @@ import java.util.Set;
  *   "articleSummary": "150 字以内的摘要",
  *   "columns": "专栏1,专栏2",
  *   "createTime": "2026-09-19 14:30:00",
- *   "updateTime": "2026-09-19 14:30:00"
+ *   "updateTime": "2026-09-19 14:30:00",
+ *   "knowledgeBasePath": "/a/bb/cc"
  * }
  * </pre>
  * 字段约定：
@@ -36,7 +37,9 @@ import java.util.Set;
  *     <li>articleSummary：摘要，150 字以内；</li>
  *     <li>columns：专栏，多个，逗号分隔；</li>
  *     <li>createTime：创建时间，格式 YYYY-MM-DD HH:mm:ss，缺省为导入时间；</li>
- *     <li>updateTime：更新时间，格式 YYYY-MM-DD HH:mm:ss，缺省同创建时间。</li>
+ *     <li>updateTime：更新时间，格式 YYYY-MM-DD HH:mm:ss，缺省同创建时间；</li>
+ *     <li>knowledgeBasePath：知识库目录路径，格式 /a/bb/cc，以 / 开头且末尾不带 /。
+ *     仅在「Markdown 文件」导入时生效，用于定位文章所在知识库目录；ZIP 导入按压缩包目录结构，忽略该字段。</li>
  * </ul>
  *
  * @Author: changlu
@@ -63,6 +66,9 @@ public class KnowledgeArticleMetadata {
 	/** 更新时间（格式 YYYY-MM-DD HH:mm:ss，缺省同创建时间） */
 	@JsonAlias({"update_time", "updatedAt", "updated_at", "updated", "modified"})
 	private String updateTime;
+	/** 知识库目录路径（格式 /a/bb/cc，以 / 开头且末尾不带 /；仅「Markdown 文件」导入时生效） */
+	@JsonAlias({"knowledge_base_path", "knowledgePath", "kbPath", "knowledge_path"})
+	private String knowledgeBasePath;
 
 	/**
 	 * tags 同时兼容数组与逗号分隔字符串两种写法。

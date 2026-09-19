@@ -64,6 +64,7 @@
 
     <resultMap id="tagBlogCount" type="com.changlu.blogloom.model.vo.TagBlogCount">
         <id property="id" column="tag_id"/>
+		<result property="name" column="tag_name"/>
         <result property="value" column="blog_count"/>
     </resultMap>
 
@@ -73,4 +74,25 @@
         from blog_tag bt join blog b on b.id=bt.blog_id and b.is_deleted=0
         group by bt.tag_id
     </select>
+
+	<!--仪表盘仅返回高频标签，避免上千个标签进入接口与 ECharts-->
+	<select id="getTopTagBlogCount" resultMap="tagBlogCount">
+		select t.id as tag_id, t.tag_name, count(bt.blog_id) as blog_count
+		from tag t
+		join blog_tag bt on bt.tag_id = t.id
+		join blog b on b.id = bt.blog_id and b.is_deleted = 0
+		group by t.id, t.tag_name
+		order by blog_count desc, t.id desc
+		limit #{limit}
+	</select>
+
+	<select id="countTag" resultType="int">
+		select count(*) from tag
+	</select>
+
+	<select id="countUsedTag" resultType="int">
+		select count(distinct bt.tag_id)
+		from blog_tag bt
+		join blog b on b.id = bt.blog_id and b.is_deleted = 0
+	</select>
 </mapper>

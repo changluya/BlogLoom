@@ -1,5 +1,7 @@
 <template>
-	<div class="site" :class="{'blog-detail-site': $route.name === 'blog'}">
+	<div class="site" :class="{'home-site': $route.name === 'home', 'blog-detail-site': $route.name === 'blog'}">
+		<!-- 固定在视口的首图；正文向上滚动时从它上方覆盖 -->
+		<div v-if="$route.name === 'home'" class="home-hero-background m-mobile-hide"></div>
 		<!--顶部导航-->
 		<Nav :blogName="siteInfo.blogName"/>
 		<!--首页大图 只在首页且pc端时显示-->
@@ -141,14 +143,45 @@
 
 <style scoped>
 	.site {
+		position: relative;
+		isolation: isolate;
 		display: flex;
 		min-height: 100vh; /* 没有元素时，也把页面撑开至100% */
 		flex-direction: column;
 	}
 
+	/* 首图始终固定在视口，不随鼠标或页面滚动 */
+	.home-hero-background {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		background: url('/img/banner/home-banner.png') center center / cover no-repeat;
+		pointer-events: none;
+	}
+
+	/* 所有页面内容置于固定首图之上 */
+	.site > .m-mobile-hide:not(.home-hero-background),
+	.site > .main,
+	.site > footer {
+		position: relative;
+		z-index: 1;
+	}
+
 	.main {
 		margin-top: 40px;
 		flex: 1;
+	}
+
+	/* 正文露出时，这块固定浓度的浅色遮罩随内容向上覆盖首图 */
+	.home-site .main {
+		margin-top: 0;
+		padding-top: 40px;
+		background: rgba(239, 239, 239, .42);
+	}
+
+	/* Footer 自带的顶部外边距会透出固定首图，首页上改为无缝衔接 */
+	.home-site > footer {
+		margin-top: 0;
 	}
 
 	.blog-detail-site .main {

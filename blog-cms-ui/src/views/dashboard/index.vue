@@ -34,23 +34,54 @@
 			</el-col>
 		</el-row>
 
-		<el-row class="panel-group charts" :gutter="20">
-			<el-col :xs="24" :lg="6">
+		<el-row class="panel-group charts distribution-charts" :gutter="20">
+			<el-col :xs="24" :lg="12">
 				<el-card class="chart-card" shadow="never">
-					<div class="chart-heading"><strong>分类分布</strong><span>各分类文章占比</span></div>
-					<div ref="categoryEcharts" class="chart"></div>
-				</el-card>
-			</el-col>
-			<el-col :xs="24" :lg="6">
-				<el-card class="chart-card" shadow="never">
-					<div class="chart-heading"><strong>标签分布</strong><span>各标签文章占比</span></div>
-					<div ref="tagEcharts" class="chart"></div>
+					<div class="chart-heading">
+						<strong>分类排行</strong>
+						<span>共 {{ categorySummary.total }} 个，展示 Top {{ categorySummary.displayed }}<template v-if="categorySummary.remaining">，其余 {{ categorySummary.remaining }} 个</template></span>
+					</div>
+					<div class="distribution-body">
+						<div v-show="!categoryExpanded" ref="categoryEcharts" class="chart"></div>
+						<div v-if="categoryExpanded" v-loading="categoryRankingLoading" class="ranking-scroll">
+							<div v-for="(item,index) in categoryRanking" :key="item.id" class="ranking-row">
+								<span class="ranking-index">{{ index + 1 }}</span><span class="ranking-name" :title="item.name">{{ item.name }}</span>
+								<span class="ranking-bar"><i :style="{width: rankPercent(item, categoryRanking)}"></i></span><strong>{{ item.value }}</strong>
+							</div>
+						</div>
+						<button v-if="categorySummary.remaining || categoryExpanded" class="ranking-toggle" type="button" @click="toggleRanking('category')">
+							<span v-if="!categoryExpanded" class="ranking-dots">•••</span>{{ categoryExpanded ? '收起排行' : '展开全部' }}
+						</button>
+					</div>
 				</el-card>
 			</el-col>
 			<el-col :xs="24" :lg="12">
 				<el-card class="chart-card" shadow="never">
+					<div class="chart-heading">
+						<strong>标签排行</strong>
+						<span>共 {{ tagSummary.total }} 个，已使用 {{ tagSummary.used }} 个，展示 Top {{ tagSummary.displayed }}</span>
+					</div>
+					<div class="distribution-body">
+						<div v-show="!tagExpanded" ref="tagEcharts" class="chart"></div>
+						<div v-if="tagExpanded" v-loading="tagRankingLoading" class="ranking-scroll">
+							<div v-for="(item,index) in tagRanking" :key="item.id" class="ranking-row">
+								<span class="ranking-index">{{ index + 1 }}</span><span class="ranking-name" :title="item.name">{{ item.name }}</span>
+								<span class="ranking-bar tag-ranking-bar"><i :style="{width: rankPercent(item, tagRanking)}"></i></span><strong>{{ item.value }}</strong>
+							</div>
+						</div>
+						<button v-if="tagSummary.remaining || tagExpanded" class="ranking-toggle" type="button" @click="toggleRanking('tag')">
+							<span v-if="!tagExpanded" class="ranking-dots">•••</span>{{ tagExpanded ? '收起排行' : '展开全部' }}
+						</button>
+					</div>
+				</el-card>
+			</el-col>
+		</el-row>
+
+		<el-row class="panel-group charts" :gutter="20">
+			<el-col :xs="24">
+				<el-card class="chart-card" shadow="never">
 					<div class="chart-heading"><strong>访客地图</strong><span>访客地域实时分布</span></div>
-					<div ref="mapEcharts" class="chart"></div>
+					<div ref="mapEcharts" class="map-chart"></div>
 				</el-card>
 			</el-col>
 		</el-row>
@@ -65,7 +96,7 @@
 <script>
 	import echarts from 'echarts'
 	import 'echarts/map/js/china'
-	import {getDashboard} from "@/api/dashboard";
+	import {getDashboard, getDashboardRanking} from "@/api/dashboard";
 	//城市经纬度数据来自 https://github.com/Naccl/region2coord
 	import geoCoordMap from '@/util/city2coord.json'
 
@@ -80,53 +111,67 @@
 				uv: 0,
 				blogCount: 0,
 				commentCount: 0,
+				categorySummary: {total: 0, displayed: 0, remaining: 0},
+				tagSummary: {total: 0, used: 0, unused: 0, displayed: 0, remaining: 0},
+				categoryExpanded: false,
+				tagExpanded: false,
+				categoryRankingLoading: false,
+				tagRankingLoading: false,
+				categoryRanking: [],
+				tagRanking: [],
 				categoryEcharts: null,
 				tagEcharts: null,
 				mapEcharts: null,
 				visitRecordEcharts: null,
 				categoryOption: {
-					title: {
-						show: false
-					},
 					tooltip: {
-						trigger: 'item',
-						formatter: '{a} <br/>{b} : {c} ({d}%)'
+						trigger: 'axis',
+						axisPointer: {type: 'shadow'},
+						formatter: params => `${params[0].name}<br/>文章数：${params[0].value}`
 					},
-					legend: {
-						left: 'center',
-						bottom: 4,
-						data: []
+					grid: {left: 16, right: 52, top: 18, bottom: 10, containLabel: true},
+					xAxis: {
+						type: 'value',
+						minInterval: 1,
+						splitLine: {lineStyle: {color: '#eef2f6'}},
+						axisLine: {show: false},
+						axisTick: {show: false}
 					},
+					yAxis: {type: 'category', data: [], axisLine: {show: false}, axisTick: {show: false}, axisLabel: {color: '#657386', width: 150, overflow: 'truncate'}},
 					series: [
 						{
 							name: '文章数量',
-							type: 'pie',
-							radius: ['42%', '68%'],
-							center: ['50%', '44%'],
-							data: []
+							type: 'bar',
+							barMaxWidth: 18,
+							data: [],
+							label: {show: true, position: 'right', color: '#637083'},
+							itemStyle: {barBorderRadius: [0, 6, 6, 0], color: '#49a9ee'}
 						}
 					]
 				},
 				tagOption: {
-					title: {
-						show: false
-					},
 					tooltip: {
-						trigger: 'item',
-						formatter: '{a} <br/>{b} : {c} ({d}%)'
+						trigger: 'axis',
+						axisPointer: {type: 'shadow'},
+						formatter: params => `${params[0].name}<br/>文章数：${params[0].value}`
 					},
-					legend: {
-						left: 'center',
-						bottom: 4,
-						data: []
+					grid: {left: 16, right: 52, top: 12, bottom: 8, containLabel: true},
+					xAxis: {
+						type: 'value',
+						minInterval: 1,
+						splitLine: {lineStyle: {color: '#eef2f6'}},
+						axisLine: {show: false},
+						axisTick: {show: false}
 					},
+					yAxis: {type: 'category', data: [], axisLine: {show: false}, axisTick: {show: false}, axisLabel: {color: '#657386', width: 150, overflow: 'truncate', fontSize: 11}},
 					series: [
 						{
 							name: '文章数量',
-							type: 'pie',
-							radius: ['42%', '68%'],
-							center: ['50%', '44%'],
-							data: []
+							type: 'bar',
+							barMaxWidth: 13,
+							data: [],
+							label: {show: true, position: 'right', color: '#637083', fontSize: 11},
+							itemStyle: {barBorderRadius: [0, 6, 6, 0], color: '#67c7c1'}
 						}
 					]
 				},
@@ -367,6 +412,34 @@
 			this.disposeCharts()
 		},
 		methods: {
+			async toggleRanking(type) {
+				const expandedKey = `${type}Expanded`
+				if (this[expandedKey]) {
+					this[expandedKey] = false
+					this.$nextTick(() => {
+						const chart = type === 'category' ? this.categoryEcharts : this.tagEcharts
+						if (chart) chart.resize()
+					})
+					return
+				}
+				this[expandedKey] = true
+				const rankingKey = `${type}Ranking`
+				if (this[rankingKey].length) return
+				const loadingKey = `${type}RankingLoading`
+				this[loadingKey] = true
+				try {
+					const res = await getDashboardRanking(type)
+					this[rankingKey] = res.data || []
+				} catch (error) {
+					this[expandedKey] = false
+				} finally {
+					this[loadingKey] = false
+				}
+			},
+			rankPercent(item, ranking) {
+				const max = ranking.length ? Number(ranking[0].value) || 1 : 1
+				return `${Math.max((Number(item.value) || 0) / max * 100, 2)}%`
+			},
 			resizeCharts() {
 				this.$nextTick(() => {
 					[this.categoryEcharts, this.tagEcharts, this.mapEcharts, this.visitRecordEcharts]
@@ -383,13 +456,16 @@
 					this.uv = res.data.uv
 					this.blogCount = res.data.blogCount
 					this.commentCount = res.data.commentCount
-					//渲染分类数据
-					this.categoryOption.legend.data = res.data.category.legend
-					this.categoryOption.series[0].data = res.data.category.series
+					//横向排行图从下到上递增，因此将后端的降序 Top N 反转后渲染
+					const categorySeries = (res.data.category.series || []).slice().reverse()
+					this.categorySummary = res.data.category
+					this.categoryOption.yAxis.data = categorySeries.map(item => item.name)
+					this.categoryOption.series[0].data = categorySeries.map(item => item.value)
 					this.initCategoryEcharts()
-					//渲染标签数据
-					this.tagOption.legend.data = res.data.tag.legend
-					this.tagOption.series[0].data = res.data.tag.series
+					const tagSeries = (res.data.tag.series || []).slice().reverse()
+					this.tagSummary = res.data.tag
+					this.tagOption.yAxis.data = tagSeries.map(item => item.name)
+					this.tagOption.series[0].data = tagSeries.map(item => item.value)
 					this.initTagEcharts()
 					//渲染访客地图数据
 					let mapData = this.convertData(res.data.cityVisitor)
@@ -580,6 +656,31 @@
 		height: 350px;
 	}
 
+	.distribution-charts .chart {
+		height: 350px;
+	}
+
+	.distribution-body { height:390px; }
+	.ranking-scroll { height:350px; overflow-x:hidden; overflow-y:auto; padding:8px 8px 4px 4px; box-sizing:border-box; scrollbar-width:thin; scrollbar-color:#cbd5e1 transparent; }
+	.ranking-scroll::-webkit-scrollbar { width:5px; }
+	.ranking-scroll::-webkit-scrollbar-thumb { border-radius:999px; background:#cbd5e1; }
+	.ranking-scroll::-webkit-scrollbar-track { background:transparent; }
+	.ranking-row { display:flex; min-height:32px; align-items:center; gap:9px; border-bottom:1px solid #f3f5f7; color:#667386; font-size:12px; }
+	.ranking-index { width:25px; flex:0 0 25px; color:#a0a9b4; text-align:right; }
+	.ranking-row:nth-child(-n+3) .ranking-index { color:#409eff; font-weight:700; }
+	.ranking-name { width:132px; flex:0 0 132px; overflow:hidden; color:#465568; text-overflow:ellipsis; white-space:nowrap; }
+	.ranking-bar { position:relative; height:7px; flex:1; overflow:hidden; border-radius:999px; background:#eef4fa; }
+	.ranking-bar i { display:block; height:100%; border-radius:inherit; background:#49a9ee; }
+	.tag-ranking-bar i { background:#67c7c1; }
+	.ranking-row strong { width:42px; flex:0 0 42px; color:#536274; text-align:right; }
+	.ranking-toggle { display:flex; width:100%; height:40px; align-items:center; justify-content:center; gap:7px; padding:0; border:0; border-top:1px solid #eef1f5; outline:none; background:#fff; color:#8b97a6; font-size:12px; cursor:pointer; transition:color .2s,background .2s; }
+	.ranking-toggle:hover { color:#409eff; background:#f7fbff; }
+	.ranking-dots { letter-spacing:3px; transform:translateY(-2px); }
+
+	.map-chart {
+		height: 420px;
+	}
+
 	.trend-chart {
 		height: 340px;
 	}
@@ -587,6 +688,10 @@
 	@media (max-width: 768px) {
 		.dashboard-container { padding: 16px; }
 		.dashboard-date { display: none; }
-		.chart { height: 320px; }
+		.chart,
+		.distribution-charts .chart,
+		.map-chart { height: 340px; }
+		.distribution-body { height:380px; }
+		.ranking-scroll { height:340px; }
 	}
 </style>
