@@ -1,0 +1,26 @@
+blog-view-ui/src/views/Index.vue
+  s_b454078cfee2fc::t_88241d760b731d 212-216
+blog-view-ui/src/components/index/Header.vue
+  s_b454078cfee2fc::t_22db38366a1278 157
+  s_b454078cfee2fc::t_f1d5a4e1b9b012 143-144,149,151,155-156
+blog-view-ui/src/views/home/Home.vue
+  s_b454078cfee2fc::t_605e655878f3d2 169,175-176,180
+  s_b454078cfee2fc::t_fb470e0c0861e8 219-220,239-247,249-254
+  s_b454078cfee2fc::t_7de940507dfdb3 142-149,165-168,170-174,177-179,181-207
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8325cfac86d82921698a3cf92e789f443a8fb957",
+  "prompts": {},
+  "sessions": {
+    "s_b454078cfee2fc": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f4722dadeffeQa1jlzuO2bYtZS",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
