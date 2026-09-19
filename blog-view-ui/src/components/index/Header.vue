@@ -140,18 +140,21 @@
 	}
 
 	.wrapper i {
-		font-size: 60px;
-		opacity: 0.5;
+		font-size: 50px;
+		color: rgba(255, 255, 255, .72);
 		cursor: pointer;
 		position: absolute;
 		top: 55px;
 		left: 20px;
+		text-shadow: 0 1px 8px rgba(0, 0, 0, .4);
 		animation: opener .5s ease-in-out alternate infinite;
-		transition: opacity .2s ease-in-out, transform .5s ease-in-out .2s;
+		transition: color .2s ease-in-out, transform .3s ease;
 	}
 
 	.wrapper i:hover {
-		opacity: 1;
+		color: rgba(255, 255, 255, .95);
+		text-shadow: 0 1px 12px rgba(0, 0, 0, .45);
+		transform: translateY(3px);
 	}
 
 	@keyframes opener {
