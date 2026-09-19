@@ -3,15 +3,12 @@ package com.changlu.blogloom.util.upload;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import com.changlu.blogloom.constant.UploadConstants;
 import com.changlu.blogloom.exception.BadRequestException;
-import com.changlu.blogloom.util.upload.channel.ChannelFactory;
-import com.changlu.blogloom.util.upload.channel.FileUploadChannel;
+import com.changlu.blogloom.util.upload.channel.LocalChannel;
 
 /**
  * @Description: 图片下载保存工具类
@@ -19,20 +16,19 @@ import com.changlu.blogloom.util.upload.channel.FileUploadChannel;
  * @Date: 2026-09-13
  */
 @Component
-@DependsOn("springContextUtils")
 public class UploadUtils {
 	private static RestTemplate restTemplate;
 
-	private static FileUploadChannel uploadChannel;
+	private static LocalChannel uploadChannel;
 
 	@Autowired
 	public void setRestTemplate(RestTemplate restTemplate) {
 		UploadUtils.restTemplate = restTemplate;
 	}
 
-	@Value("${upload.channel}")
-	public void setNotifyChannel(String channelName) {
-		UploadUtils.uploadChannel = ChannelFactory.getChannel(channelName);
+	@Autowired
+	public void setUploadChannel(LocalChannel uploadChannel) {
+		UploadUtils.uploadChannel = uploadChannel;
 	}
 
 	@AllArgsConstructor
@@ -44,7 +40,7 @@ public class UploadUtils {
 	}
 
 	/**
-	 * 通过指定方式存储图片
+	 * 保存图片到本地
 	 *
 	 * @param image 需要保存的图片
 	 * @throws Exception

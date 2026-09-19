@@ -157,39 +157,6 @@ const routes = [
 		]
 	},
 	{
-		path: '/pictureHosting',
-		name: 'PictureHosting',
-		redirect: '/pictureHosting/setting',
-		component: Layout,
-		meta: {title: '图床管理', icon: 'el-icon-picture-outline'},
-		children: [
-			{
-				path: 'setting',
-				name: 'Setting',
-				component: () => import('@/views/pictureHosting/Setting'),
-				meta: {title: '配置', icon: 'el-icon-setting'}
-			},
-			{
-				path: 'github',
-				name: 'GithubManage',
-				component: () => import('@/views/pictureHosting/GithubManage'),
-				meta: {title: 'GitHub', icon: 'github'}
-			},
-			{
-				path: 'upyun',
-				name: 'UpyunManage',
-				component: () => import('@/views/pictureHosting/UpyunManage'),
-				meta: {title: '又拍云', icon: 'el-icon-upload'}
-			},
-			{
-				path: 'txyun',
-				name: 'TxyunManage',
-				component: () => import('@/views/pictureHosting/TxyunManage'),
-				meta: {title: '腾讯云', icon: 'el-icon-cloudy'}
-			},
-		]
-	},
-	{
 		path: '/system',
 		name: 'System',
 		redirect: '/system/job',

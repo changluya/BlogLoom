@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 @Lazy
 @Component
-public class LocalChannel implements FileUploadChannel {
+public class LocalChannel {
 	@Autowired
 	private BlogProperties blogProperties;
 	@Autowired
@@ -33,7 +33,6 @@ public class LocalChannel implements FileUploadChannel {
 	 * @return 访问图片的URL
 	 * @throws Exception
 	 */
-	@Override
 	public String upload(UploadUtils.ImageResource image) throws Exception {
 		Path folder = Paths.get(uploadProperties.getPath());
 		Files.createDirectories(folder);

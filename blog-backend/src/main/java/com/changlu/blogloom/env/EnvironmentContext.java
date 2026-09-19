@@ -32,10 +32,6 @@ public class EnvironmentContext {
 		return environment.getProperty("blog.view", "http://localhost:8081");
 	}
 
-	public String getUploadChannel() {
-		return environment.getProperty("upload.channel", "local");
-	}
-
 	public String getUploadFilePath() {
 		return SystemPropertyUtil.getLocalUploadFileDir();
 	}
