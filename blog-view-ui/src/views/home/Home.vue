@@ -27,8 +27,8 @@
 			</div>
 			<div v-if="!searchResults.length" class="search-empty">无相关结果</div>
 			<a v-for="item in searchResults" :key="item.id" href="javascript:;" class="search-hit" @click.prevent="toBlog(item)">
-				<div class="search-hit-title">{{ item.title }}</div>
-				<div class="search-hit-content">{{ strip(item.content) }}</div>
+				<div class="search-hit-title" v-html="highlight(item.title)"></div>
+				<div class="search-hit-content" v-html="highlight(snippet(item.content))"></div>
 			</a>
 		</div>
 
@@ -129,7 +129,35 @@
 					.replace(/[#*`>]/g, ' ')
 					.replace(/\s+/g, ' ')
 					.trim()
-					.slice(0, 120)
+			},
+			// 以关键词为中心截取摘要，避免命中词落在截断范围之外
+			snippet(html) {
+				const text = this.strip(html)
+				const q = (this.lastKeyword || '').trim()
+				if (!q) return text.slice(0, 120)
+				const idx = text.toLowerCase().indexOf(q.toLowerCase())
+				if (idx <= 40) return text.slice(0, 120)
+				const start = idx - 40
+				return '…' + text.slice(start, start + 120)
+			},
+			escapeHtml(text) {
+				return String(text)
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;')
+					.replace(/"/g, '&quot;')
+					.replace(/'/g, '&#39;')
+			},
+			escapeRegExp(text) {
+				return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+			},
+			// 高亮标题与摘要中的搜索关键词
+			highlight(text) {
+				const safe = this.escapeHtml(text || '')
+				const q = (this.lastKeyword || '').trim()
+				if (!q) return safe
+				const pattern = this.escapeRegExp(this.escapeHtml(q))
+				return safe.replace(new RegExp(`(${pattern})`, 'gi'), '<mark class="search-highlight">$1</mark>')
 			},
 			toBlog(blog) {
 				this.$store.dispatch('goBlogPage', blog)
@@ -307,6 +335,14 @@
 		color: #7b8491;
 		font-size: 13px;
 		line-height: 1.6;
+	}
+
+	.search-hit ::v-deep .search-highlight {
+		padding: 0 2px;
+		border-radius: 2px;
+		background: rgba(0, 167, 224, .14);
+		color: #00a7e0;
+		font-weight: 600;
 	}
 </style>
 

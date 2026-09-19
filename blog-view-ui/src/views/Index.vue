@@ -1,7 +1,7 @@
 <template>
-	<div class="site" :class="{'home-site': $route.name === 'home', 'blog-detail-site': $route.name === 'blog'}">
-		<!-- 固定在视口的首图；正文向上滚动时从它上方覆盖 -->
-		<div v-if="$route.name === 'home'" class="home-hero-background m-mobile-hide"></div>
+	<div class="site" :class="{'masked-site': showMaskedBackground, 'home-site': $route.name === 'home'}">
+		<!-- 固定在视口的首图；正文向上滚动时由 .main 的浅色遮罩覆盖 -->
+		<div v-if="showMaskedBackground" class="home-hero-background m-mobile-hide"></div>
 		<!--顶部导航-->
 		<Nav :blogName="siteInfo.blogName"/>
 		<!--首页大图 只在首页且pc端时显示-->
@@ -89,7 +89,12 @@
 			}
 		},
 		computed: {
-			...mapState(['focusMode', 'introduction'])
+			...mapState(['focusMode', 'introduction']),
+			// 需要固定首图 + 浅色遮罩的页面（与首页一致的滚动遮罩效果）
+			showMaskedBackground() {
+				return ['home', 'archives', 'moments', 'friends', 'about', 'category', 'tag', 'blog']
+					.includes(this.$route.name)
+			}
 		},
 		created() {
 			this.getSite()
@@ -173,22 +178,25 @@
 	}
 
 	/* 正文露出时，这块固定浓度的浅色遮罩随内容向上覆盖首图 */
-	.home-site .main {
-		margin-top: 0;
-		padding-top: 40px;
+	.masked-site .main {
 		background: rgba(239, 239, 239, .42);
 	}
 
-	/* Footer 自带的顶部外边距会透出固定首图，首页上改为无缝衔接 */
-	.home-site > footer {
+	/* 首页：首屏大图紧接遮罩，去掉外边距改用内边距 */
+	.home-site .main {
 		margin-top: 0;
+		padding-top: 40px;
 	}
 
-	.blog-detail-site .main {
-		background:
-			radial-gradient(circle at 15% 8%, rgba(45, 212, 191, .08), transparent 25%),
-			radial-gradient(circle at 86% 15%, rgba(56, 189, 248, .08), transparent 22%),
-			linear-gradient(180deg, #f4f7fa 0, #eef2f5 55%, #f3f5f7 100%);
+	/* 其余遮罩页面：同样用内边距代替外边距，避免顶部/底部露出未遮盖的首图 */
+	.masked-site:not(.home-site) .main {
+		margin-top: 0;
+		padding-top: 40px;
+	}
+
+	/* Footer 自带的顶部外边距会透出固定首图，遮罩页面改为无缝衔接 */
+	.masked-site > footer {
+		margin-top: 0;
 	}
 
 	.main .ui.container {

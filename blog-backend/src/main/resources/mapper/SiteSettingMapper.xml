@@ -7,6 +7,11 @@
         select * from site_setting
     </select>
 
+    <!--按 name_en 查询单条站点设置-->
+    <select id="getByNameEn" resultType="com.changlu.blogloom.entity.SiteSetting">
+        select * from site_setting where name_en=#{nameEn} limit 1
+    </select>
+
     <!--查询友链页面信息-->
     <select id="getFriendInfo" resultType="com.changlu.blogloom.entity.SiteSetting">
         select * from site_setting where type=4

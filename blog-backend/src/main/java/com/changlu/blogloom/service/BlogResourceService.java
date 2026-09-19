@@ -4,8 +4,6 @@ import com.changlu.blogloom.model.dto.Blog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -20,7 +18,7 @@ public class BlogResourceService {
 	private static final Pattern HTML_ATTRIBUTE_PATTERN = Pattern.compile("(?i)(\\b(?:src|href|poster)\\s*=\\s*)(['\"])([^'\"\\s]+)(\\2)");
 
 	@Autowired
-	private LocalResourceStorageService localResourceStorageService;
+	private ResourceStorageService resourceStorageService;
 
 	/**
 	 * 将正文、描述和首图中的 /static/tmp/** 资源复制到博客目录，并重写链接。
@@ -33,7 +31,7 @@ public class BlogResourceService {
 		blog.setContent(rewriteContent(blog.getContent(), blogId, temporaryResources));
 		// 只有 copyToBlog 成功后才会记录临时资源，所有引用重写完成后再统一删除源文件。
 		for (String temporaryResource : temporaryResources) {
-			localResourceStorageService.deleteTemporaryResource(temporaryResource);
+			resourceStorageService.deleteTemporaryResource(temporaryResource);
 		}
 	}
 
@@ -127,8 +125,8 @@ public class BlogResourceService {
 		}
 		// 步骤 3：从 uploadRoot/{managedPath} 复制到 uploadRoot/blogs/{blogId}/**。
 		String archivedPath = cover
-				? localResourceStorageService.copyToBlogCover(blogId, managedPath)
-				: localResourceStorageService.copyToBlog(blogId, managedPath);
+				? resourceStorageService.copyToBlogCover(blogId, managedPath)
+				: resourceStorageService.copyToBlog(blogId, managedPath);
 		if (archivedPath == null) {
 			return url;
 		}
@@ -136,45 +134,12 @@ public class BlogResourceService {
 		if (managedPath.replace('\\', '/').startsWith("tmp/")) {
 			temporaryResources.add(managedPath);
 		}
-		// 步骤 4：构造 {blog.api}/static/blogs/{blogId}/** 并恢复原 URL 的查询参数/锚点。
-		return localResourceStorageService.buildAccessUrl(archivedPath) + suffix;
+		// 步骤 4：构造归档后的访问地址并恢复原 URL 的查询参数/锚点。
+		return resourceStorageService.buildAccessUrl(archivedPath) + suffix;
 	}
 
 	private String toManagedRelativePath(String url) {
-		String path = url;
-		try {
-			URI uri = new URI(url);
-			if (uri.isAbsolute()) {
-				if (!"http".equalsIgnoreCase(uri.getScheme()) && !"https".equalsIgnoreCase(uri.getScheme())) {
-					return null;
-				}
-				path = uri.getPath();
-			}
-		} catch (URISyntaxException e) {
-			return null;
-		}
-		if (path == null) {
-			return null;
-		}
-		while (path.startsWith("/")) {
-			path = path.substring(1);
-		}
-		if (path.startsWith("static/")) {
-			return path.substring("static/".length());
-		}
-		if (path.startsWith("image/")) {
-			return path.substring("image/".length());
-		}
-		if (path.startsWith("upload/tmp/")) {
-			return path.substring("upload/".length());
-		}
-		if (path.startsWith("upload/blogs/")) {
-			return path.substring("upload/".length());
-		}
-		if (path.startsWith("tmp/") || path.startsWith("blogs/")) {
-			return path;
-		}
-		return null;
+		return resourceStorageService.toManagedRelativePath(url);
 	}
 
 	private int findSuffixIndex(String url) {

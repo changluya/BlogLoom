@@ -60,6 +60,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		List<SiteSetting> type2 = new ArrayList<>();
 		List<SiteSetting> type3 = new ArrayList<>();
 		List<SiteSetting> type5 = new ArrayList<>();
+		List<SiteSetting> type6 = new ArrayList<>();
 		for (SiteSetting s : siteSettings) {
 			// 自定义模块固定归入独立分组，避免历史上被当作资料卡记录展示
 			if (SiteSettingConstants.CUSTOM_MODULE.equals(s.getNameEn())) {
@@ -76,6 +77,9 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 				case 3:
 					type3.add(s);
 					break;
+				case 6:
+					type6.add(s);
+					break;
 				default:
 					break;
 			}
@@ -85,6 +89,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		map.put("type2", type2);
 		map.put("type3", type3);
 		map.put("type5", type5);
+		map.put("type6", type6);
 		return map;
 	}
 

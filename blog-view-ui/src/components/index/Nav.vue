@@ -24,8 +24,8 @@
 			                 popper-class="m-search-item" aria-label="搜索文章" @select="handleSelect">
 				<i class="search icon el-input__icon" slot="suffix"></i>
 				<template slot-scope="{ item }">
-					<div class="title">{{ item.title }}</div>
-					<span class="content">{{ item.content }}</span>
+					<div class="title" v-html="highlight(item.title)"></div>
+					<span class="content" v-html="highlight(strip(item.content))"></span>
 				</template>
 			</el-autocomplete>
 			<button class="ui menu black icon button m-right-top m-mobile-show" @click="toggle">
@@ -52,6 +52,7 @@
 				mobileHide: true,
 				queryString: '',
 				queryResult: [],
+				searchKeyword: '',
 				timer: null
 			}
 		},
@@ -110,6 +111,7 @@
 					callback([])
 					return
 				}
+				this.searchKeyword = queryString.trim()
 				getSearchBlogList(queryString).then(res => {
 					if (res.code === 200) {
 						this.queryResult = res.data
@@ -124,6 +126,33 @@
 					callback([])
 					this.msgError("请求失败")
 				})
+			},
+			strip(html) {
+				if (!html) return ''
+				return html
+					.replace(/<[^>]+>/g, '')
+					.replace(/[#*`>]/g, ' ')
+					.replace(/\s+/g, ' ')
+					.trim()
+			},
+			escapeHtml(text) {
+				return String(text)
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;')
+					.replace(/"/g, '&quot;')
+					.replace(/'/g, '&#39;')
+			},
+			escapeRegExp(text) {
+				return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+			},
+			// 高亮标题与摘要中的搜索关键词
+			highlight(text) {
+				const safe = this.escapeHtml(text || '')
+				const q = (this.searchKeyword || '').trim()
+				if (!q) return safe
+				const pattern = this.escapeRegExp(this.escapeHtml(q))
+				return safe.replace(new RegExp(`(${pattern})`, 'gi'), '<mark class="search-highlight">$1</mark>')
 			},
 			handleSelect(item) {
 				if (item.id) {
@@ -309,6 +338,14 @@
 		text-overflow: ellipsis;
 		font-size: 12px;
 		color: rgba(0, 0, 0, .70);
+	}
+
+	.m-search-item .search-highlight {
+		padding: 0 1px;
+		border-radius: 2px;
+		background: rgba(0, 167, 224, .16);
+		color: #0077a3;
+		font-weight: 600;
 	}
 
 </style>

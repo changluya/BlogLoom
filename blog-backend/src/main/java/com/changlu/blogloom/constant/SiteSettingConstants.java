@@ -20,4 +20,6 @@ public class SiteSettingConstants {
 	public static final String FAVORITE = "favorite";
 	public static final String ROLL_TEXT = "rollText";
 	public static final String CUSTOM_MODULE = "customModule";
+	public static final String UPLOAD_CHANNEL_CHOOSE = "uploadChannelChoose";
+	public static final String UPLOAD_CHANNEL_ALIYUN = "uploadChannelAliyun";
 }

@@ -279,7 +279,7 @@ Service 必须在一个数据库事务内完成：校验节点存在、校验目
 ```text
 file              ZIP 文件
 targetParentId    导入目标目录，默认 0（虚拟根目录）
-published         是否直接发布，默认 false
+published         是否直接发布，默认 true
 conflictPolicy    SKIP 或 RENAME，默认 SKIP
 ```
 
@@ -364,8 +364,8 @@ my-knowledge/
 | `content` | 文件 UTF-8 原文，不移除一级标题 |
 | `description` | 去除 Markdown 标记后的首段，截断到约 200 字；为空时使用标题 |
 | `first_picture` | 不要求导入参数，首期写入空字符串 |
-| `published` | 使用导入参数，默认 `false` |
-| `recommend/appreciation/commentEnabled/top` | 使用安全默认值 `false/false/true/false` |
+| `published` | 使用导入参数，默认 `true`（公开） |
+| `recommend/appreciation/commentEnabled/top` | 使用安全默认值 `false/true/true/false`（默认开启赞赏与评论） |
 | `category` | 自动使用名为“知识库”的分类；不存在时在导入事务中创建 |
 | `tags` | 首期为空，后续可解析 Front Matter |
 | `words/readTime` | 复用现有字数和阅读时长计算规则 |

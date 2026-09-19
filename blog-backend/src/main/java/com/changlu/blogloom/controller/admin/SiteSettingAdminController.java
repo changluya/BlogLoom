@@ -12,8 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 import com.changlu.blogloom.annotation.OperationLogger;
 import com.changlu.blogloom.entity.SiteSetting;
+import com.changlu.blogloom.model.dto.ImageHostTestRequest;
 import com.changlu.blogloom.model.vo.Result;
 import com.changlu.blogloom.service.SiteSettingService;
+import com.changlu.blogloom.service.storage.ImageHostConnectivityService;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,6 +31,8 @@ import java.util.Map;
 public class SiteSettingAdminController {
 	@Autowired
 	SiteSettingService siteSettingService;
+	@Autowired
+	ImageHostConnectivityService imageHostConnectivityService;
 
 	/**
 	 * 获取所有站点配置信息
@@ -60,6 +64,19 @@ public class SiteSettingAdminController {
 	@PostMapping(value = "/siteSettings/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Result uploadImage(@PathVariable Integer id, @RequestParam("file") MultipartFile file) {
 		return Result.ok("上传成功", siteSettingService.uploadImage(id, file));
+	}
+
+	/**
+	 * 图床渠道连通性测试：模拟上传后立即删除。
+	 *
+	 * @param request 渠道标识与渠道配置字符串（配置为空时使用已保存配置）
+	 * @return
+	 */
+	@OperationLogger("测试图床连通性")
+	@PostMapping("/imageHost/test")
+	public Result testImageHost(@RequestBody ImageHostTestRequest request) {
+		return Result.ok("连通性正常",
+				imageHostConnectivityService.test(request.getChannel(), request.getValue()));
 	}
 
 	/**

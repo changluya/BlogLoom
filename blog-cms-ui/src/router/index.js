@@ -130,6 +130,21 @@ const routes = [
 		]
 	},
 	{
+		path: '/imageHost',
+		name: 'ImageHost',
+		redirect: '/imageHost/setting',
+		component: Layout,
+		meta: {title: '图床管理', icon: 'el-icon-picture-outline'},
+		children: [
+			{
+				path: 'setting',
+				name: 'ImageHostSetting',
+				component: () => import('@/views/imageHost/ImageHostSetting'),
+				meta: {title: '设置图床', icon: 'el-icon-setting'}
+			},
+		]
+	},
+	{
 		path: '/page',
 		name: 'Page',
 		redirect: '/page/site',

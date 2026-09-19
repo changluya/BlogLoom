@@ -58,7 +58,7 @@ import java.util.zip.ZipFile;
  *     <li>标签（tags，3-5 个，逗号分隔）与分类（category，单个）若数据库不存在则自动创建，再与文章建立关联；</li>
  *     <li>标题取元数据 title，文章描述取元数据 articleSummary（150 字以内）；</li>
  *     <li>专栏取元数据 columns（多个，逗号分隔），仅匹配已存在的专栏并关联，未匹配到则不关联（不自动创建）；</li>
- *     <li>默认按“公开”状态导入（published 默认 true）；</li>
+ *     <li>默认按“公开”状态导入（published 默认 true），且默认开启赞赏与评论；</li>
  *     <li>创建/更新时间取元数据 createTime/updateTime（格式 YYYY-MM-DD HH:mm:ss），缺省时使用导入时间。</li>
  * </ol>
  *
@@ -254,7 +254,7 @@ public class KnowledgeImportWorker {
 
 	/**
 	 * 构建博客实体，完成“元数据 -> 博客字段”的映射。
-	 * 规则3：title 即文章标题；规则5：published 默认公开。
+	 * 规则3：title 即文章标题；规则5：published 默认公开，赞赏与评论默认开启。
 	 */
 	private com.changlu.blogloom.model.dto.Blog buildBlog(String title, String content, String description,
 	                                                      String firstPicture, Category category, List<Long> columnIds,
@@ -268,10 +268,11 @@ public class KnowledgeImportWorker {
 		blog.setDescription(description);
 		// 规则1：firstPicture 来自正文第一个图片链接，空值写空串（数据库字段非空）
 		blog.setFirstPicture(firstPicture == null ? "" : firstPicture);
-		// 规则5：默认公开导入；published 为 null 时也视为公开
+		// 规则5：默认公开导入；published 为 null 时也视为公开；赞赏与评论默认开启
 		blog.setPublished(options.getPublished() == null || options.getPublished());
+		blog.setAppreciation(true); blog.setCommentEnabled(true);
 		// 其余展示属性使用安全默认值
-		blog.setRecommend(false); blog.setAppreciation(false); blog.setCommentEnabled(true); blog.setTop(false);
+		blog.setRecommend(false); blog.setTop(false);
 		blog.setViews(0); blog.setPassword("");
 		// 依据正文字符数估算字数与阅读时长（按 200 字/分钟）
 		int words = content.replaceAll("\\s+", "").length();

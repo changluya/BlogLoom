@@ -1,7 +1,7 @@
 package com.changlu.blogloom.controller.admin;
 
 import com.changlu.blogloom.model.vo.Result;
-import com.changlu.blogloom.service.LocalResourceStorageService;
+import com.changlu.blogloom.service.ResourceStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/admin/blog")
 public class BlogResourceAdminController {
 	@Autowired
-	private LocalResourceStorageService localResourceStorageService;
+	private ResourceStorageService resourceStorageService;
 
 	@PostMapping(value = "/resources", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Result upload(@RequestParam("file") MultipartFile file) {
-		return Result.ok("上传成功", localResourceStorageService.uploadTemp(file));
+		return Result.ok("上传成功", resourceStorageService.uploadTemp(file));
 	}
 }
