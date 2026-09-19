@@ -209,6 +209,11 @@
 		padding-top: 0;
 	}
 
+	/* 首页中栏面板与行底部对齐，避免面板下方露出空隙 */
+	.home-site .main .ui.stackable.grid > .ten.column {
+		padding-bottom: 0;
+	}
+
 	/* 桌面端：中栏撑满行高，使空列表卡片可与左侧栏（专栏展开）等高 */
 	@media (min-width: 768px) {
 		.main .ui.stackable.grid > .ten.column {

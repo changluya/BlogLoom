@@ -139,6 +139,14 @@
 </script>
 
 <style scoped>
+	/* 中栏整体化为一块面板：工具栏、列表、分页共用同一底色，内部不再有空白间隔 */
+	.home-page {
+		overflow: hidden;
+		border-radius: 8px;
+		background: rgba(255, 255, 255, .96);
+		box-shadow: 0 1px 4px rgba(5, 12, 24, .06);
+	}
+
 	/* 桌面端：作为中栏弹性容器，让列表区撑满剩余高度 */
 	@media (min-width: 768px) {
 		.home-page {
@@ -154,11 +162,49 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 16px;
-		margin-bottom: 14px;
-		padding: 10px 16px;
-		border-radius: 8px;
-		background: rgba(255, 255, 255, .96);
-		box-shadow: 0 1px 4px rgba(5, 12, 24, .06);
+		padding: 12px 16px;
+		border-bottom: 1px solid #eef1f5;
+	}
+
+	/* 列表卡片融入面板：去掉独立卡片的边框/圆角/阴影/外边距，仅保留分隔线 */
+	.home-page ::v-deep .blog-card {
+		margin-bottom: 0 !important;
+		border-radius: 0 !important;
+		background: transparent !important;
+		box-shadow: none !important;
+		border: 0 !important;
+		border-bottom: 1px solid #eef1f5 !important;
+	}
+
+	.home-page ::v-deep .blog-card:last-child {
+		border-bottom: 0 !important;
+	}
+
+	/* 空状态与搜索结果同样融入面板 */
+	.home-page ::v-deep .blog-empty {
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	.home-page ::v-deep .search-summary {
+		padding: 12px 16px 0;
+	}
+
+	.home-page ::v-deep .search-hit {
+		margin-bottom: 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+		border-bottom: 1px solid #eef1f5;
+	}
+
+	.home-page ::v-deep .search-hit:last-child {
+		border-bottom: 0;
+	}
+
+	.home-page ::v-deep .blog-list .ui.bottom {
+		padding: 14px 16px;
 	}
 
 	.home-filters {
@@ -170,7 +216,8 @@
 	.filter-tab {
 		display: inline-flex;
 		align-items: center;
-		gap: 5px;
+		gap: 6px;
+		line-height: 1;
 		padding: 6px 14px;
 		border-radius: 6px;
 		color: #5b6470;
@@ -189,14 +236,25 @@
 		background: #00a7e0;
 	}
 
-	.filter-tab .icon {
+	/* 统一图标盒，让左侧图标与右侧文字垂直居中对齐（含 Semantic 图标与内联 SVG） */
+	.filter-tab .icon,
+	.filter-tab .filter-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1em;
+		height: 1em;
+		line-height: 1;
 		margin: 0 !important;
+		font-size: 13px;
+		flex: 0 0 auto;
+	}
+
+	.filter-tab .icon:before {
+		line-height: 1;
 	}
 
 	.filter-icon {
-		width: 1em;
-		height: 1em;
-		flex: 0 0 auto;
 		fill: currentColor;
 	}
 
