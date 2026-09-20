@@ -39,7 +39,7 @@
 
 ```bash
 mkdir blogloom && cd blogloom
-curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/feat_1.0.x_4/docker/standalone/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash
 ```
 
 自动解析最新版本、拉取镜像、启动 `blogloom-app` + `blogloom-mysql` 并完成数据库初始化。

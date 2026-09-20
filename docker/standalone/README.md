@@ -9,7 +9,7 @@
 mkdir blogloom && cd blogloom
 
 # 2. 一键部署（自动拉取镜像并启动）
-curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/feat_1.0.x_4/docker/standalone/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash
 
 # 3. 浏览器访问
 #    博客前台 http://<服务器IP>:18080
@@ -88,6 +88,6 @@ blogloom/
 ## 手动方式（不使用 install.sh）
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/changluya/BlogLoom/feat_1.0.x_4/docker/standalone/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/docker-compose.yml
 docker compose up -d
 ```
