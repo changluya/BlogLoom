@@ -113,41 +113,41 @@ BlogLoom brings posts, categories, tags, columns, moments, comments and site con
 
 <div className="hs-cards">
 
-<div className="hs-card">
- <h3>Authoring</h3>
- <p>Markdown editor, categories, tags, cover and publishing options.</p>
- <a href="/v1/en/guide/admin/article-editor">Learn more →</a>
-</div>
+ <div className="hs-card">
+  <h3>Authoring</h3>
+  <p>Markdown editor, local knowledge base, categories, tags, columns and publishing options.</p>
+  <a href="/v1/en/guide/admin/article-editor">Learn more →</a>
+ </div>
 
-<div className="hs-card">
- <h3>Public blog</h3>
- <p>Home, articles, archive, search, moments and comments.</p>
- <a href="/v1/en/guide/frontend/home">Learn more →</a>
-</div>
+ <div className="hs-card">
+  <h3>Public blog</h3>
+  <p>Home, articles, archive, search, moments, custom sections and comments.</p>
+  <a href="/v1/en/guide/frontend/home">Learn more →</a>
+ </div>
 
-<div className="hs-card">
- <h3>Admin console</h3>
- <p>Dashboard, content management, site settings and logs.</p>
- <a href="/v1/en/guide/admin/dashboard">Learn more →</a>
-</div>
+ <div className="hs-card">
+  <h3>Admin console</h3>
+  <p>Dashboard, content management, recycle bin, site settings and logs.</p>
+  <a href="/v1/en/guide/admin/dashboard">Learn more →</a>
+ </div>
 
-<div className="hs-card">
- <h3>Image hosting</h3>
- <p>Local upload plus GitHub, Upyun and Tencent Cloud storage.</p>
- <a href="/v1/en/integration/storage/local">Learn more →</a>
-</div>
+ <div className="hs-card">
+  <h3>Image hosting</h3>
+  <p>Local upload plus Aliyun OSS storage, with a connectivity test.</p>
+  <a href="/v1/en/integration/storage/local">Learn more →</a>
+ </div>
 
-<div className="hs-card">
- <h3>Analytics</h3>
- <p>PV, UV, content counts, category and tag distribution, visitor map.</p>
- <a href="/v1/en/guide/admin/dashboard">Learn more →</a>
-</div>
+ <div className="hs-card">
+  <h3>Analytics</h3>
+  <p>PV, UV, content counts, category/tag post aggregation, visitor map.</p>
+  <a href="/v1/en/guide/admin/dashboard">Learn more →</a>
+ </div>
 
-<div className="hs-card">
- <h3>Deployment</h3>
- <p>Environment, installation, configuration and troubleshooting.</p>
- <a href="/v1/en/deploy/index">Learn more →</a>
-</div>
+ <div className="hs-card">
+  <h3>Deployment</h3>
+  <p>Environment, installation, one-click Docker deployment, configuration and troubleshooting.</p>
+  <a href="/v1/en/deploy/index">Learn more →</a>
+ </div>
 
 </div>
 
@@ -160,7 +160,7 @@ BlogLoom brings posts, categories, tags, columns, moments, comments and site con
 <h2>Ready to launch your blog?</h2>
 
 <p>
-Follow the quick start to initialize the database, run the backend, and launch both the public blog and the admin console. All you need is JDK, Maven and Node.js.
+Follow the quick start to initialize the database, run the backend, and launch both the public blog and the admin console. All you need is JDK, Maven and Node.js; you can also deploy with Docker in one command, with no JDK or Node.js on the server.
 </p>
 
 <a href="/v1/en/guide/quickstart" className="hs-btn hs-btn--primary">Start building →</a>
@@ -172,7 +172,7 @@ Follow the quick start to initialize the database, run the backend, and launch b
 <h2>FAQ</h2>
 
 <Accordion title="What are the runtime requirements?">
-`JDK 8+`, `Maven 3.6+`, `Node.js 16+`, plus `MySQL 5.7+` and `Redis 5+`. See [Environment](/v1/en/deploy/environment).
+`JDK 8+`, `Maven 3.6+`, `Node.js 16+`, plus `MySQL 5.7+`. See [Environment](/v1/en/deploy/environment).
 </Accordion>
 
 <Accordion title="What is the default admin account?">
@@ -180,7 +180,7 @@ After importing the full SQL, the default account is `admin` with password `1234
 </Accordion>
 
 <Accordion title="Which image storage options are supported?">
-Local upload is built in, with GitHub, Upyun and Tencent Cloud integrations. See [Image storage](/v1/en/integration/storage/local).
+Local upload is built in, with Aliyun OSS integration. See [Image storage](/v1/en/integration/storage/local).
 </Accordion>
 
 <Accordion title="Can I extend it?">

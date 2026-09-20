@@ -10,7 +10,7 @@ description: REST API、认证、业务逻辑、数据访问与任务调度。
 | 范围 | 技术 |
 | --- | --- |
 | 基础 | Java 8、Spring Boot 2.2.7、Spring MVC |
-| 数据与缓存 | MyBatis、PageHelper、MySQL、Redis |
+| 数据与缓存 | MyBatis、PageHelper、MySQL（含内部缓存） |
 | 安全与任务 | Spring Security、JWT、Quartz、Spring Retry |
 | 内容与工具 | commonmark-java、ip2region、Yauaa、Hutool |
 
@@ -22,7 +22,7 @@ service/      业务服务及实现
 mapper/       MyBatis Mapper 接口
 entity/       数据库实体
 model/        DTO 与 VO
-config/       安全、Web、Redis 等配置
+config/       安全、Web、缓存等配置
 task/         定时任务
 util/         Markdown、上传、通知等工具
 ```
@@ -31,11 +31,11 @@ util/         Markdown、上传、通知等工具
 
 - Spring Security + JWT 管理端身份认证
 - MyBatis 数据访问与 PageHelper 分页
-- Redis 缓存及临时状态管理
+- 内部缓存（`cache_entry` 表）及临时状态管理
 - Quartz 定时任务
 - CommonMark Markdown 解析
 - 评论通知与邮件发送
-- 本地及第三方对象存储上传适配
+- 本地与阿里云 OSS 上传适配
 - IP 地域解析、客户端与访问来源识别
 - 统一异常处理与操作日志
 

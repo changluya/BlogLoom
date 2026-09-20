@@ -12,7 +12,6 @@ description: Required software and versions.
 | Node.js | 16+ |
 | npm | Bundled with Node.js |
 | MySQL | 5.7+ or 8 |
-| Redis | 5+ |
 
 ## Ports
 
@@ -22,7 +21,6 @@ description: Required software and versions.
 | `blog-cms-ui` | 8079 |
 | `blog-backend` | 8090 |
 | MySQL | 3306 |
-| Redis | 6379 |
 
 ## Directories
 

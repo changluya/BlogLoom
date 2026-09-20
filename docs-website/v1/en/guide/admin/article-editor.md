@@ -29,7 +29,7 @@ Authoring is the core feature of the admin console, offering Markdown editing an
 
 ## Uploading images
 
-Images in the editor can be uploaded through the image hosting configuration. See [Image storage](/v1/en/integration/storage/local).
+Images in the editor can be uploaded through the image hosting configuration, which supports local and Aliyun OSS. See [Image storage](/v1/en/integration/storage/local).
 
 ## Next steps
 

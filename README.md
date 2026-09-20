@@ -36,11 +36,14 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 ## 项目特点
 
 - **前后端分离**：公开博客、管理后台和 REST API 独立运行、独立构建。
-- **完整内容闭环**：覆盖文章创作、分类标签、评论、页面配置和前台展示。
-- **Markdown 写作体验**：支持 Markdown 编辑、文章描述、目录、代码内容与图片展示。
-- **可配置站点**：站名、头像、首页轮播、社交链接、友链和关于页等内容可集中维护。
-- **运营数据可视化**：管理后台提供 PV、UV、内容数量、分类、标签和访客地域等概览。
-- **多种图片存储方式**：包含本地上传以及 GitHub、又拍云、腾讯云等图床配置入口。
+- **完整内容闭环**：覆盖文章创作、分类标签、专栏、评论、页面配置和前台展示。
+- **Markdown 写作体验**：支持 Markdown 编辑、文章描述、目录、代码高亮与图片展示。
+- **本地知识库**：以目录树管理文章，支持 ZIP 批量导入导出与文章元数据解析。
+- **可配置站点**：站名、图标、头像、页脚、社交链接、友链、关于页与自定义展示模块可集中维护。
+- **运营数据可视化**：管理后台提供访问次数、访客人数、内容数量、分类与标签分布等概览。
+- **内容安全**：文章删除后进入回收站，可恢复或彻底删除。
+- **多种图片存储方式**：支持本地上传与阿里云 OSS 两种图床，并可在后台测试连通性。
+- **Docker 一键部署**：一体化镜像（后端托管前台与后台页面）+ MySQL，命令化完成部署与增量升级。
 - **日志与任务管理**：集中查看访问、登录、操作、异常和定时任务执行信息。
 - **适合二次开发**：后端分层清晰，前台与后台管理端职责独立，方便更换主题或扩展接口。
 
@@ -51,8 +54,9 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 | `blog-view-ui` | 面向访客的博客门户、文章阅读与互动 | <http://localhost:8080> |
 | `blog-cms-ui` | 面向站长的内容管理与运营后台 | <http://localhost:8079> |
 | `blog-backend` | REST API、认证、业务逻辑、数据访问与任务调度 | <http://localhost:8090> |
-| MySQL | 文章、用户、评论、配置及日志等持久化数据 | 数据库名 `blogloom` |
-| Redis | 登录状态、缓存和临时业务数据 | 默认 `127.0.0.1:6379` |
+| MySQL | 业务数据与缓存表（`cache_entry`）等持久化数据 | 数据库名 `blogloom` |
+
+> 说明：缓存已由 MySQL 的 `cache_entry` 表实现，不再依赖 Redis。
 
 ```text
 ┌──────────────────────┐          ┌──────────────────────┐
@@ -66,10 +70,11 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
                │    blog-backend      │
                │ Spring Boot/MyBatis  │
                └──────────┬───────────┘
-                          │
-                 ┌────────┴────────┐
-                 ▼                 ▼
-              MySQL              Redis
+                          ▼
+               ┌──────────────────────┐
+               │        MySQL         │
+               │  业务数据 + 缓存表    │
+               └──────────────────────┘
 ```
 
 ## 功能范围
@@ -78,20 +83,22 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 
 - 首页 Banner、站点导航、个人信息卡片和最新内容展示
 - 文章列表、文章详情、Markdown 内容渲染和图片预览
-- 按分类、标签和归档浏览文章
+- 按分类、标签、专栏和归档浏览文章
 - 站内文章搜索
 - 动态展示与点赞
 - 评论与回复
-- 友链页面和关于页面
+- 友链页面、关于页面与自定义展示模块
 - 响应式布局、资源懒加载与回到顶部等阅读体验
 
 ### 管理后台
 
-- 数据仪表盘：PV、UV、文章数、评论数、分类与标签分布、访客地图
-- 文章创作：Markdown 编辑、分类标签、描述、封面和发布配置
-- 内容管理：文章、动态、分类、标签和评论维护
-- 页面管理：站点设置、友链和关于页内容维护
-- 图床管理：上传配置以及 GitHub、又拍云、腾讯云存储设置
+- 数据仪表盘：访问次数、访客人数、文章数、评论数、分类与标签分布、访客地图
+- 文章创作：Markdown 编辑、分类标签、专栏、描述、封面和发布配置
+- 内容管理：文章、动态、分类、标签、专栏和评论维护
+- 内容安全：文章回收站（恢复 / 彻底删除）
+- 迁移与整理：本地知识库目录树、Markdown 批量导入导出、文章备份
+- 页面管理：站点设置、友链、关于页与自定义展示模块维护
+- 图床管理：本地 / 阿里云 OSS 上传渠道配置与连通性测试
 - 系统管理：账号维护和定时任务管理
 - 日志中心：任务、登录、操作、异常和访问日志
 - 访客统计：访问记录与访问行为分析
@@ -100,11 +107,11 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 
 - Spring Security + JWT 管理端身份认证
 - MyBatis 数据访问与 PageHelper 分页
-- Redis 缓存及临时状态管理
+- MySQL 缓存表（`cache_entry`）及临时状态管理
 - Quartz 定时任务
 - CommonMark Markdown 解析
 - 评论通知与邮件发送能力
-- 本地及第三方对象存储上传适配
+- 本地上传与阿里云 OSS 上传适配
 - IP 地域解析、客户端与访问来源识别
 - 统一异常处理、操作日志和接口分层
 
@@ -113,7 +120,7 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 | 范围 | 主要技术 |
 | --- | --- |
 | 后端基础 | Java 8、Spring Boot 2.2.7.RELEASE、Spring MVC |
-| 数据与缓存 | MyBatis、PageHelper、MySQL、Redis |
+| 数据与缓存 | MyBatis、PageHelper、MySQL（缓存由 `cache_entry` 表实现） |
 | 安全与任务 | Spring Security、JWT、Quartz、Spring Retry |
 | 内容与工具 | commonmark-java、ip2region、Yauaa、Hutool |
 | 管理后台 | Vue 2.6.11、Vite 4.5.14、Element UI、Vuex、Vue Router、ECharts、mavon-editor |
@@ -125,7 +132,6 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 ```text
 BlogLoom/
 ├── assets/                         # README 与项目品牌资源
-│   └── blogloom-logo.png           # BlogLoom 项目 Logo
 ├── blog-backend/                   # Spring Boot 后端
 │   ├── src/main/java/com/changlu/blogloom/
 │   │   ├── controller/             # 公开端与管理端 REST 接口
@@ -133,24 +139,22 @@ BlogLoom/
 │   │   ├── mapper/                 # MyBatis Mapper 接口
 │   │   ├── entity/                 # 数据库实体
 │   │   ├── model/                  # DTO 与 VO
-│   │   ├── config/                 # 安全、Web、Redis 等配置
+│   │   ├── module/                 # 知识库、专栏、缓存等模块
+│   │   ├── config/                 # 安全、Web、静态资源等配置
 │   │   ├── task/                   # 定时任务
 │   │   └── util/                   # Markdown、上传、通知等工具
 │   ├── src/main/resources/         # 配置、Mapper XML 与静态资源
 │   └── pom.xml
-├── sql/
-│   └── increment/
-│       ├── init.sql                # 全量初始化脚本
-│       └── 1.0/                    # 1.0 版本增量数据库脚本
 ├── blog-cms-ui/                    # Vue 管理后台
-│   ├── src/                        # 页面、组件、路由、状态和 API
-│   ├── public/                     # 后台静态资源
-│   └── package.json
 ├── blog-view-ui/                   # Vue 公开博客前台
-│   ├── src/                        # 页面、组件、路由、状态和 API
-│   ├── public/                     # Banner、头像等站点资源
-│   └── package.json
+├── sql/
+│   └── increment/                  # 增量 SQL（含全量初始化基线）
+│       └── 1.0/                    # 1.0 版本数据库脚本
 ├── conf/                           # 外置配置、日志和本地上传目录
+├── docker/                         # Docker 一键部署（镜像、compose、脚本、用户版）
+├── qa/                             # 压测与容量测试脚本
+├── docs/                           # 产品与设计文档
+├── bin/                            # 本地增量升级脚本
 ├── LICENSE                         # MIT License
 └── README.md
 ```
@@ -163,7 +167,8 @@ BlogLoom/
 - Maven 3.6+
 - Node.js 16+ 与 npm
 - MySQL 5.7+ 或 MySQL 8
-- Redis 5+
+
+> 也可以直接使用 Docker 一键部署，无需本地安装 JDK / Maven / Node（见下文「Docker 一键部署」）。
 
 ### 1. 初始化数据库
 
@@ -175,13 +180,14 @@ CREATE DATABASE blogloom
   COLLATE utf8mb4_unicode_ci;
 ```
 
-导入全量初始化脚本：
+全新环境推荐直接使用 Docker 一键部署（会自动完成建库建表）；手动方式可使用本地增量升级脚本，首次运行会按文件名顺序执行 `sql/increment/` 下的全部脚本（含全量初始化基线），即完成初始化：
 
 ```bash
-mysql -u root -p < sql/increment/init.sql
+cp bin/local/deploy.conf.example bin/local/deploy.conf   # 首次需填写数据库连接
+./bin/local/upgrate-sql.sh
 ```
 
-`sql/increment/<版本>/` 用于保存后续版本的增量 SQL。全新环境通常只需导入已经包含最新结构的 `sql/increment/init.sql`；已有环境可使用 `bin/local/upgrate-sql.sh` 快速升级，该脚本不会执行 `init.sql`。
+`sql/increment/<版本>/` 用于保存后续版本的增量 SQL。已有环境再次运行该脚本时，只会执行未执行过的增量脚本（幂等），不会重复执行。
 
 ### 2. 配置后端
 
@@ -200,11 +206,10 @@ conf/application.properties
 启动前至少检查以下项目：
 
 - MySQL 地址、用户名和密码
-- Redis 地址、数据库编号和密码
 - `token.secretKey` 登录令牌密钥
 - `blog.api`、`blog.cms` 与 `blog.view` 的实际访问地址
 - 邮件通知配置（启用评论邮件通知时）
-- 本地上传目录或第三方图床配置
+- 本地上传目录或阿里云 OSS 图床配置
 
 请勿把生产环境的数据库密码、令牌密钥、邮箱授权码或对象存储密钥提交到版本库。
 
@@ -277,34 +282,36 @@ npm run build
 
 ## Docker 一键部署
 
-仓库 `docker/` 目录提供「后端服务（内含博客前台与管理后台页面）+ MySQL」的一键容器化方案，对外仅暴露两个固定非默认端口。核心三条命令：
+仓库 `docker/` 目录提供「后端服务（内含博客前台与管理后台页面）+ MySQL」的容器化方案，对外仅暴露两个固定非默认端口（Web `18080`、MySQL `13306`）。
+
+**用户视角（直接用 Docker Hub 镜像，无需构建）**
+
+```bash
+mkdir blogloom && cd blogloom
+curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash   # 首次部署
+./upgrade.sh                                                                                                 # 后续升级
+```
+
+**开发者视角（从源码构建 / 发布）**
 
 ```bash
 cd docker
-
-# 1. 一键打包：构建一体化镜像并导出离线部署包到 docker/dist/
-./scripts/package.sh 1.0.0
-
-# 2. 一键部署：加载镜像并启动服务（首次自动初始化数据库）
-./scripts/deploy.sh
-
-# 3. 一键升级（增量）：加载新镜像，按历史执行记录执行增量 SQL 并重启
-./scripts/upgrade.sh dist/blogloom-1.0.1.tar
+./scripts/package.sh 1.0.0        # 一键打包：构建一体化镜像并导出离线部署包
+./scripts/deploy.sh               # 一键部署：加载镜像并启动（首次自动初始化数据库）
+./scripts/upgrade.sh              # 一键升级（增量，按历史记录执行未执行的 SQL）
+./scripts/push.sh                 # 推送镜像到 Docker Hub
 ```
 
-默认访问地址为 `http://<服务器IP>:18080`（博客前台）、`http://<服务器IP>:18080/cms`（管理后台），MySQL 对外端口为 `13306`。首次部署请检查 `docker/.env` 中的 `BLOG_API`、`BLOG_CMS`、`BLOG_VIEW`。
-
-完整说明（目录结构、配置项、数据持久化、升级原理与常见问题）见 [docker/README.md](./docker/README.md)。
+默认访问地址为 `http://<服务器IP>:18080`（博客前台）、`http://<服务器IP>:18080/cms`（管理后台）。完整说明见 [docker/README.md](./docker/README.md)。
 
 ## 配置与数据说明
 
 - Java 根包名为 `com.changlu.blogloom`。
 - 默认数据库名为 `blogloom`。
-- 全量数据库脚本为 `sql/increment/init.sql`。
-- 增量升级脚本统一放在 `sql/increment/<版本>/`。
-- 本地增量升级使用 `bin/local/upgrate-sql.sh`。
+- 全量初始化基线为 `sql/increment/1.0/` 下最早的全量脚本；增量升级脚本统一放在 `sql/increment/<版本>/`。
+- 本地增量升级使用 `bin/local/upgrate-sql.sh`（幂等，只执行未执行过的脚本）。
 - `conf/logs/`、`conf/upload/` 与 `conf/static/` 分别用于运行日志、本地上传和外部静态资源。
-- 前端展示内容可能同时受到数据库站点配置和 Redis 缓存影响；修改初始化数据后，已运行环境还需同步数据库并按需清理缓存。
+- 缓存由 MySQL 的 `cache_entry` 表实现，不再依赖 Redis；修改站点配置后，已运行环境会按需刷新缓存。
 
 ## 后续规划
 

@@ -8,7 +8,7 @@ The dashboard is the first screen after signing in, showing an overview of site 
 ## What it shows
 
 - PV / UV traffic
-- Post, comment, category and tag counts
+- Post, comment, category and tag counts (category/tag post aggregation)
 - Latest comments and content needing attention
 - Visitor map and geographic distribution
 

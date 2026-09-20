@@ -36,7 +36,7 @@ When creating a post in the admin console, you can configure:
 
 ## Images
 
-Images in the body can be uploaded through the image hosting configuration. See [Image storage](/v1/en/integration/storage/local).
+Images in the body can be uploaded through the image hosting configuration, which supports local and Aliyun OSS. See [Image storage](/v1/en/integration/storage/local).
 
 ## Next steps
 

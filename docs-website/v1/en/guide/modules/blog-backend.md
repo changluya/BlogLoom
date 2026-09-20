@@ -10,7 +10,7 @@ description: REST API, auth, business logic, data access and scheduling.
 | Area | Technology |
 | --- | --- |
 | Foundation | Java 8, Spring Boot 2.2.7, Spring MVC |
-| Data & cache | MyBatis, PageHelper, MySQL, Redis |
+| Data & cache | MyBatis, PageHelper, MySQL (with internal cache) |
 | Security & jobs | Spring Security, JWT, Quartz, Spring Retry |
 | Content & utilities | commonmark-java, ip2region, Yauaa, Hutool |
 
@@ -22,7 +22,7 @@ service/      business services and implementations
 mapper/       MyBatis mapper interfaces
 entity/       database entities
 model/        DTOs and VOs
-config/       security, web, redis and other config
+config/       security, web, cache and other config
 task/         scheduled jobs
 util/         markdown, upload, notification utilities
 ```
@@ -31,11 +31,11 @@ util/         markdown, upload, notification utilities
 
 - Spring Security + JWT authentication for the console
 - MyBatis data access and PageHelper pagination
-- Redis caching and temporary state
+- Internal cache (the `cache_entry` table) and temporary state
 - Quartz scheduled jobs
 - CommonMark Markdown parsing
 - Comment notifications and email delivery
-- Local and third-party object storage adapters
+- Local and Aliyun OSS upload adapters
 - IP geolocation and client/source detection
 - Unified exception handling and operation logs
 

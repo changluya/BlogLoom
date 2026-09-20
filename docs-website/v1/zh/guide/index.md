@@ -23,7 +23,7 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 | `blog-cms-ui` | 面向站长的内容管理与运营后台 | `http://localhost:8079` |
 | `blog-backend` | REST API、认证、业务逻辑、数据访问与任务调度 | `http://localhost:8090` |
 | MySQL | 文章、用户、评论、配置及日志等持久化数据 | 数据库名 `blogloom` |
-| Redis | 登录状态、缓存和临时业务数据 | 默认 `127.0.0.1:6379` |
+| 缓存（`cache_entry`） | 站点配置等热点数据缓存 | 随 MySQL 存储 |
 
 ## 下一步
 

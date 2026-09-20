@@ -25,5 +25,5 @@ description: 将图片上传到服务器本地目录。
 
 ## 下一步
 
-- [GitHub 图床](/v1/zh/integration/storage/github)
+- [阿里云 OSS 图床](/v1/zh/integration/storage/aliyun)
 - [图床管理](/v1/zh/guide/admin/media)

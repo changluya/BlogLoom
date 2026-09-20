@@ -12,7 +12,7 @@ An open-source project needs a stable home for its overview, changelog and docum
 - **Content organization**: maintain series such as "Changelog" and "Docs" as columns.
 - **Pages**: use the about page and custom pages for project information.
 - **Interaction**: collect feedback and questions through comments.
-- **Media**: store screenshots and images through media management.
+- **Media**: store screenshots and images through media management (local or Aliyun OSS).
 
 ## Steps
 

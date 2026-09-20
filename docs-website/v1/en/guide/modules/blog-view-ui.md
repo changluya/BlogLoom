@@ -14,9 +14,9 @@ description: The visitor-facing blog portal.
 
 ## Key pages
 
-- Home banner, site navigation and profile card
+- Home banner, site navigation, profile card and sidebar custom section
 - Post list and post detail
-- Category, tag and archive views
+- Category, tag, archive and column reading
 - Site search
 - Moments and likes
 - Friends and about pages

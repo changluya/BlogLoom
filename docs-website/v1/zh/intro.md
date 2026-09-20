@@ -113,41 +113,41 @@ BlogLoom 把文章、分类、标签、专栏、动态、评论与站点配置�
 
 <div className="hs-cards">
 
-<div className="hs-card">
- <h3>内容创作</h3>
- <p>Markdown 编辑、分类标签、封面、描述与发布配置。</p>
- <a href="/v1/zh/guide/admin/article-editor">了解更多 →</a>
-</div>
+ <div className="hs-card">
+  <h3>内容创作</h3>
+  <p>Markdown 编辑、本地知识库、分类标签、专栏与发布配置。</p>
+  <a href="/v1/zh/guide/admin/article-editor">了解更多 →</a>
+ </div>
 
-<div className="hs-card">
- <h3>博客前台</h3>
- <p>首页、文章、归档、搜索、动态与评论互动。</p>
- <a href="/v1/zh/guide/frontend/home">了解更多 →</a>
-</div>
+ <div className="hs-card">
+  <h3>博客前台</h3>
+  <p>首页、文章、归档、搜索、动态、自定义展示与评论互动。</p>
+  <a href="/v1/zh/guide/frontend/home">了解更多 →</a>
+ </div>
 
-<div className="hs-card">
- <h3>管理后台</h3>
- <p>仪表盘、内容管理、页面设置与日志中心。</p>
- <a href="/v1/zh/guide/admin/dashboard">了解更多 →</a>
-</div>
+ <div className="hs-card">
+  <h3>管理后台</h3>
+  <p>仪表盘、内容管理、回收站、页面设置与日志中心。</p>
+  <a href="/v1/zh/guide/admin/dashboard">了解更多 →</a>
+ </div>
 
-<div className="hs-card">
- <h3>图床存储</h3>
- <p>本地上传与 GitHub、又拍云、腾讯云等存储接入。</p>
- <a href="/v1/zh/integration/storage/local">了解更多 →</a>
-</div>
+ <div className="hs-card">
+  <h3>图床存储</h3>
+  <p>本地上传与阿里云 OSS 等存储接入，支持连通性测试。</p>
+  <a href="/v1/zh/integration/storage/local">了解更多 →</a>
+ </div>
 
-<div className="hs-card">
- <h3>运营数据</h3>
- <p>PV、UV、内容数量、分类标签分布与访客地域。</p>
- <a href="/v1/zh/guide/admin/dashboard">了解更多 →</a>
-</div>
+ <div className="hs-card">
+  <h3>运营数据</h3>
+  <p>PV、UV、内容数量、分类标签文章数聚合与访客地域。</p>
+  <a href="/v1/zh/guide/admin/dashboard">了解更多 →</a>
+ </div>
 
-<div className="hs-card">
- <h3>部署运维</h3>
- <p>环境要求、安装部署、配置与故障排查。</p>
- <a href="/v1/zh/deploy/index">了解更多 →</a>
-</div>
+ <div className="hs-card">
+  <h3>部署运维</h3>
+  <p>环境要求、安装部署、Docker 一键部署、配置与故障排查。</p>
+  <a href="/v1/zh/deploy/index">了解更多 →</a>
+ </div>
 
 </div>
 
@@ -160,7 +160,7 @@ BlogLoom 把文章、分类、标签、专栏、动态、评论与站点配置�
 <h2>准备好搭建你的博客了吗？</h2>
 
 <p>
-跟随快速开始，完成数据库初始化、启动后端并运行博客前台与管理后台。全过程基于 JDK、Maven 与 Node.js，无需额外基础设施。
+跟随快速开始，完成数据库初始化、启动后端并运行博客前台与管理后台。全过程基于 JDK、Maven 与 Node.js；也可以使用 Docker 一键部署，无需在服务器安装 JDK 或 Node.js。
 </p>
 
 <a href="/v1/zh/guide/quickstart" className="hs-btn hs-btn--primary">开始搭建 →</a>
@@ -172,7 +172,7 @@ BlogLoom 把文章、分类、标签、专栏、动态、评论与站点配置�
 <h2>常见问题</h2>
 
 <Accordion title="需要哪些运行环境？">
-`JDK 8+`、`Maven 3.6+`、`Node.js 16+`，以及 `MySQL 5.7+` 与 `Redis 5+`。详见[环境要求](/v1/zh/deploy/environment)。
+`JDK 8+`、`Maven 3.6+`、`Node.js 16+`，以及 `MySQL 5.7+`。详见[环境要求](/v1/zh/deploy/environment)。
 </Accordion>
 
 <Accordion title="默认后台账号是什么？">
@@ -180,7 +180,7 @@ BlogLoom 把文章、分类、标签、专栏、动态、评论与站点配置�
 </Accordion>
 
 <Accordion title="支持哪些图片存储方式？">
-内置本地上传，并支持 GitHub、又拍云、腾讯云等图床配置，详见[图床存储](/v1/zh/integration/storage/local)。
+内置本地上传，并支持阿里云 OSS 图床配置，详见[图床存储](/v1/zh/integration/storage/local)。
 </Accordion>
 
 <Accordion title="可以二次开发吗？">

@@ -23,7 +23,7 @@ Markdown authoring → Content organization → Review & publish → Presentatio
 | `blog-cms-ui` | Content management and operations console | `http://localhost:8079` |
 | `blog-backend` | REST API, auth, business logic, data access, scheduling | `http://localhost:8090` |
 | MySQL | Posts, users, comments, config and logs | Database `blogloom` |
-| Redis | Login state, cache and temporary data | Default `127.0.0.1:6379` |
+| Cache (`cache_entry`) | Hot data such as site configuration | Stored with MySQL |
 
 ## Next steps
 

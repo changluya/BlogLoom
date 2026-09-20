@@ -100,7 +100,11 @@
                 "groups": [
                   {
                     "group": "Getting Started",
-                    "pages": ["v1/en/deploy/index", "v1/en/deploy/environment"]
+                    "pages": [
+                      "v1/en/deploy/index",
+                      "v1/en/deploy/environment",
+                      "v1/en/deploy/docker"
+                    ]
                   },
                   {
                     "group": "Installation",
@@ -132,9 +136,7 @@
                     "group": "Image Storage",
                     "pages": [
                       "v1/en/integration/storage/local",
-                      "v1/en/integration/storage/github",
-                      "v1/en/integration/storage/upyun",
-                      "v1/en/integration/storage/tencent"
+                      "v1/en/integration/storage/aliyun"
                     ]
                   },
                   {
@@ -145,7 +147,7 @@
                     "group": "Data Stores",
                     "pages": [
                       "v1/en/integration/data/mysql",
-                      "v1/en/integration/data/redis"
+                      "v1/en/integration/data/cache"
                     ]
                   },
                   {
@@ -265,7 +267,11 @@
                 "groups": [
                   {
                     "group": "开始使用",
-                    "pages": ["v1/zh/deploy/index", "v1/zh/deploy/environment"]
+                    "pages": [
+                      "v1/zh/deploy/index",
+                      "v1/zh/deploy/environment",
+                      "v1/zh/deploy/docker"
+                    ]
                   },
                   {
                     "group": "安装部署",
@@ -297,9 +303,7 @@
                     "group": "图床存储",
                     "pages": [
                       "v1/zh/integration/storage/local",
-                      "v1/zh/integration/storage/github",
-                      "v1/zh/integration/storage/upyun",
-                      "v1/zh/integration/storage/tencent"
+                      "v1/zh/integration/storage/aliyun"
                     ]
                   },
                   {
@@ -310,7 +314,7 @@
                     "group": "数据存储",
                     "pages": [
                       "v1/zh/integration/data/mysql",
-                      "v1/zh/integration/data/redis"
+                      "v1/zh/integration/data/cache"
                     ]
                   },
                   {

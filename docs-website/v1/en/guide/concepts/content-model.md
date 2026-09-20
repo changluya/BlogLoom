@@ -12,7 +12,7 @@ BlogLoom organizes content with a set of related objects. Understanding them hel
 | **Post (Blog)** | A Markdown article, the core entity | Belongs to one category, links to many tags and columns |
 | **Category** | Top-level grouping for posts | A post belongs to one category |
 | **Tag** | Topic marker for posts | A post can have many tags |
-| **Column** | A series of posts, tree-structured | Many-to-many with posts |
+| **Column** | A series of posts, two-level with cover and summary | Many-to-many with posts |
 | **Moment** | Short-form content | Supports likes |
 | **Comment** | Visitor interaction under a post | Belongs to a post; supports replies |
 | **Site setting** | Site-level configurable content | Name, avatar, friends, about page, etc. |

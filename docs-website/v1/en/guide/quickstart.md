@@ -5,13 +5,14 @@ description: From database setup to launching the blog and admin console.
 
 This guide gets you to a minimal running BlogLoom: initialize the database, start the backend, then launch the admin console and the public blog.
 
+> Prefer not to install JDK and Node.js on the server? See [Docker deployment](/v1/en/deploy/docker) for a one-command start.
+
 ## Prerequisites
 
 - JDK 8 or later
 - Maven 3.6+
 - Node.js 16+ and npm
 - MySQL 5.7+ or MySQL 8
-- Redis 5+
 
 ## 1. Initialize the database
 
@@ -35,7 +36,7 @@ Local development config lives at:
 blog-backend/src/main/resources/application-dev.properties
 ```
 
-Check the database, Redis, `token.secretKey` and URL settings, then run:
+Check the database, `token.secretKey` and URL settings, then run:
 
 ```bash
 cd blog-backend

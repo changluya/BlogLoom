@@ -17,8 +17,11 @@ description: The content management and operations console.
 - Dashboard: PV, UV, content counts and visitor map
 - Authoring: Markdown editing, categories, tags and publishing
 - Content: posts, moments, categories, tags and comments
+- Recycle bin: restore or permanently delete removed posts, with bulk actions
+- Columns: two-level columns with cover, summary and import/export
+- Local knowledge base: directory tree management and bulk ZIP import/export
 - Pages: site settings, friends and about page
-- Media: upload configuration and third-party storage
+- Media: local and Aliyun OSS upload configuration with connectivity test
 - System: accounts and scheduled jobs
 - Logs: job, login, operation, exception and access logs
 

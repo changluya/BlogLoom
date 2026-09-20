@@ -24,13 +24,13 @@ conf/application.properties
 | 配置 | 说明 |
 | --- | --- |
 | 数据源 | MySQL 地址、用户名、密码 |
-| Redis | 地址、数据库编号、密码 |
+| 缓存 | 使用内部 `cache_entry` 表，无需额外配置 |
 | `token.secretKey` | 登录令牌签名密钥 |
 | `blog.api` | 后端 API 对外地址 |
 | `blog.cms` | 管理后台地址 |
 | `blog.view` | 博客前台地址 |
 | 邮件 | 发件服务器与授权码 |
-| 上传 | 本地目录或第三方图床 |
+| 上传 | 本地目录或阿里云 OSS 图床 |
 
 ## 前端环境变量
 

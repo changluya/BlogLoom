@@ -12,11 +12,12 @@ Site settings maintain visitor-facing site content that is reflected in the publ
 - **Social links**: GitHub, email and other external links
 - **Friends**: name, URL and avatar
 - **About**: about content and custom pages
+- **Home custom section**: custom content shown in the blog sidebar
 
 ## How changes take effect
 
 - The public blog renders from site configuration returned by the backend.
-- Some configuration is cached in Redis; after changes you may need to clear the cache.
+- Some configuration is cached in the internal `cache_entry` table; after changes you may need to clear the cache.
 
 ## Notes
 

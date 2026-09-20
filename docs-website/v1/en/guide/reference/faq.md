@@ -17,11 +17,11 @@ The default account is `admin` / `123456`. If the password was changed, use the 
 
 ## Page content does not update
 
-Rendering may depend on both database site settings and the Redis cache. After changing seed data, sync the database and clear caches as needed.
+Rendering may depend on both database site settings and the cache. After changing seed data, sync the database and clear caches as needed.
 
 ## Images cannot be uploaded
 
-Check the image hosting configuration, and verify the local upload directory or third-party storage credentials and permissions.
+Check the image hosting configuration, and verify the local upload directory or Aliyun OSS credentials and permissions.
 
 ## No email notification for comments
 

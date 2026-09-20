@@ -1,22 +1,20 @@
 ---
 title: "Media"
-description: Upload configuration and third-party object storage.
+description: Upload configuration for local and Aliyun OSS storage.
 ---
 
-Media management handles storage for post images and site assets, supporting local and third-party storage.
+Media management handles storage for post images and site assets, supporting local and Aliyun OSS storage.
 
 ## Supported storage
 
 | Storage | Description |
 | --- | --- |
 | Local | Upload to a local server directory |
-| GitHub | Store images in a GitHub repository |
-| Upyun | Upyun object storage |
-| Tencent Cloud | Tencent Cloud object storage (COS) |
+| Aliyun OSS | Upload to Aliyun object storage |
 
 ## Configuration
 
-In the console under Media, choose a storage provider and fill in the credentials, such as repository, domain or object storage keys.
+In the console under Media, choose a storage provider and fill in the credentials, such as the bucket, region, storage path and access keys, then run the connectivity test to verify the configuration.
 
 ## Security notes
 
@@ -27,4 +25,5 @@ In the console under Media, choose a storage provider and fill in the credential
 ## Next steps
 
 - [Image storage integrations](/v1/en/integration/storage/local)
+- [Aliyun OSS image storage](/v1/en/integration/storage/aliyun)
 - [Site settings](/v1/en/guide/admin/site)

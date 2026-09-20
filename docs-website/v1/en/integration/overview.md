@@ -3,15 +3,15 @@ title: "Integration overview"
 description: External dependencies and extensible capabilities.
 ---
 
-BlogLoom builds on MySQL and Redis, and can integrate image hosting, email and geolocation through configuration.
+BlogLoom builds on MySQL, with caching implemented by an internal MySQL table, and can integrate image hosting, email and geolocation through configuration.
 
 ## Categories
 
 | Category | Capabilities |
 | --- | --- |
-| Image storage | Local upload, GitHub, Upyun, Tencent Cloud |
+| Image storage | Local upload, Aliyun OSS |
 | Notifications | Comment email notifications |
-| Data stores | MySQL, Redis |
+| Data stores | MySQL, internal cache (`cache_entry` table) |
 | Utilities | IP geolocation, Markdown parsing, scheduled jobs |
 
 ## Configuration entry points
@@ -29,5 +29,6 @@ BlogLoom builds on MySQL and Redis, and can integrate image hosting, email and g
 ## Next steps
 
 - [Local image storage](/v1/en/integration/storage/local)
+- [Aliyun OSS image storage](/v1/en/integration/storage/aliyun)
 - [MySQL](/v1/en/integration/data/mysql)
-- [Redis](/v1/en/integration/data/redis)
+- [Cache](/v1/en/integration/data/cache)

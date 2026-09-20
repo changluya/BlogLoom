@@ -20,9 +20,8 @@ BlogLoom uses a decoupled architecture. Three applications run and build indepen
                │ Spring Boot/MyBatis  │
                └──────────┬───────────┘
                           │
-                 ┌────────┴────────┐
-                 ▼                 ▼
-              MySQL              Redis
+                          ▼
+              MySQL (with internal cache_entry)
 ```
 
 ## Responsibilities
@@ -37,14 +36,14 @@ BlogLoom uses a decoupled architecture. Three applications run and build indepen
 
 1. Visitors browse `blog-view-ui`, which fetches posts, comments and moments through the REST API.
 2. Authors write and configure content in `blog-cms-ui`; write operations are authenticated and sent to the backend.
-3. `blog-backend` applies business logic, reads and writes MySQL, and uses Redis for caching and login state.
+3. `blog-backend` applies business logic, reads and writes MySQL, and uses the internal `cache_entry` table for caching and login state.
 4. Scheduled jobs, email notifications and file uploads are handled centrally by the backend.
 
 ## Extension points
 
 - **Frontend**: the two apps are independent and can adopt different UI frameworks or themes.
 - **Backend**: the `controller` / `service` / `mapper` layers make new APIs and modules easy to add.
-- **Storage**: an upload adapter supports local and third-party image hosting.
+- **Storage**: an upload adapter supports local and Aliyun OSS image hosting.
 
 ## Next steps
 

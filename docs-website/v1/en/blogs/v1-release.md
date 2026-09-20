@@ -9,10 +9,12 @@ BlogLoom 1.0 is the first official release, derived from Naccl/NBlog with rebran
 
 - **Three apps**: the public blog, admin console and backend run and build independently.
 - **Content loop**: posts, categories, tags, columns, moments and comments.
-- **Site configuration**: name, avatar, carousel, social links, friends and about page.
-- **Analytics**: PV, UV, content counts, category/tag distribution and visitor map.
-- **Media**: local upload plus GitHub, Upyun and Tencent Cloud configuration.
+- **Content management**: a blog recycle bin (restore or delete permanently, with bulk actions), two-level column management (cover, summary, import/export) and a local Markdown knowledge base (directory tree, bulk ZIP import/export).
+- **Site configuration**: name, avatar, carousel, social links, friends, about page and a custom home section.
+- **Analytics**: PV, UV, content counts, category/tag post aggregation and visitor map.
+- **Media**: local upload and Aliyun OSS configuration, with a connectivity test.
 - **System**: accounts, scheduled jobs and log center.
+- **Containerized deployment**: a one-click Docker option.
 
 ## Database scripts
 
@@ -26,7 +28,7 @@ For a fresh environment, import `init.sql`. For an existing one, apply increment
 ## Known notes
 
 - The default account is `admin` / `123456`; change it after the first login.
-- Rendering may depend on the Redis cache; clear it after changing data.
+- Rendering may depend on the internal `cache_entry` cache; clear it after changing data.
 
 ## Next steps
 

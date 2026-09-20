@@ -11,6 +11,7 @@ The home page is the visitor's first screen, composed of a banner, navigation, p
 - **Navigation**: entries for home, archive, categories, tags, moments, friends and about.
 - **Profile card**: avatar, nickname, bio and social links.
 - **Content modules**: featured posts, latest posts and moments.
+- **Custom section**: custom content configured in the console, shown in the blog sidebar.
 
 ## Site information
 

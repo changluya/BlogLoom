@@ -47,7 +47,7 @@ See [Initialize the database](/v1/en/deploy/database).
 ## Notes
 
 - When structure or seed data changes, add a new incremental script instead of editing an executed one.
-- After changing seed data, sync the database and clear Redis caches as needed.
+- After changing seed data, sync the database and clear caches as needed.
 
 ## Next steps
 

@@ -36,7 +36,7 @@ BlogLoom 的文章以 Markdown 撰写，由后端使用 commonmark-java 解析�
 
 ## 图片处理
 
-正文中的图片可通过图床管理统一上传。详见[图床存储](/v1/zh/integration/storage/local)。
+正文中的图片可通过图床管理统一上传，支持本地与阿里云 OSS。详见[图床存储](/v1/zh/integration/storage/local)。
 
 ## 下一步
 

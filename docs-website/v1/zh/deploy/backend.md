@@ -25,7 +25,6 @@ conf/application.properties
 启动前至少检查：
 
 - MySQL 地址、用户名和密码
-- Redis 地址、数据库编号和密码
 - `token.secretKey` 登录令牌密钥
 - `blog.api`、`blog.cms` 与 `blog.view` 的实际访问地址
 - 邮件通知与图床配置

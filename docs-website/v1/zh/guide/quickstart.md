@@ -5,6 +5,8 @@ description: 从数据库初始化到启动博客前台与管理后台。
 
 本文带你完成 BlogLoom 的最小可运行环境：初始化数据库、启动后端、启动管理后台与博客前台。
 
+> 不想在服务器安装 JDK 与 Node.js？可直接参考 [Docker 部署](/v1/zh/deploy/docker) 一键启动。
+
 ## 准备工作
 
 确保本机具备以下环境：
@@ -13,7 +15,6 @@ description: 从数据库初始化到启动博客前台与管理后台。
 - Maven 3.6+
 - Node.js 16+ 与 npm
 - MySQL 5.7+ 或 MySQL 8
-- Redis 5+
 
 ## 1. 初始化数据库
 
@@ -48,7 +49,7 @@ bin/local/upgrate-sql.sh             # 执行并记录
 blog-backend/src/main/resources/application-dev.properties
 ```
 
-至少检查数据库、Redis、`token.secretKey` 与访问地址配置，然后启动：
+至少检查数据库、`token.secretKey` 与访问地址配置，然后启动：
 
 ```bash
 cd blog-backend

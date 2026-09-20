@@ -29,7 +29,7 @@ description: 使用 Markdown 编辑器创作与发布文章。
 
 ## 图片上传
 
-编辑器中的图片可通过图床配置上传，详见[图床存储](/v1/zh/integration/storage/local)。
+编辑器中的图片可通过图床配置上传，支持本地与阿里云 OSS，详见[图床存储](/v1/zh/integration/storage/local)。
 
 ## 下一步
 

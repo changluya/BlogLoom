@@ -25,7 +25,6 @@ conf/application.properties
 Check at least:
 
 - MySQL host, user and password
-- Redis host, database index and password
 - `token.secretKey`
 - Actual URLs for `blog.api`, `blog.cms` and `blog.view`
 - Email and image storage settings

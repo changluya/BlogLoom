@@ -12,7 +12,6 @@ description: 运行 BlogLoom 所需的软件与版本。
 | Node.js | 16+ |
 | npm | 随 Node.js 安装 |
 | MySQL | 5.7+ 或 8 |
-| Redis | 5+ |
 
 ## 端口占用
 
@@ -22,7 +21,6 @@ description: 运行 BlogLoom 所需的软件与版本。
 | `blog-cms-ui` | 8079 |
 | `blog-backend` | 8090 |
 | MySQL | 3306 |
-| Redis | 6379 |
 
 ## 目录准备
 

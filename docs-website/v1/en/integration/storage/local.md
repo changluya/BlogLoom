@@ -25,5 +25,5 @@ Local storage is the default image hosting option; images are stored in the serv
 
 ## Next steps
 
-- [GitHub image hosting](/v1/en/integration/storage/github)
+- [Aliyun OSS image storage](/v1/en/integration/storage/aliyun)
 - [Media](/v1/en/guide/admin/media)

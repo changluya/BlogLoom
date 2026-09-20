@@ -15,7 +15,7 @@ Write operations in the admin console require authentication. BlogLoom uses Spri
 ## Token and state
 
 - The token is signed with the `token.secretKey` configuration.
-- Login state and similar temporary data are stored in Redis.
+- Login state and similar temporary data are stored in the internal `cache_entry` table.
 - When a token expires or is invalidated, sign in again.
 
 ## Security recommendations

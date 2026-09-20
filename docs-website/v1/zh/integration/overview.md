@@ -3,15 +3,15 @@ title: "集成概览"
 description: BlogLoom 的外部依赖与可扩展能力。
 ---
 
-BlogLoom 以 MySQL 与 Redis 为基础，并可通过配置接入图床、邮件与地域解析等外部能力。
+BlogLoom 以 MySQL 为基础，缓存由内部 MySQL 表实现，并可通过配置接入图床、邮件与地域解析等外部能力。
 
 ## 集成分类
 
 | 分类 | 能力 |
 | --- | --- |
-| 图床存储 | 本地上传、GitHub、又拍云、腾讯云 |
+| 图床存储 | 本地上传、阿里云 OSS |
 | 通知 | 评论邮件通知 |
-| 数据存储 | MySQL、Redis |
+| 数据存储 | MySQL、内部缓存（`cache_entry` 表） |
 | 工具 | IP 地域解析、Markdown 解析、定时任务 |
 
 ## 配置入口
@@ -29,5 +29,6 @@ BlogLoom 以 MySQL 与 Redis 为基础，并可通过配置接入图床、邮件
 ## 下一步
 
 - [本地图床](/v1/zh/integration/storage/local)
+- [阿里云 OSS 图床](/v1/zh/integration/storage/aliyun)
 - [MySQL](/v1/zh/integration/data/mysql)
-- [Redis](/v1/zh/integration/data/redis)
+- [缓存](/v1/zh/integration/data/cache)

@@ -14,7 +14,7 @@ Complete the following checks before going live.
 
 ## Network and transport
 
-- Open only necessary ports; keep MySQL and Redis off the public internet.
+- Open only necessary ports; keep MySQL off the public internet.
 - Enable HTTPS to protect login and data transfer.
 - Reverse proxy the backend API through Nginx.
 
@@ -22,7 +22,7 @@ Complete the following checks before going live.
 
 - Sanitize comment content before rendering.
 - Restrict executable permissions on upload directories.
-- Review third-party image hosting access policies regularly.
+- Review Aliyun OSS image hosting access policies regularly.
 
 ## Backup
 

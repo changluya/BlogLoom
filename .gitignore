@@ -41,7 +41,7 @@ sql/local/
 # Docker 部署运行时数据与产物
 docker/.env
 docker/dist/
-data/
+/data/
 
 # 压测产物
 qa/results/

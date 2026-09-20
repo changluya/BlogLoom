@@ -24,13 +24,13 @@ Key settings:
 | Setting | Description |
 | --- | --- |
 | Datasource | MySQL host, user, password |
-| Redis | Host, database index, password |
+| Cache | Uses the internal `cache_entry` table, no extra configuration |
 | `token.secretKey` | Login token signing key |
 | `blog.api` | Public backend API URL |
 | `blog.cms` | Admin console URL |
 | `blog.view` | Public blog URL |
 | Mail | Sender server and authorization code |
-| Upload | Local directory or third-party storage |
+| Upload | Local directory or Aliyun OSS image hosting |
 
 ## Frontend environment variables
 
