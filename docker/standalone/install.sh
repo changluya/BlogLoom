@@ -9,7 +9,7 @@
 #
 # 用法（在任意空文件夹执行）：
 #   mkdir blogloom && cd blogloom
-#   curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/feat_1.0.x_4/docker/standalone/install.sh | bash
 #
 # 核心步骤：
 #   0) 前置校验（docker / docker compose v2）
