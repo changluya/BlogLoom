@@ -1,0 +1,23 @@
+docker/README.md
+  s_4ec7ec8429ea2a::t_7bff8f0204177b 42
+docker/standalone/README.md
+  s_4ec7ec8429ea2a::t_e0dc4d085014bc 12,91
+docker/standalone/install.sh
+  s_4ec7ec8429ea2a::t_3d620f6771cca0 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "39fa6bd1f62a1f24d1ee15e5e09f8ec4ea274eea",
+  "prompts": {},
+  "sessions": {
+    "s_4ec7ec8429ea2a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f43f6b42dffeHKFfzEFp9AMpsT",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
