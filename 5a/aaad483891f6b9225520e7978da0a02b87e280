@@ -1,0 +1,43 @@
+docs-website/v1/en/guide/quickstart.md
+  s_42e18fe281a627::t_c076436baf49b2 25-32,34-35,38
+docs-website/v1/en/intro.md
+  s_42e18fe281a627::t_a1dfd0cdbed268 39-40
+.github/workflows/website.yml
+  s_42e18fe281a627::t_43cd351e2fe096 1-26
+docs-website/v1/en/blogs/v1-release.md
+  s_42e18fe281a627::t_4d1816f0cfe420 21-22,26
+docs-website/v1/zh/intro.md
+  s_42e18fe281a627::t_6f8ea721f1c09f 39-40
+docs-website/v1/zh/guide/reference/faq.md
+  s_42e18fe281a627::t_17eb63ee4403b9 8
+  s_42e18fe281a627::t_729562b5b1c20b 32
+bin/local/README.md
+  s_42e18fe281a627::t_687d796d53e981 5
+docs-website/README.md
+  s_42e18fe281a627::t_95983520e3269c 35-37,42-45,48
+  s_42e18fe281a627::t_bf998aba86f840 118,127-129,136-139
+  s_42e18fe281a627::t_cef2543e2ce420 49
+README.md
+  s_42e18fe281a627::t_50a07f40c5a4db 285,287-289,294-309,322
+docs-website/v1/en/guide/reference/faq.md
+  s_42e18fe281a627::t_ffbb2aaa10942c 8
+  s_42e18fe281a627::t_ab68839c16dcd1 32
+docs-website/v1/zh/blogs/v1-release.md
+  s_42e18fe281a627::t_6a350deac9c446 21-22,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5aaaad483891f6b9225520e7978da0a02b87e280",
+  "prompts": {},
+  "sessions": {
+    "s_42e18fe281a627": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f404639b5ffexeiCWifG1tUjAh",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
