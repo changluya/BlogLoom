@@ -1,0 +1,200 @@
+docs-website/v1/en/integration/overview.md
+  s_7ff97cf91644b4::t_7c9c61cfabc91f 6,12,14
+  s_7ff97cf91644b4::t_72a22e9240aa0d 32,34
+docs-website/v1/zh/guide/reference/database.md
+  s_7ff97cf91644b4::t_ef1ad5bd3fe7b1 50
+docs-website/v1/en/guide/admin/media.md
+  s_7ff97cf91644b4::t_ebb6b668973541 3
+  s_7ff97cf91644b4::t_4767d406731fcb 6,13,17
+  s_7ff97cf91644b4::t_1427f40e8e74f5 28
+docs-website/v1/en/blogs/v1-release.md
+  s_7ff97cf91644b4::t_f892a783c626ef 12-15,17
+  s_7ff97cf91644b4::t_85a0f5e0dd52c4 31
+docs-website/v1/zh/deploy/configuration.md
+  s_7ff97cf91644b4::t_0f9f4ea6944bfe 27
+  s_7ff97cf91644b4::t_8d7b2cb56a3c72 33
+docs-website/v1/zh/blogs/usecases/project-home.md
+  s_7ff97cf91644b4::t_b02124b2b626a9 15
+docs-website/v1/en/integration/storage/aliyun.md
+  s_7ff97cf91644b4::t_c2c58c40da0e49 2-3,6,8,10-14,18-27,31-34
+docs-website/v1/zh/integration/storage/aliyun.md
+  s_7ff97cf91644b4::t_bf1cf83d2aed63 2-3,6,10-14,18-27,31-34
+docs-website/v1/en/guide/frontend/home.md
+  s_7ff97cf91644b4::t_076495bcc89ad6 14
+README.md
+  s_4ec7ec8429ea2a::t_e13d8e94d72630 123
+  s_4ec7ec8429ea2a::t_86d1055ddcab52 183,186-187,190
+  s_4ec7ec8429ea2a::t_fd69e68deeb4f3 285,287,289-293,295,297-302,305
+  s_4ec7ec8429ea2a::t_816fc0e342a624 212
+  s_4ec7ec8429ea2a::t_633aed002ac900 39-46
+  s_4ec7ec8429ea2a::t_5a78e1e15d7f77 86,90,95-101,110,114
+  s_4ec7ec8429ea2a::t_e089007fc05e5c 57-59,73-77
+  s_4ec7ec8429ea2a::t_8c8737d05ff043 170-171
+  s_4ec7ec8429ea2a::t_d137740e2febce 311-312,314
+  s_4ec7ec8429ea2a::t_a817bae84c3339 142-143,150-152,154-157
+docs-website/v1/en/guide/modules/blog-view-ui.md
+  s_7ff97cf91644b4::t_40e9447fef7994 17,19
+.gitignore
+  s_4ec7ec8429ea2a::t_74c5822b5ca0e2 44
+docs-website/v1/zh/guide/concepts/content-model.md
+  s_7ff97cf91644b4::t_38b1361a9cface 15
+docs-website/v1/zh/guide/reference/faq.md
+  s_7ff97cf91644b4::t_c142cb7e113e03 20
+  s_7ff97cf91644b4::t_7adc5bcb73360b 24
+docs-website/v1/en/integration/storage/local.md
+  s_7ff97cf91644b4::t_6980622567926e 28
+docs-website/v1/en/guide/index.md
+  s_7ff97cf91644b4::t_bcbc86ed8d541f 26
+docs-website/v1/zh/guide/frontend/home.md
+  s_7ff97cf91644b4::t_d20fc8d1df1350 14
+docs-website/v1/zh/guide/modules/blog-backend.md
+  s_7ff97cf91644b4::t_c4f0daf8e6af92 34
+  s_7ff97cf91644b4::t_fba85b1329eccd 25
+  s_7ff97cf91644b4::t_be620f26ee1383 38
+docs-website/v1/en/guide/reference/faq.md
+  s_7ff97cf91644b4::t_c1b5b759712ee3 20
+  s_7ff97cf91644b4::t_5a6794c9010873 24
+docs-website/v1/zh/intro.md
+  s_7ff97cf91644b4::t_4524997d193ec6 175
+  s_7ff97cf91644b4::t_2dd98a36547dbf 163
+  s_7ff97cf91644b4::t_029d8dc51d637f 116-120,122-126,128-132,134-138,140-144,146-150
+  s_7ff97cf91644b4::t_e55098200f5033 183
+docs-website/v1/en/guide/quickstart.md
+  s_7ff97cf91644b4::t_27b414e9211f2d 39
+  s_7ff97cf91644b4::t_0f784cf562d9ed 8-9
+docs-website/v1/en/guide/admin/article-editor.md
+  s_7ff97cf91644b4::t_d8e431eb2091f3 32
+docs-website/v1/en/intro.md
+  s_7ff97cf91644b4::t_017e2238e00ec4 116-120,122-126,128-132,134-138,140-144,146-150
+  s_7ff97cf91644b4::t_0cb41f3cbcf066 163
+  s_7ff97cf91644b4::t_922605b127adad 183
+  s_7ff97cf91644b4::t_ab29e8b20ebc6c 175
+docs-website/v1/en/guide/architecture.md
+  s_7ff97cf91644b4::t_986d6300eca9d3 46
+  s_7ff97cf91644b4::t_9628cdb9229e5e 39
+  s_7ff97cf91644b4::t_ec3945171c4464 23-24
+docs-website/v1/zh/guide/reference/authentication.md
+  s_7ff97cf91644b4::t_fc76b60ca00713 18
+docs-website/v1/en/guide/reference/authentication.md
+  s_7ff97cf91644b4::t_eab9b9d1a8769b 18
+docs-website/v1/zh/guide/admin/media.md
+  s_7ff97cf91644b4::t_a4a99ff3e8da10 28
+  s_7ff97cf91644b4::t_cf6576214031a6 3
+  s_7ff97cf91644b4::t_eaf4c135889a1d 6,13,17
+docs-website/v1/en/guide/admin/dashboard.md
+  s_7ff97cf91644b4::t_c4869b52187284 11
+docs-website/v1/zh/guide/admin/dashboard.md
+  s_7ff97cf91644b4::t_2ab9dba52f9f28 11
+docs-website/v1/zh/deploy/troubleshooting.md
+  s_7ff97cf91644b4::t_140ec47f1eb22b 9
+  s_7ff97cf91644b4::t_15ea7913ea712e 21
+  s_7ff97cf91644b4::t_c461c1ab05ff38 28
+docs-website/v1/zh/guide/concepts/markdown.md
+  s_7ff97cf91644b4::t_eafe5f15252a9e 39
+docs-website/v1/zh/deploy/index.md
+  s_7ff97cf91644b4::t_4d132081fcb613 24-27,30-32,38
+docs-website/v1/en/guide/modules/blog-backend.md
+  s_7ff97cf91644b4::t_f4e386e9697d2e 13
+  s_7ff97cf91644b4::t_3cd6b2ad40e2c3 34
+  s_7ff97cf91644b4::t_402d8b5d913484 38
+  s_7ff97cf91644b4::t_a4dc180314e36a 25
+docs-website/v1/en/guide/reference/database.md
+  s_7ff97cf91644b4::t_91f3f73983594b 50
+docs-website/v1/zh/guide/admin/site.md
+  s_7ff97cf91644b4::t_9e44e7e5360b21 20
+  s_7ff97cf91644b4::t_d336248dc5dee7 15
+docs-website/v1/zh/deploy/security.md
+  s_7ff97cf91644b4::t_91acbc8b9bc53d 17
+  s_7ff97cf91644b4::t_6f26e9ee1d54ee 25
+docs-website/v1/zh/blogs/v1-release.md
+  s_7ff97cf91644b4::t_29a849102f1ee6 12-15,17
+  s_7ff97cf91644b4::t_0f28a1d1063686 31
+docs-website/v1/en/deploy/configuration.md
+  s_7ff97cf91644b4::t_1db99899e3e325 33
+  s_7ff97cf91644b4::t_db6aa5c3b01154 27
+docs-website/v1/en/deploy/security.md
+  s_7ff97cf91644b4::t_bd3eeed99c6733 25
+  s_7ff97cf91644b4::t_009ad829669232 17
+docs-website/v1/en/deploy/docker.md
+  s_7ff97cf91644b4::t_d873a39fa7e314 2-3,6,8,10,12-15,17,19-22,24-75,79-81
+docs-website/docs.json
+  s_7ff97cf91644b4::t_201ab4fd84c607 306
+  s_7ff97cf91644b4::t_b583c85cd485ad 103-107
+  s_7ff97cf91644b4::t_3a14112cc762c6 317
+  s_7ff97cf91644b4::t_9c5c7f1c3f1a7c 139
+  s_7ff97cf91644b4::t_100f85064e838d 150
+  s_7ff97cf91644b4::t_60201f76334643 270-274
+docs-website/v1/zh/guide/modules/blog-view-ui.md
+  s_7ff97cf91644b4::t_1662b8e8cddb7a 17,19
+docs-website/v1/en/guide/admin/site.md
+  s_7ff97cf91644b4::t_d03f5658e33af7 15
+  s_7ff97cf91644b4::t_2dcbc32c31e424 20
+docs-website/v1/zh/integration/overview.md
+  s_7ff97cf91644b4::t_0df2b185423e60 32,34
+  s_7ff97cf91644b4::t_9de17de3e6dd51 6,12,14
+docs-website/v1/en/guide/concepts/content-model.md
+  s_7ff97cf91644b4::t_9247c025556b99 15
+docs-website/v1/zh/integration/storage/local.md
+  s_7ff97cf91644b4::t_9463e3875b2ef8 28
+docs-website/v1/en/guide/concepts/markdown.md
+  s_7ff97cf91644b4::t_2257fd8d728b38 39
+docs-website/v1/zh/guide/modules/blog-cms-ui.md
+  s_7ff97cf91644b4::t_9c5c1bf0c1dc5e 20-22,24
+docs-website/v1/en/guide/modules/blog-cms-ui.md
+  s_7ff97cf91644b4::t_c8b1f6cc179e09 20-22,24
+docs-website/v1/zh/guide/admin/article-editor.md
+  s_7ff97cf91644b4::t_41acedd03b6d39 32
+docs-website/v1/zh/guide/quickstart.md
+  s_7ff97cf91644b4::t_2339570ed7bfee 52
+  s_7ff97cf91644b4::t_7da557d917d7ea 8-9
+docs-website/v1/en/deploy/index.md
+  s_7ff97cf91644b4::t_fabbd1df86fec1 24-27,30-32,38
+docs-website/v1/en/integration/data/cache.md
+  s_7ff97cf91644b4::t_c1dab993d93b87 2-3,6,8,10,12-14,16,18-20,24-26
+docs-website/v1/zh/integration/data/cache.md
+  s_7ff97cf91644b4::t_eecce95d2e9484 2-3,6,8,10,12-14,16,18-20,24-26
+docs-website/v1/en/deploy/troubleshooting.md
+  s_7ff97cf91644b4::t_06ad88d6ffd95a 21
+  s_7ff97cf91644b4::t_c95e5f07f5d8c1 28
+  s_7ff97cf91644b4::t_4bfd6da95679c7 9
+docs-website/v1/zh/guide/admin/content.md
+  s_7ff97cf91644b4::t_a5b1e85a60c462 13,17-18,24-25
+docs-website/v1/zh/guide/index.md
+  s_7ff97cf91644b4::t_08cd43763cb8cf 26
+docs-website/v1/zh/deploy/docker.md
+  s_7ff97cf91644b4::t_b6112c01b84564 2-3,6,8,10,12-15,17,19-22,24-75,79-81
+docs-website/v1/zh/guide/architecture.md
+  s_7ff97cf91644b4::t_876a95a7088917 39
+  s_7ff97cf91644b4::t_68b340226ef11e 46
+  s_7ff97cf91644b4::t_939953a0446c0a 23-24
+docs-website/v1/en/guide/admin/content.md
+  s_7ff97cf91644b4::t_bbe1e426e9efe6 13,17-18,24-25
+docs-website/v1/en/blogs/usecases/project-home.md
+  s_7ff97cf91644b4::t_747568fb84a1e1 15
+docs/prd/产品功能文档-CMS系统.md
+  s_4ec7ec8429ea2a::t_152be37fd9d09b 10,20,28,108-109,111-112,116,118,121,124,127,131,145-146
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c7073163c5543b07a7a5a5bb3bf00795d00a3e3",
+  "prompts": {},
+  "sessions": {
+    "s_4ec7ec8429ea2a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f43f6b42dffeHKFfzEFp9AMpsT",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_7ff97cf91644b4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f419bc5a9ffe46ljwL6RGLXNPp",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
