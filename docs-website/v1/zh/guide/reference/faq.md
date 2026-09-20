@@ -5,7 +5,7 @@ description: 部署与使用过程中的高频问题。
 
 ## 启动后端失败，提示数据库连接错误
 
-检查 `application-dev.properties` 中的 MySQL 地址、用户名与密码，确认数据库已创建并导入 `init.sql`。
+检查 `application-dev.properties` 中的 MySQL 地址、用户名与密码，确认数据库已创建并执行过增量 SQL。
 
 ## 前端启动后接口报错
 
@@ -29,7 +29,7 @@ description: 部署与使用过程中的高频问题。
 
 ## 如何升级数据库
 
-全新环境导入 `sql/increment/init.sql`；已有环境使用 `bin/local/upgrate-sql.sh` 应用增量脚本。
+全新环境执行 `bin/local/upgrate-sql.sh` 应用全部增量脚本（基线已含建表语句）；已有环境再次执行即可只应用未记录在 `sql/local/` 的脚本。
 
 ## 下一步
 

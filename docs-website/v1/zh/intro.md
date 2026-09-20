@@ -36,7 +36,8 @@ BlogLoom 基于 Spring Boot、MyBatis 与 Vue 构建，由博客前台、内容�
 
 <div className="hs-code-panel" id="backend">
 ```bash
-mysql -u root -p < sql/increment/init.sql
+cp bin/local/deploy.conf.example bin/local/deploy.conf
+bin/local/upgrate-sql.sh
 
 cd blog-backend
 mvn spring-boot:run

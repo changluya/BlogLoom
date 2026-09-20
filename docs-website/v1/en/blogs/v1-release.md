@@ -18,12 +18,12 @@ BlogLoom 1.0 is the first official release, derived from Naccl/NBlog with rebran
 
 ## Database scripts
 
-- Full script: `sql/increment/init.sql`
-- Incremental scripts: `sql/increment/1.0/`
+- Full baseline: the earliest full script under `sql/increment/1.0/` (schema + tables)
+- Incremental scripts: the remaining timestamped scripts under `sql/increment/1.0/`
 
 ## Upgrade notes
 
-For a fresh environment, import `init.sql`. For an existing one, apply incremental scripts with `bin/local/upgrate-sql.sh` after backing up the database.
+For a fresh environment, run `bin/local/upgrate-sql.sh` to initialize (the baseline includes the schema). For an existing one, rerun it to apply only the scripts not yet recorded in `sql/local/`; back up the database first.
 
 ## Known notes
 

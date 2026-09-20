@@ -5,7 +5,7 @@ description: Common questions about deployment and usage.
 
 ## The backend fails to start with a database connection error
 
-Check the MySQL host, user and password in `application-dev.properties`, and confirm the database was created and `init.sql` imported.
+Check the MySQL host, user and password in `application-dev.properties`, and confirm the database was created and the incremental SQL has been applied.
 
 ## The frontend reports API errors after startup
 
@@ -29,7 +29,7 @@ Confirm the mail service is configured correctly and check the authorization cod
 
 ## How do I upgrade the database?
 
-For a fresh environment, import `sql/increment/init.sql`; for an existing one, apply incremental scripts with `bin/local/upgrate-sql.sh`.
+For a fresh environment, run `bin/local/upgrate-sql.sh` to apply all incremental scripts (the baseline includes the schema); for an existing one, rerun it to apply only the scripts not yet recorded in `sql/local/`.
 
 ## Next steps
 

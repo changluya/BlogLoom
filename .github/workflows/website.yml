@@ -1,0 +1,26 @@
+name: Validate Docs
+
+on:
+  pull_request:
+    paths: ['docs-website/**']
+  push:
+    branches: [master, main]
+
+defaults:
+  run:
+    working-directory: docs-website
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: docs-website/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run validate
+      - run: npm run broken-links

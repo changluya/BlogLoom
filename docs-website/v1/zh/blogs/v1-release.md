@@ -18,12 +18,12 @@ BlogLoom 1.0 是项目的首个正式版本，基于 Naccl/NBlog 二次开发，
 
 ## 数据库脚本
 
-- 全量脚本：`sql/increment/init.sql`
-- 增量脚本：`sql/increment/1.0/`
+- 全量初始化基线：`sql/increment/1.0/` 下最早的全量脚本（含建库建表）
+- 增量脚本：`sql/increment/1.0/` 下按时间戳命名的其余脚本
 
 ## 升级说明
 
-全新环境导入 `init.sql` 即可。已有环境请使用 `bin/local/upgrate-sql.sh` 应用增量脚本，并在升级前备份数据库。
+全新环境执行 `bin/local/upgrate-sql.sh` 即可完成初始化（基线含建表语句）。已有环境再次执行该脚本，只会应用未记录在 `sql/local/` 的增量脚本；升级前请先备份数据库。
 
 ## 已知事项
 

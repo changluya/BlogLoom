@@ -282,14 +282,31 @@ npm run build
 
 ## Docker 一键部署
 
-仓库 `docker/` 目录提供「后端服务（内含博客前台与管理后台页面）+ MySQL」的容器化方案，对外仅暴露两个固定非默认端口（Web `18080`、MySQL `13306`）。
+仓库 `docker/` 目录提供「后端服务（内含博客前台与管理后台页面）+ MySQL」的容器化方案，只有 `blogloom-app` 与 `blogloom-mysql` 两个容器，对外仅暴露两个固定非默认端口（Web `18080`、MySQL `13306`）。
 
-**用户视角（直接用 Docker Hub 镜像，无需构建）**
+**用户视角（直接用 Docker Hub 镜像，无需 JDK / Node / Maven，也无需克隆仓库）**
+
+前置条件：服务器已安装 Docker 与 Docker Compose v2，且可访问 Docker Hub。
 
 ```bash
 mkdir blogloom && cd blogloom
 curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash   # 首次部署
-./upgrade.sh                                                                                                 # 后续升级
+```
+
+部署完成后：
+
+| 入口 | 地址 |
+| --- | --- |
+| 博客前台 | `http://<服务器IP>:18080` |
+| 管理后台 | `http://<服务器IP>:18080/cms` |
+| 默认账号 | `admin` / `123456`（登录后请立即修改） |
+
+后续升级（自动拉取新版本并重启，容器启动时执行数据库增量 SQL，数据不丢失）：
+
+```bash
+cd blogloom
+./upgrade.sh            # 自动解析最新版本并升级
+./upgrade.sh 1.0.1      # 升级到指定版本
 ```
 
 **开发者视角（从源码构建 / 发布）**
@@ -302,7 +319,7 @@ cd docker
 ./scripts/push.sh                 # 推送镜像到 Docker Hub
 ```
 
-默认访问地址为 `http://<服务器IP>:18080`（博客前台）、`http://<服务器IP>:18080/cms`（管理后台）。完整说明见 [docker/README.md](./docker/README.md)。
+完整说明（自定义配置、数据目录、备份与运维）见 [docker/README.md](./docker/README.md)。
 
 ## 配置与数据说明
 

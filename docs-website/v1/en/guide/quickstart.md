@@ -22,11 +22,20 @@ CREATE DATABASE blogloom
   COLLATE utf8mb4_unicode_ci;
 ```
 
+Copy the config template and fill in the database connection:
+
 ```bash
-mysql -u root -p < sql/increment/init.sql
+cp bin/local/deploy.conf.example bin/local/deploy.conf
 ```
 
-For a fresh environment, importing `sql/increment/init.sql` is enough.
+Then run the incremental SQL to initialize:
+
+```bash
+bin/local/upgrate-sql.sh --dry-run   # preview pending SQL
+bin/local/upgrate-sql.sh             # execute and record
+```
+
+The script runs the scripts under `sql/increment/` in timestamp order (the baseline includes the schema) and writes execution records to `sql/local/`, so it is safe to rerun. See [Initialize the database](/v1/en/deploy/database) for details.
 
 ## 2. Configure and start the backend
 

@@ -32,15 +32,20 @@ docs-website/
 ├── package.json       # 脚本：dev / check / test / validate / broken-links
 ├── style.css          # 首页 Landing 自定义样式（.blogloom-landing 作用域）
 ├── landing.js         # 首页交互（Tab 切换 / 复制按钮）
-├── logo.svg           # 品牌 Logo
+├── logo.svg           # 品牌 Logo（矢量）
+├── blogloom-logo.png  # 品牌 Logo（位图，与仓库根 assets/ 同源）
+├── site-favicon.png   # 站点图标 / favicon
 ├── .mintignore        # 忽略文件
 ├── scripts/
 │   ├── check-docs.mjs # 校验：每个导航路由有文件、每页有 title、无孤儿页
 │   └── tests/         # 校验逻辑单元测试
-└── v1/                # 当前版本 1.x
-    ├── en/            #   英文（默认语言）
-    └── zh/            #   中文（与 en 平行对齐）
+├── v1/                # 当前版本 1.x
+│   ├── en/            #   英文（默认语言）
+│   └── zh/            #   中文（与 en 平行对齐）
+└── 开源项目官网结构与文档库拆解.md   # 官网建设方法论
 ```
+
+> CI 工作流位于仓库根目录 `.github/workflows/website.yml`，会在 `docs-website/` 下执行 `npm test`、`npm run validate` 与 `npm run broken-links`。
 
 **导航模型**（五层树，全部由 `docs.json` 驱动）：
 
@@ -110,7 +115,7 @@ language (en 默认 / zh) → version (v1) → tab (Home/Guide/Deploy/Integratio
 - 每个 `.md` 文件都在导航中（无孤儿页）；
 - 每个页面有 `title` front-matter。
 
-接入 CI（参考 `.github/workflows/website.yml`）：
+已内置 CI 工作流：仓库根目录 [`.github/workflows/website.yml`](../.github/workflows/website.yml)，在 `docs-website/` 目录下执行：
 
 ```yaml
 name: Validate Docs
@@ -119,14 +124,19 @@ on:
     paths: ['docs-website/**']
   push:
     branches: [master, main]
+defaults:
+  run:
+    working-directory: docs-website
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '22', cache: npm }
-        # 在 docs-website/ 目录下执行
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: docs-website/package-lock.json
       - run: npm ci
       - run: npm test
       - run: npm run validate

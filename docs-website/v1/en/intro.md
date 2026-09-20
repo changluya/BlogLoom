@@ -36,7 +36,8 @@ BlogLoom is built with Spring Boot, MyBatis and Vue, and ships as three parts: a
 
 <div className="hs-code-panel" id="backend">
 ```bash
-mysql -u root -p < sql/increment/init.sql
+cp bin/local/deploy.conf.example bin/local/deploy.conf
+bin/local/upgrate-sql.sh
 
 cd blog-backend
 mvn spring-boot:run
