@@ -1,0 +1,318 @@
+docker/scripts/common.sh
+  s_4ec7ec8429ea2a::t_bfb22dc1e94f59 3-98,105-123
+  s_4ec7ec8429ea2a::t_5f1d89416e8ac9 100-102
+  s_4ec7ec8429ea2a::t_b607ffef970cfa 1-2
+  s_4ec7ec8429ea2a::t_67759c4e277c77 99
+  s_4ec7ec8429ea2a::t_a95542bd3a5786 103-104
+  s_4ec7ec8429ea2a::t_12aff26e94a3c3 124-126
+blog-backend/src/main/java/com/changlu/blogloom/module/cache/domain/pojo/CacheEntry.java
+  s_a985bebdadbaf2::t_329456293ee6d6 1-46
+blog-backend/src/test/resources/schema.sql
+  s_a985bebdadbaf2::t_00a96d60a26b0f 1-29
+blog-backend/src/test/java/com/changlu/blogloom/service/impl/MysqlBlogCacheServiceImplTest.java
+  s_a985bebdadbaf2::t_1fd4ae2c45865b 192,208
+  s_a985bebdadbaf2::t_007a3728cf9138 1-191,193-207,209-211
+blog-backend/src/main/java/com/changlu/blogloom/config/SpaForwardConfig.java
+  s_4ec7ec8429ea2a::t_70a4b81dfb273f 3,6-16,19-25,28,31,33-36,38-97
+docker/standalone/upgrade.sh
+  s_4ec7ec8429ea2a::t_5d18828a32866b 6-9,17-23,28-30,37-41,62-65,75,79-82,90-92,96-99,103-105,107
+  s_4ec7ec8429ea2a::t_0036a63b7aac33 1-5,10-11,13-16,24-27,31-34,66,85,87,89,94-95,100-102
+  s_4ec7ec8429ea2a::t_e5ad1d34c634fc 12,35-36,42-61,67-74,76-78,83-84,86,88,93,106,108
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/AboutServiceImpl.java
+  s_a985bebdadbaf2::t_80846788ff98db 33-36,46,66,85
+  s_a985bebdadbaf2::t_bd376f4c030f74 6,11,29,86
+blog-backend/src/main/resources/mapper/BlogMapper.xml
+  s_a985bebdadbaf2::t_2e970a599c4941 278
+  s_a985bebdadbaf2::t_87fd5fb223c2ff 350
+sql/increment/1.0/20260915000000_v1.0.x.sql
+  s_a985bebdadbaf2::t_c951ff7f692a62 266
+  s_a985bebdadbaf2::t_c8c24257346efa 267
+  s_a985bebdadbaf2::t_1075a3e44bd9e5 100-115
+qa/run-stress-test.sh
+  s_4ec7ec8429ea2a::t_11274a742db273 195
+  s_4ec7ec8429ea2a::t_7d2ffa37bfa91c 256
+  s_4ec7ec8429ea2a::t_d060feefb06cfa 200-201,203,207-208
+  s_4ec7ec8429ea2a::t_cb0f73da350b7b 265
+  s_4ec7ec8429ea2a::t_04a452714462f9 247,249,259,268-277
+  s_4ec7ec8429ea2a::t_6ee933cb6969f8 218,221-222
+  s_4ec7ec8429ea2a::t_0f6832b449e53c 1-59,61-155,160,162,164-165,167-168,170-171,173-176,189,194,196-199,202,211-217,219-220,223-246,248,250-255,257-258,260-264,266-267,278-288
+  s_4ec7ec8429ea2a::t_bb0b3f22d4b572 60
+  s_4ec7ec8429ea2a::t_2fb1e2cb1c2593 177-187
+  s_4ec7ec8429ea2a::t_1b0491fe48d689 156-159,161,163,166,169,172,188,190-193,204-206,209-210
+docker/scripts/push.sh
+  s_4ec7ec8429ea2a::t_3111c32310283d 1-68
+blog-backend/src/main/java/com/changlu/blogloom/module/cache/constant/CacheConstant.java
+  s_a985bebdadbaf2::t_66d20721f7429f 1-13
+.dockerignore
+  s_4ec7ec8429ea2a::t_703a8ece6d3387 9-11
+  s_4ec7ec8429ea2a::t_75cd6dbc29bf63 1-8,12-13
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/MysqlBlogCacheServiceImpl.java
+  s_a985bebdadbaf2::t_4e96bf85c16919 189-190,194-201
+  s_a985bebdadbaf2::t_ac055749b0da94 3-5,8,10-13,15-16,21-23,25,27,29-34,36,40-41,44,49,54-60,65-70,75-79,87,92,96,98-102,107,111,113-117,122,126,128-132,140,145,150,155,160,165,170-172,177-180,185-188,191-193,202-240
+qa/run-capacity-test.sh
+  s_4ec7ec8429ea2a::t_02ec6fe64408fd 65
+  s_4ec7ec8429ea2a::t_533f8b6cb542b3 238,240-243,246
+  s_4ec7ec8429ea2a::t_10129e14ce754a 1-8,17-20,23-27,29-30,32,36-64,68-73,86-96,98-117,129-130,133,165-200,202-205,207-208,210-222,229-231,233-234,236-237,249-251,259-264,266-279
+  s_4ec7ec8429ea2a::t_8c54a089d1ff5c 9-16,21-22,28,31,34-35,66-67,74-85,97,118-128,131-132,134-164,201,206,209,223-228,232,235,239,244-245,247-248,252-258,265
+  s_4ec7ec8429ea2a::t_b00277a2bef580 33
+docker/scripts/package.sh
+  s_4ec7ec8429ea2a::t_aedc55672098eb 10-11
+  s_4ec7ec8429ea2a::t_4d9cfd4da6f5e3 3-8,12-49,53-67,83-85
+  s_4ec7ec8429ea2a::t_de4ab211b83af4 79-81
+  s_4ec7ec8429ea2a::t_6c73dfbd37838e 51,76-77,89-90
+  s_4ec7ec8429ea2a::t_1ad69a4697bdfc 1-2
+  s_4ec7ec8429ea2a::t_0c949e42365a90 9
+  s_4ec7ec8429ea2a::t_604c503fd7827e 50
+  s_4ec7ec8429ea2a::t_1137277baeeb78 52
+  s_4ec7ec8429ea2a::t_3c5e1b382dd8fe 68-70,73-75
+  s_4ec7ec8429ea2a::t_88513029024e5b 78
+  s_4ec7ec8429ea2a::t_ece9c58b0fb09c 82
+  s_4ec7ec8429ea2a::t_ddb0165d8e149e 86-88
+blog-backend/src/main/java/com/changlu/blogloom/service/BlogCacheService.java
+  s_a985bebdadbaf2::t_b1a5e749393f29 9-14
+blog-backend/src/main/java/com/changlu/blogloom/service/BlogService.java
+  s_a985bebdadbaf2::t_004aa9340ac9a7 56
+blog-backend/src/main/java/com/changlu/blogloom/controller/BlogController.java
+  s_a985bebdadbaf2::t_004aa9340ac9a7 95
+blog-backend/src/test/java/com/changlu/blogloom/task/VisitorSyncScheduleTaskTest.java
+  s_a985bebdadbaf2::t_e298250e37c8b9 70-71
+  s_a985bebdadbaf2::t_2a6d4dc7cee391 57
+  s_a985bebdadbaf2::t_a046ca5bed70e9 1-56,58-69,72-73
+docker/standalone/docker-compose.yml
+  s_4ec7ec8429ea2a::t_10866f7af21d9f 1-6,13-14,16-32,34-46,48-77
+  s_4ec7ec8429ea2a::t_d5a041879d2dd8 7-12,15,33,47,78-80
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/VisitorAdminController.java
+  s_a985bebdadbaf2::t_6b4fb243b3c3f3 52
+blog-cms-ui/src/util/request.js
+  s_4ec7ec8429ea2a::t_6da6885a05279b 11-12,16,18
+docs/工程化开发模块设计思路产物/运维/标准单体项目一键Docker部署全生命周期落地方案.md
+  s_4ec7ec8429ea2a::t_b013d6cbb22b1b 1-451
+docker/scripts/upgrade.sh
+  s_4ec7ec8429ea2a::t_d1e1c058c812d6 62-72
+  s_4ec7ec8429ea2a::t_04c73121c75361 10,12
+  s_4ec7ec8429ea2a::t_255b87dd8fe008 3-8,11,13-61,75-99
+  s_4ec7ec8429ea2a::t_b832db9d078c9a 1-2
+  s_4ec7ec8429ea2a::t_54589a706aec15 9
+  s_4ec7ec8429ea2a::t_a4437ceff25eec 73-74
+  s_4ec7ec8429ea2a::t_1dfe8203ed7514 100-102
+blog-backend/src/test/java/com/changlu/blogloom/service/impl/AboutServiceImplTest.java
+  s_a985bebdadbaf2::t_18baa4aeba4fde 1-75
+blog-backend/pom.xml
+  s_a985bebdadbaf2::t_945a22d4d929f2 179-185
+docker/.env.example
+  s_4ec7ec8429ea2a::t_e9dd98e5f49941 9,11-15
+  s_4ec7ec8429ea2a::t_9a0f3944f33177 31,33
+  s_4ec7ec8429ea2a::t_e279eb294d964e 1-8,10,16-30,32
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/BlogServiceImpl.java
+  s_a985bebdadbaf2::t_e95dab82e8fc3a 80,85,87,165,176-177,182,305,419,442
+  s_a985bebdadbaf2::t_cb10c42c1e93ff 57
+  s_a985bebdadbaf2::t_b5cca9e8f3a540 8
+  s_a985bebdadbaf2::t_8840a669d5fbb5 24
+  s_a985bebdadbaf2::t_004aa9340ac9a7 83-84,86,89,127-130,142,160,169-170,187,199,209,219,240-243,263,300,315,331,360,400,421,444,464,477-479,510
+  s_a985bebdadbaf2::t_33e2bc1359a146 301,314,332,359,385-387,396,401,423,446,465,511-513
+docker/standalone/install.sh
+  s_4ec7ec8429ea2a::t_8ff3b23e7961f1 1-3,5,9-13,22,28-32,34-38,40,44-46,92-109,111-139,143-146,228-230,234-238,242-244
+  s_4ec7ec8429ea2a::t_0ab8011cbfa3ef 33,39,52-71,76-87,150-155,164-165,173,175-193,196-200,202-203,205,207,209,212,239,241
+  s_4ec7ec8429ea2a::t_3d0eff823733f0 4,6-8,14-21,23-27,41-43,47-51,72-75,88-91,147-149,156-159,169,174,194,201,208,210,218-220,224-227,231-233
+  s_4ec7ec8429ea2a::t_e62fc7fb71b075 110,140-142,221-223,240
+  s_4ec7ec8429ea2a::t_88a2bf479b4e9e 160-163,166-168,170-172,195,204,206,211,213-217
+blog-backend/src/main/java/com/changlu/blogloom/BlogApiApplication.java
+  s_4ec7ec8429ea2a::t_ba2a65f40cff8c 22,24
+qa/lib/report.py
+  s_4ec7ec8429ea2a::t_3db18afec6382c 1-131,134-240,245-248,251,254-260,262-296
+  s_4ec7ec8429ea2a::t_891f918498b906 241-244
+  s_4ec7ec8429ea2a::t_213380d94158a9 132-133
+  s_4ec7ec8429ea2a::t_12335ab9e66a4b 249-250,252-253,261
+blog-backend/src/main/java/com/changlu/blogloom/module/cache/dao/CacheMapper.java
+  s_a985bebdadbaf2::t_45b55d08743037 1-24,50-88
+  s_a985bebdadbaf2::t_957841e8254b90 25-29,41-49
+  s_a985bebdadbaf2::t_ec1578fba34a28 30-40
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/SiteSettingServiceImpl.java
+  s_a985bebdadbaf2::t_bd376f4c030f74 6,16,41,247
+  s_a985bebdadbaf2::t_80846788ff98db 53,201,219,246
+blog-backend/src/main/java/com/changlu/blogloom/module/cache/service/CacheService.java
+  s_a985bebdadbaf2::t_b907fa44adf972 1-63
+blog-backend/src/test/java/com/changlu/blogloom/task/CacheSyncScheduleTaskTest.java
+  s_a985bebdadbaf2::t_85956349bd80b9 1-52
+blog-backend/src/main/java/com/changlu/blogloom/aspect/VisitLogAspect.java
+  s_a985bebdadbaf2::t_7a05a41289a03a 89,92-95,99,111,134-137
+  s_a985bebdadbaf2::t_69262eaed2bd44 12,19,46,100,138
+docker/standalone/README.md
+  s_4ec7ec8429ea2a::t_00c4f4ef36839a 71-86
+  s_4ec7ec8429ea2a::t_27655c7f12f573 43-44,46-48,50-58,61
+  s_4ec7ec8429ea2a::t_a542a3238b539a 45,49,59-60
+  s_4ec7ec8429ea2a::t_f1a3281441be29 1-42,62-70,87-93
+.gitignore
+  s_4ec7ec8429ea2a::t_ac4ab691e7805a 45-47
+  s_4ec7ec8429ea2a::t_9f070e3f8fb288 44
+  s_4ec7ec8429ea2a::t_219f8806ec9f89 40-43
+blog-backend/src/main/java/com/changlu/blogloom/module/cache/service/impl/MysqlCacheServiceImpl.java
+  s_a985bebdadbaf2::t_5c9da00b97f80c 50
+  s_a985bebdadbaf2::t_84dc8f0c6a8bed 1-49,51-155
+blog-backend/src/main/java/com/changlu/blogloom/task/CacheSyncScheduleTask.java
+  s_a985bebdadbaf2::t_3bb8915b2a24fa 5-6,12,17,19,24,27-36
+blog-backend/src/test/java/com/changlu/blogloom/controller/CacheInterfaceSimulationTest.java
+  s_a985bebdadbaf2::t_0af59bec1fc827 1-125
+qa/README.md
+  s_4ec7ec8429ea2a::t_70e4939ce370d6 36,38-50,58,62
+  s_4ec7ec8429ea2a::t_d26ee58d179792 1-2,4,11,13-14,19,25-26,28,87,90,97,99-103,105-110,112,114-126,145,147
+  s_4ec7ec8429ea2a::t_51140d73491e08 3,5-9,12,18,21-24,30-35,37,51-57,59-61,63-66
+  s_4ec7ec8429ea2a::t_698fbf864a8fe9 129-142
+  s_4ec7ec8429ea2a::t_3106b123282c09 10,15-17,20,27,29,67-86,88-89,91-96,98,104,111,113,127-128,143-144,146,148-151
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/VisitorServiceImpl.java
+  s_a985bebdadbaf2::t_bd376f4c030f74 6,12,29,71
+  s_a985bebdadbaf2::t_80846788ff98db 70
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/DashboardAdminController.java
+  s_a985bebdadbaf2::t_0aa6ad7ab7d3d1 8,11
+  s_a985bebdadbaf2::t_cd8e30ad016540 29,34
+"docs/工程化开发模块设计思路产物/运维/BlogLoom Docker 一键部署设计方案.md"
+  s_4ec7ec8429ea2a::t_ff57a873bae073 1-3,6-15,18,20-23,25-27,32-36,38-82,84,86,89-97,100,108,111,124-134,136-140,142-144,146-147,149-189,191-201,232,234-253,255-261,266-267,269,271-273,277-299,301-302,304,319-321,323-327
+  s_4ec7ec8429ea2a::t_8511b180a7704b 4-5,16-17,19,24,28-31,37,83,85,87-88,98-99,101-107,109-110,112-123,135,141,145,148,190,202-231,233,254,262-265,268,270,274-276,300,303,305-318,322,328-340
+blog-backend/src/main/java/com/changlu/blogloom/constant/CacheKeyConstants.java
+  s_a985bebdadbaf2::t_2b061ab166f84f 4,6,8
+docker/docker-compose.yml
+  s_4ec7ec8429ea2a::t_0bde64fb2c939e 54
+  s_4ec7ec8429ea2a::t_1081a90b7c91f1 51
+  s_4ec7ec8429ea2a::t_358d027b5bb188 63-64
+  s_4ec7ec8429ea2a::t_f71fcea625ab19 1-23,27-29,38,45,48-50,53,59-61,71,77,82,87,90-96,98
+  s_4ec7ec8429ea2a::t_ceaf5a7103fe5f 24-26,30-37,39-44,46-47,52,55-58,62,65-70,72-76,78-81,83-86,88-89,97
+blog-backend/src/main/resources/mapper/CacheMapper.xml
+  s_a985bebdadbaf2::t_5266095fd53be1 1-25,53-114
+  s_a985bebdadbaf2::t_9d46bab5c7d890 45
+  s_a985bebdadbaf2::t_e5bf5874c8eb2b 26-44,46-52
+blog-backend/src/test/resources/application.properties
+  s_a985bebdadbaf2::t_4b2e3d2de18394 1-37
+blog-backend/src/main/java/com/changlu/blogloom/interceptor/AccessLimitInterceptor.java
+  s_a985bebdadbaf2::t_7c52631755b742 25
+  s_a985bebdadbaf2::t_8313aeb71d99a0 59
+  s_a985bebdadbaf2::t_cfdb4d3f9b8782 9
+  s_a985bebdadbaf2::t_1b3cff97d0c664 41-42,44-46
+blog-backend/src/test/java/com/changlu/blogloom/module/cache/InMemoryCacheMapper.java
+  s_a985bebdadbaf2::t_67a18649283c3f 1-173
+README.md
+  s_4ec7ec8429ea2a::t_b2ffec67911fe3 278-285,287-288,290-291,293-298
+  s_4ec7ec8429ea2a::t_595fe09d3f0965 286,289,292
+  s_4ec7ec8429ea2a::t_e3de8dc4877c6d 320
+docker/scripts/deploy.sh
+  s_4ec7ec8429ea2a::t_477c7665e00d56 10
+  s_4ec7ec8429ea2a::t_aaa962e639078c 58,60-71
+  s_4ec7ec8429ea2a::t_acf2b32d4e4cfb 3-8,11-31,37-41,47-57,59,74-88
+  s_4ec7ec8429ea2a::t_02e0f703e81c22 32-36,44-46
+  s_84159f3ae4b10f::t_bdd196634ba3c6 1-2,9,42-43,72-73,89-93
+blog-backend/src/main/java/com/changlu/blogloom/task/VisitorSyncScheduleTask.java
+  s_a985bebdadbaf2::t_8bd0e5d8a84083 6,10
+  s_a985bebdadbaf2::t_f17ad522132ca7 44
+  s_a985bebdadbaf2::t_02186a28a83f9d 53
+  s_a985bebdadbaf2::t_319c2a0b524b7b 50-51
+  s_a985bebdadbaf2::t_abe90f8192c408 30
+sql/increment/1.0/20260920000000_v1.0.x.sql
+  s_a985bebdadbaf2::t_9a273f7628f7a4 17,19-20
+  s_a985bebdadbaf2::t_0332a325d83899 1-16,18,21-24
+docker/container/bin/upgrade-sql.sh
+  s_4ec7ec8429ea2a::t_3c2e9584099b12 2-217
+  s_4ec7ec8429ea2a::t_8c29ab6ad89719 1
+  s_4ec7ec8429ea2a::t_cad0092da5154d 218
+qa/docker-compose.limits.yml
+  s_4ec7ec8429ea2a::t_9041074e90d24a 1-22
+blog-backend/src/test/java/com/changlu/blogloom/service/impl/FriendServiceImplTest.java
+  s_a985bebdadbaf2::t_36400f1b4dfd3d 1-66,68-91
+  s_a985bebdadbaf2::t_72d18aa95008df 67
+blog-backend/src/main/java/com/changlu/blogloom/util/comment/CommentUtils.java
+  s_a985bebdadbaf2::t_bd376f4c030f74 9,16,52,292,295
+blog-view-ui/vite.config.js
+  s_4ec7ec8429ea2a::t_2c00768bba3ccb 30-31
+"code/Redis 组件相关功能梳理与移除评估.md"
+  s_a985bebdadbaf2::t_6cba3c7a23b2de 193
+  s_a985bebdadbaf2::t_1470488e7dde3d 249
+  s_a985bebdadbaf2::t_eb42528b43a7d8 239-248,250
+  s_a985bebdadbaf2::t_179b82e206e7b2 3,7,9,11-23,25-34,36-83,85-91,93,95-112,114,116-123,125,127-132,134-169,188-192,194-238,251-252,254-257
+  s_a985bebdadbaf2::t_0b893f087259a2 170-173,175-187
+docker/README.md
+  s_4ec7ec8429ea2a::t_5070d6ecfd5156 49-51,53-55,58
+  s_4ec7ec8429ea2a::t_8d1a5c248f6326 205,219,227,249-251,344,353
+  s_4ec7ec8429ea2a::t_a7b7b8fddacd4a 139,345
+  s_4ec7ec8429ea2a::t_0cca1fe71c62c0 264-308
+  s_4ec7ec8429ea2a::t_97aabda4c6c1f6 93-99
+  s_4ec7ec8429ea2a::t_35ae3901075ff8 317-319
+  s_4ec7ec8429ea2a::t_bbf3bd11ff0309 61-62
+  s_4ec7ec8429ea2a::t_e2c95b28eb13f2 1-2,4,10-12,15-20,24,76-78,80-82,84,86,134-138,140,199-204,206-210,212-218,220-226,228-232,234,236-248,252-257,260,262-263,309-310,312-316,320-326,328,330-334,339,341-343,346,349-350,352
+  s_4ec7ec8429ea2a::t_d7b1538c305105 3,5-9,13-14,21-23,25,65-74,85,235,259,347,351
+  s_4ec7ec8429ea2a::t_7dccbc78d63dc8 75,79,100-133,211,233,258,261,311,327,329,335-338,340,348
+  s_4ec7ec8429ea2a::t_c4bde53f3266c4 141-198
+  s_4ec7ec8429ea2a::t_f58721f25ba511 48,52,56-57
+  s_4ec7ec8429ea2a::t_6a838e65820bf7 26-47,59-60,63-64
+  s_4ec7ec8429ea2a::t_957fbebd7b3c5a 83,87-90
+  s_4ec7ec8429ea2a::t_619397b892cb9f 91-92
+blog-backend/src/test/java/com/changlu/blogloom/service/impl/VisitorServiceImplTest.java
+  s_a985bebdadbaf2::t_254b538b814a37 1-49
+docker/container/bin/start.sh
+  s_4ec7ec8429ea2a::t_95ca9056e72500 2-75
+  s_4ec7ec8429ea2a::t_0a5283948678f4 1
+  s_4ec7ec8429ea2a::t_3ce9510b7e0b77 76-77
+docker/Dockerfile
+  s_4ec7ec8429ea2a::t_de6d4dd9dce3d9 18
+  s_4ec7ec8429ea2a::t_6e3f80146c5131 61-62,65-69
+  s_4ec7ec8429ea2a::t_b264edea48a576 74-75,82-83
+  s_4ec7ec8429ea2a::t_d28408d896071d 32-33
+  s_4ec7ec8429ea2a::t_258f425468dbda 3-16,20-25,27-28,30,35,41,47-48,51,57,60,64,73,77,79-81,84-85,92,96
+  s_4ec7ec8429ea2a::t_068d6d50499bfa 1-2,17,19,26,29,31,34,36,38-40,42-46,49-50,52-56,58-59,63,70-72,76,86-91,93-95,97
+  s_4ec7ec8429ea2a::t_e0c1f4af11779d 78
+  s_4ec7ec8429ea2a::t_51c431fde8b28e 37
+qa/lib/capacity_report.py
+  s_4ec7ec8429ea2a::t_28eb951c90e708 7-9,19,22,59,67,83,88-90,93-94,102-106,109-112,117,126,129,144-150,153-154,158,160-161,172,174,178,180,183,189-190,198-199,201-203,208,214-215,233-234,246,252
+  s_4ec7ec8429ea2a::t_99af0a786502da 11-13,20,78,124,140,152,157,173,179,181,194,209,227,240-243,248-249
+  s_4ec7ec8429ea2a::t_f375b00e5ea3be 10,21,70-77,79-80,84-87,91-92,107-108,113-116,151,156,164-166,175,182,184,196,206,223-224,228,237-239
+  s_4ec7ec8429ea2a::t_727ea4f04a5fbc 167-170,176-177
+  s_4ec7ec8429ea2a::t_f4f5673feadf5a 193,195,200,204-205
+  s_4ec7ec8429ea2a::t_8aec4de8467700 1-5,14-18,23-58,60,62,81-82,95-101,118-121,123,127-128,130-139,141,155,159,162,187-188,191-192,197,210-213,216-219,221-222,225,229-232,235-236,244-245,247,253-260
+  s_4ec7ec8429ea2a::t_9553ebe4711ce8 6,61,63-66,68-69,122,125,142-143,163,171,185-186,207,220,226,250-251
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/FriendServiceImpl.java
+  s_a985bebdadbaf2::t_bd376f4c030f74 6,14,32,140
+  s_a985bebdadbaf2::t_80846788ff98db 88,90-92,113,124,133,139
+conf/application.properties.conf
+  s_4ec7ec8429ea2a::t_48bdd92cb69c70 3,7-10,18-20,31,34,38-42,47-48
+  s_a985bebdadbaf2::t_f9f01cb54dc5bd 22-23
+blog-backend/src/test/java/com/changlu/blogloom/service/impl/BlogServiceImplCacheTest.java
+  s_a985bebdadbaf2::t_313ca43adb2cc9 1-227
+blog-backend/src/test/java/com/changlu/blogloom/interceptor/AccessLimitInterceptorTest.java
+  s_a985bebdadbaf2::t_64f4c0aff9a89e 1-108
+blog-backend/src/test/java/com/changlu/blogloom/module/cache/MysqlCacheServiceImplTest.java
+  s_a985bebdadbaf2::t_e1bc2ba597715f 1-126
+conf/application.properties
+  s_a985bebdadbaf2::t_17620032d79d0a 21-22
+  s_4ec7ec8429ea2a::t_b781d46db886d2 2,6-9,17-19,30,33,37-41,46-47
+docker/container/mysql/init/00-grant.sql
+  s_a985bebdadbaf2::t_448e0e9f795cc5 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2b339746e175c0fdbd397fbf35c9f8f795d1e572",
+  "prompts": {},
+  "sessions": {
+    "s_4ec7ec8429ea2a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f43f6b42dffeHKFfzEFp9AMpsT",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_84159f3ae4b10f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f42b8210fffeq3cBw2sAzmr81U",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_a985bebdadbaf2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f457357f3ffeqbodJFdM4q6ztm",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
