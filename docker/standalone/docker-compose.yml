@@ -1,0 +1,80 @@
+# =============================================================================
+# BlogLoom 独立部署（用户版）
+# =============================================================================
+# 面向只想快速把博客跑起来的用户：无需 JDK / Node / Maven，直接从 Docker Hub 拉取镜像。
+# 只暴露一个 Web 端口（默认 18080），MySQL 仅在容器内部使用。
+#
+# 数据落盘：所有运行时数据绑定挂载到本目录下的 ./data/，便于查看与备份。
+#   ./data/mysql       MySQL 数据
+#   ./data/logs        运行日志
+#   ./data/upload      上传资源
+#   ./data/sql-local   已执行 SQL 记录
+#
+# 用法（在任意空文件夹执行）：
+#   curl -fsSLO https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/docker-compose.yml
+#   mkdir -p data/mysql data/logs data/upload data/sql-local
+#   docker compose up -d
+#
+# 默认账号：admin / 123456
+#
+# 可选：在同目录创建 .env 覆盖默认值，例如：
+#   WEB_PORT=8080
+#   MYSQL_ROOT_PASSWORD=your-strong-password
+#   TOKEN_SECRET=your-long-random-secret
+#   BLOG_API=http://your-domain:8080
+#   BLOG_CMS=http://your-domain:8080/cms
+#   BLOG_VIEW=http://your-domain:8080
+#   IMAGE_TAG=1.0.0        # 默认 latest
+# =============================================================================
+
+name: blogloom
+
+services:
+  # MySQL 8：数据绑定挂载到 ./data/mysql，仅容器内网访问
+  mysql:
+    image: mysql:8.0
+    container_name: blogloom-mysql
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-blogloom_root_pwd}
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-blogloom}
+      TZ: ${TZ:-Asia/Shanghai}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  # BlogLoom 应用：镜像已内置前端与增量 SQL，启动时自动初始化数据库
+  blogloom:
+    image: ${IMAGE_REPO:-codercl/blogloom}:${IMAGE_TAG:-latest}
+    container_name: blogloom-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-blogloom_root_pwd}
+      DB_NAME: ${MYSQL_DATABASE:-blogloom}
+      BLOG_NAME: ${BLOG_NAME:-BlogLoom}
+      BLOG_API: ${BLOG_API:-http://localhost:18080}
+      BLOG_CMS: ${BLOG_CMS:-http://localhost:18080/cms}
+      BLOG_VIEW: ${BLOG_VIEW:-http://localhost:18080}
+      TOKEN_SECRET: ${TOKEN_SECRET:-please-change-this-token-secret}
+      TZ: ${TZ:-Asia/Shanghai}
+      JAVA_OPTS: ${JAVA_OPTS:--Xms256m -Xmx512m}
+    ports:
+      - "${WEB_PORT:-18080}:8090"
+    volumes:
+      - ./data/logs:/opt/blogloom/conf/logs
+      - ./data/upload:/opt/blogloom/conf/upload
+      - ./data/sql-local:/opt/blogloom/sql/local

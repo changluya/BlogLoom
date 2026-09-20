@@ -1,0 +1,13 @@
+.git
+.idea
+.vscode
+**/node_modules
+**/target
+**/dist
+docker/dist
+docker/.env
+data
+conf/logs
+conf/upload
+docs
+*.log

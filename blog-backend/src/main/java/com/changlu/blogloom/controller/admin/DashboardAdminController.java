@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.changlu.blogloom.constant.RedisKeyConstants;
+import com.changlu.blogloom.constant.CacheKeyConstants;
 import com.changlu.blogloom.entity.CityVisitor;
 import com.changlu.blogloom.model.vo.Result;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.service.DashboardService;
-import com.changlu.blogloom.service.RedisService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +26,12 @@ public class DashboardAdminController {
 	@Autowired
 	DashboardService dashboardService;
 	@Autowired
-	RedisService redisService;
+	BlogCacheService cacheService;
 
 	@GetMapping("/dashboard")
 	public Result dashboard() {
 		int todayPV = dashboardService.countVisitLogByToday();
-		int todayUV = redisService.countBySet(RedisKeyConstants.IDENTIFICATION_SET);
+		int todayUV = cacheService.countBySet(CacheKeyConstants.IDENTIFICATION_SET);
 		int blogCount = dashboardService.getBlogCount();
 		int commentCount = dashboardService.getCommentCount();
 		Map<String, Object> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();

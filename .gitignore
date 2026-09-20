@@ -37,3 +37,11 @@ build/
 package-lock.json
 bin/local/deploy.conf
 sql/local/
+
+# Docker 部署运行时数据与产物
+docker/.env
+docker/dist/
+data/
+
+# 压测产物
+qa/results/

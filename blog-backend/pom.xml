@@ -112,11 +112,6 @@
             <artifactId>commonmark-ext-task-list-items</artifactId>
             <version>0.18.1</version>
         </dependency>
-        <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
         <!-- mail -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -180,6 +175,13 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- H2：仅供单元测试使用，作为 MySQL 的内存替身 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

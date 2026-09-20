@@ -3,7 +3,7 @@ package com.changlu.blogloom.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.changlu.blogloom.constant.RedisKeyConstants;
+import com.changlu.blogloom.constant.CacheKeyConstants;
 import com.changlu.blogloom.constant.SiteSettingConstants;
 import com.changlu.blogloom.entity.SiteSetting;
 import com.changlu.blogloom.exception.PersistenceException;
@@ -13,7 +13,7 @@ import com.changlu.blogloom.model.vo.Copyright;
 import com.changlu.blogloom.model.vo.CustomModule;
 import com.changlu.blogloom.model.vo.Favorite;
 import com.changlu.blogloom.model.vo.Introduction;
-import com.changlu.blogloom.service.RedisService;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.service.SiteSettingService;
 import com.changlu.blogloom.service.SiteImageStorageService;
 import com.changlu.blogloom.util.JacksonUtils;
@@ -38,7 +38,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	@Autowired
 	SiteSettingMapper siteSettingMapper;
 	@Autowired
-	RedisService redisService;
+	BlogCacheService cacheService;
 	@Autowired
 	SiteImageStorageService siteImageStorageService;
 
@@ -50,7 +50,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	 */
 	@PostConstruct
 	private void clearSiteInfoCacheOnStartup() {
-		deleteSiteInfoRedisCache();
+		deleteSiteInfoCache();
 	}
 
 	@Override
@@ -198,7 +198,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 				saveOneSiteSetting(siteSetting);
 			}
 		}
-		deleteSiteInfoRedisCache();
+		deleteSiteInfoCache();
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -216,7 +216,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		String url = siteImageStorageService.save(file);
 		setting.setValue(url);
 		updateOneSiteSetting(setting);
-		deleteSiteInfoRedisCache();
+		deleteSiteInfoCache();
 		Map<String, String> result = new LinkedHashMap<>();
 		result.put("url", url);
 		return result;
@@ -243,8 +243,8 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	/**
 	 * 删除站点信息缓存
 	 */
-	private void deleteSiteInfoRedisCache() {
-		redisService.deleteCacheByKey(RedisKeyConstants.SITE_INFO_MAP);
+	private void deleteSiteInfoCache() {
+		cacheService.deleteCacheByKey(CacheKeyConstants.SITE_INFO_MAP);
 	}
 
 	private String normalizeOptionalLink(String value) {

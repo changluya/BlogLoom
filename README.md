@@ -275,6 +275,27 @@ npm run build
 
 构建生产前端前，请分别检查两个前端模块的 `.env.production`，将 `VITE_API_URL` 修改为实际后端地址。生产部署时建议由 Nginx 托管前端静态资源并反向代理后端 API，同时仅开放必要端口。
 
+## Docker 一键部署
+
+仓库 `docker/` 目录提供「后端服务（内含博客前台与管理后台页面）+ MySQL」的一键容器化方案，对外仅暴露两个固定非默认端口。核心三条命令：
+
+```bash
+cd docker
+
+# 1. 一键打包：构建一体化镜像并导出离线部署包到 docker/dist/
+./scripts/package.sh 1.0.0
+
+# 2. 一键部署：加载镜像并启动服务（首次自动初始化数据库）
+./scripts/deploy.sh
+
+# 3. 一键升级（增量）：加载新镜像，按历史执行记录执行增量 SQL 并重启
+./scripts/upgrade.sh dist/blogloom-1.0.1.tar
+```
+
+默认访问地址为 `http://<服务器IP>:18080`（博客前台）、`http://<服务器IP>:18080/cms`（管理后台），MySQL 对外端口为 `13306`。首次部署请检查 `docker/.env` 中的 `BLOG_API`、`BLOG_CMS`、`BLOG_VIEW`。
+
+完整说明（目录结构、配置项、数据持久化、升级原理与常见问题）见 [docker/README.md](./docker/README.md)。
+
 ## 配置与数据说明
 
 - Java 根包名为 `com.changlu.blogloom`。
@@ -296,7 +317,7 @@ npm run build
 - [ ] 扩展 CSDN、掘金、博客园等多渠道发布能力
 - [ ] 增强媒体资源统一管理
 - [ ] 引入 AI 辅助写作、摘要和内容整理能力
-- [ ] 提供 Docker Compose 一键部署方案
+- [x] 提供 Docker Compose 一键部署方案（见 [docker/README.md](./docker/README.md)）
 
 > 以上内容属于演进规划，不代表当前版本已实现。
 

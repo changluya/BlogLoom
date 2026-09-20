@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import com.changlu.blogloom.annotation.VisitLogger;
-import com.changlu.blogloom.constant.RedisKeyConstants;
+import com.changlu.blogloom.constant.CacheKeyConstants;
 import com.changlu.blogloom.entity.VisitLog;
 import com.changlu.blogloom.entity.Visitor;
 import com.changlu.blogloom.enums.VisitBehavior;
 import com.changlu.blogloom.model.dto.VisitLogRemark;
 import com.changlu.blogloom.model.vo.BlogDetail;
 import com.changlu.blogloom.model.vo.Result;
-import com.changlu.blogloom.service.RedisService;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.service.VisitLogService;
 import com.changlu.blogloom.service.VisitorService;
 import com.changlu.blogloom.util.AopUtils;
@@ -43,7 +43,7 @@ public class VisitLogAspect {
 	@Autowired
 	VisitorService visitorService;
 	@Autowired
-	RedisService redisService;
+	BlogCacheService cacheService;
 
 	ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
@@ -86,18 +86,18 @@ public class VisitLogAspect {
 	private String checkIdentification(HttpServletRequest request) {
 		String identification = request.getHeader("identification");
 		if (identification == null) {
-			//请求头没有uuid，签发uuid并保存到数据库和Redis
+			//请求头没有uuid，签发uuid并保存到数据库和缓存
 			identification = saveUUID(request);
 		} else {
-			//校验Redis中是否存在uuid
-			boolean redisHas = redisService.hasValueInSet(RedisKeyConstants.IDENTIFICATION_SET, identification);
-			//Redis中不存在uuid
-			if (!redisHas) {
+			//校验缓存中是否存在uuid
+			boolean cacheHas = cacheService.hasValueInSet(CacheKeyConstants.IDENTIFICATION_SET, identification);
+			//缓存中不存在uuid
+			if (!cacheHas) {
 				//校验数据库中是否存在uuid
 				boolean mysqlHas = visitorService.hasUUID(identification);
 				if (mysqlHas) {
-					//数据库存在，保存至Redis
-					redisService.saveValueToSet(RedisKeyConstants.IDENTIFICATION_SET, identification);
+					//数据库存在，保存至缓存
+					cacheService.saveValueToSet(CacheKeyConstants.IDENTIFICATION_SET, identification);
 				} else {
 					//数据库不存在，签发新的uuid
 					identification = saveUUID(request);
@@ -108,7 +108,7 @@ public class VisitLogAspect {
 	}
 
 	/**
-	 * 签发UUID，并保存至数据库和Redis
+	 * 签发UUID，并保存至数据库和缓存
 	 *
 	 * @param request
 	 * @return
@@ -131,11 +131,11 @@ public class VisitLogAspect {
 		response.addHeader("identification", uuid);
 		//暴露自定义header供页面资源使用
 		response.addHeader("Access-Control-Expose-Headers", "identification");
-		//校验Redis中是否存在uuid
-		boolean redisHas = redisService.hasValueInSet(RedisKeyConstants.IDENTIFICATION_SET, uuid);
-		if (!redisHas) {
-			//保存至Redis
-			redisService.saveValueToSet(RedisKeyConstants.IDENTIFICATION_SET, uuid);
+		//校验缓存中是否存在uuid
+		boolean cacheHas = cacheService.hasValueInSet(CacheKeyConstants.IDENTIFICATION_SET, uuid);
+		if (!cacheHas) {
+			//保存至缓存
+			cacheService.saveValueToSet(CacheKeyConstants.IDENTIFICATION_SET, uuid);
 			//保存至数据库
 			Visitor visitor = new Visitor(uuid, ip, userAgent);
 			visitorService.saveVisitor(visitor);

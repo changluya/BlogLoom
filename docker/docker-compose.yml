@@ -1,0 +1,98 @@
+# =============================================================================
+# BlogLoom Docker Compose
+# =============================================================================
+# 仅两个常驻服务：
+#   - blogloom  应用服务（后端 + 博客前台 + 管理后台，容器启动时自动执行增量 SQL）
+#   - mysql     MySQL 8 数据库
+#
+# 对外端口（固定非默认端口，可在 docker/.env 修改）：
+#   - WEB_PORT   18080 -> 容器 8090（前台 /、后台 /cms、接口 /admin、上传 /static）
+#   - MYSQL_PORT 13306 -> 容器 3306
+#
+# 挂载的宿主目录统一位于仓库根目录（BlogLoom/）下，便于查找与备份：
+#   - conf/application.properties、conf/logback-spring.xml  配置（只读）
+#   - conf/logs、conf/upload                                 运行日志与上传资源（持久化）
+#   - sql/increment                                          增量 SQL（只读）
+#   - data/sql-local                                         已执行 SQL 记录（持久化）
+#   - data/mysql                                             MySQL 数据（持久化）
+#
+# 使用方式（在 docker/ 目录执行）：
+#   ./scripts/deploy.sh     一键部署（首次会自动生成 .env 与数据目录）
+#   ./scripts/upgrade.sh    一键升级（加载新镜像并重启，启动时执行增量 SQL）
+# =============================================================================
+
+name: blogloom
+
+services:
+  # ---------------------------------------------------------------------------
+  # MySQL 8：数据持久化在仓库根目录 data/mysql
+  # ---------------------------------------------------------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: blogloom-mysql
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      # root 仅用于容器内健康检查；应用使用下方的 blogloom 账号。
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-blogloom}
+      MYSQL_USER: blogloom
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TZ:-Asia/Shanghai}
+    ports:
+      # 宿主 MYSQL_PORT -> 容器 3306
+      - "${MYSQL_PORT:-13306}:3306"
+    volumes:
+      # 数据目录（持久化，务必纳入备份）
+      - ../data/mysql:/var/lib/mysql
+      # 首次初始化时补授应用账号全局权限（支持增量 SQL 中的 CREATE DATABASE IF NOT EXISTS）
+      - ./container/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # 健康检查通过后，应用容器才会启动，保证启动时数据库可用。
+      test: ["CMD-SHELL", "mysql -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  # ---------------------------------------------------------------------------
+  # BlogLoom 应用：容器入口 bin/start.sh 会先执行增量 SQL，再启动后端
+  # ---------------------------------------------------------------------------
+  blogloom:
+    # IMAGE_REPO 默认 blogloom（本地构建/加载）；从 Docker Hub 部署时设为 codercl/blogloom
+    image: ${IMAGE_REPO:-blogloom}:${IMAGE_TAG:-1.0.0}
+    container_name: blogloom-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      # 数据库连接（供应用与 bin/upgrade-sql.sh 使用）
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: blogloom
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE:-blogloom}
+      # 站点对外地址（影响上传资源、邮件与通知中的链接）
+      BLOG_NAME: ${BLOG_NAME:-BlogLoom}
+      BLOG_API: ${BLOG_API:-http://localhost:18080}
+      BLOG_CMS: ${BLOG_CMS:-http://localhost:18080/cms}
+      BLOG_VIEW: ${BLOG_VIEW:-http://localhost:18080}
+      # 登录令牌密钥
+      TOKEN_SECRET: ${TOKEN_SECRET}
+      TZ: ${TZ:-Asia/Shanghai}
+      JAVA_OPTS: ${JAVA_OPTS:--Xms256m -Xmx512m}
+    ports:
+      # 宿主 WEB_PORT -> 容器 8090（前台 /、后台 /cms、接口共用）
+      - "${WEB_PORT:-18080}:8090"
+    volumes:
+      # 配置（只读，来自仓库 conf/）
+      - ../conf/application.properties:/opt/blogloom/conf/application.properties:ro
+      - ../conf/logback-spring.xml:/opt/blogloom/conf/logback-spring.xml:ro
+      # 运行日志与上传资源（持久化）
+      - ../conf/logs:/opt/blogloom/conf/logs
+      - ../conf/upload:/opt/blogloom/conf/upload
+      # 增量 SQL（只读）与执行记录（持久化）：start.sh 据此只执行未执行过的 SQL
+      - ../sql/increment:/opt/blogloom/sql/increment:ro
+      - ../data/sql-local:/opt/blogloom/sql/local

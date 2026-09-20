@@ -1,11 +1,11 @@
 package com.changlu.blogloom.constant;
 
 /**
- * @Description: Redis key配置
+ * @Description: 缓存 key 配置
  * @Author: changlu
- * @Date: 2026-09-13
+ * @Date: 2026-09-20
  */
-public class RedisKeyConstants {
+public class CacheKeyConstants {
 	/**
 	 * 首页博客简介列表 分页对象key
 	 * homeBlogInfoList : {{1,"第一页的缓存"},{2,"第二页的缓存"}}

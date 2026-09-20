@@ -49,7 +49,7 @@ public class VisitorAdminController {
 
 	/**
 	 * 按id删除访客
-	 * 按uuid删除Redis缓存
+	 * 按uuid删除缓存
 	 *
 	 * @param id   访客id
 	 * @param uuid 访客uuid

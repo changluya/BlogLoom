@@ -3,12 +3,12 @@ package com.changlu.blogloom.task;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.changlu.blogloom.constant.RedisKeyConstants;
+import com.changlu.blogloom.constant.CacheKeyConstants;
 import com.changlu.blogloom.entity.CityVisitor;
 import com.changlu.blogloom.entity.VisitRecord;
 import com.changlu.blogloom.model.dto.VisitLogUuidTime;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.service.CityVisitorService;
-import com.changlu.blogloom.service.RedisService;
 import com.changlu.blogloom.service.VisitLogService;
 import com.changlu.blogloom.service.VisitRecordService;
 import com.changlu.blogloom.service.VisitorService;
@@ -27,7 +27,7 @@ import java.util.Map;
 @Component
 public class VisitorSyncScheduleTask {
 	@Autowired
-	RedisService redisService;
+	BlogCacheService cacheService;
 	@Autowired
 	VisitLogService visitLogService;
 	@Autowired
@@ -41,16 +41,16 @@ public class VisitorSyncScheduleTask {
 	 * 这个方法不应该被直接调用，应当作为定时任务的task，在每天0点执行
 	 * 每日访问量很大时，这个任务可能很耗时
 	 * <p>
-	 * 清空昨天Redis访客标识
+	 * 清空昨天缓存访客标识
 	 * 记录昨天的PV和UV
 	 * 更新昨天所有访客的PV和最后访问时间
 	 * 更新城市新增访客UV数
 	 */
 	public void syncVisitInfoToDatabase() {
-		//清空昨天Redis的访客标识Set，以便统计每日UV
-		redisService.deleteCacheByKey(RedisKeyConstants.IDENTIFICATION_SET);
+		//清空昨天缓存的访客标识Set，以便统计每日UV
+		cacheService.deleteCacheByKey(CacheKeyConstants.IDENTIFICATION_SET);
 		//获取昨天的所有访问日志
-		//为避免缓存击穿导致第二天的数据统计不准确，以数据库访问日志为准，而不从Redis中获取这个Set
+		//为避免缓存击穿导致第二天的数据统计不准确，以数据库访问日志为准，而不从缓存中获取这个Set
 		//比如在这个定时任务执行期间，产生大量访客的请求，而这些访客的uuid都在任务执行结束后被清空了，没有被第二天的定时任务记录到
 		List<VisitLogUuidTime> yesterdayLogList = visitLogService.getUUIDAndCreateTimeByYesterday();
 		//按每日UV 700的标准初始化map

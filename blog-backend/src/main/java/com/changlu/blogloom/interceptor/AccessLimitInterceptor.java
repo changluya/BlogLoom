@@ -6,7 +6,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.changlu.blogloom.annotation.AccessLimit;
 import com.changlu.blogloom.model.vo.Result;
-import com.changlu.blogloom.service.RedisService;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.util.IpAddressUtils;
 import com.changlu.blogloom.util.JacksonUtils;
 
@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 @Component
 public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
-	RedisService redisService;
+	BlogCacheService cacheService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -38,12 +38,12 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
 			String ip = IpAddressUtils.getIpAddress(request);
 			String method = request.getMethod();
 			String requestURI = request.getRequestURI();
-			String redisKey = ip + ":" + method + ":" + requestURI;
-			Integer count = redisService.getObjectByValue(redisKey, Integer.class);
+			String cacheKey = ip + ":" + method + ":" + requestURI;
+			Integer count = cacheService.getObjectByValue(cacheKey, Integer.class);
 			if (count == null) {
-				//在规定周期内第一次访问，存入redis
-				redisService.incrementByKey(redisKey, 1);
-				redisService.expire(redisKey, seconds);
+				//在规定周期内第一次访问，写入缓存
+				cacheService.incrementByKey(cacheKey, 1);
+				cacheService.expire(cacheKey, seconds);
 			} else {
 				if (count >= maxCount) {
 					//超出访问限制次数
@@ -56,7 +56,7 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
 					return false;
 				} else {
 					//没超出访问限制次数
-					redisService.incrementByKey(redisKey, 1);
+					cacheService.incrementByKey(cacheKey, 1);
 				}
 			}
 		}

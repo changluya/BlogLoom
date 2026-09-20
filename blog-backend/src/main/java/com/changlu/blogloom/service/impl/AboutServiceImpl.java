@@ -3,12 +3,12 @@ package com.changlu.blogloom.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.changlu.blogloom.constant.RedisKeyConstants;
+import com.changlu.blogloom.constant.CacheKeyConstants;
 import com.changlu.blogloom.entity.About;
 import com.changlu.blogloom.exception.PersistenceException;
 import com.changlu.blogloom.mapper.AboutMapper;
 import com.changlu.blogloom.service.AboutService;
-import com.changlu.blogloom.service.RedisService;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.util.markdown.MarkdownUtils;
 
 import java.util.HashMap;
@@ -26,14 +26,14 @@ public class AboutServiceImpl implements AboutService {
 	@Autowired
 	AboutMapper aboutMapper;
 	@Autowired
-	RedisService redisService;
+	BlogCacheService cacheService;
 
 	@Override
 	public Map<String, String> getAboutInfo() {
-		String redisKey = RedisKeyConstants.ABOUT_INFO_MAP;
-		Map<String, String> aboutInfoMapFromRedis = redisService.getMapByValue(redisKey);
-		if (aboutInfoMapFromRedis != null) {
-			return aboutInfoMapFromRedis;
+		String cacheKey = CacheKeyConstants.ABOUT_INFO_MAP;
+		Map<String, String> aboutInfoMapFromCache = cacheService.getMapByValue(cacheKey);
+		if (aboutInfoMapFromCache != null) {
+			return aboutInfoMapFromCache;
 		}
 		List<About> abouts = aboutMapper.getList();
 		Map<String, String> aboutInfoMap = new HashMap<>(16);
@@ -43,7 +43,7 @@ public class AboutServiceImpl implements AboutService {
 			}
 			aboutInfoMap.put(about.getNameEn(), about.getValue());
 		}
-		redisService.saveMapToValue(redisKey, aboutInfoMap);
+		cacheService.saveMapToValue(cacheKey, aboutInfoMap);
 		return aboutInfoMap;
 	}
 
@@ -63,7 +63,7 @@ public class AboutServiceImpl implements AboutService {
 		for (String key : keySet) {
 			updateOneAbout(key, map.get(key));
 		}
-		deleteAboutRedisCache();
+		deleteAboutCache();
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -82,7 +82,7 @@ public class AboutServiceImpl implements AboutService {
 	/**
 	 * 删除关于我页面缓存
 	 */
-	private void deleteAboutRedisCache() {
-		redisService.deleteCacheByKey(RedisKeyConstants.ABOUT_INFO_MAP);
+	private void deleteAboutCache() {
+		cacheService.deleteCacheByKey(CacheKeyConstants.ABOUT_INFO_MAP);
 	}
 }

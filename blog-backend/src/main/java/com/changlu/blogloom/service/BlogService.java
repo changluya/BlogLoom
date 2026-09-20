@@ -53,7 +53,7 @@ public interface BlogService {
 
 	void updateBlogTopById(Long blogId, Boolean top);
 
-	void updateViewsToRedis(Long blogId);
+	void updateViewsToCache(Long blogId);
 
 	void updateViews(Long blogId, Integer views);
 

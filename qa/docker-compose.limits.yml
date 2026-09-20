@@ -1,0 +1,22 @@
+# =============================================================================
+# BlogLoom 容量测试资源限制覆盖文件（仅用于 qa 压测，不影响正常部署）
+# =============================================================================
+# 通过 docker compose 的 -f 叠加方式为应用容器设置 CPU / 内存配额，
+# 用于测量「给定资源配置下的最大 QPS」。
+#
+# 用法示例：
+#   QA_APP_CPUS=2 QA_APP_MEM_LIMIT=1g \
+#     docker compose --env-file docker/.env \
+#       -f docker/docker-compose.yml -f qa/docker-compose.limits.yml \
+#       up -d --force-recreate blogloom
+#
+# 说明：
+#   - cpus      ：CPU 核数配额（可小数，如 0.5、1、2、4）
+#   - mem_limit ：内存上限（如 512m、1g、2g）
+#   正常部署不会加载本文件，因此不影响 docker/scripts/deploy.sh 的默认行为。
+# =============================================================================
+
+services:
+  blogloom:
+    cpus: ${QA_APP_CPUS:?请在容量测试时设置 QA_APP_CPUS}
+    mem_limit: ${QA_APP_MEM_LIMIT:?请在容量测试时设置 QA_APP_MEM_LIMIT}

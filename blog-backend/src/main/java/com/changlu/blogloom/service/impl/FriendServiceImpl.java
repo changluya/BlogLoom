@@ -3,7 +3,7 @@ package com.changlu.blogloom.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.changlu.blogloom.constant.RedisKeyConstants;
+import com.changlu.blogloom.constant.CacheKeyConstants;
 import com.changlu.blogloom.entity.Friend;
 import com.changlu.blogloom.entity.SiteSetting;
 import com.changlu.blogloom.exception.PersistenceException;
@@ -11,7 +11,7 @@ import com.changlu.blogloom.mapper.FriendMapper;
 import com.changlu.blogloom.mapper.SiteSettingMapper;
 import com.changlu.blogloom.model.vo.FriendInfo;
 import com.changlu.blogloom.service.FriendService;
-import com.changlu.blogloom.service.RedisService;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.util.markdown.MarkdownUtils;
 
 import java.util.Date;
@@ -29,7 +29,7 @@ public class FriendServiceImpl implements FriendService {
 	@Autowired
 	SiteSettingMapper siteSettingMapper;
 	@Autowired
-	RedisService redisService;
+	BlogCacheService cacheService;
 
 	@Override
 	public List<Friend> getFriendList() {
@@ -85,11 +85,11 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public FriendInfo getFriendInfo(boolean cache, boolean md) {
-		String redisKey = RedisKeyConstants.FRIEND_INFO_MAP;
+		String cacheKey = CacheKeyConstants.FRIEND_INFO_MAP;
 		if (cache) {
-			FriendInfo friendInfoFromRedis = redisService.getObjectByValue(redisKey, FriendInfo.class);
-			if (friendInfoFromRedis != null) {
-				return friendInfoFromRedis;
+			FriendInfo friendInfoFromCache = cacheService.getObjectByValue(cacheKey, FriendInfo.class);
+			if (friendInfoFromCache != null) {
+				return friendInfoFromCache;
 			}
 		}
 		List<SiteSetting> siteSettings = siteSettingMapper.getFriendInfo();
@@ -110,7 +110,7 @@ public class FriendServiceImpl implements FriendService {
 			}
 		}
 		if (cache && md) {
-			redisService.saveObjectToValue(redisKey, friendInfo);
+			cacheService.saveObjectToValue(cacheKey, friendInfo);
 		}
 		return friendInfo;
 	}
@@ -121,7 +121,7 @@ public class FriendServiceImpl implements FriendService {
 		if (siteSettingMapper.updateFriendInfoContent(content) != 1) {
 			throw new PersistenceException("修改失败");
 		}
-		deleteFriendInfoRedisCache();
+		deleteFriendInfoCache();
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -130,13 +130,13 @@ public class FriendServiceImpl implements FriendService {
 		if (siteSettingMapper.updateFriendInfoCommentEnabled(commentEnabled) != 1) {
 			throw new PersistenceException("修改失败");
 		}
-		deleteFriendInfoRedisCache();
+		deleteFriendInfoCache();
 	}
 
 	/**
 	 * 删除友链页面缓存
 	 */
-	private void deleteFriendInfoRedisCache() {
-		redisService.deleteCacheByKey(RedisKeyConstants.FRIEND_INFO_MAP);
+	private void deleteFriendInfoCache() {
+		cacheService.deleteCacheByKey(CacheKeyConstants.FRIEND_INFO_MAP);
 	}
 }

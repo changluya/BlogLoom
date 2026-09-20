@@ -3,13 +3,13 @@ package com.changlu.blogloom.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.changlu.blogloom.constant.RedisKeyConstants;
+import com.changlu.blogloom.constant.CacheKeyConstants;
 import com.changlu.blogloom.entity.Visitor;
 import com.changlu.blogloom.exception.PersistenceException;
 import com.changlu.blogloom.mapper.VisitorMapper;
 import com.changlu.blogloom.model.dto.UserAgentDTO;
 import com.changlu.blogloom.model.dto.VisitLogUuidTime;
-import com.changlu.blogloom.service.RedisService;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.service.VisitorService;
 import com.changlu.blogloom.util.IpAddressUtils;
 import com.changlu.blogloom.util.UserAgentUtils;
@@ -26,7 +26,7 @@ public class VisitorServiceImpl implements VisitorService {
 	@Autowired
 	VisitorMapper visitorMapper;
 	@Autowired
-	RedisService redisService;
+	BlogCacheService cacheService;
 	@Autowired
 	UserAgentUtils userAgentUtils;
 
@@ -67,8 +67,8 @@ public class VisitorServiceImpl implements VisitorService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteVisitor(Long id, String uuid) {
-		//删除Redis中该访客的uuid
-		redisService.deleteValueBySet(RedisKeyConstants.IDENTIFICATION_SET, uuid);
+		//删除缓存中该访客的uuid
+		cacheService.deleteValueBySet(CacheKeyConstants.IDENTIFICATION_SET, uuid);
 		if (visitorMapper.deleteVisitorById(id) != 1) {
 			throw new PersistenceException("删除访客失败");
 		}

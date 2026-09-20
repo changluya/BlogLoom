@@ -92,7 +92,7 @@ public class BlogController {
 			}
 			blog.setPassword("");
 		}
-		blogService.updateViewsToRedis(id);
+		blogService.updateViewsToCache(id);
 		return Result.ok("获取成功", blog);
 	}
 

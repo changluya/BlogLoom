@@ -27,7 +27,8 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    assetsDir: 'static',
+    // 后端同源部署时 /static/** 已被后台上传资源占用，允许通过环境变量切换产物目录。
+    assetsDir: process.env.VITE_ASSETS_DIR || 'static',
     sourcemap: false
   }
 })

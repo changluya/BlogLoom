@@ -6,14 +6,14 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import com.changlu.blogloom.config.properties.BlogProperties;
 import com.changlu.blogloom.constant.PageConstants;
-import com.changlu.blogloom.constant.RedisKeyConstants;
+import com.changlu.blogloom.constant.CacheKeyConstants;
 import com.changlu.blogloom.entity.User;
 import com.changlu.blogloom.model.dto.Comment;
 import com.changlu.blogloom.model.vo.FriendInfo;
 import com.changlu.blogloom.service.AboutService;
 import com.changlu.blogloom.service.BlogService;
 import com.changlu.blogloom.service.FriendService;
-import com.changlu.blogloom.service.RedisService;
+import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.service.UserService;
 import com.changlu.blogloom.util.IpAddressUtils;
 import com.changlu.blogloom.util.MailUtils;
@@ -49,7 +49,7 @@ public class CommentUtils {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private RedisService redisService;
+	private BlogCacheService cacheService;
 
 	private static BlogService blogService;
 
@@ -289,10 +289,10 @@ public class CommentUtils {
 	 * @throws Exception 上传QQ头像时可能抛出的异常
 	 */
 	private void setCommentQQAvatar(Comment comment, String qq) throws Exception {
-		String uploadAvatarUrl = (String) redisService.getValueByHashKey(RedisKeyConstants.QQ_AVATAR_URL_MAP, qq);
+		String uploadAvatarUrl = (String) cacheService.getValueByHashKey(CacheKeyConstants.QQ_AVATAR_URL_MAP, qq);
 		if (StringUtils.isEmpty(uploadAvatarUrl)) {
 			uploadAvatarUrl = QQInfoUtils.getQQAvatarUrl(qq);
-			redisService.saveKVToHash(RedisKeyConstants.QQ_AVATAR_URL_MAP, qq, uploadAvatarUrl);
+			cacheService.saveKVToHash(CacheKeyConstants.QQ_AVATAR_URL_MAP, qq, uploadAvatarUrl);
 		}
 		comment.setAvatar(uploadAvatarUrl);
 	}

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.changlu.blogloom.module.cache.dao.CacheMapper">
+
+    <resultMap id="CacheEntryResult" type="com.changlu.blogloom.module.cache.domain.pojo.CacheEntry">
+        <id property="id" column="id"/>
+        <result property="cacheKey" column="cache_key"/>
+        <result property="cacheValue" column="cache_value"/>
+        <result property="cacheType" column="cache_type"/>
+        <result property="expireTime" column="expire_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <sql id="selectCacheVo">
+        select id, cache_key, cache_value, cache_type, expire_time, create_time, modify_time
+        from cache_entry
+    </sql>
+
+    <select id="selectByKey" parameterType="String" resultMap="CacheEntryResult">
+        <include refid="selectCacheVo"/>
+        where cache_key = #{cacheKey}
+        and (expire_time is null or expire_time > now())
+    </select>
+
+    <select id="selectByKeyPrefix" resultMap="CacheEntryResult">
+        <include refid="selectCacheVo"/>
+        where cache_key like concat(#{prefix}, '%')
+        and (expire_time is null or expire_time > now())
+    </select>
+
+    <select id="countByKeyPrefix" resultType="int">
+        select count(*) from cache_entry
+        where cache_key like concat(#{prefix}, '%')
+        and (expire_time is null or expire_time > now())
+    </select>
+
+    <delete id="deleteByKeyPrefix">
+        delete from cache_entry where cache_key like concat(#{prefix}, '%')
+    </delete>
+
+    <update id="incrementByKey">
+        update cache_entry set cache_value = cast(cast(cache_value as signed) + #{increment} as char), modify_time = now()
+        where cache_key = #{cacheKey}
+        and (expire_time is null or expire_time > now())
+    </update>
+
+    <update id="updateExpire">
+        update cache_entry set expire_time = #{expireTime}, modify_time = now()
+        where cache_key = #{cacheKey}
+    </update>
+
+    <insert id="insertCache" parameterType="com.changlu.blogloom.module.cache.domain.pojo.CacheEntry"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into cache_entry
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cacheKey != null and cacheKey != ''">cache_key,</if>
+            <if test="cacheValue != null">cache_value,</if>
+            <if test="cacheType != null and cacheType != ''">cache_type,</if>
+            <if test="expireTime != null">expire_time,</if>
+            create_time,
+            modify_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cacheKey != null and cacheKey != ''">#{cacheKey},</if>
+            <if test="cacheValue != null">#{cacheValue},</if>
+            <if test="cacheType != null and cacheType != ''">#{cacheType},</if>
+            <if test="expireTime != null">#{expireTime},</if>
+            now(),
+            now()
+        </trim>
+    </insert>
+
+    <update id="updateCache" parameterType="com.changlu.blogloom.module.cache.domain.pojo.CacheEntry">
+        update cache_entry
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cacheValue != null">cache_value = #{cacheValue},</if>
+            <if test="cacheType != null and cacheType != ''">cache_type = #{cacheType},</if>
+            <if test="expireTime != null">expire_time = #{expireTime},</if>
+            modify_time = now()
+        </trim>
+        where cache_key = #{cacheKey}
+    </update>
+
+    <delete id="deleteByKey" parameterType="String">
+        delete from cache_entry where cache_key = #{cacheKey}
+    </delete>
+
+    <delete id="deleteByKeys" parameterType="String">
+        delete from cache_entry where cache_key in
+        <foreach collection="keys" item="key" open="(" separator="," close=")">
+            #{key}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAll">
+        delete from cache_entry
+    </delete>
+
+    <delete id="deleteExpired">
+        delete from cache_entry where expire_time is not null and expire_time &lt;= #{currentTime}
+    </delete>
+
+    <select id="selectAllKeys" resultType="String">
+        select cache_key from cache_entry
+        where expire_time is null or expire_time > now()
+    </select>
+
+    <select id="countCache" resultType="Long">
+        select count(*) from cache_entry
+        where expire_time is null or expire_time > now()
+    </select>
+
+</mapper>

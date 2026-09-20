@@ -6,7 +6,12 @@ import com.changlu.blogloom.model.vo.PageResult;
 import java.util.List;
 import java.util.Map;
 
-public interface RedisService {
+/**
+ * @Description: 博客缓存服务抽象，屏蔽底层存储实现，便于后续无缝切换 MySQL / Redis
+ * @Author: changlu
+ * @Date: 2026-09-20
+ */
+public interface BlogCacheService {
 	PageResult<BlogInfo> getBlogInfoPageResultByHash(String hash, Integer pageNum);
 
 	void saveKVToHash(String hash, Object key, Object value);

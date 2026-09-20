@@ -275,7 +275,7 @@
         where b.id=#{id} and b.is_deleted=0
     </select>
 
-    <!--按id查询博客浏览量（含已删除，用于回收站恢复时回填 Redis）-->
+    <!--按id查询博客浏览量（含已删除，用于回收站恢复时回填缓存）-->
     <select id="getBlogViewsById" resultType="java.lang.Integer">
         select views from blog where id=#{id}
     </select>
@@ -347,7 +347,7 @@
         select count(*) from blog where is_published=true and is_deleted=0
     </select>
 
-    <!--查询公开博客ID及数据库阅读量，实时阅读量以Redis为准-->
+    <!--查询公开博客ID及数据库阅读量，实时阅读量以缓存为准-->
     <select id="getBlogViewsListByIsPublished" resultType="com.changlu.blogloom.model.dto.BlogView">
         select id, views from blog where is_published=true and is_deleted=0
     </select>

@@ -8,12 +8,14 @@ const request = axios.create({
 	timeout: 5000
 })
 
+const loginPath = `${import.meta.env.BASE_URL || '/'}login`.replace(/\/{2,}/g, '/')
+
 const redirectToLogin = () => {
 	window.localStorage.removeItem('token')
 	window.localStorage.removeItem('user')
-	if (window.location.pathname !== '/login') {
+	if (window.location.pathname !== loginPath) {
 		const redirect = `${window.location.pathname}${window.location.search}`
-		window.location.replace(`/login?redirect=${encodeURIComponent(redirect)}`)
+		window.location.replace(`${loginPath}?redirect=${encodeURIComponent(redirect)}`)
 	}
 }
 
