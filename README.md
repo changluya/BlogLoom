@@ -115,6 +115,20 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 - IP 地域解析、客户端与访问来源识别
 - 统一异常处理、操作日志和接口分层
 
+## 产品展示
+
+### 博客前台
+
+| 博客首页 | 博客主页 | 文章阅读 | 文章归档 | 友人帐 | 关于我 |
+| --- | --- | --- | --- | --- | --- |
+| ![博客首页](./assets/前台/博客首页.png) | ![博客主页](./assets/前台/博客主页.png) | ![文章阅读](./assets/前台/博客文章阅读页.png) | ![文章归档](./assets/前台/文章归档页.png) | ![友人帐](./assets/前台/博客友人帐.png) | ![关于我](./assets/前台/关于我.png) |
+
+### 管理后台
+
+| 数据概览 | 博客文章 | 博客专栏 | 知识库 | 图床管理 | 站点数据 | 访问日志 |
+| --- | --- | --- | --- | --- | --- | --- |
+| ![数据概览](./assets/后台/后台数据概览页.png) | ![博客文章](./assets/后台/后台（博客管理-文章）.png) | ![博客专栏](./assets/后台/后台（博客管理-专栏）.png) | ![知识库](./assets/后台/后台（博客管理-知识库）.png) | ![图床管理](./assets/后台/后台（图床管理-图床）.png) | ![站点数据](./assets/后台/后台（页面管理-站点数据）.png) | ![访问日志](./assets/后台/后台（日志管理-访问日志）.png) |
+
 ## 技术栈
 
 | 范围 | 主要技术 |
@@ -161,16 +175,36 @@ BlogLoom/
 
 ## 快速开始
 
-### 环境要求
+### 用户部署（推荐）
 
-- JDK 8 或更高版本
-- Maven 3.6+
-- Node.js 16+ 与 npm
-- MySQL 5.7+ 或 MySQL 8
+只想快速把博客跑起来？服务器安装 Docker 与 Docker Compose v2 后，一条命令即可完成部署，无需 JDK / Node / Maven，也无需克隆仓库：
 
-> 也可以直接使用 Docker 一键部署，无需本地安装 JDK / Maven / Node（见下文「Docker 一键部署」）。
+```bash
+mkdir blogloom && cd blogloom
+curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash
+```
 
-### 1. 初始化数据库
+| 入口 | 地址 |
+| --- | --- |
+| 博客前台 | `http://<服务器IP>:18080` |
+| 管理后台 | `http://<服务器IP>:18080/cms` |
+| 默认账号 | `admin` / `123456`（登录后请立即修改） |
+
+后续升级（自动拉取新版本，数据不丢失）：
+
+```bash
+cd blogloom
+./upgrade.sh            # 自动解析最新版本并升级
+./upgrade.sh 1.0.1      # 升级到指定版本
+```
+
+完整说明见 [docker/README.md](./docker/README.md)。
+
+### 本地开发
+
+环境要求：JDK 8+、Maven 3.6+、Node.js 16+ 与 npm、MySQL 5.7+ 或 MySQL 8。
+
+**1. 初始化数据库**
 
 创建数据库：
 
@@ -180,49 +214,25 @@ CREATE DATABASE blogloom
   COLLATE utf8mb4_unicode_ci;
 ```
 
-全新环境推荐直接使用 Docker 一键部署（会自动完成建库建表）；手动方式可使用本地增量升级脚本，首次运行会按文件名顺序执行 `sql/increment/` 下的全部脚本（含全量初始化基线），即完成初始化：
+配置连接后执行增量 SQL，首次运行即完成初始化（含全量基线）：
 
 ```bash
-cp bin/local/deploy.conf.example bin/local/deploy.conf   # 首次需填写数据库连接
+cp bin/local/deploy.conf.example bin/local/deploy.conf   # 填写数据库连接
 ./bin/local/upgrate-sql.sh
 ```
 
-`sql/increment/<版本>/` 用于保存后续版本的增量 SQL。已有环境再次运行该脚本时，只会执行未执行过的增量脚本（幂等），不会重复执行。
+**2. 启动后端**
 
-### 2. 配置后端
-
-本地开发配置位于：
-
-```text
-blog-backend/src/main/resources/application-dev.properties
-```
-
-部署时也可以参考根目录下的外置配置：
-
-```text
-conf/application.properties
-```
-
-启动前至少检查以下项目：
-
-- MySQL 地址、用户名和密码
-- `token.secretKey` 登录令牌密钥
-- `blog.api`、`blog.cms` 与 `blog.view` 的实际访问地址
-- 邮件通知配置（启用评论邮件通知时）
-- 本地上传目录或阿里云 OSS 图床配置
-
-请勿把生产环境的数据库密码、令牌密钥、邮箱授权码或对象存储密钥提交到版本库。
-
-### 3. 启动后端
+按需修改 `blog-backend/src/main/resources/application-dev.properties`（数据库、`token.secretKey`、`blog.api`/`blog.cms`/`blog.view` 等），然后：
 
 ```bash
 cd blog-backend
 mvn spring-boot:run
 ```
 
-默认后端端口为 `8090`。
+默认端口 `8090`。请勿把数据库密码、令牌密钥、邮箱授权码或对象存储密钥提交到版本库。
 
-### 4. 启动管理后台
+**3. 启动管理后台**
 
 ```bash
 cd blog-cms-ui
@@ -230,9 +240,9 @@ npm install
 npm run dev
 ```
 
-默认访问地址为 <http://localhost:8079>，开发环境 API 地址由 `blog-cms-ui/.env.development` 中的 `VITE_API_URL` 控制。
+默认 <http://localhost:8079>，API 地址由 `.env.development` 的 `VITE_API_URL` 控制。
 
-### 5. 启动博客前台
+**4. 启动博客前台**
 
 ```bash
 cd blog-view-ui
@@ -240,7 +250,7 @@ npm install
 npm run dev
 ```
 
-默认访问地址为 <http://localhost:8080>，开发环境 API 地址由 `blog-view-ui/.env.development` 中的 `VITE_API_URL` 控制。
+默认 <http://localhost:8080>，API 地址由 `.env.development` 的 `VITE_API_URL` 控制。
 
 ## 默认管理账号
 
@@ -252,83 +262,6 @@ npm run dev
 ```
 
 首次登录后请立即修改默认密码，并为生产环境生成足够长且随机的 `token.secretKey`。
-
-## 构建发布
-
-### 后端
-
-```bash
-cd blog-backend
-mvn clean package
-```
-
-### 管理后台
-
-```bash
-cd blog-cms-ui
-npm install
-npm run build
-```
-
-### 博客前台
-
-```bash
-cd blog-view-ui
-npm install
-npm run build
-```
-
-构建生产前端前，请分别检查两个前端模块的 `.env.production`，将 `VITE_API_URL` 修改为实际后端地址。生产部署时建议由 Nginx 托管前端静态资源并反向代理后端 API，同时仅开放必要端口。
-
-## Docker 一键部署
-
-仓库 `docker/` 目录提供「后端服务（内含博客前台与管理后台页面）+ MySQL」的容器化方案，只有 `blogloom-app` 与 `blogloom-mysql` 两个容器，对外仅暴露两个固定非默认端口（Web `18080`、MySQL `13306`）。
-
-**用户视角（直接用 Docker Hub 镜像，无需 JDK / Node / Maven，也无需克隆仓库）**
-
-前置条件：服务器已安装 Docker 与 Docker Compose v2，且可访问 Docker Hub。
-
-```bash
-mkdir blogloom && cd blogloom
-curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash   # 首次部署
-```
-
-部署完成后：
-
-| 入口 | 地址 |
-| --- | --- |
-| 博客前台 | `http://<服务器IP>:18080` |
-| 管理后台 | `http://<服务器IP>:18080/cms` |
-| 默认账号 | `admin` / `123456`（登录后请立即修改） |
-
-后续升级（自动拉取新版本并重启，容器启动时执行数据库增量 SQL，数据不丢失）：
-
-```bash
-cd blogloom
-./upgrade.sh            # 自动解析最新版本并升级
-./upgrade.sh 1.0.1      # 升级到指定版本
-```
-
-**开发者视角（从源码构建 / 发布）**
-
-```bash
-cd docker
-./scripts/package.sh 1.0.0        # 一键打包：构建一体化镜像并导出离线部署包
-./scripts/deploy.sh               # 一键部署：加载镜像并启动（首次自动初始化数据库）
-./scripts/upgrade.sh              # 一键升级（增量，按历史记录执行未执行的 SQL）
-./scripts/push.sh                 # 推送镜像到 Docker Hub
-```
-
-完整说明（自定义配置、数据目录、备份与运维）见 [docker/README.md](./docker/README.md)。
-
-## 配置与数据说明
-
-- Java 根包名为 `com.changlu.blogloom`。
-- 默认数据库名为 `blogloom`。
-- 全量初始化基线为 `sql/increment/1.0/` 下最早的全量脚本；增量升级脚本统一放在 `sql/increment/<版本>/`。
-- 本地增量升级使用 `bin/local/upgrate-sql.sh`（幂等，只执行未执行过的脚本）。
-- `conf/logs/`、`conf/upload/` 与 `conf/static/` 分别用于运行日志、本地上传和外部静态资源。
-- 缓存由 MySQL 的 `cache_entry` 表实现，不再依赖 Redis；修改站点配置后，已运行环境会按需刷新缓存。
 
 ## 后续规划
 
