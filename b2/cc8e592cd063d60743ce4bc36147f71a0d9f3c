@@ -1,0 +1,21 @@
+README.md
+  s_42e18fe281a627::t_2781ee853efac6 118-131
+  s_42e18fe281a627::t_5c7fdb59817ee0 178,180,182-184,187-193,196-198,201,203,205,207,209,211-214,217,219-222,224,226,235,243,245,253
+  s_42e18fe281a627::t_e74ed145131075 233
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b2cc8e592cd063d60743ce4bc36147f71a0d9f3c",
+  "prompts": {},
+  "sessions": {
+    "s_42e18fe281a627": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f404639b5ffexeiCWifG1tUjAh",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
