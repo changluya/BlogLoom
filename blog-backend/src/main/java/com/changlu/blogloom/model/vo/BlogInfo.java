@@ -23,6 +23,7 @@ import java.util.List;
 public class BlogInfo {
 	private Long id;
 	private String title;//文章标题
+	private String firstPicture;//文章首图，用于列表卡片展示
 	private String description;//描述
 	private Date createTime;//创建时间
 	private Integer views;//浏览次数

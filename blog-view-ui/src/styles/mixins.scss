@@ -1,4 +1,5 @@
-@import "./variables.scss";
+@use "./variables" as *;
+@forward "./variables";
 
 // 响应式断点 mixin（统一入口，勿在业务样式内直接写媒体查询）
 @mixin tablet {

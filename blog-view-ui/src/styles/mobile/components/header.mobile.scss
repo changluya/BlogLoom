@@ -1,4 +1,4 @@
-@import "@/styles/mixins.scss";
+@use "@/styles/mixins" as *;
 
 // 首页大图移动端样式（对应 components/index/Header.vue）
 // 注：首页在移动端已用 m-mobile-hide 隐藏大图，此处仅保留精简规则

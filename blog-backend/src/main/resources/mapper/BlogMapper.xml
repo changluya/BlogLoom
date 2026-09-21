@@ -118,6 +118,7 @@
     <resultMap id="blogInfo" type="com.changlu.blogloom.model.vo.BlogInfo">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
+        <result property="firstPicture" column="first_picture"/>
         <result property="description" column="description"/>
         <result property="createTime" column="create_time"/>
         <result property="views" column="views"/>
@@ -132,7 +133,7 @@
 
     <!--查询公开博客的简要信息；topOnly=true 时仅返回置顶文章-->
     <select id="getBlogInfoListByIsPublished" resultMap="blogInfo">
-        select b.id, b.title, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
+        select b.id, b.title, b.first_picture, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
         from blog as b left join category as c on b.category_id=c.id
         where b.is_published=true and b.is_deleted=0
         <if test="topOnly"> and b.is_top=true </if>
@@ -140,20 +141,20 @@
 
     <!--根据分类name查询公开博客List-->
     <select id="getBlogInfoListByCategoryNameAndIsPublished" resultMap="blogInfo">
-        select b.id, b.title, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
+        select b.id, b.title, b.first_picture, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
         from category as c left join blog as b on b.category_id=c.id
         where c.category_name=#{categoryName} and b.is_published=true and b.is_deleted=0
     </select>
 
     <!--根据标签name查询公开博客List-->
     <select id="getBlogInfoListByTagNameAndIsPublished" resultMap="blogInfo">
-        select b.id, b.title, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
+        select b.id, b.title, b.first_picture, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
         from (((tag as t left join blog_tag as bt on t.id=bt.tag_id) left join blog as b on bt.blog_id=b.id) left join category as c on b.category_id=c.id)
         where t.tag_name=#{tagName} and b.is_published=true and b.is_deleted=0
     </select>
 
     <select id="getBlogInfoListByColumnIdAndIsPublished" resultMap="blogInfo">
-        select b.id, b.title, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
+        select b.id, b.title, b.first_picture, b.description, b.is_top, b.create_time, b.views, b.words, b.read_time, b.password, c.category_name
         from blog_column_relation bcr
         join blog b on bcr.blog_id=b.id
         left join category c on b.category_id=c.id

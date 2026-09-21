@@ -18,6 +18,7 @@
 			</el-col>
 			<el-col :span="6" class="toolbar-actions">
 				<el-button size="small" icon="el-icon-upload2" @click="importVisible = true">快捷导入</el-button>
+				<el-button size="small" icon="el-icon-magic-stick" :loading="skillDownloading" @click="downloadSkill">Skill 下载</el-button>
 				<el-button type="primary" size="small" icon="el-icon-edit-outline" @click="goWriteBlogPage">写文章</el-button>
 			</el-col>
 		</el-row>
@@ -122,7 +123,7 @@
 	import Breadcrumb from "@/components/Breadcrumb";
 	import PageTip from "@/components/PageTip";
 	import KnowledgeImportDialog from "@/components/KnowledgeImportDialog";
-	import {getDataByQuery, deleteBlogById, updateTop, updateRecommend, updateVisibility} from '@/api/blog'
+	import {getDataByQuery, deleteBlogById, updateTop, updateRecommend, updateVisibility, downloadSkillPackage} from '@/api/blog'
 	import CategoryList from '@/views/blog/category/CategoryList'
 	import TagList from '@/views/blog/tag/TagList'
 
@@ -144,6 +145,7 @@
 				categoryDialogVisible: false,
 				tagDialogVisible: false,
 				importVisible: false,
+				skillDownloading: false,
 				blogId: 0,
 				radio: 1,
 				visForm: {
@@ -164,6 +166,23 @@
 			handleTagChanged() {},
 			goWriteBlogPage() {
 				this.$router.push('/blog/write')
+			},
+			//下载「本地博客同步 Skill」包，内含当前用户 BASE_URL 与 Token
+			downloadSkill() {
+				this.skillDownloading = true
+				downloadSkillPackage().then(res => {
+					const blob = res.data instanceof Blob ? res.data : new Blob([res.data])
+					const link = document.createElement('a')
+					link.href = window.URL.createObjectURL(blob)
+					link.download = 'blogloom-skill.zip'
+					document.body.appendChild(link)
+					link.click()
+					document.body.removeChild(link)
+					window.URL.revokeObjectURL(link.href)
+					this.msgSuccess('Skill 已下载，解压后交给 AI Agent 即可直接同步本地博客')
+				}).finally(() => {
+					this.skillDownloading = false
+				})
 			},
 			getData() {
 				getDataByQuery(this.queryInfo).then(res => {

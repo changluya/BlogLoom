@@ -1,4 +1,4 @@
-@import "../mixins.scss";
+@use "../mixins" as *;
 
 // 全局移动端规则（仅放真正跨组件的通用规则，组件级规则走 styles/mobile/components|pages）
 

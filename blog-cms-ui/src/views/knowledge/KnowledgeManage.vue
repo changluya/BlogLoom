@@ -13,7 +13,10 @@
 					<el-button size="small" icon="el-icon-refresh" @click="repair">修复未映射博客</el-button>
 					<el-button size="small" icon="el-icon-download" :loading="exporting" @click="exportZip">备份知识库</el-button>
 				</div>
-				<el-button size="small" icon="el-icon-refresh" @click="loadTree">刷新</el-button>
+				<div class="toolbar-right">
+					<el-button size="small" icon="el-icon-magic-stick" :loading="skillDownloading" @click="downloadSkill">Skill 下载</el-button>
+					<el-button size="small" icon="el-icon-refresh" @click="loadTree">刷新</el-button>
+				</div>
 			</div>
 			<div class="content">
 				<div v-loading="deleting" element-loading-text="正在删除并刷新知识树..." class="tree-panel" :class="{'is-dragging': treeDragging}" :style="{width: leftWidth + 'px'}">
@@ -98,6 +101,7 @@
 <script>
 	import {getBlogById} from '@/api/blog'
 	import {batchDeleteNodes, createDirectory, deleteNode, exportKnowledge, exportKnowledgeDocument, getKnowledgeTree, moveNode, renameNode, repairKnowledge} from '@/api/knowledge'
+	import {downloadSkillPackage} from '@/api/blog'
 	import PageTip from '@/components/PageTip'
 	import KnowledgeImportDialog from '@/components/KnowledgeImportDialog'
 
@@ -107,7 +111,7 @@
 		data() {
 			return {
 				tree: [], treeKeyword: '', batchMode: false, selected: null, selectedBlog: null, blogLoading: false, importVisible: false,
-				exporting: false, documentDownloading: false, deleting: false,
+				exporting: false, documentDownloading: false, deleting: false, skillDownloading: false,
 				contextMenu: {visible: false, x: 0, y: 0, node: null}, leftWidth: Number(window.localStorage.getItem('knowledge-tree-width')) || 380, resizing: false, treeDragging: false
 			}
 		},
@@ -291,6 +295,19 @@
 				}).finally(() => { this.documentDownloading = false })
 			},
 			openImport() { this.importVisible = true },
+			downloadSkill() {
+				this.skillDownloading = true
+				downloadSkillPackage().then(res => {
+					const blob = res.data instanceof Blob ? res.data : new Blob([res.data])
+					const url = window.URL.createObjectURL(blob)
+					const link = document.createElement('a')
+					link.href = url
+					link.download = 'blogloom-skill.zip'
+					document.body.appendChild(link); link.click(); document.body.removeChild(link)
+					window.URL.revokeObjectURL(url)
+					this.msgSuccess('Skill 已下载，解压后交给 AI Agent 即可直接同步本地博客')
+				}).finally(() => { this.skillDownloading = false })
+			},
 		}
 	}
 </script>
@@ -300,6 +317,7 @@
 	.toolbar, .content, .tree-row { display: flex; align-items: center; }
 	.toolbar { justify-content: space-between; }
 	.toolbar-left { display: flex; align-items: center; gap: 8px; }
+	.toolbar-right { display: flex; align-items: center; gap: 8px; }
 	.content { align-items: stretch; height: calc(100vh - 190px); min-height: 520px; overflow: hidden; }
 	.tree-panel { flex: 0 0 auto; min-width: 260px; padding: 12px 16px 12px 0; overflow: auto; }
 	.tree-panel ::v-deep .el-tree-node__content, .tree-panel ::v-deep .tree-row { cursor: move; }

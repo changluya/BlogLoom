@@ -140,3 +140,13 @@ export function uploadBlogResource(file) {
 		data
 	})
 }
+
+// 下载当前用户专属的「本地博客同步 Skill」包（ZIP，内含 BASE_URL 与 Token）
+export function downloadSkillPackage() {
+	return axios({
+		url: 'skill/download',
+		method: 'GET',
+		responseType: 'blob',
+		timeout: 60000
+	})
+}

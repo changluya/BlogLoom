@@ -1,4 +1,4 @@
 // BlogLoom 前台全局样式入口（被 main.js 引入）
-@import "./variables.scss";
-@import "./mixins.scss";
-@import "./mobile/index.scss";
+@use "./variables";
+@use "./mixins";
+@use "./mobile/index";
