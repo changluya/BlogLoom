@@ -1,0 +1,20 @@
+docs/releases/v1.0.0.md
+  s_36c04caadd37b3::t_f1885b4d86cbfe 5-44
+  s_36c04caadd37b3::t_d14de350223608 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "55693474ff97a15fb719aed3f4594a4f63a4cc00",
+  "prompts": {},
+  "sessions": {
+    "s_36c04caadd37b3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f391c5f3affeUcVM2eWGRNYc8z",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
