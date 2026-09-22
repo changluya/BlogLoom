@@ -1,0 +1,59 @@
+docs/prd/核心功能业务逻辑/后台快速迁移导入逻辑/知识库-博客迁移导入标准逻辑.md
+  s_e515dc010038de::t_28f8055c04e18c 272
+  s_e515dc010038de::t_3e3d8ffc7522f0 154
+  s_e515dc010038de::t_249fbe6084dc84 99-100
+  s_e515dc010038de::t_f06a351b6213d1 386,388-391
+  s_e515dc010038de::t_44e89bf6d503e0 140-146
+  s_e515dc010038de::t_ec1efe6a2c4282 363
+  s_e515dc010038de::t_6812cf20492491 147
+docs/工程化开发模块设计思路产物/backend/skill设计/BlogLoom-Skill设计思路与功能实现.md
+  s_e515dc010038de::t_fd16fcb3e3de52 264,266,268,282,286-301
+  s_e515dc010038de::t_dd3cf5f3bd69a3 1-57,59-263,265,267,269-281,283-285,302-334
+  s_e515dc010038de::t_911c17102ca40c 58
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/service/impl/KnowledgeImportWorker.java
+  s_e515dc010038de::t_57b09c2ce554d1 56
+  s_e515dc010038de::t_6826a59e093518 220
+  s_e515dc010038de::t_5a88be312fd04a 374-375,378
+  s_e515dc010038de::t_e163a8cd023c00 264
+  s_e515dc010038de::t_6d60023a685a9e 44
+  s_e515dc010038de::t_5b58300b4deaac 19
+blog-backend/src/main/java/com/changlu/blogloom/module/knowledge/support/KnowledgeCoverExtractor.java
+  s_e515dc010038de::t_dac8c24a53cdc8 1-44
+blog-view-ui/src/components/blog/BlogItem.vue
+  s_e515dc010038de::t_bb145703bdb534 139
+  s_e515dc010038de::t_358f3e771381e6 23,26
+  s_e515dc010038de::t_4c3fca22998cc2 57,66-69
+  s_e515dc010038de::t_d0344553cf265b 124-125,134
+  s_e515dc010038de::t_680fdd802fa4a8 44-49,54-56
+  s_e515dc010038de::t_d88a1be7dc1f9e 98
+  s_e515dc010038de::t_19faa2992928f0 122-123,135
+  s_e515dc010038de::t_7682af9322847f 25
+  s_e515dc010038de::t_da47327ff54972 99-120
+blog-backend/src/main/resources/skill/blogloom-skill/SKILL.md
+  s_e515dc010038de::t_f3631d318a8692 14
+blog-backend/src/test/java/com/changlu/blogloom/module/knowledge/KnowledgeCoverExtractorTest.java
+  s_e515dc010038de::t_ef484f8ee10fcb 1-57
+blog-cms-ui/src/components/KnowledgeImportDialog.vue
+  s_e515dc010038de::t_a806172fac16e7 116-118
+  s_e515dc010038de::t_c354025f2d90a3 189-195
+  s_e515dc010038de::t_86e27dfd5a5f79 238
+blog-backend/src/main/resources/skill/blogloom-skill/references/01-import-blog-sop.md
+  s_e515dc010038de::t_452d5e11d03d66 99
+  s_e515dc010038de::t_9219b8f4475e8d 34-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "67a9ec1d3b2a9c4203502aa810694cad920c04bd",
+  "prompts": {},
+  "sessions": {
+    "s_e515dc010038de": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f3bae9401ffeMVFpKHI5Bj7SSv",
+        "model": "deepseek-flash"
+      },
+      "human_author": null
+    }
+  }
+}
