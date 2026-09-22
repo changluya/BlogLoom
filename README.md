@@ -13,6 +13,7 @@
 </p>
 
 <p align="center">
+  <a href="https://blogloom.changlu.cloud/"><img src="https://img.shields.io/badge/Docs-blogloom.changlu.cloud-5b5bd6" alt="Docs"></a>
   <a href="https://github.com/changluya/BlogLoom/actions/workflows/ci.yml"><img src="https://github.com/changluya/BlogLoom/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/changluya/BlogLoom/releases"><img src="https://img.shields.io/github/v/release/changluya/BlogLoom" alt="Release"></a>
   <img src="https://img.shields.io/badge/JDK-8+-f89820" alt="JDK 8+">

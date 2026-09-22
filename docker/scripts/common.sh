@@ -118,6 +118,77 @@ require_docker() {
 }
 
 # -----------------------------------------------------------------------------
+# detect_arch：检测宿主 CPU 架构，归一化为 Docker 平台标识。
+#   用于多架构镜像构建与拉取时展示实际使用的架构。
+# -----------------------------------------------------------------------------
+detect_arch() {
+    case "$(uname -m)" in
+        x86_64|amd64)   echo "linux/amd64" ;;
+        aarch64|arm64)  echo "linux/arm64" ;;
+        armv7l|armhf)   echo "linux/arm/v7" ;;
+        *)              echo "linux/$(uname -m)" ;;
+    esac
+}
+
+# -----------------------------------------------------------------------------
+# ensure_buildx_builder：确保存在可用的 buildx builder（多架构构建依赖）。
+#   默认使用名为 blogloom-builder 的 docker-container 驱动 builder，
+#   由 push.sh 通过 --builder 显式指定，不改变全局默认 builder。
+# -----------------------------------------------------------------------------
+BUILDX_BUILDER="${BUILDX_BUILDER:-blogloom-builder}"
+ensure_buildx_builder() {
+    docker buildx version >/dev/null 2>&1 \
+        || { echo "[ERROR] 未找到 docker buildx（多架构构建需要 docker-buildx-plugin）" >&2; exit 1; }
+    if ! docker buildx inspect "$BUILDX_BUILDER" >/dev/null 2>&1; then
+        printf '[buildx] 创建 builder %s（首次会拉取 buildkit 镜像）\n' "$BUILDX_BUILDER"
+        docker buildx create --name "$BUILDX_BUILDER" >/dev/null
+    fi
+    docker buildx inspect --bootstrap "$BUILDX_BUILDER" >/dev/null 2>&1 || true
+}
+
+# -----------------------------------------------------------------------------
+# prune_buildx_cache：清理指定 builder 的构建缓存，释放 Docker 磁盘空间。
+# 多架构构建会缓存两套架构的中间层，长期累积可能撑满 Docker 磁盘。
+# -----------------------------------------------------------------------------
+prune_buildx_cache() {
+    local builder="${1:-$BUILDX_BUILDER}"
+    printf '[prune] 清理 buildx 构建缓存（builder：%s）\n' "$builder"
+    docker buildx prune -af --builder "$builder" >/dev/null 2>&1 || true
+}
+
+# -----------------------------------------------------------------------------
+# print_docker_disk_help：构建因磁盘空间不足失败时输出清理指引。
+# -----------------------------------------------------------------------------
+print_docker_disk_help() {
+    local builder="${1:-$BUILDX_BUILDER}"
+    printf '[ERROR] 构建失败，疑似 Docker 磁盘空间不足（no space left on device）。\n' >&2
+    printf '        可尝试以下清理后重试：\n' >&2
+    printf '        - 清理 buildx 构建缓存：docker buildx prune -af --builder %s\n' "$builder" >&2
+    printf '        - 清理未使用镜像/容器/缓存：docker system prune -af\n' >&2
+    printf '        - 清理未使用数据卷（谨慎，会删数据）：docker volume prune\n' >&2
+    printf '        - Docker Desktop → Settings → Resources 增大磁盘容量后重启\n' >&2
+    printf '        - 或直接带 --prune 重试：./scripts/push.sh --prune <版本号>\n' >&2
+}
+
+# -----------------------------------------------------------------------------
+# warn_docker_disk：构建前检查 Docker 可回收空间，超过阈值时给出提醒。
+# 阈值 MB，默认 8192（8GB）；检测失败时静默跳过，不影响构建。
+# -----------------------------------------------------------------------------
+warn_docker_disk() {
+    local threshold_mb="${1:-8192}" reclaim=""
+    # docker system df 的 Reclaimable 形如 "30.6GB (95%)"，统一换算为 MB
+    reclaim="$(docker system df --format '{{.Reclaimable}}' 2>/dev/null | awk '
+        { v=$1; u=v; gsub(/[0-9.]/,"",u); gsub(/[^0-9.]/,"",v);
+          if (u=="GB") v=v*1024; else if (u=="kB") v=v/1024; else if (u=="B") v=v/1048576;
+          s+=v } END { printf "%d", s }')" 2>/dev/null || true
+    [ -n "$reclaim" ] || return 0
+    if [ "$reclaim" -ge "$threshold_mb" ] 2>/dev/null; then
+        printf '[warn] Docker 可回收空间约 %s MB，磁盘偏紧；如构建报 “no space left”，可执行：\n' "$reclaim"
+        printf '       docker system prune -af   # 或 ./scripts/push.sh --prune\n'
+    fi
+}
+
+# -----------------------------------------------------------------------------
 # load_image_tar <tar 路径>：若传入镜像 tar 且文件存在，则执行 docker load。
 # 传空值时直接返回，交由调用方决定是否使用本地已有镜像。
 # -----------------------------------------------------------------------------

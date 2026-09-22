@@ -70,6 +70,20 @@ if vs:
 }
 
 # ---------------------------------------------------------------------------
+# 检测宿主 CPU 架构，归一化为 Docker 平台标识。
+#   多架构镜像（amd64/arm64 manifest）在 pull 时由 Docker 按此架构自动选择，
+#   这里仅用于显式提示当前使用的架构，无需手工指定 platform。
+# ---------------------------------------------------------------------------
+detect_arch() {
+    case "$(uname -m)" in
+        x86_64|amd64)   echo "linux/amd64" ;;
+        aarch64|arm64)  echo "linux/arm64" ;;
+        armv7l|armhf)   echo "linux/arm/v7" ;;
+        *)              echo "linux/$(uname -m)" ;;
+    esac
+}
+
+# ---------------------------------------------------------------------------
 # 步骤 1：解析镜像版本 tag
 #   优先级：环境变量 IMAGE_TAG > Docker Hub 最新版本 > latest
 # ---------------------------------------------------------------------------
@@ -191,6 +205,15 @@ if vs:
     print(sorted(vs)[-1][1])
 ' 2>/dev/null || true
 }
+# 检测宿主架构（多架构镜像由 Docker 按此自动选择）
+detect_arch() {
+    case "$(uname -m)" in
+        x86_64|amd64)   echo "linux/amd64" ;;
+        aarch64|arm64)  echo "linux/arm64" ;;
+        armv7l|armhf)   echo "linux/arm/v7" ;;
+        *)              echo "linux/$(uname -m)" ;;
+    esac
+}
 # 步骤1：解析目标版本（参数 > Docker Hub 最新 > 回退 latest）
 if [ -n "${1:-}" ]; then
     TAG="$1"; echo "[upgrade] 指定版本：$TAG"
@@ -205,8 +228,8 @@ else
     echo "IMAGE_TAG=${TAG}" >> .env
 fi
 export IMAGE_TAG="$TAG"
-# 步骤3：拉取镜像
-echo "[upgrade] 拉取镜像 ${IMAGE_REPO}:${TAG} ..."; docker compose pull
+# 步骤3：拉取镜像（多架构镜像按宿主架构自动选择）
+echo "[upgrade] 宿主架构：$(detect_arch)，拉取镜像 ${IMAGE_REPO}:${TAG} ..."; docker compose pull
 # 步骤4：重建并启动（启动时自动执行增量 SQL）
 echo "[upgrade] 重启服务（容器启动时自动执行增量 SQL）..."; docker compose up -d
 echo "[done] 已升级到 ${IMAGE_REPO}:${TAG}"
@@ -223,9 +246,13 @@ echo "[init] 数据目录：$(pwd)/data"
 
 # ---------------------------------------------------------------------------
 # 步骤 6：拉取镜像并启动服务
+#   镜像为多架构（linux/amd64 + linux/arm64），Docker 会按宿主架构自动选择；
 #   首次会下载镜像；应用容器入口自动执行增量 SQL（首次=全量初始化）。
 # ---------------------------------------------------------------------------
+ARCH="$(detect_arch)"
+echo "[deploy] 检测到宿主架构：${ARCH}，将从多架构镜像中自动选择对应架构"
 echo "[deploy] 拉取镜像并启动服务（首次会下载镜像，请稍候）..."
+docker compose pull
 docker compose up -d
 
 # ---------------------------------------------------------------------------

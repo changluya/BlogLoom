@@ -194,25 +194,36 @@ cd docker
 > 仅更新 `sql/increment/` 下的增量 SQL 时，也可直接 `docker compose restart blogloom` 触发升级。
 > 升级前建议备份数据库：`docker exec blogloom-mysql mysqldump -uroot -p blogloom > backup.sql`
 
-### 7. 推送镜像到 Docker Hub
+### 7. 推送镜像到 Docker Hub（多架构）
 
 仅需推送 BlogLoom 应用镜像（MySQL 使用官方 `mysql:8.0`，无需推送）。
 
 ```bash
 docker login -u codercl          # 步骤 1：登录（PAT 需 Read/Write/Delete 权限）
-./scripts/package.sh 1.0.0       # 步骤 2：构建本地镜像
-./scripts/push.sh                # 步骤 3：推送 <DOCKERHUB_USER>/blogloom:<IMAGE_TAG> 与 :latest
-./scripts/push.sh 1.0.1          # 指定 tag
-./scripts/push.sh --no-latest
+./scripts/push.sh 1.0.0          # 步骤 2：一键多架构构建并推送 <DOCKERHUB_USER>/blogloom:1.0.0 与 :latest
+./scripts/push.sh --no-latest    # 只推送指定 tag
+./scripts/push.sh --prune 1.0.0  # 构建前清理 buildx 缓存，释放 Docker 磁盘空间
 ```
 
-推送 tag 取自 `.env` 的 `IMAGE_TAG`，仓库用户取自 `.env` 的 `DOCKERHUB_USER`（默认 `codercl`）：
+`push.sh` 默认用 `docker buildx` 构建 **多架构镜像**（`linux/amd64` + `linux/arm64`）并直接推送，生成多平台 manifest：
 
 ```text
-codercl/blogloom:<IMAGE_TAG>
-codercl/blogloom:latest
+codercl/blogloom:<IMAGE_TAG>    → linux/amd64 + linux/arm64
+codercl/blogloom:latest         → linux/amd64 + linux/arm64
 ```
 
+部署端 `docker compose pull` / `docker pull` 时会**按宿主架构自动选择**对应镜像层（amd64 服务器拉 amd64、arm64 服务器拉 arm64），不再出现平台不匹配告警。
+
+其他用法：
+
+```bash
+./scripts/push.sh --platform linux/amd64,linux/arm64   # 自定义平台
+./scripts/push.sh --single                             # 回退：推送 package.sh 构建的本地单架构镜像
+```
+
+> 多架构构建需要 `docker buildx`（Docker Desktop 自带；Linux 安装 `docker-buildx-plugin`），首次会拉取 buildkit 镜像。
+> 多平台镜像无法 `docker load` 到本地，因此 `push.sh` 采用 buildx `--push` 直推；离线单架构镜像仍由 `package.sh` 生成 tar。
+> 多架构构建会缓存两套架构的中间层，长期累积可能撑满 Docker 磁盘；脚本会在可回收空间过大时提醒，报 `no space left on device` 时按提示清理，或直接 `./scripts/push.sh --prune`。
 > 由于应用镜像基于 `mysql:8.0`，基础层在 Hub 已存在，推送时会自动复用（`Mounted from library/mysql`），只有 JRE、jar、前端等自定义层需要上传。
 
 ### 8. 配置说明
