@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (Maven)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: blog-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
+      - run: mvn -B -ntp verify
+
+  cms-ui:
+    name: CMS UI (Vue)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: blog-cms-ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: blog-cms-ui/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  view-ui:
+    name: View UI (Vue)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: blog-view-ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: blog-view-ui/package-lock.json
+      - run: npm ci
+      - run: npm run build

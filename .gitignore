@@ -34,7 +34,6 @@ build/
 
 .DS_Store
 /blog-cms-tmp
-package-lock.json
 bin/local/deploy.conf
 sql/local/
 

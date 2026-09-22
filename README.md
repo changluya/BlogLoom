@@ -13,6 +13,8 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/changluya/BlogLoom/actions/workflows/ci.yml"><img src="https://github.com/changluya/BlogLoom/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/changluya/BlogLoom/releases"><img src="https://img.shields.io/github/v/release/changluya/BlogLoom" alt="Release"></a>
   <img src="https://img.shields.io/badge/JDK-8+-f89820" alt="JDK 8+">
   <img src="https://img.shields.io/badge/Spring_Boot-2.2.7.RELEASE-6db33f" alt="Spring Boot 2.2.7.RELEASE">
   <img src="https://img.shields.io/badge/Vue-2.6.11-42b883" alt="Vue 2.6.11">
