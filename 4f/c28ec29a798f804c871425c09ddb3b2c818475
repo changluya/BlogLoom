@@ -1,0 +1,48 @@
+README.md
+  s_e515dc010038de::t_72c84018cd8ab1 101
+  s_e515dc010038de::t_22642cb92f126b 42
+docs-website/v1/zh/integration/ai-skill.md
+  s_e515dc010038de::t_8a63541e6281df 1-85
+docs-website/docs.json
+  s_e515dc010038de::t_80b9c82822e633 307-309
+  s_e515dc010038de::t_4bd32e7ca2368e 136-138
+  s_e515dc010038de::t_0c3d0d0052dea4 135
+  s_e515dc010038de::t_ffe61e8bfc4585 306
+docs-website/v1/zh/integration/overview.md
+  s_e515dc010038de::t_d57add36019386 36
+  s_e515dc010038de::t_3ced9fa14d86df 16
+docs-website/v1/zh/guide/admin/content.md
+  s_e515dc010038de::t_46e926679afa59 25-27,34
+docs/prd/产品功能文档-CMS系统.md
+  s_e515dc010038de::t_2b6be479621728 140
+  s_e515dc010038de::t_cdabce08a6968f 60-61
+  s_e515dc010038de::t_bb339de32b8c1f 89,94-103,106
+  s_e515dc010038de::t_d1b9a179010b1c 27
+  s_e515dc010038de::t_e3cdba860799de 124-125
+  s_e515dc010038de::t_74e74dd2da9226 157-160
+CHANGELOG.md
+  s_e515dc010038de::t_1c2f548f2edc5e 6,8,19-24,36-49
+docs-website/v1/en/guide/admin/content.md
+  s_e515dc010038de::t_8386f6e98a9380 25-27,34
+docs-website/v1/en/integration/overview.md
+  s_e515dc010038de::t_ca95bddefc19d5 36
+  s_e515dc010038de::t_ee17a613526cd0 16
+docs-website/v1/en/integration/ai-skill.md
+  s_e515dc010038de::t_13d64ec09fc2e8 1-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4fc28ec29a798f804c871425c09ddb3b2c818475",
+  "prompts": {},
+  "sessions": {
+    "s_e515dc010038de": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f3bae9401ffeMVFpKHI5Bj7SSv",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
