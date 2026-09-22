@@ -34,6 +34,7 @@ build/
 
 .DS_Store
 /blog-cms-tmp
+/codes/
 bin/local/deploy.conf
 sql/local/
 

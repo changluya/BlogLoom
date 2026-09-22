@@ -32,18 +32,23 @@
 - **修复历史失败 CI**：移除 `.gitignore` 中 `package-lock.json` 忽略规则并跟踪三个 lockfile，长期失败的 `Validate Docs` 恢复 success。
 - **README 徽章**：新增 CI 状态与 Release 徽章。
 - **Release Notes 入库**：新增 `docs/releases/v1.0.0.md`，与 Release 页面内容一致。
+- **社交预览图**：生成 `assets/social-preview.png`（1280×640）并加入 README「产品展示」章节；待手动上传到 Settings → Social preview。
+- **README 精简**：移除顶部 NBlog 提及（仅文末鸣谢保留），弱化 MySQL 缓存实现细节（去掉 `cache_entry` 描述）。
+- **README 目录结构补全**：补齐 `.github/`、`CHANGELOG.md`、`docs-website/`、`docs/releases/`。
+- **忽略内部草稿目录**：`.gitignore` 新增 `/codes/` 并取消跟踪 `codes/快捷提示词.md`。
 
 ## 合并记录
 
 ```text
-feat_1.0.x_6  →  release_1.0.x  →  master   （均指向 5569347）
+feat_1.0.x_6  →  release_1.0.x  →  master   （均指向 9eaf568）
 ```
 
 ## 待办（中/低优先）
 
-- 社交预览图、README 目录树更新、社区文件（CONTRIBUTING/SECURITY/Issue 模板）
+- 社区文件（CONTRIBUTING/SECURITY/Issue 模板）
 - Homepage / GitHub Pages、Discussions/Wiki 开关、分支与体积清理
 - CI actions 升级到 v5（消除 Node 20 deprecation 告警）
+- 以上改动统一提交并同步 `release_1.0.x` / `master`
 
 # 开发分支
 

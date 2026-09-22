@@ -146,6 +146,7 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 
 ```text
 BlogLoom/
+├── .github/                        # CI 工作流（后端与前后台构建校验）
 ├── assets/                         # README 与项目品牌资源
 ├── blog-backend/                   # Spring Boot 后端
 │   ├── src/main/java/com/changlu/blogloom/
@@ -169,7 +170,10 @@ BlogLoom/
 ├── docker/                         # Docker 一键部署（镜像、compose、脚本、用户版）
 ├── qa/                             # 压测与容量测试脚本
 ├── docs/                           # 产品与设计文档
+│   └── releases/                   # 各版本发布说明留档
+├── docs-website/                   # 官网文档站
 ├── bin/                            # 本地增量升级脚本
+├── CHANGELOG.md                    # 变更日志
 ├── LICENSE                         # MIT License
 └── README.md
 ```
