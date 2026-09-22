@@ -1,0 +1,19 @@
+docs/开发文档留存/release_1.0.x/06、github相关开源优化.md
+  s_36c04caadd37b3::t_e5ee88d48cbff0 1-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "804c0f7e0e9368172eafe5bf3a3c676a426d12b4",
+  "prompts": {},
+  "sessions": {
+    "s_36c04caadd37b3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f391c5f3affeUcVM2eWGRNYc8z",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
