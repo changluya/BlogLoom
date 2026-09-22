@@ -23,7 +23,27 @@
 ```
 
 
-# 优化完成
+# 完成进度
+
+## 已完成（高价值项）
+
+- **Release / Tag**：在 `95d3f9d` 打 annotated tag `v1.0.0` 并推送，创建 GitHub Release 并设为 Latest。
+- **CI 构建**：新增 `.github/workflows/ci.yml`，含后端 `mvn verify`（JDK 8）与前后台两个前端 `npm ci && npm run build`；master 上三个 job 全绿。
+- **修复历史失败 CI**：移除 `.gitignore` 中 `package-lock.json` 忽略规则并跟踪三个 lockfile，长期失败的 `Validate Docs` 恢复 success。
+- **README 徽章**：新增 CI 状态与 Release 徽章。
+- **Release Notes 入库**：新增 `docs/releases/v1.0.0.md`，与 Release 页面内容一致。
+
+## 合并记录
+
+```text
+feat_1.0.x_6  →  release_1.0.x  →  master   （均指向 5569347）
+```
+
+## 待办（中/低优先）
+
+- 社交预览图、README 目录树更新、社区文件（CONTRIBUTING/SECURITY/Issue 模板）
+- Homepage / GitHub Pages、Discussions/Wiki 开关、分支与体积清理
+- CI actions 升级到 v5（消除 Node 20 deprecation 告警）
 
 # 开发分支
 
