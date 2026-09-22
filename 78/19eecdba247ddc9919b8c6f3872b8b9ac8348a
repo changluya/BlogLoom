@@ -1,0 +1,22 @@
+README.md
+  s_36c04caadd37b3::t_29d8c9f5b90a28 122-123
+docs/开发文档留存/release_1.0.x/06、github相关开源优化.md
+  s_36c04caadd37b3::t_0fb72953150bf8 28-46
+  s_36c04caadd37b3::t_3d9c70785c68d8 26-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7819eecdba247ddc9919b8c6f3872b8b9ac8348a",
+  "prompts": {},
+  "sessions": {
+    "s_36c04caadd37b3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f391c5f3affeUcVM2eWGRNYc8z",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
