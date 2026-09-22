@@ -13,6 +13,7 @@ BlogLoom builds on MySQL, with caching implemented by an internal MySQL table, a
 | Notifications | Comment email notifications |
 | Data stores | MySQL, internal cache (`cache_entry` table) |
 | Utilities | IP geolocation, Markdown parsing, scheduled jobs |
+| AI Skill | Download a dedicated skill package and sync local Markdown posts via an AI assistant |
 
 ## Configuration entry points
 
@@ -32,3 +33,4 @@ BlogLoom builds on MySQL, with caching implemented by an internal MySQL table, a
 - [Aliyun OSS image storage](/v1/en/integration/storage/aliyun)
 - [MySQL](/v1/en/integration/data/mysql)
 - [Cache](/v1/en/integration/data/cache)
+- [AI Skill sync](/v1/en/integration/ai-skill)

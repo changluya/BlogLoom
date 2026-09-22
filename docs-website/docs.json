@@ -133,6 +133,10 @@
                     "pages": ["v1/en/integration/overview"]
                   },
                   {
+                    "group": "AI Skill",
+                    "pages": ["v1/en/integration/ai-skill"]
+                  },
+                  {
                     "group": "Image Storage",
                     "pages": [
                       "v1/en/integration/storage/local",
@@ -298,6 +302,10 @@
                   {
                     "group": "集成",
                     "pages": ["v1/zh/integration/overview"]
+                  },
+                  {
+                    "group": "AI 技能",
+                    "pages": ["v1/zh/integration/ai-skill"]
                   },
                   {
                     "group": "图床存储",

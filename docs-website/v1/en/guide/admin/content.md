@@ -22,11 +22,14 @@ Content management covers day-to-day maintenance of every content object on the 
 
 - Use categories for stable sections and tags for topics.
 - Use columns to group series for continuous reading; columns support two levels, a cover and a summary.
-- Use the local knowledge base to organize posts as a directory tree and bulk import/export as ZIP, parsing metadata such as title, tags, category, summary and column on import.
+- Use the local knowledge base to organize posts as a directory tree and bulk import/export as ZIP, parsing metadata such as title, tags, category, summary, columns, create/update time and knowledge-base path on import; mark the cover in the body with `![coverImg](image-url)` — ordinary images are not treated as covers.
+- On import, missing tags and categories are created and linked automatically; columns only match existing ones (including two-level columns) and are never auto-created.
+- The Posts page offers a **Skill download** in the top-right corner, which lets an AI assistant sync local posts in natural language; see [AI Skill sync](/v1/en/integration/ai-skill).
 - Clean up unused tags regularly to keep search clear.
 
 ## Next steps
 
 - [Authoring](/v1/en/guide/admin/article-editor)
 - [Content model](/v1/en/guide/concepts/content-model)
+- [AI Skill sync](/v1/en/integration/ai-skill)
 - [Comments](/v1/en/guide/concepts/comments)

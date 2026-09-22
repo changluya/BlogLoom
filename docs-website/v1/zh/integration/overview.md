@@ -13,6 +13,7 @@ BlogLoom 以 MySQL 为基础，缓存由内部 MySQL 表实现，并可通过配
 | 通知 | 评论邮件通知 |
 | 数据存储 | MySQL、内部缓存（`cache_entry` 表） |
 | 工具 | IP 地域解析、Markdown 解析、定时任务 |
+| AI 技能 | 下载专属技能包，用 AI 助手同步本地 Markdown 文章 |
 
 ## 配置入口
 
@@ -32,3 +33,4 @@ BlogLoom 以 MySQL 为基础，缓存由内部 MySQL 表实现，并可通过配
 - [阿里云 OSS 图床](/v1/zh/integration/storage/aliyun)
 - [MySQL](/v1/zh/integration/data/mysql)
 - [缓存](/v1/zh/integration/data/cache)
+- [AI Skill 同步](/v1/zh/integration/ai-skill)
