@@ -55,9 +55,7 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 | `blog-view-ui` | 面向访客的博客门户、文章阅读与互动 | <http://localhost:8080> |
 | `blog-cms-ui` | 面向站长的内容管理与运营后台 | <http://localhost:8079> |
 | `blog-backend` | REST API、认证、业务逻辑、数据访问与任务调度 | <http://localhost:8090> |
-| MySQL | 业务数据与缓存表（`cache_entry`）等持久化数据 | 数据库名 `blogloom` |
-
-> 说明：缓存已由 MySQL 的 `cache_entry` 表实现，不再依赖 Redis。
+| MySQL | 业务数据等持久化数据 | 数据库名 `blogloom` |
 
 ```text
 ┌──────────────────────┐          ┌──────────────────────┐
@@ -74,7 +72,7 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
                           ▼
                ┌──────────────────────┐
                │        MySQL         │
-               │  业务数据 + 缓存表    │
+               │      业务数据        │
                └──────────────────────┘
 ```
 
@@ -109,7 +107,6 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 
 - Spring Security + JWT 管理端身份认证
 - MyBatis 数据访问与 PageHelper 分页
-- MySQL 缓存表（`cache_entry`）及临时状态管理
 - Quartz 定时任务
 - CommonMark Markdown 解析
 - 评论通知与邮件发送能力
@@ -138,7 +135,7 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 | 范围 | 主要技术 |
 | --- | --- |
 | 后端基础 | Java 8、Spring Boot 2.2.7.RELEASE、Spring MVC |
-| 数据与缓存 | MyBatis、PageHelper、MySQL（缓存由 `cache_entry` 表实现） |
+| 数据存储 | MyBatis、PageHelper、MySQL |
 | 安全与任务 | Spring Security、JWT、Quartz、Spring Retry |
 | 内容与工具 | commonmark-java、ip2region、Yauaa、Hutool |
 | 管理后台 | Vue 2.6.11、Vite 4.5.14、Element UI、Vuex、Vue Router、ECharts、mavon-editor |
