@@ -1,0 +1,20 @@
+CHANGELOG.md
+  s_e515dc010038de::t_ad13226bb0e5de 12,24-26,40
+  s_e515dc010038de::t_73242c6fdd7bd5 36-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "95d3f9d29c661cf7cfc98103d5d15702d072a280",
+  "prompts": {},
+  "sessions": {
+    "s_e515dc010038de": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f3bae9401ffeMVFpKHI5Bj7SSv",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
