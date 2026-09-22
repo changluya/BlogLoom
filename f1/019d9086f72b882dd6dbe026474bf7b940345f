@@ -1,0 +1,51 @@
+README.md
+  s_36c04caadd37b3::t_4fd4c4952c65a3 16
+docker/standalone/upgrade.sh
+  s_6327988408e598::t_1458aa57e9cb4b 104,106
+  s_6327988408e598::t_6fdfd665687ec6 62-73
+docker/scripts/common.sh
+  s_6327988408e598::t_efb8f8911ead45 120,150-190
+  s_6327988408e598::t_c3adaf1f76b941 121-149
+docker/scripts/push.sh
+  s_6327988408e598::t_22a7a2477e2205 40,48
+  s_6327988408e598::t_79220e7260da20 7-10,14-17,19,23-24,37-38,41-47,49,53,63-69,71-86,94-98,100-105
+  s_6327988408e598::t_e52c25002e65f7 114-116
+  s_6327988408e598::t_beebf6971dde1e 87-93,99,106-109
+  s_6327988408e598::t_85b6698e310f91 18
+docker/standalone/install.sh
+  s_6327988408e598::t_1e1e83e5ea4249 72-85
+  s_6327988408e598::t_f55006de302277 208-216
+  s_6327988408e598::t_e940782d91ffc3 231-232
+  s_6327988408e598::t_7f328c2ec43aa0 249,252-253,255
+docker/README.md
+  s_6327988408e598::t_5596c3be594bf4 226
+  s_6327988408e598::t_ad90b2506695c2 197,203-204,208,211-212,215-225
+  s_6327988408e598::t_ba81b8bebc4238 205
+"docs/开发文档留存/release_1.0.x/06、github相关开源优化 & 部署脚本支持多架构.md"
+  s_6327988408e598::t_5a3d4db4e04279 69-75,78-82
+  s_6327988408e598::t_e2c3c4ec54ec29 26-68,76-77,83-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f1019d9086f72b882dd6dbe026474bf7b940345f",
+  "prompts": {},
+  "sessions": {
+    "s_36c04caadd37b3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f391c5f3affeUcVM2eWGRNYc8z",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_6327988408e598": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f35ea8d08ffepeZ5rRUCtYTXXt",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
