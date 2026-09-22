@@ -1,0 +1,43 @@
+blog-view-ui/package-lock.json
+  s_9d43701a9d4764::t_8d6ed0ac0cf64b 1-2904
+.github/workflows/ci.yml
+  s_36c04caadd37b3::t_a0896e7675d8ff 1-58
+blog-cms-ui/package-lock.json
+  s_439d19d6120770::t_abf8e3d52f56f3 1-2613
+README.md
+  s_36c04caadd37b3::t_6cc76ab168148c 16-17
+docs-website/package-lock.json
+  s_9d43701a9d4764::t_c8d10ef3217a04 1-14975
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4beb50cdf1236e874c89912329546890099c067f",
+  "prompts": {},
+  "sessions": {
+    "s_36c04caadd37b3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f391c5f3affeUcVM2eWGRNYc8z",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_439d19d6120770": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f460693dbffeIxEKd52yw6vLuZ",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_9d43701a9d4764": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f4cf6221fffeNkRIckBTwlzWcJ",
+        "model": "deepseek-v4-flash-0731"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
