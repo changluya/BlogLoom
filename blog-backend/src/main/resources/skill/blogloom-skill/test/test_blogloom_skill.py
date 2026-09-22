@@ -194,8 +194,19 @@ class BlogLoomSkillTest(unittest.TestCase):
         self.assertEqual({}, metadata)
         self.assertIn("```json", content)
 
-    def test_pick_first_picture_markdown(self):
-        self.assertEqual("http://a.png", skill.pick_first_picture("x\n![p](http://a.png)\ny"))
+    def test_pick_cover_only_matches_coverImg(self):
+        # 普通图片不再作为封面
+        self.assertEqual("", skill.pick_first_picture("x\n![pic](http://a.png)\ny"))
+        # 仅 alt 为 coverImg 的图片作为封面
+        self.assertEqual("http://a.png", skill.pick_first_picture("x\n![coverImg](http://a.png)\ny"))
+        # HTML 写法
+        self.assertEqual("http://b.png",
+                         skill.pick_first_picture("<img alt=\"coverImg\" src=\"http://b.png\">"))
+        # 同时存在时取正文中更靠前者
+        content = "<img alt=\"coverImg\" src=\"http://first.png\">\n![coverImg](http://second.png)"
+        self.assertEqual("http://first.png", skill.pick_first_picture(content))
+        # 无任何图片 / 无 coverImg 标记
+        self.assertEqual("", skill.pick_first_picture("纯文本，没有图片"))
 
     def test_derive_description_fallback(self):
         desc = skill.derive_description({}, "# 标题\n\n正文内容")

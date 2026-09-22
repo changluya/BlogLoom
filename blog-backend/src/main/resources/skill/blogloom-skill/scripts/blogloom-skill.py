@@ -77,12 +77,18 @@ def parse_markdown(file_path):
 
 
 def pick_first_picture(content):
-    """取正文第一个图片链接（Markdown 或 HTML，取更靠前者）。"""
+    """提取封面图：仅 alt 为 coverImg 的图片才视为封面（Markdown 或 HTML，取更靠前者）。
+
+    约定写法：![coverImg](url) 或 <img alt="coverImg" src="url">；
+    正文中其他普通图片不再被当作封面，没有 coverImg 标记则无封面（返回空串）。
+    """
     candidates = []
-    md = re.search(r"!\[[^\]]*\]\(([^)\s]+)", content or "")
+    md = re.search(r"!\[\s*coverImg\s*\]\s*\(\s*<?([^)\s>]+)>?", content or "", re.IGNORECASE)
     if md:
         candidates.append((md.start(), md.group(1)))
-    html = re.search(r"<img[^>]+src=[\"']([^\"']+)[\"']", content or "", re.IGNORECASE)
+    html = re.search(
+        r"<img(?=[^>]*\balt\s*=\s*[\"']\s*coverImg\s*[\"'])[^>]*\bsrc\s*=\s*[\"']([^\"']+)[\"'][^>]*>",
+        content or "", re.IGNORECASE)
     if html:
         candidates.append((html.start(), html.group(1)))
     if not candidates:

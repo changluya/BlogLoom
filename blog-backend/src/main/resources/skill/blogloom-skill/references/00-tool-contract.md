@@ -75,7 +75,7 @@
 | --- | --- | --- |
 | `blog_id` | 是 | 目标文章 id |
 | `file_path` / `content` | 否 | 覆盖正文（`file_path` 会自动去掉顶部元数据代码块） |
-| `title`/`description`/`firstPicture`/`category`/`tags`/`columns` | 否 | 覆盖对应字段 |
+| `title`/`description`/`firstPicture`/`category`/`tags`/`columns` | 否 | 覆盖对应字段（导入首图只认正文 alt 为 `coverImg` 的图片，用 `firstPicture` 可显式指定封面） |
 | `published`/`top`/`recommend`/`appreciation`/`commentEnabled`/`password` | 否 | 覆盖对应开关 |
 
 未传的字段一律沿用原文，避免误清空。返回 `updated` 列出实际变更的字段。

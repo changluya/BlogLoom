@@ -11,6 +11,7 @@ description: "BlogLoom 本地博客同步技能。Use when: (1) 把本地 Markdo
 ## 设计要点
 
 - **新增/导入**：直接复用页面「导入 Markdown 到知识库」接口 —— 原生支持 `knowledgeBasePath` 目录归位、缺失目录逐级创建、标签/分类自动创建、专栏只匹配已存在、冲突策略。
+- **封面图**：只识别正文中 alt 为 `coverImg` 的图片（`![coverImg](url)` / `<img alt="coverImg" src="url">`），普通图片不再作为封面，无标记则无封面。
 - **修改**：直接复用页面「编辑博客」接口 —— 按 id 更新，未传字段沿用原文。
 - 因此 Skill 不自行实现目录创建/节点搬移，行为与页面完全一致。
 

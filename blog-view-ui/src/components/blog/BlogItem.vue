@@ -20,9 +20,10 @@
 							<span v-if="item.category"><i class="folder open outline icon"></i>{{ item.category.name }}</span>
 							<span><i class="clock outline icon"></i>{{ item.readTime || 0 }} 分钟</span>
 						</div>
-						<div class="blog-tags">
+						<div v-if="item.tags && item.tags.length" class="blog-tags" data-tooltip data-position="top right" :data-tooltip-text="tagTooltip(item.tags)">
 							<router-link :to="`/tag/${tag.name}`" class="ui mini label m-text-500" :class="tagColor(tag)"
-							             v-for="(tag,index) in item.tags" :key="index">{{ tag.name }}</router-link>
+							             v-for="(tag,index) in visibleTags(item.tags)" :key="index">{{ tag.name }}</router-link>
+							<span v-if="item.tags.length > MAX_TAGS" class="blog-tags-more">...</span>
 						</div>
 					</div>
 				</div>
@@ -40,9 +41,19 @@
 				required: true
 			}
 		},
+		data() {
+			return {
+				// 卡片内最多展示的标签数，超出以「...」收尾，hover 展示全部
+				MAX_TAGS: 3
+			}
+		},
 		methods: {
 			toBlog(blog) {
 				this.$store.dispatch('goBlogPage', blog)
+			},
+			// 只取前 N 个标签，避免标签过多撑高卡片
+			visibleTags(tags) {
+				return (tags || []).slice(0, this.MAX_TAGS)
 			},
 			// 标签有配置颜色则用配置；否则按名称稳定取一个颜色，避免全部落在默认灰色
 			tagColor(tag) {
@@ -52,6 +63,10 @@
 				let hash = 0
 				for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0
 				return palette[hash % palette.length]
+			},
+			// 标签超出单行被截断时，hover 展示完整标签，方便查看
+			tagTooltip(tags) {
+				return (tags || []).map(tag => tag.name).join('、')
 			}
 		}
 	}
@@ -80,8 +95,34 @@
 	.blog-description ::v-deep p { display: inline; margin: 0; }
 	.blog-description ::v-deep img { display: none; }
 	.blog-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 10px; }
-	.blog-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+	.blog-meta { flex: 0 0 auto; }
+	.blog-tags { display: flex; flex: 1 1 auto; align-items: center; justify-content: flex-end; gap: 5px; min-width: 0; overflow: visible; position: relative; }
+	/* 标签过多时 hover 行内容立即展示全部标签（纯 CSS，无延迟） */
+	.blog-tags[data-tooltip-text]:hover::after {
+		content: attr(data-tooltip-text);
+		position: absolute;
+		right: 0;
+		bottom: calc(100% + 8px);
+		z-index: 20;
+		max-width: 360px;
+		padding: 6px 10px;
+		border: 1px solid #d4d4d5;
+		border-radius: 6px;
+		background: #fff;
+		color: rgba(0, 0, 0, .87);
+		font-size: 12px;
+		font-weight: 400;
+		line-height: 1.5;
+		white-space: normal;
+		text-align: left;
+		box-shadow: 0 2px 10px rgba(34, 36, 38, .15);
+		pointer-events: none;
+	}
 	.blog-tags .label {
+		flex: 0 1 auto;
+		min-width: 0;
+		max-width: 120px;
+		overflow: hidden;
 		margin: 0 !important;
 		padding: 3px 10px !important;
 		border-radius: 6px !important;
@@ -90,9 +131,12 @@
 		font-size: 12px !important;
 		font-weight: 500 !important;
 		letter-spacing: .2px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 		box-shadow: 0 1px 2px rgba(16, 24, 40, .08);
 		transition: opacity .2s, transform .2s;
 	}
+	.blog-tags .blog-tags-more { flex: 0 0 auto; color: #8a9199; font-size: 12px; font-weight: 600; letter-spacing: 1px; cursor: pointer; }
 	.blog-tags .label:hover { opacity: .88; transform: translateY(-1px); }
 	.blog-tags .label.red { background: #e06a6a !important; }
 	.blog-tags .label.orange { background: #e89a4e !important; }

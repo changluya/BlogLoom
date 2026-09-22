@@ -16,6 +16,7 @@ import com.changlu.blogloom.module.knowledge.domain.enums.KnowledgeNodeType;
 import com.changlu.blogloom.module.knowledge.service.KnowledgeImportTaskService;
 import com.changlu.blogloom.module.knowledge.support.KnowledgeArticleMetadataParser;
 import com.changlu.blogloom.module.knowledge.support.KnowledgeArticleMetadataParser.ParsedArticle;
+import com.changlu.blogloom.module.knowledge.support.KnowledgeCoverExtractor;
 import com.changlu.blogloom.service.BlogService;
 import com.changlu.blogloom.service.CategoryService;
 import com.changlu.blogloom.service.TagService;
@@ -28,8 +29,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -42,7 +41,7 @@ import java.util.zip.ZipFile;
  * <p>
  * 核心描述：把目录与 Markdown 还原成知识库树，并把每篇 Markdown 转成一篇博客。
  * 目录按层级复用/创建；每篇文档解析顶部 JSON 元数据后，标题取 title、描述取 articleSummary、
- * 首图取正文第一个图片链接；标签、分类遵循“先查库 -> 不存在则新建 -> 再关联”，
+ * 首图取正文中 alt 为 coverImg 的图片；标签、分类遵循“先查库 -> 不存在则新建 -> 再关联”，
  * 专栏则只匹配已存在的并关联（不自动创建）；默认以“公开”状态入库。整个过程在一个事务内完成，任一文档失败即整体回滚。
  * <p>
  * 整体流程（由 MarkdownArchiveServiceImpl 在后台线程中调用）：
@@ -54,7 +53,7 @@ import java.util.zip.ZipFile;
  * <p>
  * 本类额外承载了“一键导入知识库”的业务规则：
  * <ol>
- *     <li>文章首图取正文里出现的第一个图片链接（Markdown 或 HTML）；</li>
+ *     <li>文章首图取正文中 alt 为 coverImg 的图片（Markdown {@code ![coverImg](url)} 或 HTML {@code <img alt="coverImg" src="url">}），无标记则无封面；</li>
  *     <li>标签（tags，3-5 个，逗号分隔）与分类（category，单个）若数据库不存在则自动创建，再与文章建立关联；</li>
  *     <li>标题取元数据 title，文章描述取元数据 articleSummary（150 字以内）；</li>
  *     <li>专栏取元数据 columns（多个，逗号分隔），仅匹配已存在的专栏并关联，未匹配到则不关联（不自动创建）；</li>
@@ -73,10 +72,6 @@ public class KnowledgeImportWorker {
 	private static final int MAX_TAG_NAME_LENGTH = 100;
 	/** 专栏名最大长度，超出则截断，避免超过数据库字段限制 */
 	private static final int MAX_COLUMN_NAME_LENGTH = 100;
-	/** 规则1：匹配 Markdown 图片语法 ![alt](url) 中的 URL */
-	private static final Pattern MARKDOWN_IMAGE = Pattern.compile("!\\[[^\\]]*\\]\\(\\s*<?([^)\\s>]+)>?");
-	/** 规则1：匹配 HTML <img src="url"> 中的 URL（大小写不敏感） */
-	private static final Pattern HTML_IMAGE = Pattern.compile("<img[^>]+src\\s*=\\s*[\"']([^\"']+)[\"']", Pattern.CASE_INSENSITIVE);
 	/** 规则6：创建/更新时间支持的时间格式（标准为 YYYY-MM-DD HH:mm:ss，其余为兼容写法） */
 	private static final String[] DATE_TIME_PATTERNS = {
 			"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM-dd",
@@ -222,7 +217,7 @@ public class KnowledgeImportWorker {
 		String description = hasText(metadata == null ? null : metadata.getArticleSummary())
 				? metadata.getArticleSummary().trim() : description(content, name);
 
-		// 步骤6（规则1）：首图取正文中第一个图片链接（Markdown 或 HTML，取出现位置更靠前者）
+		// 步骤6（规则1）：首图取正文中 alt 为 coverImg 的图片（Markdown 或 HTML，取出现位置更靠前者），无则空串
 		String firstPicture = firstPicture(content);
 
 		// 步骤7（规则2）：解析标签，数据库不存在则自动创建
@@ -266,7 +261,7 @@ public class KnowledgeImportWorker {
 		blog.setContent(content);
 		// 规则3：description 来自 articleSummary
 		blog.setDescription(description);
-		// 规则1：firstPicture 来自正文第一个图片链接，空值写空串（数据库字段非空）
+		// 规则1：firstPicture 来自正文中 alt 为 coverImg 的图片，空值写空串（数据库字段非空）
 		blog.setFirstPicture(firstPicture == null ? "" : firstPicture);
 		// 规则5：默认公开导入；published 为 null 时也视为公开；赞赏与评论默认开启
 		blog.setPublished(options.getPublished() == null || options.getPublished());
@@ -376,19 +371,11 @@ public class KnowledgeImportWorker {
 	}
 
 	/**
-	 * 规则1：提取正文中出现的第一个图片链接作为文章首图。
-	 * 同时扫描 Markdown 与 HTML 两种写法，若都存在则取在正文中出现位置更靠前的那一个。
+	 * 规则1：提取正文中的封面图链接（委托 {@link KnowledgeCoverExtractor}）。
+	 * 仅识别 alt 为 coverImg 的图片，无标记则返回空串。
 	 */
 	private String firstPicture(String content) {
-		if (content == null || content.isEmpty()) return "";
-		Matcher markdown = MARKDOWN_IMAGE.matcher(content);
-		Matcher html = HTML_IMAGE.matcher(content);
-		boolean hasMarkdown = markdown.find();
-		boolean hasHtml = html.find();
-		if (!hasMarkdown && !hasHtml) return "";
-		if (!hasHtml) return markdown.group(1).trim();
-		if (!hasMarkdown) return html.group(1).trim();
-		return markdown.start() <= html.start() ? markdown.group(1).trim() : html.group(1).trim();
+		return KnowledgeCoverExtractor.extract(content);
 	}
 
 	/**

@@ -113,6 +113,9 @@
 					<strong>ZIP 导入</strong>：目录按压缩包内的多级文件夹自动映射为知识库目录，<strong>忽略 knowledgeBasePath</strong>。<br/>
 					<strong>Markdown 文件导入</strong>：没有文件夹结构，目录由每篇的 <code>knowledgeBasePath</code> 决定（格式 <code>/a/bb/cc</code>，以 / 开头、末尾不带 /）；为空则落在知识库根目录，缺失目录会自动逐级创建。
 				</p>
+				<p class="meta-help-desc">
+					<strong>封面图</strong>：只识别正文中 alt 为 <code>coverImg</code> 的图片，写作 <code>![coverImg](图片URL)</code>（或 <code>&lt;img alt="coverImg" src="URL"&gt;</code>）；正文中其他普通图片不会作为封面，没有 <code>coverImg</code> 标记则无封面。
+				</p>
 				<div class="meta-drawer-actions">
 					<el-button size="small" type="primary" icon="el-icon-download" @click="downloadSampleZip">下载示例 ZIP</el-button>
 					<el-button size="small" plain icon="el-icon-document-copy" @click="copyMetaSample">复制全部示例</el-button>
@@ -183,7 +186,13 @@
 							'  "updateTime": "2026-09-19 14:30:00",',
 							'  "knowledgeBasePath": "/版本发布"',
 							'}',
-							'```'
+							'```',
+							'',
+							'# BlogLoom 1.0 发布',
+							'',
+							'![coverImg](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/cover.png)',
+							'',
+							'正文内容……'
 						].join('\n')
 					},
 					{
@@ -226,6 +235,7 @@
 					{field: 'tags', desc: '标签，多个，逗号分隔；数据库中不存在会自动创建'},
 					{field: 'category', desc: '分类，单个；不存在会自动创建，缺省为「知识库」'},
 					{field: 'articleSummary', desc: '文章摘要（150 字以内），对应文章描述'},
+					{field: '封面图', desc: '正文中 alt 为 coverImg 的图片作为封面，写作 ![coverImg](图片URL)；普通图片不作为封面，无标记则无封面'},
 					{field: 'columns', desc: '所属专栏，多个，逗号分隔；仅关联已存在的专栏（含二级专栏），不会自动创建'},
 					{field: 'createTime', desc: '创建时间，格式 YYYY-MM-DD HH:mm:ss；缺省为导入时间'},
 					{field: 'updateTime', desc: '更新时间，格式 YYYY-MM-DD HH:mm:ss；缺省同创建时间'},
