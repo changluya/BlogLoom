@@ -24,6 +24,8 @@ public class LocalUploadChannel implements UploadChannel {
 	private UploadProperties uploadProperties;
 	@Autowired
 	private BlogProperties blogProperties;
+	@Autowired
+	private ImageHostConfigService imageHostConfigService;
 
 	private static final byte[] PROBE = "blogloom-connectivity-test".getBytes(java.nio.charset.StandardCharsets.UTF_8);
 
@@ -90,11 +92,23 @@ public class LocalUploadChannel implements UploadChannel {
 
 	@Override
 	public String buildUrl(String relativePath) {
-		String api = blogProperties.getApi() == null ? "" : blogProperties.getApi();
+		String api = resolveBaseUrl();
 		while (api.endsWith("/")) {
 			api = api.substring(0, api.length() - 1);
 		}
 		return api + "/static/" + relativePath.replace('\\', '/');
+	}
+
+	/**
+	 * 本地资源访问地址前缀：优先读取站点设置中的本地上传配置（uploadChannelLocal.address），
+	 * 为空时回退到 blog.api，保持历史行为不变。
+	 */
+	private String resolveBaseUrl() {
+		LocalUploadConfig config = imageHostConfigService.getLocalConfig();
+		if (config != null && config.getAddress() != null && !config.getAddress().trim().isEmpty()) {
+			return config.getAddress().trim();
+		}
+		return blogProperties.getApi() == null ? "" : blogProperties.getApi();
 	}
 
 	@Override

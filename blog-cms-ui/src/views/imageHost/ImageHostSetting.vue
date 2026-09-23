@@ -24,7 +24,16 @@
 						<el-button class="test-btn" size="mini" plain icon="el-icon-connection"
 						           :loading="testingChannel === 'local'" @click="testChannel('local')">测试连通性</el-button>
 					</div>
-					<div class="channel-desc">使用系统默认的本地存储目录（conf/upload），无需额外配置。</div>
+					<el-form label-position="right" label-width="120px" size="small" class="channel-form">
+						<el-form-item label="访问地址">
+							<el-input v-model="form.uploadChannelLocal.address" placeholder="本地资源访问地址前缀，如 http://localhost:8090"></el-input>
+						</el-form-item>
+						<div class="channel-desc local-desc">
+							使用系统默认的本地存储目录（conf/upload），无需额外配置。资源访问地址形如
+							<code>{{ localSampleUrl }}</code>
+							，留空则回退到后端 blog.api 配置。
+						</div>
+					</el-form>
 				</div>
 
 				<div class="channel-box" :class="{'is-active': form.uploadChannelChoose === 'aliyun'}">
@@ -72,6 +81,9 @@
 				testingChannel: null,
 				form: {
 					uploadChannelChoose: 'local',
+					uploadChannelLocal: {
+						address: ''
+					},
 					uploadChannelAliyun: {
 						accessKeyId: '',
 						accessKeySecret: '',
@@ -80,6 +92,13 @@
 						path: ''
 					}
 				}
+			}
+		},
+		computed: {
+			localSampleUrl() {
+				const address = (this.form.uploadChannelLocal.address || '').trim().replace(/\/+$/, '')
+				const base = address || window.location.origin
+				return `${base}/static/blogColumn/1/uuid.png`
 			}
 		},
 		created() {
@@ -91,6 +110,17 @@
 					this.records = (res.data && res.data.type6) || []
 					const choose = this.records.find(item => item.nameEn === 'uploadChannelChoose')
 					if (choose && choose.value) this.form.uploadChannelChoose = choose.value
+					const local = this.records.find(item => item.nameEn === 'uploadChannelLocal')
+					if (local && local.value) {
+						try {
+							const value = JSON.parse(local.value)
+							this.form.uploadChannelLocal = {
+								address: value.address || ''
+							}
+						} catch (e) {
+							// 历史脏数据忽略，保留默认空配置
+						}
+					}
 					const aliyun = this.records.find(item => item.nameEn === 'uploadChannelAliyun')
 					if (aliyun && aliyun.value) {
 						try {
@@ -122,6 +152,8 @@
 				const settings = []
 				const choose = this.records.find(item => item.nameEn === 'uploadChannelChoose')
 				if (choose) settings.push({...choose, value: this.form.uploadChannelChoose})
+				const local = this.records.find(item => item.nameEn === 'uploadChannelLocal')
+				if (local) settings.push({...local, value: JSON.stringify(this.form.uploadChannelLocal)})
 				const aliyun = this.records.find(item => item.nameEn === 'uploadChannelAliyun')
 				if (aliyun) settings.push({...aliyun, value: JSON.stringify(this.form.uploadChannelAliyun)})
 				if (!settings.length) return this.msgError('未找到图床配置项，请先执行数据库增量脚本')
@@ -201,5 +233,18 @@
 
 	.channel-form {
 		margin-bottom: -18px;
+	}
+
+	.local-desc {
+		margin-bottom: 18px;
+	}
+
+	.local-desc code {
+		padding: 1px 5px;
+		border-radius: 4px;
+		background: #f4f4f5;
+		color: #606266;
+		font-size: 12px;
+		word-break: break-all;
 	}
 </style>

@@ -27,6 +27,17 @@ public class ImageHostConfigService {
 	}
 
 	/**
+	 * 本地渠道参数，未配置时返回 null。
+	 */
+	public LocalUploadConfig getLocalConfig() {
+		SiteSetting setting = siteSettingMapper.getByNameEn(SiteSettingConstants.UPLOAD_CHANNEL_LOCAL);
+		if (setting == null || setting.getValue() == null || setting.getValue().trim().isEmpty()) {
+			return null;
+		}
+		return JacksonUtils.readValue(setting.getValue(), LocalUploadConfig.class);
+	}
+
+	/**
 	 * 阿里云渠道参数，未配置时返回 null。
 	 */
 	public AliyunOssConfig getAliyunConfig() {
