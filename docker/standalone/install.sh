@@ -22,13 +22,19 @@
 #
 # 说明：
 #   - 所有运行时数据都落在当前目录 ./data/ 下，便于查看与备份；
-#   - 只对外暴露一个 Web 端口（默认 18080），MySQL 仅容器内网；
+#   - Web 端口默认 18080，MySQL 额外映射到宿主机 13306（可用 MYSQL_PORT 覆盖）供外网连接；
 #   - 默认账号：admin / 123456（登录后请立即修改）。
+#
+# 安全提示：
+#   MySQL 对外暴露存在风险，请务必在服务器安全组/防火墙中仅放行可信来源 IP 到 MYSQL_PORT。
+#   首次部署会自动生成随机 MySQL root 密码与登录令牌密钥并写入同目录 .env，
+#   部署完成后请查看脚本末尾输出的密码并妥善保存（重复执行/升级会复用，不会改变）。
 #
 # 可选环境变量（也可在同目录 .env 中覆盖）：
 #   WEB_PORT=18080            对外 Web 端口
-#   MYSQL_ROOT_PASSWORD=...   数据库密码
-#   TOKEN_SECRET=...          登录令牌密钥
+#   MYSQL_PORT=13306          MySQL 对外端口（映射容器 3306）
+#   MYSQL_ROOT_PASSWORD=...   数据库密码（不设置则首次自动生成随机密码）
+#   TOKEN_SECRET=...          登录令牌密钥（不设置则首次自动生成随机密钥）
 #   BLOG_API / BLOG_CMS / BLOG_VIEW  站点对外地址
 #   IMAGE_REPO / IMAGE_TAG    镜像仓库与版本（默认自动解析最新版本）
 # =============================================================================
@@ -101,7 +107,7 @@ export IMAGE_TAG="$TAG"
 
 # ---------------------------------------------------------------------------
 # 步骤 2：生成自包含 docker-compose.yml（若不存在）
-#   仅依赖 Docker Hub 镜像；数据绑定挂载到 ./data；只暴露 Web 端口。
+#   仅依赖 Docker Hub 镜像；数据绑定挂载到 ./data；暴露 Web 端口与 MySQL 端口。
 # ---------------------------------------------------------------------------
 if [ ! -f docker-compose.yml ]; then
     cat > docker-compose.yml <<'YAML'
@@ -120,6 +126,8 @@ services:
       MYSQL_ROOT_HOST: "%"
       MYSQL_DATABASE: ${MYSQL_DATABASE:-blogloom}
       TZ: ${TZ:-Asia/Shanghai}
+    ports:
+      - "${MYSQL_PORT:-13306}:3306"
     volumes:
       - ./data/mysql:/var/lib/mysql
     healthcheck:
@@ -159,13 +167,52 @@ YAML
 fi
 
 # ---------------------------------------------------------------------------
-# 步骤 3：写入 .env（记录当前使用的版本，保证后续 compose 命令一致）
+# 步骤 3：写入 .env（记录版本；首次自动生成随机数据库密码与令牌密钥）
+#   密码/密钥只在首次生成并写入 .env，后续重复执行或升级都会复用，
+#   避免与已初始化的数据库密码不一致；若已有 data/mysql 数据则沿用历史密码。
 # ---------------------------------------------------------------------------
 if [ -f .env ] && grep -q '^IMAGE_TAG=' .env; then
     sed -i.bak -E "s|^IMAGE_TAG=.*|IMAGE_TAG=${TAG}|" .env && rm -f .env.bak
 else
     echo "IMAGE_TAG=${TAG}" >> .env
 fi
+
+# 随机凭据生成器：优先 openssl，其次 /dev/urandom，最后 cksum 兜底
+gen_secret() {
+    if command -v openssl >/dev/null 2>&1; then
+        openssl rand -hex 16
+    elif [ -r /dev/urandom ]; then
+        LC_ALL=C tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 24
+    else
+        date +%s%N | cksum | tr -dc '0-9'
+    fi
+}
+env_value() { grep -E "^$1=" .env 2>/dev/null | tail -n1 | cut -d= -f2-; }
+
+# 数据库 root 密码：.env 已有 > 环境变量 > 首次随机生成
+if grep -q '^MYSQL_ROOT_PASSWORD=' .env 2>/dev/null; then
+    MYSQL_ROOT_PASSWORD="$(env_value MYSQL_ROOT_PASSWORD)"
+elif [ -n "$(ls -A data/mysql 2>/dev/null)" ]; then
+    # 已存在数据库数据（历史部署）：沿用历史默认密码，避免生成新密码后无法连接
+    MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-blogloom_root_pwd}"
+    echo "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" >> .env
+    echo "[warn] 检测到已有数据库数据，沿用历史密码；如需改密请手动在数据库中执行 ALTER USER。"
+else
+    MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-$(gen_secret)}"
+    echo "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" >> .env
+    echo "[init] 已生成随机数据库密码并写入 .env"
+fi
+export MYSQL_ROOT_PASSWORD
+
+# 登录令牌密钥：.env 已有 > 环境变量 > 首次随机生成
+if grep -q '^TOKEN_SECRET=' .env 2>/dev/null; then
+    TOKEN_SECRET="$(env_value TOKEN_SECRET)"
+else
+    TOKEN_SECRET="${TOKEN_SECRET:-$(gen_secret)}"
+    echo "TOKEN_SECRET=${TOKEN_SECRET}" >> .env
+    echo "[init] 已生成随机令牌密钥并写入 .env"
+fi
+export TOKEN_SECRET
 
 # ---------------------------------------------------------------------------
 # 步骤 4：生成 upgrade.sh（若不存在）
@@ -263,9 +310,13 @@ echo "================ BlogLoom 部署完成 ================"
 echo "  博客前台：http://<服务器IP>:${WEB_PORT}"
 echo "  管理后台：http://<服务器IP>:${WEB_PORT}/cms"
 echo "  默认账号：admin / 123456（请登录后立即修改）"
+echo "  MySQL   ：<服务器IP>:${MYSQL_PORT:-13306}  用户 root  库 ${MYSQL_DATABASE:-blogloom}"
+echo "  MySQL 密码：${MYSQL_ROOT_PASSWORD:-blogloom_root_pwd}"
 echo "  运行版本：${IMAGE_REPO}:${TAG}"
 echo "  数据目录：$(pwd)/data"
 echo "  版本升级：./upgrade.sh"
 echo "  查看日志：docker logs -f blogloom-app"
 echo "  停止服务：docker compose down"
+echo "---------------------------------------------------"
+echo "  请妥善保存上面的 MySQL 密码，同时已写入 $(pwd)/.env（可查看：grep MYSQL_ROOT_PASSWORD .env）"
 echo "==================================================="

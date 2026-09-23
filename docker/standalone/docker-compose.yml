@@ -2,7 +2,10 @@
 # BlogLoom 独立部署（用户版）
 # =============================================================================
 # 面向只想快速把博客跑起来的用户：无需 JDK / Node / Maven，直接从 Docker Hub 拉取镜像。
-# 只暴露一个 Web 端口（默认 18080），MySQL 仅在容器内部使用。
+# Web 端口默认 18080；MySQL 额外映射到宿主机 13306（可用 MYSQL_PORT 覆盖），供外网/客户端连接。
+#
+# 安全提示：MySQL 对外暴露存在风险，请务必修改 MYSQL_ROOT_PASSWORD 为强密码，
+#           并在服务器安全组/防火墙中仅放行可信来源 IP。
 #
 # 数据落盘：所有运行时数据绑定挂载到本目录下的 ./data/，便于查看与备份。
 #   ./data/mysql       MySQL 数据
@@ -19,6 +22,7 @@
 #
 # 可选：在同目录创建 .env 覆盖默认值，例如：
 #   WEB_PORT=8080
+#   MYSQL_PORT=13306
 #   MYSQL_ROOT_PASSWORD=your-strong-password
 #   TOKEN_SECRET=your-long-random-secret
 #   BLOG_API=http://your-domain:8080
@@ -30,7 +34,7 @@
 name: blogloom
 
 services:
-  # MySQL 8：数据绑定挂载到 ./data/mysql，仅容器内网访问
+  # MySQL 8：数据绑定挂载到 ./data/mysql；对外映射 MYSQL_PORT（默认 13306）供外网连接
   mysql:
     image: mysql:8.0
     container_name: blogloom-mysql
@@ -43,6 +47,8 @@ services:
       MYSQL_ROOT_HOST: "%"
       MYSQL_DATABASE: ${MYSQL_DATABASE:-blogloom}
       TZ: ${TZ:-Asia/Shanghai}
+    ports:
+      - "${MYSQL_PORT:-13306}:3306"
     volumes:
       - ./data/mysql:/var/lib/mysql
     healthcheck:

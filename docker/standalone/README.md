@@ -26,12 +26,15 @@ curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/st
 
 ## 自定义配置（可选）
 
-在部署目录创建 `.env` 覆盖默认值：
+首次部署时，脚本会**自动生成随机 MySQL root 密码与登录令牌密钥**并写入部署目录的 `.env`，部署完成后会在终端打印，请妥善保存（重复执行/升级会复用，不会改变）。
+
+也可以在同目录创建 `.env` 提前指定（则不会自动生成）：
 
 ```bash
 WEB_PORT=8080
-MYSQL_ROOT_PASSWORD=your-strong-password
-TOKEN_SECRET=your-long-random-secret
+MYSQL_PORT=13306
+MYSQL_ROOT_PASSWORD=your-strong-password   # 不设置则首次自动生成随机密码
+TOKEN_SECRET=your-long-random-secret       # 不设置则首次自动生成随机密钥
 BLOG_API=http://your-domain:8080
 BLOG_CMS=http://your-domain:8080/cms
 BLOG_VIEW=http://your-domain:8080
@@ -39,6 +42,24 @@ IMAGE_TAG=1.0.0        # 默认 latest
 ```
 
 修改后重新 `docker compose up -d` 生效。
+
+> 查看当前数据库密码：`grep MYSQL_ROOT_PASSWORD .env`。
+
+## 连接数据库（外网）
+
+MySQL 默认映射到宿主机 `13306` 端口（容器内仍为 3306），可用 `MYSQL_PORT` 覆盖：
+
+```text
+主机：<服务器IP>
+端口：13306
+用户：root
+密码：见部署目录 .env 中的 MYSQL_ROOT_PASSWORD（首次自动随机生成）
+数据库：blogloom          # 可用 MYSQL_DATABASE 覆盖
+```
+
+> **安全提示**：MySQL 对外暴露存在风险。请在服务器安全组/防火墙中仅放行可信来源 IP 到 `MYSQL_PORT`，切勿对整个公网开放。
+>
+> 如不需要外网直连，删除 `docker-compose.yml` 中 mysql 服务的 `ports` 段即可（应用仍可通过容器内网 `mysql:3306` 连接）。
 
 ## 版本升级
 
