@@ -1,0 +1,37 @@
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/LocalUploadConfig.java
+  s_888a77a3dd5898::t_c970eb9b5f6952 1-20
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/ImageHostConfigService.java
+  s_888a77a3dd5898::t_f3b27e80d55ada 30-39
+  s_888a77a3dd5898::t_0e6f262eee7d51 29
+blog-cms-ui/src/views/imageHost/ImageHostSetting.vue
+  s_888a77a3dd5898::t_97e7df8d43add3 27-36
+  s_888a77a3dd5898::t_debb6214054742 237-249
+  s_888a77a3dd5898::t_72652e48127cf9 84-86,97-101
+  s_888a77a3dd5898::t_92cd9b24bb03b2 155-156
+  s_888a77a3dd5898::t_b69b581ab89c74 113-123
+  s_888a77a3dd5898::t_b79e7d262c15ec 102-103
+sql/increment/1.0/20260921000000_v1.0.x.sql
+  s_888a77a3dd5898::t_6d4fb726be08d5 1-7
+blog-backend/src/main/java/com/changlu/blogloom/constant/SiteSettingConstants.java
+  s_888a77a3dd5898::t_28d5d58d166410 24
+blog-backend/src/main/java/com/changlu/blogloom/service/storage/LocalUploadChannel.java
+  s_888a77a3dd5898::t_714f6c3ec1333f 27-28
+  s_888a77a3dd5898::t_4edd9490886553 95,102-111
+  s_888a77a3dd5898::t_58dddb3a9da07f 112-113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fef02a0d9aaa8913bc8a2be9d8b7a9a8024ab5fe",
+  "prompts": {},
+  "sessions": {
+    "s_888a77a3dd5898": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f336e11ffffePugcluXO4SyUMP",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
