@@ -1,0 +1,32 @@
+docker/standalone/docker-compose.yml
+  s_888a77a3dd5898::t_aa570b9f4b942a 5-8
+  s_888a77a3dd5898::t_226b38f90f3bdd 25
+  s_888a77a3dd5898::t_db3ec1eb66ed1d 37,50-51
+docker/standalone/install.sh
+  s_888a77a3dd5898::t_089f8326c3ef0a 110,129-130
+  s_888a77a3dd5898::t_ffd020e7798c2d 29-31,36-37
+  s_888a77a3dd5898::t_3a3b58f58ff2f4 170-172,180-215
+  s_888a77a3dd5898::t_b135d23586efee 313-314,320-321
+  s_888a77a3dd5898::t_ecd4d1e0833785 25,28,32,35
+  s_888a77a3dd5898::t_fadcd46baa82fa 216
+docker/standalone/README.md
+  s_888a77a3dd5898::t_709fca945fa52a 29-31,36-37,46,56,60
+  s_888a77a3dd5898::t_80ff3887e59947 35,47-55,57-59,61-62
+  s_888a77a3dd5898::t_bac04e4f300dbc 63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b18a38572f6511ab25bd818837676b4ffd903c61",
+  "prompts": {},
+  "sessions": {
+    "s_888a77a3dd5898": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f336e11ffffePugcluXO4SyUMP",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
