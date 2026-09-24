@@ -49,33 +49,32 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 - **日志与任务管理**：集中查看访问、登录、操作、异常和定时任务执行信息。
 - **适合二次开发**：后端分层清晰，前台与后台管理端职责独立，方便更换主题或扩展接口。
 
-## 系统组成
+## 快速开始
 
-| 模块 | 职责 | 默认地址 |
-| --- | --- | --- |
-| `blog-view-ui` | 面向访客的博客门户、文章阅读与互动 | <http://localhost:8080> |
-| `blog-cms-ui` | 面向站长的内容管理与运营后台 | <http://localhost:8079> |
-| `blog-backend` | REST API、认证、业务逻辑、数据访问与任务调度 | <http://localhost:8090> |
-| MySQL | 业务数据等持久化数据 | 数据库名 `blogloom` |
+### 一键部署（推荐）
 
-```text
-┌──────────────────────┐          ┌──────────────────────┐
-│    blog-view-ui      │          │     blog-cms-ui      │
-│  公开博客 / 访客端    │          │  内容管理 / 运营后台   │
-└──────────┬───────────┘          └──────────┬───────────┘
-           │            REST API             │
-           └──────────────┬──────────────────┘
-                          ▼
-               ┌──────────────────────┐
-               │    blog-backend      │
-               │ Spring Boot/MyBatis  │
-               └──────────┬───────────┘
-                          ▼
-               ┌──────────────────────┐
-               │        MySQL         │
-               │      业务数据        │
-               └──────────────────────┘
+只想快速把博客跑起来？服务器安装 Docker 与 Docker Compose v2 后，一条命令即可完成部署，无需 JDK / Node / Maven，也无需克隆仓库：
+
+```bash
+mkdir blogloom && cd blogloom
+curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash
 ```
+
+| 入口 | 地址 |
+| --- | --- |
+| 博客前台 | `http://<服务器IP>:18080` |
+| 管理后台 | `http://<服务器IP>:18080/cms` |
+| 默认账号 | `admin` / `123456`（登录后请立即修改） |
+
+**平滑升级**（自动拉取新版本，数据不丢失）：
+
+```bash
+cd blogloom
+./upgrade.sh            # 自动解析最新版本并升级
+./upgrade.sh 1.0.1      # 升级到指定版本
+```
+
+完整说明见 [docker/README.md](./docker/README.md)。
 
 ## 功能范围
 
@@ -131,6 +130,34 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 | --- | --- | --- | --- | --- | --- | --- |
 | ![数据概览](./assets/后台/后台数据概览页.png) | ![博客文章](./assets/后台/后台（博客管理-文章）.png) | ![博客专栏](./assets/后台/后台（博客管理-专栏）.png) | ![知识库](./assets/后台/后台（博客管理-知识库）.png) | ![图床管理](./assets/后台/后台（图床管理-图床）.png) | ![站点数据](./assets/后台/后台（页面管理-站点数据）.png) | ![访问日志](./assets/后台/后台（日志管理-访问日志）.png) |
 
+## 系统组成
+
+| 模块 | 职责 | 默认地址 |
+| --- | --- | --- |
+| `blog-view-ui` | 面向访客的博客门户、文章阅读与互动 | <http://localhost:8080> |
+| `blog-cms-ui` | 面向站长的内容管理与运营后台 | <http://localhost:8079> |
+| `blog-backend` | REST API、认证、业务逻辑、数据访问与任务调度 | <http://localhost:8090> |
+| MySQL | 业务数据等持久化数据 | 数据库名 `blogloom` |
+
+```text
+┌──────────────────────┐          ┌──────────────────────┐
+│    blog-view-ui      │          │     blog-cms-ui      │
+│  公开博客 / 访客端    │          │  内容管理 / 运营后台   │
+└──────────┬───────────┘          └──────────┬───────────┘
+           │            REST API             │
+           └──────────────┬──────────────────┘
+                          ▼
+               ┌──────────────────────┐
+               │    blog-backend      │
+               │ Spring Boot/MyBatis  │
+               └──────────┬───────────┘
+                          ▼
+               ┌──────────────────────┐
+               │        MySQL         │
+               │      业务数据        │
+                └──────────────────────┘
+```
+
 ## 技术栈
 
 | 范围 | 主要技术 |
@@ -179,34 +206,7 @@ BlogLoom/
 └── README.md
 ```
 
-## 快速开始
-
-### 用户部署（推荐）
-
-只想快速把博客跑起来？服务器安装 Docker 与 Docker Compose v2 后，一条命令即可完成部署，无需 JDK / Node / Maven，也无需克隆仓库：
-
-```bash
-mkdir blogloom && cd blogloom
-curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash
-```
-
-| 入口 | 地址 |
-| --- | --- |
-| 博客前台 | `http://<服务器IP>:18080` |
-| 管理后台 | `http://<服务器IP>:18080/cms` |
-| 默认账号 | `admin` / `123456`（登录后请立即修改） |
-
-后续升级（自动拉取新版本，数据不丢失）：
-
-```bash
-cd blogloom
-./upgrade.sh            # 自动解析最新版本并升级
-./upgrade.sh 1.0.1      # 升级到指定版本
-```
-
-完整说明见 [docker/README.md](./docker/README.md)。
-
-### 本地开发
+## 本地开发
 
 环境要求：JDK 8+、Maven 3.6+、Node.js 16+ 与 npm、MySQL 5.7+ 或 MySQL 8。
 
@@ -286,12 +286,24 @@ npm run dev
 
 ## 参与贡献
 
-欢迎通过 Issue 提交问题、建议或功能需求，也欢迎通过 Pull Request 参与改进。提交代码前建议：
+欢迎通过 Issue 提交问题、建议或功能需求，也欢迎通过 Pull Request 参与改进。完整的协作流程与规范请见 [CONTRIBUTING.md](./CONTRIBUTING.md)，提交代码前建议：
 
 1. 分别验证涉及模块可以正常构建。
 2. 数据库结构或初始数据发生变化时，同步维护全量 SQL 与必要的增量 SQL。
 3. 不提交本地日志、上传文件、真实账号密码和访问密钥。
 4. 在变更说明中写清影响模块、验证方式和兼容性注意事项。
+
+如发现安全漏洞，请勿公开提交 Issue，按 [SECURITY.md](./SECURITY.md) 私下报告。
+
+## 联系我
+
+如果这个项目对你有帮助，或者你有更好的思路与想法，欢迎加我微信沟通交流。
+
+添加好友时请备注来意（例如「BlogLoom 交流」）。
+
+<p align="center">
+  <img src="./assets/wechat.jpg" alt="微信联系方式" width="240">
+</p>
 
 ## 鸣谢
 

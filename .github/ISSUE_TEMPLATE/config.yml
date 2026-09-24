@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 使用文档
+    url: https://blogloom.changlu.cloud/
+    about: 查看官方文档，了解安装、部署与使用说明
+  - name: 安全漏洞报告
+    url: https://github.com/changluya/BlogLoom/security/policy
+    about: 请勿公开披露安全漏洞，请按安全策略私下报告
