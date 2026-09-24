@@ -1,0 +1,21 @@
+blog-view-ui/src/views/Index.vue
+  s_f7c6288d6923b0::t_8eed92acb568ca 19,239-240,251-253
+  s_f7c6288d6923b0::t_325d7f36f7803f 29-35
+  s_f7c6288d6923b0::t_63451f4da64a61 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0e57fd3d3d80a096d285a70fe7e468604ebab1aa",
+  "prompts": {},
+  "sessions": {
+    "s_f7c6288d6923b0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0d2db-2785-7350-9cf9-ae8ce74546b6",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
