@@ -15,8 +15,8 @@
 					<div class="ui stackable grid">
 						<!--左侧-->
 						<div class="three wide column m-mobile-hide">
-							<Introduction :class="{'m-display-none':focusMode, 'article-introduction-sticky': $route.name === 'blog'}"/>
-							<CustomModule :module="siteInfo.customModule" :class="{'m-display-none':focusMode}"/>
+							<Introduction :class="{'m-display-none':focusMode}"/>
+							<CustomModule :module="siteInfo.customModule" :class="{'m-display-none':focusMode, 'article-custom-module-sticky': $route.name === 'blog'}"/>
 						</div>
 						<!--中间-->
 						<div class="ten wide column">
@@ -26,11 +26,13 @@
 						</div>
 						<!--右侧-->
 						<div class="three wide column m-mobile-hide">
-							<RandomBlog :randomBlogList="randomBlogList" :class="{'m-display-none':focusMode}"/>
-							<Categories :categoryList="categoryList" :class="{'m-display-none':focusMode}"/>
-							<Tags :tagList="tagList" :class="{'m-display-none':focusMode}"/>
-							<!--只在文章页面显示目录-->
-							<Tocbot v-if="$route.name==='blog'"/>
+							<!--文章详情页右栏仅显示目录，其他页面显示推荐、分类和标签-->
+							<Tocbot v-if="$route.name === 'blog'"/>
+							<template v-else>
+								<RandomBlog :randomBlogList="randomBlogList" :class="{'m-display-none':focusMode}"/>
+								<Categories :categoryList="categoryList" :class="{'m-display-none':focusMode}"/>
+								<Tags :tagList="tagList" :class="{'m-display-none':focusMode}"/>
+							</template>
 						</div>
 					</div>
 				</div>
@@ -234,7 +236,8 @@
 		display: none !important;
 	}
 
-	.article-introduction-sticky {
+	/* 自定义模块保持在介绍/专栏之后，滚动到顶部时再吸顶 */
+	.article-custom-module-sticky {
 		position: sticky;
 		top: 60px;
 		max-height: calc(100vh - 76px);
@@ -245,9 +248,9 @@
 		scrollbar-color: #cbd5e1 transparent;
 	}
 
-	.article-introduction-sticky::-webkit-scrollbar { width: 5px; }
-	.article-introduction-sticky::-webkit-scrollbar-thumb { border-radius: 999px; background: #cbd5e1; }
-	.article-introduction-sticky::-webkit-scrollbar-track { background: transparent; }
+	.article-custom-module-sticky::-webkit-scrollbar { width: 5px; }
+	.article-custom-module-sticky::-webkit-scrollbar-thumb { border-radius: 999px; background: #cbd5e1; }
+	.article-custom-module-sticky::-webkit-scrollbar-track { background: transparent; }
 </style>
 
 <!-- 移动端样式（独立文件，单独维护） -->
