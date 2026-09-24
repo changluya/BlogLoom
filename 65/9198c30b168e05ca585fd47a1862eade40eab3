@@ -1,0 +1,38 @@
+.github/PULL_REQUEST_TEMPLATE.md
+  s_d42a224680cf91::t_6888388078e8d8 1-36
+.github/ISSUE_TEMPLATE/feature_request.md
+  s_d42a224680cf91::t_d4420ba9d6fc1d 1-23
+CONTRIBUTING.md
+  s_d42a224680cf91::t_c988dec24bcc5d 1-79
+.github/ISSUE_TEMPLATE/config.yml
+  s_d42a224680cf91::t_aa2581a0aa1e5f 1-8
+README.md
+  s_d42a224680cf91::t_d9332c1fdd58c4 158
+  s_d42a224680cf91::t_bc88ad45121f31 289,296
+  s_d42a224680cf91::t_98bbdac73727f8 209
+  s_d42a224680cf91::t_6a43b3a2adc6d7 298-307
+  s_d42a224680cf91::t_da22044ba26bf7 52,54,56-74,77-78,159
+  s_d42a224680cf91::t_dc94bf8c82ba94 155-157
+  s_d42a224680cf91::t_ded534905f98db 160
+  s_d42a224680cf91::t_71070069710f89 297
+SECURITY.md
+  s_d42a224680cf91::t_6ffcb690bfc0c0 1-45
+.github/ISSUE_TEMPLATE/bug_report.md
+  s_d42a224680cf91::t_7da58cffc905aa 1-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "659198c30b168e05ca585fd47a1862eade40eab3",
+  "prompts": {},
+  "sessions": {
+    "s_d42a224680cf91": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f2c308ae7ffeyxLxYMQQZOt3fo",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
