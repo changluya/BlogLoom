@@ -64,8 +64,12 @@ Windows PowerShell（已安装并启动 Docker Desktop）：
 
 ```powershell
 New-Item -ItemType Directory -Force blogloom | Out-Null; Set-Location blogloom
-irm https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1 | iex
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$ProgressPreference = 'SilentlyContinue'
+irm 'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' | iex
 ```
+
+> 如提示“基础连接已经关闭”，请参考 [Windows PowerShell 下载回退方案](docker/standalone/README.md#windows-powershell-一键部署)。最后一行使用的是管道符 `|`，不是 `/`。
 
 | 入口 | 地址 |
 | --- | --- |

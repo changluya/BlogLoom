@@ -26,10 +26,27 @@ Windows 无需安装 Bash。请在 **PowerShell** 中执行（不要在 CMD 中�
 ```powershell
 New-Item -ItemType Directory -Force blogloom | Out-Null
 Set-Location blogloom
-irm https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1 | iex
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$ProgressPreference = 'SilentlyContinue'
+irm 'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' | iex
 ```
 
-> `install.sh` 必须由 Bash 解释，Windows 没有 `/bin/bash` 时会在运行脚本前失败，因此 Windows 需要使用上面的 PowerShell 入口。
+> 最后一行使用的是 PowerShell 管道符 `|`，不是 `/`。`install.sh` 必须由 Bash 解释，Windows 没有 `/bin/bash` 时会在运行脚本前失败。
+
+如果 `irm` 提示“基础连接已经关闭”或 `WebCmdletWebResponseException`，可改用 Windows 自带的 `curl.exe` 下载后执行：
+
+```powershell
+curl.exe --ssl-no-revoke -fL --retry 5 `
+  'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' `
+  -o install.ps1
+powershell.exe -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+如果 `curl.exe` 仍提示 `Recv failure` 或连接重置，说明当前网络无法稳定访问 `raw.githubusercontent.com`，请先配置本机 HTTPS 代理后重试，例如：
+
+```powershell
+$env:HTTPS_PROXY = 'http://127.0.0.1:7890' # 请改为本机实际代理地址
+```
 
 ## 前置条件
 
