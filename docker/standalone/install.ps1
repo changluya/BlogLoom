@@ -56,7 +56,12 @@ function Read-DotEnv {
 
 function Set-DotEnvValue([string]$Name, [string]$Value) {
     $path = Join-Path (Get-Location) '.env'
-    $lines = if (Test-Path -LiteralPath $path) { [Collections.Generic.List[string]]::new([IO.File]::ReadAllLines($path)) } else { [Collections.Generic.List[string]]::new() }
+    # PowerShell 5.1 会把从 if 表达式返回的空集合展开为 $null，
+    # 因此先显式创建列表，再逐行加入已有 .env 内容。
+    $lines = New-Object 'System.Collections.Generic.List[string]'
+    if (Test-Path -LiteralPath $path) {
+        foreach ($line in [IO.File]::ReadAllLines($path)) { $lines.Add($line) }
+    }
     $replaced = $false
     for ($i = 0; $i -lt $lines.Count; $i++) {
         if ($lines[$i] -match "^$([regex]::Escape($Name))=") {

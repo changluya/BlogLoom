@@ -10,7 +10,11 @@ function Invoke-DockerCompose([string[]]$Arguments) {
 
 function Set-DotEnvValue([string]$Name, [string]$Value) {
     $path = Join-Path (Get-Location) '.env'
-    $lines = if (Test-Path $path) { [Collections.Generic.List[string]]::new([IO.File]::ReadAllLines($path)) } else { [Collections.Generic.List[string]]::new() }
+    # 兼容 Windows PowerShell 5.1：空集合从 if 表达式输出时会变成 $null。
+    $lines = New-Object 'System.Collections.Generic.List[string]'
+    if (Test-Path -LiteralPath $path) {
+        foreach ($line in [IO.File]::ReadAllLines($path)) { $lines.Add($line) }
+    }
     $found = $false
     for ($i = 0; $i -lt $lines.Count; $i++) {
         if ($lines[$i] -match "^$([regex]::Escape($Name))=") { $lines[$i] = "$Name=$Value"; $found = $true }
