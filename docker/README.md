@@ -33,13 +33,20 @@
 
 > 面向只想快速把博客跑起来的用户：**无需 JDK / Node / Maven，也无需克隆仓库**，只要服务器装了 Docker，直接用已发布到 Docker Hub 的镜像即可。
 
-**前置条件**：Linux 服务器已安装 Docker 与 Docker Compose v2，且可访问 Docker Hub。
+**前置条件**：Linux/macOS 已安装 Docker，或 Windows 已安装并启动 Docker Desktop；需支持 Docker Compose v2 并可访问 Docker Hub。
 
 ### 亮点一：第一次本地快速部署（一条命令）
 
 ```bash
 mkdir blogloom && cd blogloom
 curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash
+```
+
+Windows PowerShell：
+
+```powershell
+New-Item -ItemType Directory -Force blogloom | Out-Null; Set-Location blogloom
+irm https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1 | iex
 ```
 
 自动解析最新版本、拉取镜像、启动 `blogloom-app` + `blogloom-mysql` 并完成数据库初始化。

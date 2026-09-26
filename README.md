@@ -60,6 +60,13 @@ mkdir blogloom && cd blogloom
 curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.sh | bash
 ```
 
+Windows PowerShell（已安装并启动 Docker Desktop）：
+
+```powershell
+New-Item -ItemType Directory -Force blogloom | Out-Null; Set-Location blogloom
+irm https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1 | iex
+```
+
 | 入口 | 地址 |
 | --- | --- |
 | 博客前台 | `http://<服务器IP>:18080` |

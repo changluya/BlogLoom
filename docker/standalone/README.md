@@ -2,7 +2,7 @@
 
 只想快速把博客跑起来？**只需 Docker**，无需 JDK / Node / Maven，也无需克隆仓库。
 
-## 三步部署
+## Linux / macOS 三步部署
 
 ```bash
 # 1. 创建并进入一个空文件夹
@@ -19,9 +19,22 @@ curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/st
 
 脚本会自动写入 `docker-compose.yml`、从 Docker Hub 拉取 `codercl/blogloom` 镜像并启动 `blogloom-app` + `blogloom-mysql` 两个容器，应用启动时自动完成数据库初始化。
 
+## Windows PowerShell 一键部署
+
+Windows 无需安装 Bash。请在 **PowerShell** 中执行（不要在 CMD 中执行）：
+
+```powershell
+New-Item -ItemType Directory -Force blogloom | Out-Null
+Set-Location blogloom
+irm https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1 | iex
+```
+
+> `install.sh` 必须由 Bash 解释，Windows 没有 `/bin/bash` 时会在运行脚本前失败，因此 Windows 需要使用上面的 PowerShell 入口。
+
 ## 前置条件
 
-- Linux 服务器，已安装 Docker 与 Docker Compose v2
+- Linux/macOS 已安装 Docker，或 Windows 已安装并启动 Docker Desktop
+- Docker Compose v2（`docker compose`）
 - 服务器可访问 Docker Hub
 
 ## 自定义配置（可选）
@@ -71,13 +84,22 @@ cd blogloom
 ./upgrade.sh 1.0.1      # 升级到指定版本
 ```
 
+Windows PowerShell：
+
+```powershell
+cd blogloom
+powershell -ExecutionPolicy Bypass -File .\upgrade.ps1
+# 指定版本
+powershell -ExecutionPolicy Bypass -File .\upgrade.ps1 1.0.1
+```
+
 等价手动命令：
 
 ```bash
 docker compose pull && docker compose up -d
 ```
 
-> `install.sh` 已自动生成 `upgrade.sh`，并把当前版本写入 `.env` 的 `IMAGE_TAG`。数据在 `./data/`，升级不会丢失。
+> Linux/macOS 安装会生成 `upgrade.sh`，Windows 安装会下载 `upgrade.ps1`，并把当前版本写入 `.env` 的 `IMAGE_TAG`。数据在 `./data/`，升级不会丢失。
 > 查看当前运行版本：`docker ps --format '{{.Names}} {{.Image}}'`。
 
 ## 常用运维
