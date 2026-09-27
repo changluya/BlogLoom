@@ -5,7 +5,12 @@ $ErrorActionPreference = 'Stop'
 
 function Invoke-DockerCompose([string[]]$Arguments) {
     & docker compose @Arguments
-    if ($LASTEXITCODE -ne 0) { throw "docker compose $($Arguments -join ' ') 执行失败（退出码 $LASTEXITCODE）" }
+    if ($LASTEXITCODE -ne 0) {
+        if ($Arguments.Count -gt 0 -and $Arguments[0] -eq 'pull') {
+            throw "Docker 镜像拉取失败（退出码 $LASTEXITCODE）。如 registry-1.docker.io 连接超时，请在 Docker Desktop -> Settings -> Resources -> Proxies 中配置代理，重启 Docker Desktop 后重试。"
+        }
+        throw "docker compose $($Arguments -join ' ') 执行失败（退出码 $LASTEXITCODE）"
+    }
 }
 
 function Set-DotEnvValue([string]$Name, [string]$Value) {

@@ -63,6 +63,19 @@ powershell.exe -ExecutionPolicy Bypass -File .\install.ps1
 - Docker Compose v2（`docker compose`）
 - 服务器可访问 Docker Hub
 
+### Docker Hub 连接超时
+
+国内 Windows 用户如果提示 `registry-1.docker.io` 连接超时，在 PowerShell 中执行下面两行，即可自动备份当前 Docker 配置、写入国内镜像源并重启 Docker Desktop：
+
+```powershell
+curl.exe --ssl-no-revoke -fL --retry 5 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/configure-docker-mirrors.ps1' -o configure-docker-mirrors.ps1
+powershell.exe -ExecutionPolicy Bypass -File .\configure-docker-mirrors.ps1
+```
+
+重启完成后，重新执行上方 BlogLoom 安装命令即可。配置文件位于 `$HOME\.docker\daemon.json`，脚本会保留其他已有配置。
+
+> 镜像加速服务由第三方提供，可用性可能变化，请勿通过不可信镜像源拉取私有镜像。Docker Desktop 可通过 **Settings → Docker Engine** 查看或修改配置。
+
 ## 自定义配置（可选）
 
 首次部署时，脚本会**自动生成随机 MySQL root 密码与登录令牌密钥**并写入部署目录的 `.env`，部署完成后会在终端打印，请妥善保存（重复执行/升级会复用，不会改变）。

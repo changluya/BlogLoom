@@ -18,6 +18,15 @@ function Get-Setting([string]$Name, [string]$DefaultValue) {
 function Invoke-DockerCompose([string[]]$Arguments) {
     & docker compose @Arguments
     if ($LASTEXITCODE -ne 0) {
+        if ($Arguments.Count -gt 0 -and $Arguments[0] -eq 'pull') {
+            throw @"
+Docker 镜像拉取失败（退出码 $LASTEXITCODE）。
+如错误中包含 registry-1.docker.io 连接超时，请在 Docker Desktop 中配置代理：
+Settings -> Resources -> Proxies -> Manual proxy configuration。
+保存并重启 Docker Desktop 后，先执行 docker pull mysql:8.0 验证，再重新运行本脚本。
+PowerShell 的 HTTPS_PROXY 不一定会传递给 Docker Desktop 后台引擎。
+"@
+        }
         throw "docker compose $($Arguments -join ' ') 执行失败（退出码 $LASTEXITCODE）"
     }
 }
