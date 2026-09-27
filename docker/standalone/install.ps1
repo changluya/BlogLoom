@@ -168,14 +168,23 @@ if ($envValues.ContainsKey('TOKEN_SECRET')) {
 
 # 保存 Windows 升级脚本，与 Linux 版安装后生成 upgrade.sh 的行为一致。
 if (-not (Test-Path -LiteralPath 'upgrade.ps1')) {
-    try {
-        $upgradeUri = 'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/upgrade.ps1'
-        $upgradeContent = (Invoke-WebRequest -UseBasicParsing -Uri $upgradeUri -TimeoutSec 15).Content
-        [IO.File]::WriteAllText((Join-Path (Get-Location) 'upgrade.ps1'), $upgradeContent, [Text.UTF8Encoding]::new($false))
-        Write-Host '[init] 已生成 upgrade.ps1'
-    } catch {
-        Write-Warning "未能保存 upgrade.ps1，不影响本次部署：$($_.Exception.Message)"
+    $upgradeSources = @(
+        'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/upgrade.ps1',
+        'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/upgrade.ps1'
+    )
+    $upgradeSaved = $false
+    foreach ($upgradeUri in $upgradeSources) {
+        try {
+            $upgradeContent = (Invoke-WebRequest -UseBasicParsing -Uri $upgradeUri -TimeoutSec 15).Content
+            [IO.File]::WriteAllText((Join-Path (Get-Location) 'upgrade.ps1'), $upgradeContent, [Text.UTF8Encoding]::new($false))
+            Write-Host "[init] 已生成 upgrade.ps1（来源：$upgradeUri）"
+            $upgradeSaved = $true
+            break
+        } catch {
+            Write-Warning "升级脚本下载失败，正在尝试备用源：$upgradeUri"
+        }
     }
+    if (-not $upgradeSaved) { Write-Warning '未能保存 upgrade.ps1，不影响本次部署。' }
 }
 
 foreach ($directory in @('data/mysql', 'data/logs', 'data/upload', 'data/sql-local')) {

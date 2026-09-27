@@ -51,7 +51,7 @@ $ProgressPreference = 'SilentlyContinue'
 irm 'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' | iex
 ```
 
-> 如提示“基础连接已经关闭”，请使用 [Windows `curl.exe` 回退方案](standalone/README.md#windows-powershell-一键部署)。
+> 如提示“基础连接已经关闭”，请使用 [Windows `curl.exe` 回退或 Gitee 备用源](standalone/README.md#windows-powershell-一键部署)。
 
 自动解析最新版本、拉取镜像、启动 `blogloom-app` + `blogloom-mysql` 并完成数据库初始化。
 

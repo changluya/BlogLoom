@@ -48,6 +48,15 @@ powershell.exe -ExecutionPolicy Bypass -File .\install.ps1
 $env:HTTPS_PROXY = 'http://127.0.0.1:7890' # 请改为本机实际代理地址
 ```
 
+也可以直接使用 Gitee 国内备用源：
+
+```powershell
+curl.exe --ssl-no-revoke -fL --retry 5 `
+  'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/install.ps1' `
+  -o install.ps1
+powershell.exe -ExecutionPolicy Bypass -File .\install.ps1
+```
+
 ## 前置条件
 
 - Linux/macOS 已安装 Docker，或 Windows 已安装并启动 Docker Desktop

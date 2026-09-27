@@ -69,7 +69,7 @@ $ProgressPreference = 'SilentlyContinue'
 irm 'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' | iex
 ```
 
-> 如提示“基础连接已经关闭”，请参考 [Windows PowerShell 下载回退方案](docker/standalone/README.md#windows-powershell-一键部署)。最后一行使用的是管道符 `|`，不是 `/`。
+> 如提示“基础连接已经关闭”，请参考 [Windows PowerShell 下载回退与 Gitee 备用源](docker/standalone/README.md#windows-powershell-一键部署)。最后一行使用的是管道符 `|`，不是 `/`。
 
 | 入口 | 地址 |
 | --- | --- |
