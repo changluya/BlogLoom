@@ -1,0 +1,31 @@
+docker/standalone/README.md
+  s_98f450b62a9dc4::t_84b0af43b3db33 24,30,36
+  s_98f450b62a9dc4::t_3ff479d2109adf 27
+README.md
+  s_98f450b62a9dc4::t_3ff479d2109adf 66
+  s_98f450b62a9dc4::t_84b0af43b3db33 69
+docker/standalone/windows/README.md
+  s_98f450b62a9dc4::t_3ff479d2109adf 1-9
+docker/README.md
+  s_98f450b62a9dc4::t_3ff479d2109adf 48
+docker/快捷.md
+  s_98f450b62a9dc4::t_3ff479d2109adf 21
+docker/standalone/windows/install.ps1
+  s_98f450b62a9dc4::t_3ff479d2109adf 7,11,22-30,33-35,38,93-117,214-215
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7681f096784477b9539b34713908383d6735c383",
+  "prompts": {},
+  "sessions": {
+    "s_98f450b62a9dc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0dbff-c9f1-71c0-9f67-50d82941fbbe",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
