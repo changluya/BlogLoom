@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 BlogLoom Windows 一键部署脚本。
 
@@ -176,7 +176,9 @@ if (-not (Test-Path -LiteralPath 'upgrade.ps1')) {
     foreach ($upgradeUri in $upgradeSources) {
         try {
             $upgradeContent = (Invoke-WebRequest -UseBasicParsing -Uri $upgradeUri -TimeoutSec 15).Content
-            [IO.File]::WriteAllText((Join-Path (Get-Location) 'upgrade.ps1'), $upgradeContent, [Text.UTF8Encoding]::new($false))
+            # Windows PowerShell 5.1 使用系统 ANSI 编码读取无 BOM 的 .ps1，
+            # 中文可能被错误解码并导致 ParserError，因此写入 UTF-8 BOM。
+            [IO.File]::WriteAllText((Join-Path (Get-Location) 'upgrade.ps1'), $upgradeContent, [Text.UTF8Encoding]::new($true))
             Write-Host "[init] 已生成 upgrade.ps1（来源：$upgradeUri）"
             $upgradeSaved = $true
             break
