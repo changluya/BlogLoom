@@ -1,0 +1,27 @@
+docker/standalone/README.md
+  s_98f450b62a9dc4::t_3f83d5d7f6d90c 68,71-72,74-75,77
+  s_98f450b62a9dc4::t_d044ad926d9cff 66-67,69-70,73,76,78
+docker/standalone/install.ps1
+  s_98f450b62a9dc4::t_d044ad926d9cff 21-29
+docker/standalone/upgrade.ps1
+  s_98f450b62a9dc4::t_d044ad926d9cff 8-13
+docker/standalone/configure-docker-mirrors.ps1
+  s_98f450b62a9dc4::t_3f83d5d7f6d90c 2-56
+  s_98f450b62a9dc4::t_b16b833931c42f 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5745ee157c91fd37221f6d8d1fcc0428dce7ec06",
+  "prompts": {},
+  "sessions": {
+    "s_98f450b62a9dc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0dbff-c9f1-71c0-9f67-50d82941fbbe",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
