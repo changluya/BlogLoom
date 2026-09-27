@@ -1,0 +1,22 @@
+docker/standalone/install.ps1
+  s_98f450b62a9dc4::t_4aa7106aa4e97a 179-181
+  s_98f450b62a9dc4::t_7f3c7057c24afc 1
+docker/standalone/upgrade.ps1
+  s_98f450b62a9dc4::t_7f3c7057c24afc 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "06fd31bd5e329207a95a4fcc49b524fa1d25d31d",
+  "prompts": {},
+  "sessions": {
+    "s_98f450b62a9dc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0dbff-c9f1-71c0-9f67-50d82941fbbe",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
