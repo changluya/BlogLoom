@@ -47,10 +47,14 @@ $json = $config | ConvertTo-Json -Depth 32
 [IO.File]::WriteAllText($daemonConfigPath, $json, [Text.UTF8Encoding]::new($false))
 Write-Host "[done] Docker 镜像源已写入：$daemonConfigPath"
 
-try {
-    & docker desktop restart
-    if ($LASTEXITCODE -ne 0) { throw "docker desktop restart 退出码：$LASTEXITCODE" }
-    Write-Host '[done] Docker Desktop 已重启，现在可重新执行 BlogLoom 安装命令。'
-} catch {
-    Write-Warning '配置已保存，但无法自动重启 Docker Desktop，请手动退出并重新打开 Docker Desktop。'
+$desktopExe = Join-Path $env:ProgramFiles 'Docker\Docker\Docker Desktop.exe'
+if (-not (Test-Path -LiteralPath $desktopExe)) {
+    throw "已保存镜像源配置，但未找到 Docker Desktop：$desktopExe"
 }
+
+# 旧版 Docker Desktop CLI 没有 `docker desktop restart`，且可能在显示
+# usage 后仍返回 0。直接重启桌面程序可兼容新旧版本。
+Get-Process -Name 'Docker Desktop' -ErrorAction SilentlyContinue | Stop-Process -Force
+Start-Sleep -Seconds 2
+Start-Process -FilePath $desktopExe
+Write-Host '[done] Docker Desktop 已重新启动。'

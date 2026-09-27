@@ -96,7 +96,7 @@ function Repair-DockerHubAccess {
     if (-not (Test-Path -LiteralPath $repairPath)) {
         $repairUri = 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/configure-docker-mirrors.ps1'
         try {
-            $repairContent = (Invoke-WebRequest -UseBasicParsing -Uri $repairUri -TimeoutSec 30).Content
+            $repairContent = (Invoke-WebRequest -UseBasicParsing -Uri $repairUri -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
             [IO.File]::WriteAllText($repairPath, $repairContent, [Text.UTF8Encoding]::new($true))
         } catch {
             throw "无法下载 Docker 镜像源配置脚本：$($_.Exception.Message)"
@@ -108,7 +108,9 @@ function Repair-DockerHubAccess {
 
     Write-Host '[deploy] 等待 Docker Desktop 引擎恢复...'
     for ($attempt = 1; $attempt -le 60; $attempt++) {
-        & docker info *> $null
+        # Windows PowerShell 5.1 会把 native stderr 中的普通警告包装为
+        # NativeCommandError，因此通过 cmd 静默执行并仅检查退出码。
+        & cmd.exe /d /c 'docker info >nul 2>nul'
         if ($LASTEXITCODE -eq 0) { return }
         Start-Sleep -Seconds 2
     }
@@ -217,7 +219,7 @@ if (-not (Test-Path -LiteralPath 'upgrade.ps1')) {
     $upgradeSaved = $false
     foreach ($upgradeUri in $upgradeSources) {
         try {
-            $upgradeContent = (Invoke-WebRequest -UseBasicParsing -Uri $upgradeUri -TimeoutSec 15).Content
+            $upgradeContent = (Invoke-WebRequest -UseBasicParsing -Uri $upgradeUri -TimeoutSec 15).Content.TrimStart([char]0xFEFF)
             # Windows PowerShell 5.1 使用系统 ANSI 编码读取无 BOM 的 .ps1，
             # 中文可能被错误解码并导致 ParserError，因此写入 UTF-8 BOM。
             [IO.File]::WriteAllText((Join-Path (Get-Location) 'upgrade.ps1'), $upgradeContent, [Text.UTF8Encoding]::new($true))
