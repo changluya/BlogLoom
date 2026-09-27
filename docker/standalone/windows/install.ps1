@@ -93,14 +93,13 @@ function Set-DotEnvValue([string]$Name, [string]$Value) {
 function Repair-DockerHubAccess {
     Write-Warning '检测到 Docker Hub 拉取失败，正在自动配置国内镜像源...'
     $repairPath = Join-Path (Get-Location) 'configure-docker-mirrors.ps1'
-    if (-not (Test-Path -LiteralPath $repairPath)) {
-        $repairUri = 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/configure-docker-mirrors.ps1'
-        try {
-            $repairContent = (Invoke-WebRequest -UseBasicParsing -Uri $repairUri -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
-            [IO.File]::WriteAllText($repairPath, $repairContent, [Text.UTF8Encoding]::new($true))
-        } catch {
-            throw "无法下载 Docker 镜像源配置脚本：$($_.Exception.Message)"
-        }
+    $repairUri = 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/configure-docker-mirrors.ps1'
+    try {
+        # 始终覆盖下载最新版，避免复用上一次安装留下的旧脚本。
+        $repairContent = (Invoke-WebRequest -UseBasicParsing -Uri $repairUri -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
+        [IO.File]::WriteAllText($repairPath, $repairContent, [Text.UTF8Encoding]::new($true))
+    } catch {
+        throw "无法下载 Docker 镜像源配置脚本：$($_.Exception.Message)"
     }
 
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $repairPath
