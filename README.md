@@ -63,13 +63,10 @@ curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/st
 Windows PowerShell（已安装并启动 Docker Desktop）：
 
 ```powershell
-New-Item -ItemType Directory -Force blogloom | Out-Null; Set-Location blogloom
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$ProgressPreference = 'SilentlyContinue'
-irm 'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' | iex
+$dir = Join-Path $HOME 'blogloom'; New-Item -ItemType Directory -Force $dir | Out-Null; Set-Location $dir; curl.exe --ssl-no-revoke -fL --retry 5 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/install.ps1' -o install.ps1; if ($LASTEXITCODE -eq 0) { powershell.exe -ExecutionPolicy Bypass -File .\install.ps1 }
 ```
 
-> 如提示“基础连接已经关闭”，请参考 [Windows PowerShell 下载回退与 Gitee 备用源](docker/standalone/README.md#windows-powershell-一键部署)。最后一行使用的是管道符 `|`，不是 `/`。
+> 如 Docker Hub 连接超时，安装器会自动配置国内镜像源并重试。
 
 | 入口 | 地址 |
 | --- | --- |

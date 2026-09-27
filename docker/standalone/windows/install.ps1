@@ -4,10 +4,11 @@ BlogLoom Windows 一键部署脚本。
 
 在 PowerShell 中执行：
   New-Item -ItemType Directory -Force blogloom | Out-Null; Set-Location blogloom
-  irm https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1 | iex
+  curl.exe -fL https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/install.ps1 -o install.ps1
 #>
 
 $ErrorActionPreference = 'Stop'
+$script:MirrorRepairAttempted = $false
 
 function Get-Setting([string]$Name, [string]$DefaultValue) {
     $value = [Environment]::GetEnvironmentVariable($Name)
@@ -18,16 +19,23 @@ function Get-Setting([string]$Name, [string]$DefaultValue) {
 function Invoke-DockerCompose([string[]]$Arguments) {
     & docker compose @Arguments
     if ($LASTEXITCODE -ne 0) {
+        $exitCode = $LASTEXITCODE
+        if ($Arguments.Count -gt 0 -and $Arguments[0] -eq 'pull' -and -not $script:MirrorRepairAttempted) {
+            $script:MirrorRepairAttempted = $true
+            Repair-DockerHubAccess
+            Write-Host '[deploy] Docker 引擎已恢复，正在自动重试拉取镜像...'
+            & docker compose @Arguments
+            if ($LASTEXITCODE -eq 0) { return }
+            $exitCode = $LASTEXITCODE
+        }
         if ($Arguments.Count -gt 0 -and $Arguments[0] -eq 'pull') {
             throw @"
-Docker 镜像拉取失败（退出码 $LASTEXITCODE）。
-如错误中包含 registry-1.docker.io 连接超时，请在 Docker Desktop 中配置代理：
-Settings -> Resources -> Proxies -> Manual proxy configuration。
-保存并重启 Docker Desktop 后，先执行 docker pull mysql:8.0 验证，再重新运行本脚本。
-PowerShell 的 HTTPS_PROXY 不一定会传递给 Docker Desktop 后台引擎。
+Docker 镜像拉取失败（退出码 $exitCode）。
+安装器已自动配置国内镜像源并重试，但当前网络仍无法拉取镜像。
+请在 Docker Desktop -> Settings -> Docker Engine 确认 registry-mirrors 已生效。
 "@
         }
-        throw "docker compose $($Arguments -join ' ') 执行失败（退出码 $LASTEXITCODE）"
+        throw "docker compose $($Arguments -join ' ') 执行失败（退出码 $exitCode）"
     }
 }
 
@@ -80,6 +88,31 @@ function Set-DotEnvValue([string]$Name, [string]$Value) {
     }
     if (-not $replaced) { $lines.Add("$Name=$Value") }
     [IO.File]::WriteAllLines($path, $lines, [Text.UTF8Encoding]::new($false))
+}
+
+function Repair-DockerHubAccess {
+    Write-Warning '检测到 Docker Hub 拉取失败，正在自动配置国内镜像源...'
+    $repairPath = Join-Path (Get-Location) 'configure-docker-mirrors.ps1'
+    if (-not (Test-Path -LiteralPath $repairPath)) {
+        $repairUri = 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/configure-docker-mirrors.ps1'
+        try {
+            $repairContent = (Invoke-WebRequest -UseBasicParsing -Uri $repairUri -TimeoutSec 30).Content
+            [IO.File]::WriteAllText($repairPath, $repairContent, [Text.UTF8Encoding]::new($true))
+        } catch {
+            throw "无法下载 Docker 镜像源配置脚本：$($_.Exception.Message)"
+        }
+    }
+
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $repairPath
+    if ($LASTEXITCODE -ne 0) { throw "Docker 镜像源配置失败（退出码 $LASTEXITCODE）。" }
+
+    Write-Host '[deploy] 等待 Docker Desktop 引擎恢复...'
+    for ($attempt = 1; $attempt -le 60; $attempt++) {
+        & docker info *> $null
+        if ($LASTEXITCODE -eq 0) { return }
+        Start-Sleep -Seconds 2
+    }
+    throw 'Docker Desktop 重启超时，请手动重启 Docker Desktop 后再运行安装脚本。'
 }
 
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
@@ -178,8 +211,8 @@ if ($envValues.ContainsKey('TOKEN_SECRET')) {
 # 保存 Windows 升级脚本，与 Linux 版安装后生成 upgrade.sh 的行为一致。
 if (-not (Test-Path -LiteralPath 'upgrade.ps1')) {
     $upgradeSources = @(
-        'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/upgrade.ps1',
-        'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/upgrade.ps1'
+        'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/windows/upgrade.ps1',
+        'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/upgrade.ps1'
     )
     $upgradeSaved = $false
     foreach ($upgradeUri in $upgradeSources) {

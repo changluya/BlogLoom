@@ -45,13 +45,8 @@ curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/st
 Windows PowerShell：
 
 ```powershell
-New-Item -ItemType Directory -Force blogloom | Out-Null; Set-Location blogloom
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$ProgressPreference = 'SilentlyContinue'
-irm 'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' | iex
+$dir = Join-Path $HOME 'blogloom'; New-Item -ItemType Directory -Force $dir | Out-Null; Set-Location $dir; curl.exe --ssl-no-revoke -fL --retry 5 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/install.ps1' -o install.ps1; if ($LASTEXITCODE -eq 0) { powershell.exe -ExecutionPolicy Bypass -File .\install.ps1 }
 ```
-
-> 如提示“基础连接已经关闭”，请使用 [Windows `curl.exe` 回退或 Gitee 备用源](standalone/README.md#windows-powershell-一键部署)。
 
 自动解析最新版本、拉取镜像、启动 `blogloom-app` + `blogloom-mysql` 并完成数据库初始化。
 

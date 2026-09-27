@@ -21,60 +21,19 @@ curl -fsSL https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/st
 
 ## Windows PowerShell 一键部署
 
-Windows 无需安装 Bash。请在 **PowerShell** 中执行（不要在 CMD 中执行）：
+Windows 安装并启动 Docker Desktop 后，打开 **PowerShell**，复制下面一整行执行即可：
 
 ```powershell
-New-Item -ItemType Directory -Force blogloom | Out-Null
-Set-Location blogloom
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$ProgressPreference = 'SilentlyContinue'
-irm 'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' | iex
+$dir = Join-Path $HOME 'blogloom'; New-Item -ItemType Directory -Force $dir | Out-Null; Set-Location $dir; curl.exe --ssl-no-revoke -fL --retry 5 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/windows/install.ps1' -o install.ps1; if ($LASTEXITCODE -eq 0) { powershell.exe -ExecutionPolicy Bypass -File .\install.ps1 }
 ```
 
-> 最后一行使用的是 PowerShell 管道符 `|`，不是 `/`。`install.sh` 必须由 Bash 解释，Windows 没有 `/bin/bash` 时会在运行脚本前失败。
-
-如果 `irm` 提示“基础连接已经关闭”或 `WebCmdletWebResponseException`，可改用 Windows 自带的 `curl.exe` 下载后执行：
-
-```powershell
-curl.exe --ssl-no-revoke -fL --retry 5 `
-  'https://raw.githubusercontent.com/changluya/BlogLoom/master/docker/standalone/install.ps1' `
-  -o install.ps1
-powershell.exe -ExecutionPolicy Bypass -File .\install.ps1
-```
-
-如果 `curl.exe` 仍提示 `Recv failure` 或连接重置，说明当前网络无法稳定访问 `raw.githubusercontent.com`，请先配置本机 HTTPS 代理后重试，例如：
-
-```powershell
-$env:HTTPS_PROXY = 'http://127.0.0.1:7890' # 请改为本机实际代理地址
-```
-
-也可以直接使用 Gitee 国内备用源：
-
-```powershell
-curl.exe --ssl-no-revoke -fL --retry 5 `
-  'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/install.ps1' `
-  -o install.ps1
-powershell.exe -ExecutionPolicy Bypass -File .\install.ps1
-```
+脚本会自动创建用户目录下的 `blogloom` 目录、配置国内 Docker 镜像源（如需）、拉取镜像并启动服务。
 
 ## 前置条件
 
 - Linux/macOS 已安装 Docker，或 Windows 已安装并启动 Docker Desktop
 - Docker Compose v2（`docker compose`）
-- 服务器可访问 Docker Hub
-
-### Docker Hub 连接超时
-
-国内 Windows 用户如果提示 `registry-1.docker.io` 连接超时，在 PowerShell 中执行下面两行，即可自动备份当前 Docker 配置、写入国内镜像源并重启 Docker Desktop：
-
-```powershell
-curl.exe --ssl-no-revoke -fL --retry 5 'https://gitee.com/changluJava/blog-loom/raw/master/docker/standalone/configure-docker-mirrors.ps1' -o configure-docker-mirrors.ps1
-powershell.exe -ExecutionPolicy Bypass -File .\configure-docker-mirrors.ps1
-```
-
-重启完成后，重新执行上方 BlogLoom 安装命令即可。配置文件位于 `$HOME\.docker\daemon.json`，脚本会保留其他已有配置。
-
-> 镜像加速服务由第三方提供，可用性可能变化，请勿通过不可信镜像源拉取私有镜像。Docker Desktop 可通过 **Settings → Docker Engine** 查看或修改配置。
+- 可访问 Docker Hub 或脚本配置的国内镜像源
 
 ## 自定义配置（可选）
 
