@@ -1,0 +1,21 @@
+docker/standalone/windows/configure-docker-mirrors.ps1
+  s_98f450b62a9dc4::t_ea36c180149fc5 50-52,54-60
+docker/standalone/windows/install.ps1
+  s_98f450b62a9dc4::t_ea36c180149fc5 99,111-113,222
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a97094d2ba7b4171327977173820f05d1e23a2da",
+  "prompts": {},
+  "sessions": {
+    "s_98f450b62a9dc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0dbff-c9f1-71c0-9f67-50d82941fbbe",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
