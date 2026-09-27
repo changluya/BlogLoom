@@ -1,0 +1,19 @@
+docker/standalone/windows/install.ps1
+  s_98f450b62a9dc4::t_b00f97ff31f68e 96-102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "88b8f60550cfba3a7812d752881d1207cdc35c8b",
+  "prompts": {},
+  "sessions": {
+    "s_98f450b62a9dc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0dbff-c9f1-71c0-9f67-50d82941fbbe",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
