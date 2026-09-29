@@ -1,0 +1,197 @@
+docs-website/v1/en/blogs/blogloom-publisher-skill/01-publisher-skill.md
+  s_dda20123f6cc2f::t_7ce56432de19f3 1-388
+skills/blogloom-publisher-skill/README.md
+  s_dda20123f6cc2f::t_53d76caf7c7ea7 32-39,50,54
+  s_dda20123f6cc2f::t_edf72e976c7065 49,52-53
+  s_dda20123f6cc2f::t_ff096ecc9fcb4f 82
+  s_dda20123f6cc2f::t_df127f9a8fa597 62-74
+  s_dda20123f6cc2f::t_c2e286dee1c78c 84
+  s_dda20123f6cc2f::t_c011061433bcbc 1-31,40-48,51,55-61,75-81,83
+skills/blogloom-publisher-skill/package.json
+  s_dda20123f6cc2f::t_368706fd49303a 1-12,16-23
+  s_dda20123f6cc2f::t_1467fb3299f98c 13-15
+skills/blogloom-publisher-skill/test/markdown.test.js
+  s_dda20123f6cc2f::t_52db30da32ddea 6
+  s_dda20123f6cc2f::t_e11b29c49c47ff 46-70
+  s_dda20123f6cc2f::t_29206b7e1ca4b9 71-80,82,84
+  s_dda20123f6cc2f::t_5d2f81b7d0245c 1-5,7-45,85
+  s_dda20123f6cc2f::t_38019dd6808156 81,83
+skills/blogloom-publisher-skill/skill.env.sh
+  s_dda20123f6cc2f::t_7785354af006de 1-7,13-15
+  s_dda20123f6cc2f::t_96116834ba2ad9 8-10
+  s_dda20123f6cc2f::t_1e5d65f027288d 11-12
+skills/blogloom-publisher-skill/references/channels/csdn/sop.md
+  s_0817e0581e4492::t_8077113ef086a4 146
+  s_dda20123f6cc2f::t_28938cbb8f50f0 150
+  s_dda20123f6cc2f::t_d6d1d4f62137f9 89
+  s_dda20123f6cc2f::t_3989e82fcc3bef 144,147,152
+  s_dda20123f6cc2f::t_60987f3642a1ab 1-4,6,9-15,20-26,28,30-39,41,45-48,50-58,63-68,70-75,92,122-125,132-140,155-159
+  s_0817e0581e4492::t_d39319ffbfe3b5 83,90
+  s_dda20123f6cc2f::t_6c394c21928adc 7-8
+  s_dda20123f6cc2f::t_2fffa9515b2b35 5,16-19,27,29,40,42-44,49,59-62,69,76-79,81-82,85,87-88,91,127-128,130,141-143,145,148-149,151,153-154,160
+  s_dda20123f6cc2f::t_b41171393ee128 86
+  s_dda20123f6cc2f::t_eb1a0141d68743 80
+  s_dda20123f6cc2f::t_d71cc0469160b5 84,93-121,126,129,131
+docs-website/v1/zh/blogs/index.md
+  s_dda20123f6cc2f::t_b79d215426ef1f 11
+skills/blogloom-publisher-skill/.gitignore
+  s_dda20123f6cc2f::t_34611ff8ba71d2 1-3
+docs-website/docs.json
+  s_dda20123f6cc2f::t_5726fe5a46b4c8 349-353
+  s_dda20123f6cc2f::t_78701adad689ca 172-176
+  s_dda20123f6cc2f::t_18e3d895e8c9a4 171
+  s_dda20123f6cc2f::t_f1af69131e6c30 348
+skills/blogloom-publisher-skill/test/channel.test.js
+  s_dda20123f6cc2f::t_4214f669b0a650 1-6,8-29
+  s_dda20123f6cc2f::t_d996379139f0fd 7
+docs-website/v1/en/blogs/index.md
+  s_dda20123f6cc2f::t_e2866fa5277604 11
+skills/blogloom-publisher-skill/references/00-tool-contract.md
+  s_dda20123f6cc2f::t_b25e9279c09ed4 38-39
+  s_dda20123f6cc2f::t_5cfa97fc183518 104-116
+  s_dda20123f6cc2f::t_ca8438460baa68 13-16
+  s_dda20123f6cc2f::t_6c20c184ed6ac6 97-100
+  s_dda20123f6cc2f::t_a6b8efdf83f02d 1-12,17-33,37,40,44,61-68,70-95,101-103,117-132
+  s_dda20123f6cc2f::t_ce166365ea8789 43,47-60
+  s_dda20123f6cc2f::t_641258ab1e1c7f 41-42,45-46
+  s_dda20123f6cc2f::t_14a38d3220d6d2 96
+  s_dda20123f6cc2f::t_a3952184f9f61b 69
+  s_dda20123f6cc2f::t_eb436be239d0cb 34-36
+skills/blogloom-publisher-skill/scripts/publisher.js
+  s_dda20123f6cc2f::t_d93586e3234888 75
+  s_dda20123f6cc2f::t_3076c8742e8b84 149,156
+  s_dda20123f6cc2f::t_c9f8897c77730d 1-13,15-16,19-27,29-35,37,39-46,51-61,67-74,76-81,84-86,94-99,103,109-116,120-148,150-155,157-175,208-219,283-284,344-352,358,360-363,368-370,376-379,402,412-413,424,428-429,432-437,439-440
+  s_dda20123f6cc2f::t_29489051f773bf 176-183
+  s_dda20123f6cc2f::t_86ca37b041c3e7 184,186-187,198,200-207,220-247,256-257,259-282,364-367,371,373-375,381,410
+  s_dda20123f6cc2f::t_8ef463c52ea7ae 285-343,353-357,359,380,382-401,403-409,418-423,425-427,430-431,438
+  s_dda20123f6cc2f::t_902d5fa75b0419 64-66
+  s_dda20123f6cc2f::t_4f5811568f4eb5 104-105
+  s_dda20123f6cc2f::t_77cb82ced8442a 106-108
+  s_dda20123f6cc2f::t_c535ffd465a8f7 62-63
+  s_dda20123f6cc2f::t_8d0423a2c38c50 82-83,87-93,100-102,117-119
+  s_dda20123f6cc2f::t_ea4b65320533b6 47-50
+  s_dda20123f6cc2f::t_8850e766a1611e 188-197,199
+  s_dda20123f6cc2f::t_d5a273c0d6ded7 411,414-417
+  s_dda20123f6cc2f::t_9212b5aab97556 248-255
+  s_dda20123f6cc2f::t_2b242ae3fab322 258
+  s_dda20123f6cc2f::t_cb0dee17d78254 185
+  s_dda20123f6cc2f::t_c943168c8e3dc8 14,17-18,28
+  s_dda20123f6cc2f::t_563fd679a48e33 36,38
+  s_dda20123f6cc2f::t_64e6cc2eaed0db 372
+skills/blogloom-publisher-skill/test/helpers/mock-page.js
+  s_dda20123f6cc2f::t_1b836a690559d1 209,211-227
+  s_dda20123f6cc2f::t_ab6c5a49bda36f 20-24,50-55
+  s_dda20123f6cc2f::t_9a07749efc27e5 284-286
+  s_dda20123f6cc2f::t_b04b7742b4d925 1-19,25-49,56-156,158,165-208,210,228-283,287-290
+  s_0817e0581e4492::t_c926069ff5d6f9 157,159-164
+skills/blogloom-publisher-skill/scripts/lib/editor.js
+  s_dda20123f6cc2f::t_b08a280f2c8611 1-89
+skills/blogloom-publisher-skill/test/channels/csdn.test.js
+  s_dda20123f6cc2f::t_41abaa83d99e79 98,112-114,121,131,139-142,196-203,205-208
+  s_dda20123f6cc2f::t_6a5ea4f5eb9b1d 244
+  s_0817e0581e4492::t_aa982bd6d65ef0 147-148,150,155,166-167
+  s_dda20123f6cc2f::t_95287c6cba22cf 223-236
+  s_dda20123f6cc2f::t_dcbb3749d632ef 250-265
+  s_dda20123f6cc2f::t_83ba3c268d0c3c 237-243,245-249
+  s_0817e0581e4492::t_17aa955934abd9 102
+  s_0817e0581e4492::t_3e18bd55ac71f5 143-145,163,165,168,171-172,175-177,179-185,187-195
+  s_0817e0581e4492::t_4310cbacfd3448 146,149,151-154,156-162,164,169-170,173-174,178,186
+  s_dda20123f6cc2f::t_f7d5adff655df7 107,204
+  s_dda20123f6cc2f::t_407124a7a4ec18 1-97,99-101,103-106,108-111,115-120,122-130,132-138,209-222,266-331
+skills/blogloom-publisher-skill/SKILL.md
+  s_dda20123f6cc2f::t_e7f1dbd38fda61 3
+  s_dda20123f6cc2f::t_afb874ad837a62 1-2,4-7,9-13,15,17,19,23,27-35,38-52,54-55
+  s_dda20123f6cc2f::t_f4ac3b34e41b9e 14
+  s_dda20123f6cc2f::t_384490096c4854 18,20-22,24,26
+  s_dda20123f6cc2f::t_ff16d1dd74ff5f 36-37
+  s_dda20123f6cc2f::t_918b61a4da61a5 53
+  s_dda20123f6cc2f::t_18b04d591064e6 8,16,25
+skills/blogloom-publisher-skill/test/cli.test.js
+  s_dda20123f6cc2f::t_a4b19a1ad86e01 1-65
+skills/blogloom-publisher-skill/scripts/channels/csdn/selectors.js
+  s_dda20123f6cc2f::t_fbacf4a2171987 58,61
+  s_dda20123f6cc2f::t_8e9bb3ec99c347 54
+  s_dda20123f6cc2f::t_4f4a48f39b8953 4,6-10,13-24,28-31,34,39-53,55-57,62-64,74-76
+  s_dda20123f6cc2f::t_89ba3ce84b578d 1-3,5,11-12
+  s_dda20123f6cc2f::t_60cf6ba0a62c2b 69-71
+  s_dda20123f6cc2f::t_d8d9a70c2518b3 72-73
+  s_dda20123f6cc2f::t_531f99ea754d46 25-27
+  s_0817e0581e4492::t_062e35f3137827 32-33,35-38
+  s_dda20123f6cc2f::t_77629332f9d0bd 65-68
+  s_dda20123f6cc2f::t_be9e633da66421 59-60
+docs-website/v1/zh/blogs/blogloom-publisher-skill/01-publisher-skill.md
+  s_dda20123f6cc2f::t_05a3aaaf9ffd32 1-388
+skills/blogloom-publisher-skill/scripts/lib/channel.js
+  s_dda20123f6cc2f::t_7414110494101c 4,6-11,19-20,24,33,35,39-45,48,51-59,62
+  s_dda20123f6cc2f::t_2eed99a5eb6e4e 1-3,5,12-18,21-23,25-32,34,36-38,46-47,49-50,60-61,63-68
+skills/blogloom-publisher-skill/scripts/lib/markdown.js
+  s_dda20123f6cc2f::t_2bcc5acb8af662 15-39
+  s_dda20123f6cc2f::t_a851d2532a1947 148-149,151,154-155
+  s_dda20123f6cc2f::t_42abc2573d3e81 109-112,114,119,125-126,128,132,135
+  s_dda20123f6cc2f::t_5659e3d535989a 139-147,150,152-153,156-157,164-165
+  s_dda20123f6cc2f::t_93912df7b890ea 163
+  s_dda20123f6cc2f::t_720d678c50ea7f 1-14,40-108,113,115-118,120-124,127,129-131,133-134,136-138,158-162,166-167
+skills/blogloom-publisher-skill/scripts/channels/csdn/index.js
+  s_dda20123f6cc2f::t_1fd30ecfa325f6 267-268,271-274,282-284
+  s_dda20123f6cc2f::t_4a3ea668fdcd1f 332-354
+  s_dda20123f6cc2f::t_0b0e8fb3da4782 382,385-395,407-408,410-415,417-422,424,429,443-444,451,457
+  s_dda20123f6cc2f::t_3a3ba9ba73160b 232-234,237-245
+  s_dda20123f6cc2f::t_1d64616f9e09cd 487
+  s_dda20123f6cc2f::t_ab33874f12edc3 497
+  s_0817e0581e4492::t_a799570aecf871 498
+  s_dda20123f6cc2f::t_26fc55d8349fdb 379
+  s_dda20123f6cc2f::t_7459d05a2122b5 18
+  s_dda20123f6cc2f::t_355015e60bd2fb 1-5,14-17,19-20,46,48-51,62-65,67-69,72-73,78,101,103-106,116,125-127,147-148,205,209-210,223-224,226-227,229-231,299,331,374,384,479-486,488,490-491,493,499-500
+  s_dda20123f6cc2f::t_66bd807ccb60dd 265-266,269-270,275-281,285,295
+  s_dda20123f6cc2f::t_535c52c4a2c49f 431,434-440
+  s_dda20123f6cc2f::t_b358af20b82a6f 286-294
+  s_dda20123f6cc2f::t_e0c0c8c9f3ff98 367,383
+  s_dda20123f6cc2f::t_b2babab0a4af60 248-249,252
+  s_dda20123f6cc2f::t_3f2e9caf667fb5 95,97-100
+  s_0817e0581e4492::t_ad7377a0d60956 150-151,153,155,163,165,181-185,189,196,198,201,211-212,216
+  s_0817e0581e4492::t_0bb5e6260ca3af 199,203
+  s_dda20123f6cc2f::t_5afdf97d85219f 381
+  s_dda20123f6cc2f::t_261f3c0dde6c3e 494-496
+  s_dda20123f6cc2f::t_437481f54eafb1 6-13,21-45,47,52-61,66,70-71,74-77,79-94,96,102,107-115,117-124,128-136,174,177,186,190-192,194-195,197,225,228,246-247,250-251,253-264,296-298,300-302,316-330,355-362,364-366,373,375,380,458-478,489,492
+  s_dda20123f6cc2f::t_d97f3a3c7fa15d 236
+  s_dda20123f6cc2f::t_b451f45e5b0672 370-372
+  s_dda20123f6cc2f::t_95e2c93185bdbf 235
+  s_0817e0581e4492::t_ed5b5e55c274bf 363
+  s_dda20123f6cc2f::t_7cbd207379399a 368-369
+  s_dda20123f6cc2f::t_5b6ff869a92302 303-315
+  s_0817e0581e4492::t_02ba7d42db6a9f 154,156-162,164,166-173,175-176,178-180,187-188,193,200,202,204,206-208,213-215,217-222
+  s_dda20123f6cc2f::t_4e9dc700406c9a 396-406,409,416,445-450,452-456
+  s_dda20123f6cc2f::t_0e471a22d759b5 423,425-428,430,432-433,441-442
+  s_dda20123f6cc2f::t_c2f3848132f6f6 137-138,145-146
+  s_0817e0581e4492::t_79a1ea77327a71 149,152
+  s_0817e0581e4492::t_1faceadc1f2eeb 376-378
+  s_dda20123f6cc2f::t_d7ecd39231d7b9 139-144
+skills/blogloom-publisher-skill/scripts/lib/session.js
+  s_dda20123f6cc2f::t_f0fab2211a6e5d 1-147
+skills/blogloom-publisher-skill/package-lock.json
+  s_dda20123f6cc2f::t_4214b43eb07b88 1-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "625a6b5b3763b1cd0652faf36298ddd532f6fdb3",
+  "prompts": {},
+  "sessions": {
+    "s_0817e0581e4492": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f13528c50ffeHYAZm3CW8ZZTTd",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_dda20123f6cc2f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f13dafe1bffe7bdpMhIdyWTl2Y",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
