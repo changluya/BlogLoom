@@ -1,0 +1,23 @@
+{
+  "name": "blogloom-publisher-skill",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BlogLoom 博客多渠道分发技能（Playwright 主操作 + CDP 底层增强），初次对接 csdn。",
+  "bin": {
+    "blogloom-publish": "scripts/publisher.js"
+  },
+  "scripts": {
+    "check": "node scripts/publisher.js csdn checkLogin",
+    "login": "node scripts/publisher.js csdn login",
+    "publish": "node scripts/publisher.js csdn publish",
+    "test": "node --test test/*.test.js test/channels/*.test.js",
+    "test:core": "node --test test/*.test.js",
+    "test:channels": "node --test test/channels/*.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}

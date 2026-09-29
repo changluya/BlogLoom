@@ -169,6 +169,12 @@
                       "v1/en/blogs/index",
                       "v1/en/blogs/v1-release",
                       {
+                        "group": "BlogLoom Publisher Skill",
+                        "pages": [
+                          "v1/en/blogs/blogloom-publisher-skill/01-publisher-skill"
+                        ]
+                      },
+                      {
                         "group": "Use Cases",
                         "pages": [
                           "v1/en/blogs/usecases/index",
@@ -339,6 +345,12 @@
                     "pages": [
                       "v1/zh/blogs/index",
                       "v1/zh/blogs/v1-release",
+                      {
+                        "group": "BlogLoom 分发 Skill",
+                        "pages": [
+                          "v1/zh/blogs/blogloom-publisher-skill/01-publisher-skill"
+                        ]
+                      },
                       {
                         "group": "使用场景",
                         "pages": [
