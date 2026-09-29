@@ -8,6 +8,7 @@ description: 版本发布、技术文章与使用场景。
 ## 内容
 
 - [BlogLoom 1.0 发布](/v1/zh/blogs/v1-release)
+- [BlogLoom 分发 Skill 01：博客一键分发 Skill 从 0 到 1](/v1/zh/blogs/blogloom-publisher-skill/01-publisher-skill)
 - [使用场景](/v1/zh/blogs/usecases/index)
 
 ## 撰写约定

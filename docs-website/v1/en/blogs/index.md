@@ -8,6 +8,7 @@ This section collects BlogLoom releases, technical notes and use cases.
 ## Contents
 
 - [BlogLoom 1.0 release](/v1/en/blogs/v1-release)
+- [BlogLoom Publisher Skill 01: One-Click Blog Publishing from 0 to 1](/v1/en/blogs/blogloom-publisher-skill/01-publisher-skill)
 - [Use cases](/v1/en/blogs/usecases/index)
 
 ## Writing conventions
