@@ -10,6 +10,7 @@
 				<el-button type="primary" size="small" icon="el-icon-plus" @click="openCreate(0)">新建一级专栏</el-button>
 			</div>
 			<div class="toolbar-right">
+				<el-button type="primary" plain size="small" icon="el-icon-rank" @click="openQuickMove">快捷移动</el-button>
 				<el-button size="small" icon="el-icon-upload2" @click="openImport">批量导入专栏</el-button>
 				<el-button size="small" icon="el-icon-download" :loading="exporting" @click="exportZip">导出专栏备份</el-button>
 			</div>
@@ -37,6 +38,29 @@
 				</template>
 			</el-table-column>
 		</el-table>
+
+		<el-dialog title="快捷移动专栏" :visible.sync="quickMoveVisible" width="560px" :close-on-click-modal="!quickMoveSaving" :close-on-press-escape="!quickMoveSaving">
+			<div class="quick-move-tip">
+				<i class="el-icon-info"></i>
+				<span>拖动调整专栏顺序；拖入一级专栏可设为子专栏。最多支持两级。</span>
+			</div>
+			<div class="quick-tree-wrap" :class="{'is-saving': quickMoveSaving}">
+				<el-tree ref="quickMoveTree" class="quick-move-tree" :data="quickMoveTree" node-key="id" default-expand-all
+				         :expand-on-click-node="false" :draggable="!quickMoveSaving" :allow-drop="allowQuickDrop"
+				         @node-drag-start="quickDragStart" @node-drag-over="quickDragOver"
+				         @node-drag-end="stopQuickAutoScroll" @node-drop="quickNodeDrop">
+					<div slot-scope="{ node, data }" class="quick-tree-node">
+						<span class="quick-drag-handle"><i class="el-icon-rank"></i></span>
+						<span class="quick-node-name" :title="data.name">{{ data.name }}</span>
+						<span class="quick-node-meta">{{ data.blogCount || 0 }} 篇</span>
+						<el-tag v-if="!data.published" size="mini" type="info">未展示</el-tag>
+						<span class="quick-node-level">{{ node.level === 1 ? '一级' : '子专栏' }}</span>
+					</div>
+				</el-tree>
+				<div v-if="quickMoveSaving" class="quick-saving"><i class="el-icon-loading"></i> 正在保存位置…</div>
+			</div>
+			<span slot="footer"><el-button :disabled="quickMoveSaving" @click="quickMoveVisible=false">完成</el-button></span>
+		</el-dialog>
 
 		<el-dialog :title="form.id ? '编辑专栏' : '创建专栏'" :visible.sync="editVisible" width="620px" :close-on-click-modal="false" @closed="resetForm">
 			<el-form ref="formRef" :model="form" :rules="rules" label-width="90px">
@@ -117,7 +141,7 @@ const emptyForm = () => ({id: null, parentId: 0, name: '', description: '', cove
 export default {
 	name: 'ColumnManage',
 	components: {PageTip},
-	data() { return {tree: [], draggingColumn: null, publishedUpdatingId: null, editVisible: false, moveVisible: false, saving: false, form: emptyForm(), coverFile: null, coverPreview: '', moveTarget: null, moveForm: {targetParentId: 0, targetSort: 0}, importVisible: false, importStep: 'form', importFile: null, previewing: false, importing: false, exporting: false, preview: {}, importResult: {}, importForm: {conflictPolicy: 'SKIP', published: true}, rules: {name: [{required: true, message: '请输入专栏名称', trigger: 'blur'}]}} },
+	data() { return {tree: [], draggingColumn: null, publishedUpdatingId: null, editVisible: false, moveVisible: false, quickMoveVisible: false, quickMoveSaving: false, quickMoveTree: [], quickDragParentId: 0, quickAutoScrollFrame: null, quickAutoScrollSpeed: 0, saving: false, form: emptyForm(), coverFile: null, coverPreview: '', moveTarget: null, moveForm: {targetParentId: 0, targetSort: 0}, importVisible: false, importStep: 'form', importFile: null, previewing: false, importing: false, exporting: false, preview: {}, importResult: {}, importForm: {conflictPolicy: 'SKIP', published: true}, rules: {name: [{required: true, message: '请输入专栏名称', trigger: 'blur'}]}} },
 	computed: {
 		rootOptions() { return this.tree.filter(item => item.parentId === 0) },
 		moveParents() { return this.rootOptions.filter(item => !this.moveTarget || item.id !== this.moveTarget.id) },
@@ -133,8 +157,75 @@ export default {
 		}
 	},
 	created() { this.load() },
+	beforeDestroy() { this.stopQuickAutoScroll() },
 	methods: {
 		load() { getColumnTree().then(res => { this.tree = res.data || []; this.$nextTick(this.bindRowDrag) }) },
+		cloneTree(tree) { return tree.map(item => ({...item, children: (item.children || []).map(child => ({...child, children: []}))})) },
+		openQuickMove() { this.quickMoveTree = this.cloneTree(this.tree); this.quickMoveVisible = true },
+		quickDragStart(node) { this.quickDragParentId = node.data.parentId || 0 },
+		quickDragOver(draggingNode, dropNode, event) {
+			const container = this.$el.querySelector('.quick-tree-wrap')
+			if (!container || !event) return
+			const rect = container.getBoundingClientRect()
+			const edgeSize = Math.min(72, rect.height * .22)
+			let speed = 0
+			if (event.clientY < rect.top + edgeSize) speed = -Math.ceil((rect.top + edgeSize - event.clientY) / edgeSize * 14)
+			else if (event.clientY > rect.bottom - edgeSize) speed = Math.ceil((event.clientY - (rect.bottom - edgeSize)) / edgeSize * 14)
+			this.quickAutoScrollSpeed = speed
+			if (speed && !this.quickAutoScrollFrame) this.runQuickAutoScroll()
+			if (!speed) this.stopQuickAutoScroll()
+		},
+		runQuickAutoScroll() {
+			const container = this.$el.querySelector('.quick-tree-wrap')
+			if (!container || !this.quickAutoScrollSpeed) return this.stopQuickAutoScroll()
+			container.scrollTop += this.quickAutoScrollSpeed
+			this.quickAutoScrollFrame = window.requestAnimationFrame(this.runQuickAutoScroll)
+		},
+		stopQuickAutoScroll() {
+			if (this.quickAutoScrollFrame) window.cancelAnimationFrame(this.quickAutoScrollFrame)
+			this.quickAutoScrollFrame = null
+			this.quickAutoScrollSpeed = 0
+		},
+		allowQuickDrop(draggingNode, dropNode, type) {
+			if (draggingNode.data.id === dropNode.data.id) return false
+			if (type === 'inner') return dropNode.level === 1 && !(draggingNode.data.children || []).length
+			// 只允许放到根级节点之间，或同一个一级专栏的子节点之间。
+			return dropNode.level === 1 || !(draggingNode.data.children || []).length
+		},
+		async quickNodeDrop(draggingNode, dropNode, type) {
+			this.stopQuickAutoScroll()
+			const source = draggingNode.data
+			const oldParentId = this.quickDragParentId || 0
+			const targetParentId = type === 'inner' ? dropNode.data.id : (dropNode.data.parentId || 0)
+			source.parentId = targetParentId
+			this.quickMoveSaving = true
+			try {
+				const targetSiblings = targetParentId === 0 ? this.quickMoveTree : ((this.quickMoveTree.find(item => String(item.id) === String(targetParentId)) || {}).children || [])
+				await this.saveSiblingOrder(targetSiblings, targetParentId)
+				if (String(oldParentId) !== String(targetParentId)) {
+					const oldSiblings = oldParentId === 0 ? this.quickMoveTree : ((this.quickMoveTree.find(item => String(item.id) === String(oldParentId)) || {}).children || [])
+					await this.saveSiblingOrder(oldSiblings, oldParentId)
+				}
+				this.msgSuccess(String(oldParentId) === String(targetParentId) ? '排序成功' : '移动成功')
+				await this.loadTreeAfterQuickMove()
+			} catch (error) {
+				await this.loadTreeAfterQuickMove()
+			} finally {
+				this.quickMoveSaving = false
+			}
+		},
+		async saveSiblingOrder(siblings, parentId) {
+			for (let index = 0; index < siblings.length; index += 1) {
+				siblings[index].parentId = parentId
+				await moveColumn(siblings[index].id, {targetParentId: parentId, targetSort: (index + 1) * 10})
+			}
+		},
+		async loadTreeAfterQuickMove() {
+			const res = await getColumnTree()
+			this.tree = res.data || []
+			this.quickMoveTree = this.cloneTree(this.tree)
+			this.$nextTick(this.bindRowDrag)
+		},
 		rowClassName({row}) { return `column-drag-row column-row-${row.id}` },
 		bindRowDrag() {
 			const table = this.$refs.columnTable && this.$refs.columnTable.$el
@@ -267,6 +358,23 @@ export default {
 .column-tree-table ::v-deep .column-drag-row.is-drag-over-before td { background:#ecf5ff !important; box-shadow:inset 0 3px 0 #409eff; }
 .column-tree-table ::v-deep .column-drag-row.is-drag-over-after td { background:#ecf5ff !important; box-shadow:inset 0 -3px 0 #409eff; }
 .column-tree-table ::v-deep .column-drag-row.is-drag-over-inside td { background:#e8f4ff !important; box-shadow:inset 0 0 0 2px #409eff; }
+.quick-move-tip { display:flex; align-items:flex-start; gap:7px; margin:-4px 0 12px; color:#909399; font-size:12px; line-height:18px; }
+.quick-move-tip i { margin-top:2px; color:#409eff; }
+.quick-tree-wrap { position:relative; max-height:58vh; min-height:180px; overflow:auto; border:1px solid #ebeef5; border-radius:6px; background:#fff; transition:opacity .2s; }
+.quick-tree-wrap.is-saving { opacity:.72; }
+.quick-move-tree { padding:6px; }
+.quick-move-tree ::v-deep .el-tree-node__content { height:38px; border-radius:4px; }
+.quick-move-tree ::v-deep .el-tree-node__content:hover { background:#f5f7fa; }
+.quick-move-tree ::v-deep .el-tree-node.is-drop-inner > .el-tree-node__content { background:#ecf5ff; color:#409eff; }
+.quick-move-tree ::v-deep .el-tree-node__expand-icon { color:#909399; }
+.quick-move-tree ::v-deep .el-tree-node__expand-icon.is-leaf { color:transparent; }
+.quick-tree-node { display:flex; min-width:0; flex:1; align-items:center; gap:8px; padding-right:10px; font-size:13px; }
+.quick-drag-handle { display:inline-flex; width:18px; height:28px; flex:0 0 18px; align-items:center; justify-content:center; color:#c0c4cc; cursor:grab; }
+.quick-tree-node:hover .quick-drag-handle { color:#606266; }
+.quick-node-name { min-width:0; flex:1; overflow:hidden; color:#303133; text-overflow:ellipsis; white-space:nowrap; }
+.quick-node-meta,.quick-node-level { flex:0 0 auto; color:#a8abb2; font-size:12px; }
+.quick-node-level { width:38px; text-align:right; }
+.quick-saving { position:sticky; right:0; bottom:0; left:0; padding:8px 0; background:rgba(255,255,255,.94); color:#409eff; font-size:12px; text-align:center; box-shadow:0 -2px 8px rgba(0,0,0,.04); }
 .column-cell { position:relative; display:flex; align-items:center; gap:12px; min-height:52px; }
 .child-column-cell { min-height:48px; padding-left:52px; }
 .drag-handle { display:inline-flex; width:18px; height:32px; flex:0 0 18px; align-items:center; justify-content:center; color:#c0c4cc; font-size:15px; cursor:grab; }
