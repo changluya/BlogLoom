@@ -3,7 +3,10 @@
 		<article class="ui attached segment m-margin-bottom-big m-box blog-card" v-for="item in blogList" :key="item.id">
 			<div class="blog-card-layout" :class="{'without-cover': !item.firstPicture}">
 				<a v-if="item.firstPicture" href="javascript:;" class="blog-cover" @click.prevent="toBlog(item)" :aria-label="`阅读文章：${item.title}`">
-					<img v-lazy="item.firstPicture" :alt="item.title">
+					<el-image :src="item.firstPicture" :alt="item.title" fit="cover" lazy class="blog-cover-image">
+						<div slot="placeholder" class="blog-cover-placeholder"></div>
+						<div slot="error" class="blog-cover-error"><i class="el-icon-picture-outline"></i></div>
+					</el-image>
 				</a>
 				<div class="blog-summary">
 					<h2 class="ui header blog-title">
@@ -80,18 +83,28 @@
 	}
 
 	.blog-card-layout { display: flex; align-items: stretch; gap: 20px; min-width: 0; }
-	.blog-cover { flex: 0 0 220px; width: 220px; height: 132px; overflow: hidden; border-radius: 8px; background: #f3f4f6; }
-	.blog-cover img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
-	.blog-cover:hover img { transform: scale(1.035); }
+	.blog-cover { flex: 0 0 220px; width: 220px; height: 132px; overflow: hidden; border-radius: 8px; background: #eef2f6; }
+	.blog-cover-image { display: block; width: 100%; height: 100%; }
+	.blog-cover-image ::v-deep .el-image__inner { transition: transform .3s ease; }
+	.blog-cover:hover .blog-cover-image ::v-deep .el-image__inner { transform: scale(1.035); }
+	.blog-cover-placeholder { width: 100%; height: 100%; background: linear-gradient(105deg, #eef2f6 20%, #f8fafc 40%, #eef2f6 60%); background-size: 220% 100%; animation: cover-loading 1.4s ease-in-out infinite; }
+	.blog-cover-error { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; background: #f3f6f9; color: #b6c0cc; font-size: 28px; }
+	@keyframes cover-loading {
+		0% { background-position: 100% 0; }
+		100% { background-position: -100% 0; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.blog-cover-placeholder { animation: none; }
+	}
 	.blog-summary { display: flex; flex: 1; min-width: 0; flex-direction: column; }
 	.blog-title.ui.header {
-		margin: 0 0 9px;
-		font-size: 20px;
+		margin: 0 0 6px;
+		font-size: 18px;
 		font-weight: 700;
-		line-height: 1.35;
+		line-height: 1.3;
 	}
 	.blog-title a:hover { color: #00a7e0 !important; }
-	.blog-description { display: -webkit-box; overflow: hidden; color: #6b7280; font-size: 14px; line-height: 1.65; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+	.blog-description { display: -webkit-box; overflow: hidden; color: #6b7280; font-size: 13px; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 	.blog-description ::v-deep p { display: inline; margin: 0; }
 	.blog-description ::v-deep img { display: none; }
 	.blog-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 10px; }

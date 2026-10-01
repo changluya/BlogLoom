@@ -14,7 +14,7 @@
 				</span>
 			</div>
 			<div class="home-search">
-				<el-input v-model="keyword" size="mini" placeholder="搜索文章..." clearable prefix-icon="el-icon-search"
+				<el-input v-model="keyword" size="small" placeholder="搜索文章..." clearable prefix-icon="el-icon-search"
 				          @keyup.enter.native="doSearch" @clear="clearSearch"></el-input>
 			</div>
 		</div>
@@ -190,7 +190,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 16px;
-		padding: 4px 16px;
+		padding: 9px 16px;
 		border-bottom: 1px solid #eef1f5;
 	}
 
@@ -246,10 +246,10 @@
 		align-items: center;
 		gap: 6px;
 		line-height: 1;
-		padding: 2px 10px;
+		padding: 6px 14px;
 		border-radius: 6px;
 		color: #5b6470;
-		font-size: 12px;
+		font-size: 13px;
 		cursor: pointer;
 		transition: color .2s, background .2s;
 	}
@@ -274,7 +274,7 @@
 		height: 1em;
 		line-height: 1;
 		margin: 0 !important;
-		font-size: 12px;
+		font-size: 13px;
 		flex: 0 0 auto;
 	}
 
@@ -287,12 +287,7 @@
 	}
 
 	.home-search {
-		width: 190px;
-	}
-
-	.home-search ::v-deep .el-input__inner {
-		height: 24px;
-		line-height: 24px;
+		width: 220px;
 	}
 
 	.search-summary {
