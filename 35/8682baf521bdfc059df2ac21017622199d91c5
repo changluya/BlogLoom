@@ -1,0 +1,21 @@
+blog-cms-ui/src/views/blog/column/ColumnManage.vue
+  s_8f7703af905d2c::t_e4c28da8047ec9 13,42-49,52-64,163-165,189-195,197-228
+  s_8f7703af905d2c::t_9512568253ceef 50-51,144,160,166-188,196
+  s_8f7703af905d2c::t_274e8138d7254b 361-377
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "358682baf521bdfc059df2ac21017622199d91c5",
+  "prompts": {},
+  "sessions": {
+    "s_8f7703af905d2c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f81f-3c4c-75a0-9143-8a1860586931",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
