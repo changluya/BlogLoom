@@ -1,0 +1,80 @@
+blog-view-ui/src/components/index/Nav.vue
+  s_15f1b642e3d02f::t_c035f72bbff54d 176,193,289,305,319
+blog-cms-ui/src/views/blog/blog/WriteBlog.vue
+  s_15f1b642e3d02f::t_1165eda53c3a66 9,158-164,166-194,196-198
+  s_15f1b642e3d02f::t_f6e35acdff25b8 195
+  s_15f1b642e3d02f::t_6fc9450f230cdd 327
+  s_15f1b642e3d02f::t_5531ef82d64e26 328,331,333-337
+  s_15f1b642e3d02f::t_d61d4a57ef784d 329-330,332,338
+blog-view-ui/src/components/index/Footer.vue
+  s_15f1b642e3d02f::t_c701a2f434d9f0 144,146
+blog-view-ui/src/views/blog/Blog.vue
+  s_15f1b642e3d02f::t_6fc9450f230cdd 443
+  s_15f1b642e3d02f::t_7813cebb7a4bc4 158
+  s_84ab8775187023::t_82381ed9a4d187 278
+  s_84ab8775187023::t_33122c2a5f8fc4 562
+  s_84ab8775187023::t_f415dbdb554529 250
+  s_15f1b642e3d02f::t_acecaacfa7d529 441-442,444-446,451-470,472-487,493-499
+  s_84ab8775187023::t_6662e928612bda 537
+  s_84ab8775187023::t_01290c3ce8e9de 342
+  s_84ab8775187023::t_c523083b90c3e4 547
+  s_84ab8775187023::t_55e98f7f848aa1 634,636,639
+  s_15f1b642e3d02f::t_5531ef82d64e26 447-450,471,488-492
+  s_84ab8775187023::t_306b49ba846342 530
+  s_15f1b642e3d02f::t_8f9ee69683249e 130-157,159-167,179
+  s_15f1b642e3d02f::t_7b5633ab696fb1 344-345,351-352,356,363-365,367-375,380-381,383,388-389,398-415,643-646
+  s_15f1b642e3d02f::t_41e80418e45415 7-9,259-260,265,635
+  s_84ab8775187023::t_3e490de539bc77 501-502,508-517
+blog-view-ui/src/styles/variables.scss
+  s_15f1b642e3d02f::t_c035f72bbff54d 20
+blog-view-ui/src/styles/mobile/pages/home.mobile.scss
+  s_84ab8775187023::t_debf82a85e261c 8-9
+  s_84ab8775187023::t_3b37cb2df6ff86 19
+blog-view-ui/src/views/home/Home.vue
+  s_84ab8775187023::t_5ef1824efd5a2f 293
+  s_84ab8775187023::t_6bb7d99d9009ab 193
+  s_84ab8775187023::t_e32811b5192a0c 17
+  s_84ab8775187023::t_1bcba6e06bc989 249
+  s_84ab8775187023::t_7ccc907f2f6a15 252
+  s_84ab8775187023::t_c30553df7b29fc 277
+  s_84ab8775187023::t_459725403c51ce 290
+  s_84ab8775187023::t_2442b7b5a0a7f7 294-295
+  s_84ab8775187023::t_3d6552c2c4017a 291-292
+blog-view-ui/src/assets/css/base.css
+  s_15f1b642e3d02f::t_c701a2f434d9f0 14-18
+blog-view-ui/src/assets/css/typo.css
+  s_84ab8775187023::t_4a0babb2f68b13 266-267
+blog-view-ui/src/views/Index.vue
+  s_15f1b642e3d02f::t_a1b5923e319d3d 228,237,239
+  s_15f1b642e3d02f::t_c701a2f434d9f0 157,161-162
+  s_15f1b642e3d02f::t_eab49c6e70410c 2,28,227,229,231-233,235-236
+  s_15f1b642e3d02f::t_855b8935815a7a 230,234,238
+  s_15f1b642e3d02f::t_0690bca356b3b0 163-164
+  s_15f1b642e3d02f::t_4ab010bde5b062 240-241
+blog-view-ui/src/components/sidebar/Tocbot.vue
+  s_15f1b642e3d02f::t_3b079a5e051d65 67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "60db32e97fd0b891e604c264b122120d7b9107f1",
+  "prompts": {},
+  "sessions": {
+    "s_15f1b642e3d02f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f59e-79c4-79a3-94e4-3d133b1a85e8",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_84ab8775187023": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f0cc4ea0affej5XqIZ0vL1Pdih",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
