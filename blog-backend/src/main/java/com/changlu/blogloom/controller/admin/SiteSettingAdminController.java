@@ -66,6 +66,12 @@ public class SiteSettingAdminController {
 		return Result.ok("上传成功", siteSettingService.uploadImage(id, file));
 	}
 
+	@OperationLogger("上传站点配置图片")
+	@PostMapping(value = "/siteSettings/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public Result uploadImage(@RequestParam("file") MultipartFile file) {
+		return Result.ok("上传成功", siteSettingService.uploadImage(file));
+	}
+
 	/**
 	 * 图床渠道连通性测试：模拟上传后立即删除。
 	 *

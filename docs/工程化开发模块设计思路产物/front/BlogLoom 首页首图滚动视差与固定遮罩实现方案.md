@@ -84,7 +84,7 @@ Banner 入口收敛在 `blog-view-ui/src/settings.js`：
 
 ```js
 export default {
-	banner: '/img/banner/home-banner.png',
+	banner: '/img/banner/home-banner-old.png',
 	malfunctionText: 'Changlu\'s Blog',
 	heroEyebrow: 'JAVA BACKEND · AI AGENT · OPEN SOURCE',
 	heroDescription: '每个人都是独一无二的，把握好自己的节奏，跟着自己的心走。'

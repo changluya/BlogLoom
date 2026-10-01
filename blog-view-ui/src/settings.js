@@ -3,7 +3,7 @@ export default {
 	 * @type {string}
 	 * @description 首页 Banner 背景图（单张）
 	 */
-	banner: '/img/banner/home-banner.png',
+	banner: '/img/banner/home-banner-old.png',
 
 	/**
 	 * @type {string}

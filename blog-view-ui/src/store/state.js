@@ -3,6 +3,7 @@ export default {
 	introduction: {
 		avatar: '',
 		name: '',
+		profileLabel: 'Java 开发者',
 		totalViews: 0,
 		publishedBlogCount: 0,
 		totalBlogViews: 0,

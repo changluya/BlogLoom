@@ -1,6 +1,6 @@
 <template>
 	<div class="ui segments m-box">
-		<div class="ui secondary segment"><i class="folder open icon"></i>文章分类<span v-if="categoryList.length" class="segment-count">{{ categoryList.length }}</span></div>
+		<div class="ui secondary segment sidebar-title"><img src="/img/sidebar/categories.svg" class="sidebar-title-icon" alt=""><span>文章分类</span><span v-if="categoryList.length" class="segment-count">{{ categoryList.length }}</span></div>
 		<div class="ui blue segment m-padding-small content-segment">
 			<router-link v-for="category in categoryList" :key="category.id" :to="`/category/${encodeURIComponent(category.name)}`" class="category-label m-text-500" :title="category.name">
 				<i class="folder outline icon"></i>
@@ -25,6 +25,8 @@ export default {
 
 <style scoped>
 .secondary.segment { padding:10px; }
+.sidebar-title { display:flex; align-items:center; gap:7px; }
+.sidebar-title-icon { display:block; width:18px; height:18px; flex:0 0 18px; }
 .segment-count { margin-left:6px; padding:0 7px; border-radius:999px; background:#ecf5ff; color:#409eff; font-size:12px; line-height:17px; vertical-align:1px; }
 .m-padding-small { padding:6px; }
 /* 固定高度上限，分类过多时在面板内上下滚动，保持侧栏整体高度稳定 */

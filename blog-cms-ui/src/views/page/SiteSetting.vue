@@ -55,7 +55,7 @@
 						<span class="card-title">资料卡</span>
 					</div>
 					<el-form label-position="right" label-width="100px">
-						<el-form-item v-for="item in typeMap.type2" :key="item.id">
+						<el-form-item v-for="item in profileSettings" :key="item.id || item.nameEn">
 							<template slot="label">
 								<span>{{ item.nameZh }}</span>
 								<el-tooltip v-if="settingTip(item)" :content="settingTip(item)" placement="top">
@@ -96,6 +96,36 @@
 					</el-form>
 				</el-card>
 			</el-col>
+		</el-row>
+
+		<el-row v-if="heroSetting" style="margin-top: 20px">
+			<el-card>
+				<div slot="header">
+					<span class="card-title">首屏设置</span>
+					<span class="image-tip hero-setting-tip">配置首页大图及中间的三段文字</span>
+				</div>
+				<el-form label-position="right" label-width="100px" class="hero-setting-form">
+					<el-form-item label="首屏图">
+						<div class="site-image-editor">
+							<ImageUpload v-model="heroSetting.heroConfig.backgroundImage" :width="220" :height="110"
+							             :loading="uploadingHeroImage" @change="uploadHeroImage"/>
+							<div>
+								<el-input v-model="heroSetting.heroConfig.backgroundImage" size="small"></el-input>
+								<span class="image-tip">点击图片可重新上传，默认 /img/banner/home-banner.png</span>
+							</div>
+						</div>
+					</el-form-item>
+					<el-form-item label="顶部标签">
+						<el-input v-model="heroSetting.heroConfig.eyebrow" size="small"></el-input>
+					</el-form-item>
+					<el-form-item label="主标题">
+						<el-input v-model="heroSetting.heroConfig.title" size="small"></el-input>
+					</el-form-item>
+					<el-form-item label="描述文案">
+						<el-input v-model="heroSetting.heroConfig.description" size="small"></el-input>
+					</el-form-item>
+				</el-form>
+			</el-card>
 		</el-row>
 
 		<el-row style="margin-top: 20px">
@@ -156,7 +186,7 @@
 <script>
 	import Breadcrumb from "@/components/Breadcrumb";
 	import ImageUpload from "@/components/ImageUpload";
-	import {getSiteSettingData, update, uploadSiteImage} from "@/api/siteSetting";
+	import {getSiteSettingData, update, uploadSiteImage, uploadSiteSettingImage} from "@/api/siteSetting";
 	import {setFavicon} from '@/util/favicon'
 	import _ from 'lodash'
 
@@ -167,6 +197,7 @@
 			return {
 				deleteIds: [],
 				uploadingId: null,
+				uploadingHeroImage: false,
 				draggingRollTextIndex: null,
 				typeMap: {type1: [], type2: [], type3: [], type5: []},
 			}
@@ -178,10 +209,25 @@
 			basicSettings() {
 				const settings = (this.typeMap && this.typeMap.type1) || []
 				const favicon = settings.filter(item => item.nameEn === 'favicon')
-				const others = settings.filter(item => item.nameEn !== 'favicon')
+				const others = settings.filter(item => item.nameEn !== 'favicon' && item.nameEn !== 'heroConfig')
 				const blogNameIndex = others.findIndex(item => item.nameEn === 'blogName')
 				others.splice(blogNameIndex < 0 ? 0 : blogNameIndex, 0, ...favicon)
 				return others
+			},
+			heroSetting() {
+				return ((this.typeMap && this.typeMap.type1) || []).find(item => item.nameEn === 'heroConfig') || null
+			},
+			profileSettings() {
+				const settings = (this.typeMap && this.typeMap.type2) || []
+				const order = ['avatar', 'name', 'profileLabel', 'rollText', 'github', 'csdn', 'telegram', 'qq', 'bilibili', 'netease', 'email']
+				return settings.slice().sort((a, b) => {
+					const aIndex = order.indexOf(a.nameEn)
+					const bIndex = order.indexOf(b.nameEn)
+					if (aIndex === -1 && bIndex === -1) return 0
+					if (aIndex === -1) return 1
+					if (bIndex === -1) return -1
+					return aIndex - bIndex
+				})
 			}
 		},
 		methods: {
@@ -212,9 +258,22 @@
 					this.msgSuccess(res.msg)
 				}).finally(() => { this.uploadingId = null })
 			},
+			uploadHeroImage(file) {
+				this.uploadingHeroImage = true
+				uploadSiteSettingImage(file).then(res => {
+					this.heroSetting.heroConfig.backgroundImage = res.data.url
+					this.msgSuccess(res.msg)
+				}).finally(() => { this.uploadingHeroImage = false })
+			},
 			getData() {
 				getSiteSettingData().then(res => {
 					this.typeMap = res.data
+					if (!res.data.type1.some(item => item.nameEn === 'heroConfig')) {
+						res.data.type1.push({nameEn: 'heroConfig', nameZh: '首屏设置', type: 1, value: ''})
+					}
+					if (!res.data.type2.some(item => item.nameEn === 'profileLabel')) {
+						res.data.type2.push({nameEn: 'profileLabel', nameZh: '标签', type: 2, value: 'Java 开发者'})
+					}
 					const favicon = res.data.type1.find(item => item.nameEn === 'favicon')
 					setFavicon(favicon && favicon.value)
 					if (favicon && favicon.value) {
@@ -230,6 +289,16 @@
 							}
 						}
 						if (item.nameEn === 'hitokotoTexts') this.$set(item, 'rollTexts', this.parseRollTexts(item.value))
+						if (item.nameEn === 'heroConfig') {
+							let value = {}
+							try { value = JSON.parse(item.value || '{}') } catch (e) { value = {} }
+							this.$set(item, 'heroConfig', {
+								eyebrow: value.eyebrow || 'JAVA BACKEND · AI AGENT · OPEN SOURCE',
+								title: value.title || "Changlu's Blog",
+								description: value.description || '每个人都是独一无二的，把握好自己的节奏，跟着自己的心走。',
+								backgroundImage: value.backgroundImage || '/img/banner/home-banner.png'
+							})
+						}
 					})
 					res.data.type2.forEach(item => {
 						if (item.nameEn === 'rollText') this.$set(item, 'rollTexts', this.parseRollTexts(item.value))
@@ -335,6 +404,10 @@
 				const result = _.cloneDeep(this.typeMap)
 				result.type1.forEach(item => {
 					if (item.nameEn === 'copyright') item.value = JSON.stringify(item.value)
+					if (item.nameEn === 'heroConfig') {
+						item.value = JSON.stringify(item.heroConfig || {})
+						delete item.heroConfig
+					}
 					if (item.nameEn === 'hitokotoTexts') {
 						item.value = (item.rollTexts || []).map(text => (text || '').trim()).filter(Boolean).map(text => JSON.stringify(text)).join(',')
 						delete item.rollTexts
@@ -378,6 +451,8 @@
 	.copyright-editor { display:flex; flex-direction:column; gap:8px; }
 	.copyright-editor ::v-deep .el-input-group__prepend { width:64px; padding:0 12px; text-align:center; }
 	.image-tip { display:block; margin-top:6px; color:#909399; font-size:12px; line-height:1.4; }
+	.hero-setting-tip { display:inline; margin-left:10px; }
+	.hero-setting-form { max-width:900px; }
 	.setting-tip-icon { margin-left:4px; color:#909399; cursor:help; }
 	.custom-module-editor { display:flex; flex-direction:column; gap:8px; }
 	.custom-module-editor ::v-deep .el-input-group__prepend { width:64px; padding:0 12px; text-align:center; }

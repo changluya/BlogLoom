@@ -1,7 +1,7 @@
 <template>
 	<!--推荐文章-->
 	<div class="ui segments m-box">
-		<div class="ui secondary segment"><i class="bookmark icon"></i>推荐文章</div>
+		<div class="ui secondary segment sidebar-title"><img src="/img/sidebar/recommended.svg" class="sidebar-title-icon" alt=""><span>推荐文章</span></div>
 		<div class="ui yellow segment content-segment">
 			<ul v-if="randomBlogList.length" class="recommend-list">
 				<li v-for="(blog, index) in randomBlogList" :key="blog.id" @click="toBlog(blog)" :title="blog.title">
@@ -44,6 +44,9 @@
 	.secondary.segment {
 		padding: 10px;
 	}
+
+	.sidebar-title { display: flex; align-items: center; gap: 7px; }
+	.sidebar-title-icon { display: block; width: 18px; height: 18px; flex: 0 0 18px; }
 
 	.content-segment {
 		padding: 6px 12px !important;

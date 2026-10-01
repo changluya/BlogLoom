@@ -1,6 +1,6 @@
 <template>
 	<div v-if="columns.length" class="ui segments m-box">
-		<div class="ui secondary segment"><i class="columns icon"></i>TA 的专栏</div>
+		<div class="ui secondary segment sidebar-title"><img src="/img/sidebar/columns.svg" class="sidebar-title-icon" alt=""><span>TA 的专栏</span></div>
 		<div class="ui segment column-panel">
 		<div class="column-tree">
 		<div v-for="column in visibleColumns" :key="column.id" class="column-group">
@@ -65,6 +65,8 @@ export default {
 
 <style scoped>
 .secondary.segment { padding:10px; }
+.sidebar-title { display:flex; align-items:center; gap:7px; }
+.sidebar-title-icon { display:block; width:18px; height:18px; flex:0 0 18px; }
 .column-panel { padding:13px 12px 12px; }
 .column-tree { position:relative; padding-left:16px; }
 .column-tree::before { position:absolute; top:17px; bottom:17px; left:4px; border-left:1px dotted #cbd2dc; content:''; }

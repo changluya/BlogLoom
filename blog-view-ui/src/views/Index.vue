@@ -1,7 +1,7 @@
 <template>
 	<div class="site" :class="{'masked-site': showMaskedBackground, 'home-site': $route.name === 'home', 'blog-site': $route.name === 'blog'}">
 		<!-- 固定在视口的首图；正文向上滚动时由 .main 的浅色遮罩覆盖 -->
-		<div v-if="showMaskedBackground" class="home-hero-background m-mobile-hide"></div>
+		<div v-if="showMaskedBackground" class="home-hero-background m-mobile-hide" :style="heroBackgroundStyle"></div>
 		<!--顶部导航-->
 		<Nav :blogName="siteInfo.blogName"/>
 		<!--首页大图 只在首页且pc端时显示-->
@@ -92,6 +92,11 @@
 		},
 		computed: {
 			...mapState(['focusMode', 'introduction']),
+			heroBackgroundStyle() {
+				const heroConfig = this.siteInfo && this.siteInfo.heroConfig
+				const image = heroConfig && heroConfig.backgroundImage || '/img/banner/home-banner.png'
+				return {backgroundImage: `url(${JSON.stringify(image)})`}
+			},
 			// 需要固定首图 + 浅色遮罩的页面（与首页一致的滚动遮罩效果）
 			showMaskedBackground() {
 				return ['home', 'archives', 'moments', 'friends', 'about', 'category', 'tag', 'blog']
@@ -167,7 +172,9 @@
 		position: fixed;
 		inset: 0;
 		z-index: 0;
-		background: url('/img/banner/home-banner.png') center center / cover no-repeat;
+		background-position: center center;
+		background-size: cover;
+		background-repeat: no-repeat;
 		pointer-events: none;
 	}
 
