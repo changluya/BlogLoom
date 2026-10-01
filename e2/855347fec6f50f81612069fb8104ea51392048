@@ -1,0 +1,93 @@
+blog-backend/src/main/java/com/changlu/blogloom/constant/SiteSettingConstants.java
+  s_15f1b642e3d02f::t_a5ab0343928b0e 14-15
+  s_15f1b642e3d02f::t_19efd40603cf41 17
+blog-backend/src/main/java/com/changlu/blogloom/model/vo/Introduction.java
+  s_15f1b642e3d02f::t_a5ab0343928b0e 23
+  s_15f1b642e3d02f::t_19efd40603cf41 25
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/SiteSettingAdminController.java
+  s_15f1b642e3d02f::t_c1eadb16c9acef 69-74
+blog-view-ui/src/components/sidebar/Categories.vue
+  s_15f1b642e3d02f::t_971e6b821386f2 3,28-29
+blog-view-ui/public/img/sidebar/columns.svg
+  s_15f1b642e3d02f::t_868fc5ef5bc9e1 1-6
+blog-cms-ui/src/api/siteSetting.js
+  s_15f1b642e3d02f::t_c1eadb16c9acef 27-32
+blog-view-ui/src/components/sidebar/Tocbot.vue
+  s_15f1b642e3d02f::t_046c691ab4f6eb 144
+  s_15f1b642e3d02f::t_d73b0c30557b3c 143,145,153,158
+blog-view-ui/src/components/index/Header.vue
+  s_15f1b642e3d02f::t_bf3d84880f4c79 10,151-160
+  s_15f1b642e3d02f::t_a5ab0343928b0e 5-7,29-37
+  s_15f1b642e3d02f::t_7eb03eb3604ae5 9,87,93-95,97-101,103-105,109,112,114-115,121,124-126,131-132,134-148,163-166,170-171
+blog-view-ui/public/img/sidebar/categories.svg
+  s_15f1b642e3d02f::t_971e6b821386f2 1-7
+blog-backend/src/main/java/com/changlu/blogloom/service/SiteSettingService.java
+  s_15f1b642e3d02f::t_c1eadb16c9acef 19
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/SiteSettingServiceImpl.java
+  s_15f1b642e3d02f::t_19efd40603cf41 137,141-143
+  s_15f1b642e3d02f::t_a5ab0343928b0e 114,118-122,135-136
+  s_15f1b642e3d02f::t_c1eadb16c9acef 236-241
+  s_15f1b642e3d02f::t_79a1212a177304 234-235
+blog-cms-ui/src/views/page/SiteSetting.vue
+  s_15f1b642e3d02f::t_a833a81a952001 101-130,189,200,212,216-218
+  s_15f1b642e3d02f::t_04ee52ad2c0840 58,219-221,223-230
+  s_15f1b642e3d02f::t_f3f026c6dedfaa 261-267,271-276,292-301,407-410,454-455
+  s_15f1b642e3d02f::t_ef972c0d0f8de9 222
+blog-view-ui/public/img/sidebar/tags.svg
+  s_15f1b642e3d02f::t_868fc5ef5bc9e1 1-6
+blog-view-ui/src/views/Index.vue
+  s_15f1b642e3d02f::t_67babeb0b4b4e0 4,95-99,175-177
+blog-view-ui/src/components/sidebar/Introduction.vue
+  s_15f1b642e3d02f::t_ad8c247dfafeba 31
+  s_15f1b642e3d02f::t_c7b510eea5e120 68,133,180-181,184-185,187,276,278-298
+  s_15f1b642e3d02f::t_24e2c51c3bca2d 138-139
+  s_15f1b642e3d02f::t_6f83397e61893b 159,197-208,210-216,226-228,313
+  s_15f1b642e3d02f::t_a5ab0343928b0e 11
+  s_15f1b642e3d02f::t_19efd40603cf41 29-30,32,323-326
+  s_15f1b642e3d02f::t_1d32636965c86b 179,275
+  s_15f1b642e3d02f::t_c9c478a86b6272 155,168,170
+  s_15f1b642e3d02f::t_67babeb0b4b4e0 5,89-94
+  s_15f1b642e3d02f::t_6159c719989c49 268-272,304,307-311
+  s_15f1b642e3d02f::t_3cd69a6a2e1dbb 327-330
+  s_15f1b642e3d02f::t_5c8a94c35bdf43 141
+  s_15f1b642e3d02f::t_59c6f803c104c7 3,117-125,127-128,130-132,134-137,140,142-143,147-153,156-157,164-167,171,175-176,182,186,188-196,217-222,246,252,255,257,267,273-274,277,299-303,305-306,312,314-322,336,344,355-362
+blog-view-ui/src/components/sidebar/UserColumns.vue
+  s_15f1b642e3d02f::t_868fc5ef5bc9e1 68-69
+  s_15f1b642e3d02f::t_3ef0919a084308 3
+blog-view-ui/public/img/csdn-logo.svg
+  s_15f1b642e3d02f::t_ad8c247dfafeba 2-4,8-9,12
+  s_15f1b642e3d02f::t_30ae8523062ae1 1,5-7,10-11
+sql/increment/1.0/20261001000000_v1.0.x.sql
+  s_15f1b642e3d02f::t_a5ab0343928b0e 1-2,5-6,8,13-15
+  s_15f1b642e3d02f::t_19efd40603cf41 9-10,12
+  s_15f1b642e3d02f::t_ef8e654e6df740 11
+  s_15f1b642e3d02f::t_c1eadb16c9acef 16
+  s_15f1b642e3d02f::t_7f58668d09301a 3-4
+  s_15f1b642e3d02f::t_a1409d7da82f9b 7
+blog-view-ui/public/img/sidebar/recommended.svg
+  s_15f1b642e3d02f::t_868fc5ef5bc9e1 1-6
+blog-view-ui/src/components/sidebar/RandomBlog.vue
+  s_15f1b642e3d02f::t_868fc5ef5bc9e1 4,48-49
+  s_15f1b642e3d02f::t_79f95121e352ad 50
+blog-view-ui/src/components/sidebar/Tags.vue
+  s_15f1b642e3d02f::t_868fc5ef5bc9e1 4,52-53
+  s_15f1b642e3d02f::t_bd0892f8ecb754 54
+blog-view-ui/src/store/state.js
+  s_15f1b642e3d02f::t_a5ab0343928b0e 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e2855347fec6f50f81612069fb8104ea51392048",
+  "prompts": {},
+  "sessions": {
+    "s_15f1b642e3d02f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f59e-79c4-79a3-94e4-3d133b1a85e8",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
