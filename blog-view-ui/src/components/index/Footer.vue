@@ -141,7 +141,9 @@
 
 	.site-footer {
 		margin-top: 40px;
+		margin-bottom: 0;
 		padding: 48px 0 24px;
+		border-radius: 0 !important;
 		color: #9aa5b4;
 		background: linear-gradient(180deg, #1f2733 0%, #171d27 100%);
 		font-size: 13px;

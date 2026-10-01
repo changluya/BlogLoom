@@ -263,8 +263,8 @@
 /* 标题应该更贴紧内容，并与其他块区分，margin 值要相应做优化 */
 .typo h1, .typo h2, .typo h3, .typo h4, .typo h5, .typo h6 {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-    margin-top: 24px;
-    margin-bottom: 16px;
+    margin-top: 22px;
+    margin-bottom: 12px;
     font-weight: 600;
     line-height: 1.25;
 }

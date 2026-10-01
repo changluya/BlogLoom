@@ -173,7 +173,7 @@
 	}
 
 	.ui.fixed.menu {
-		min-height: 64px;
+		min-height: 58px;
 		border: 0;
 		background: rgba(13, 20, 31, .92) !important;
 		box-shadow: 0 8px 28px rgba(5, 12, 24, .12);
@@ -190,7 +190,7 @@
 	.ui.inverted.menu .item {
 		display: inline-flex;
 		align-items: center;
-		min-height: 42px;
+		min-height: 38px;
 		margin: 0 2px;
 		padding: 0 14px;
 		border-radius: 8px;
@@ -286,7 +286,7 @@
 
 	.m-search {
 		min-width: 210px;
-		min-height: 38px !important;
+		min-height: 34px !important;
 		margin: 0 0 0 auto !important;
 		padding: 0 !important;
 		border: 1px solid rgba(255, 255, 255, .24) !important;
@@ -302,7 +302,7 @@
 	}
 
 	.m-search input {
-		height: 38px;
+		height: 34px;
 		color: #fff;
 		border: 0 !important;
 		border-radius: 999px;
@@ -316,7 +316,7 @@
 
 	.m-search i {
 		color: rgba(255, 255, 255, .9) !important;
-		line-height: 38px !important;
+		line-height: 34px !important;
 	}
 
 	.m-search-item {

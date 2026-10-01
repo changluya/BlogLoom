@@ -6,7 +6,7 @@
 			</el-form-item>
 			<el-form-item label="文章正文" prop="content">
 				<mavon-editor ref="contentEditor" v-model="form.content" class="content-editor"
-				              :scroll-style="true" @imgAdd="handleContentImageAdd"/>
+				              :scroll-style="true" @change="handleContentChange" @imgAdd="handleContentImageAdd"/>
 			</el-form-item>
 		</el-form>
 		<div class="editor-status-bar">
@@ -155,7 +155,47 @@
 				this.getBlog(this.$route.params.id)
 			}
 		},
+		mounted() {
+			this.$refs.contentEditor.$el.addEventListener('click', this.handleEditorTocClick)
+		},
+		beforeDestroy() {
+			const editor = this.$refs.contentEditor
+			if (editor && editor.$el) editor.$el.removeEventListener('click', this.handleEditorTocClick)
+		},
 		methods: {
+			handleContentChange(markdown, renderedHtml) {
+				if (!/(^|\n)\s*\[toc\]\s*(?=\n|$)/i.test(markdown || '')) return
+				const editor = this.$refs.contentEditor
+				if (!editor || typeof renderedHtml !== 'string') return
+				const documentNode = new DOMParser().parseFromString(renderedHtml, 'text/html')
+				const headings = Array.from(documentNode.querySelectorAll('h1,h2,h3,h4,h5,h6')).map((heading, index) => ({
+					level: Number(heading.tagName.slice(1)), text: heading.textContent.trim(), index
+				})).filter(item => item.text)
+				const htmlWithToc = renderedHtml.replace(/<p>\s*\[toc\]\s*(?:<br\s*\/?>)?\s*<\/p>/i, this.buildEditorToc(headings))
+				if (htmlWithToc !== renderedHtml && editor.d_render !== htmlWithToc) editor.d_render = htmlWithToc
+			},
+			buildEditorToc(headings) {
+				if (!headings.length) return '<section class="editor-article-toc"><h3>文章目录</h3><div class="editor-toc-empty">暂无标题，请在正文中添加 # 标题</div></section>'
+				const minLevel = Math.min(...headings.map(item => item.level))
+				const items = headings.map(item => {
+					const depth = Math.min(item.level - minLevel, 5)
+					return `<li class="editor-toc-level-${depth}"><a href="#" data-editor-toc-index="${item.index}">${this.escapeHtml(item.text)}</a></li>`
+				}).join('')
+				return `<section class="editor-article-toc"><h3>文章目录</h3><ul>${items}</ul></section>`
+			},
+			escapeHtml(value) {
+				return String(value).replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]))
+			},
+			handleEditorTocClick(event) {
+				const link = event.target.closest && event.target.closest('[data-editor-toc-index]')
+				if (!link) return
+				event.preventDefault()
+				const editor = this.$refs.contentEditor
+				const preview = editor && editor.$refs && editor.$refs.vShowContent
+				const headings = preview ? Array.from(preview.querySelectorAll('h1,h2,h3,h4,h5,h6')).filter(item => !item.closest('.editor-article-toc')) : []
+				const heading = headings[Number(link.getAttribute('data-editor-toc-index'))]
+				if (heading) preview.scrollTo({top: Math.max(heading.offsetTop - 20, 0), behavior: 'smooth'})
+			},
 			getData() {
 				getCategoryAndTag().then(res => {
 					this.categoryList = res.data.categories
@@ -284,6 +324,18 @@
 	.content-editor ::v-deep .v-note-panel { min-height: 0; }
 	.content-editor ::v-deep .v-note-edit,
 	.content-editor ::v-deep .v-note-show { min-height: 0; }
+	.content-editor ::v-deep .editor-article-toc { margin: 4px 0 28px; padding: 8px 4px 12px; }
+	.content-editor ::v-deep .editor-article-toc h3 { margin: 0 0 8px; padding: 0; border: 0; color: #606266; font-size: 18px; line-height: 1.5; }
+	.content-editor ::v-deep .editor-article-toc ul { margin: 0; padding: 0; list-style: none; }
+	.content-editor ::v-deep .editor-article-toc li { margin: 0; padding: 0; list-style: none; }
+	.content-editor ::v-deep .editor-article-toc a { display: block; overflow: hidden; padding: 4px 8px 4px 32px; border-radius: 4px; color: #409eff; font-size: 14px; line-height: 1.55; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; transition: color .2s, background .2s; }
+	.content-editor ::v-deep .editor-article-toc a:hover { background: #ecf5ff; color: #337ecc; }
+	.content-editor ::v-deep .editor-toc-level-1 a { padding-left: 56px; }
+	.content-editor ::v-deep .editor-toc-level-2 a { padding-left: 80px; }
+	.content-editor ::v-deep .editor-toc-level-3 a { padding-left: 104px; }
+	.content-editor ::v-deep .editor-toc-level-4 a { padding-left: 128px; }
+	.content-editor ::v-deep .editor-toc-level-5 a { padding-left: 152px; }
+	.content-editor ::v-deep .editor-toc-empty { padding: 8px; color: #909399; font-size: 13px; }
 	@media (max-height: 760px) {
 		.content-editor:not(.fullscreen) { height: 500px; }
 	}

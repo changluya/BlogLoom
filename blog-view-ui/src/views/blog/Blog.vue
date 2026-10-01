@@ -2,11 +2,11 @@
 	<div class="article-page" :class="{'is-loading': loading, 'is-ready': !loading}" v-loading="loading">
 		<div class="ui padded attached segment m-padded-tb-large article-card">
 			<header class="article-header">
-				<router-link :to="`/category/${blog.category.name}`" class="article-category" v-if="blog.category">
-					<i class="small folder open icon"></i><span>{{ blog.category.name }}</span>
-				</router-link>
 				<h1 class="article-title">{{ blog.title }}</h1>
 				<div class="article-meta">
+					<router-link :to="`/category/${blog.category.name}`" class="article-category" v-if="blog.category">
+						<i class="small folder open icon"></i><span>{{ blog.category.name }}</span>
+					</router-link>
 					<div class="meta-item m-datetime">
 						<i class="small calendar outline icon"></i><span>{{ blog.createTime | dateFormat('YYYY-MM-DD') }}</span>
 					</div>
@@ -127,11 +127,44 @@
 			this.getBlog()
 		},
 		methods: {
-			removeTocPlaceholder(content) {
-				if (typeof content !== 'string') {
-					return content
-				}
-				return content.replace(/<p>\s*\[toc\]\s*<\/p>/gi, '')
+			renderTocPlaceholder(content) {
+				if (typeof content !== 'string' || !/<p>\s*\[toc\]\s*<\/p>/i.test(content)) return content
+				const documentNode = new DOMParser().parseFromString(content, 'text/html')
+				const placeholders = Array.from(documentNode.querySelectorAll('p')).filter(item => item.textContent.trim().toLowerCase() === '[toc]')
+				const headings = Array.from(documentNode.querySelectorAll('h1,h2,h3,h4,h5,h6'))
+				const minLevel = headings.length ? Math.min(...headings.map(item => Number(item.tagName.slice(1)))) : 1
+
+				placeholders.forEach(placeholder => {
+					const toc = documentNode.createElement('section')
+					toc.className = 'article-inline-toc'
+					const title = documentNode.createElement('div')
+					title.className = 'article-inline-toc-title'
+					title.textContent = '文章目录'
+					toc.appendChild(title)
+
+					if (!headings.length) {
+						const empty = documentNode.createElement('div')
+						empty.className = 'article-inline-toc-empty'
+						empty.textContent = '暂无可展示的文章标题'
+						toc.appendChild(empty)
+					} else {
+						const list = documentNode.createElement('ul')
+						headings.forEach((heading, index) => {
+							if (!heading.id) heading.id = `article-heading-${index + 1}`
+							const item = documentNode.createElement('li')
+							item.className = `article-inline-toc-level-${Math.min(Number(heading.tagName.slice(1)) - minLevel, 5)}`
+							const link = documentNode.createElement('a')
+							link.className = 'toc-link'
+							link.setAttribute('href', `#${heading.id}`)
+							link.textContent = heading.textContent.trim()
+							item.appendChild(link)
+							list.appendChild(item)
+						})
+						toc.appendChild(list)
+					}
+					placeholder.replaceWith(toc)
+				})
+				return documentNode.body.innerHTML
 			},
 			getBlog(id = this.blogId) {
 				this.loading = true
@@ -143,7 +176,7 @@
 				getBlogById(token, id).then(res => {
 					if (res.code === 200) {
 						this.blog = res.data
-						this.blog.content = this.removeTocPlaceholder(this.blog.content)
+						this.blog.content = this.renderTocPlaceholder(this.blog.content)
 						document.title = this.blog.title + this.siteInfo.webTitleSuffix
 						//v-html渲染完毕后，渲染代码块样式
 						this.$nextTick(() => {
@@ -214,7 +247,7 @@
 
 	.article-header {
 		position: relative;
-		padding: 44px 8px 30px;
+		padding: 38px 8px 22px;
 		border-bottom: 1px solid var(--article-border);
 		text-align: center;
 	}
@@ -223,13 +256,13 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 5px;
-		margin-bottom: 17px;
-		padding: 7px 13px;
+		margin: 0;
+		padding: 4px 9px;
 		border: 1px solid rgba(14, 165, 183, .14);
 		border-radius: 999px;
 		background: rgba(14, 165, 183, .08);
 		color: var(--article-accent-dark);
-		font-size: 13px;
+		font-size: 12px;
 		font-weight: 600;
 		transition: background .2s ease, transform .2s ease;
 	}
@@ -242,7 +275,7 @@
 
 	.article-title {
 		max-width: 720px;
-		margin: 0 auto 20px !important;
+		margin: 0 auto 14px !important;
 		color: #1e293b !important;
 		font-size: 32px !important;
 		font-weight: 750 !important;
@@ -306,45 +339,54 @@
 	}
 
 	.article-content {
-		padding: 38px 8px 32px !important;
+		padding: 24px 8px 32px !important;
 		color: var(--article-ink);
-		font-size: 16px;
-		line-height: 1.95;
+		font-size: 15px;
+		line-height: 1.85;
 	}
 
 	.article-content::v-deep p,
 	.article-content::v-deep ul,
 	.article-content::v-deep ol {
-		font-size: 16px;
-		line-height: 1.95;
+		font-size: 15px;
+		line-height: 1.85;
 	}
 
 	.article-content::v-deep p {
-		margin: 1.15em 0;
+		margin: .9em 0;
 		text-align: left;
 	}
 
 	.article-content::v-deep h1,
 	.article-content::v-deep h2,
 	.article-content::v-deep h3,
-	.article-content::v-deep h4 {
+	.article-content::v-deep h4,
+	.article-content::v-deep h5,
+	.article-content::v-deep h6 {
 		color: #26354a;
-		font-weight: 700;
-		letter-spacing: -.015em;
+		font-weight: 650;
+		letter-spacing: -.01em;
+		line-height: 1.45;
+	}
+
+	.article-content::v-deep h1 {
+		margin: 1.8em 0 .65em;
+		padding-bottom: 9px;
+		font-size: 26px;
 	}
 
 	.article-content::v-deep h2 {
 		position: relative;
-		margin: 2.2em 0 .8em;
-		padding: 0 0 11px 17px;
+		margin: 1.75em 0 .55em;
+		padding: 0 0 9px 14px;
 		border-bottom: 1px solid var(--article-border);
-		font-size: 27px;
+		font-size: 23px;
 	}
 
 	.article-content::v-deep h2::after {
 		position: absolute;
-		top: 6px;
-		bottom: 16px;
+		top: 5px;
+		bottom: 13px;
 		left: 0;
 		width: 4px;
 		border-radius: 3px;
@@ -353,8 +395,24 @@
 	}
 
 	.article-content::v-deep h3 {
-		margin: 1.8em 0 .7em;
-		font-size: 21px;
+		margin: 1.5em 0 .45em;
+		padding-bottom: 5px;
+		font-size: 19px;
+	}
+
+	.article-content::v-deep h4 {
+		margin: 1.35em 0 .4em;
+		font-size: 17px;
+	}
+
+	.article-content::v-deep h5 {
+		margin: 1.25em 0 .35em;
+		font-size: 15.5px;
+	}
+
+	.article-content::v-deep h6 {
+		margin: 1.2em 0 .35em;
+		font-size: 14px;
 	}
 
 	.article-content::v-deep ul,
@@ -380,14 +438,83 @@
 		font-weight: 500;
 	}
 
+	.article-content::v-deep .article-inline-toc {
+		margin: 8px 0 32px;
+		padding: 8px 4px 12px;
+	}
+
+	.article-content::v-deep .article-inline-toc-title {
+		margin-bottom: 8px;
+		padding: 0;
+		border: 0;
+		color: #64748b;
+		font-size: 18px;
+		font-weight: 700;
+		line-height: 1.4;
+	}
+
+	.article-content::v-deep .article-inline-toc ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.article-content::v-deep .article-inline-toc li {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.article-content::v-deep .article-inline-toc a {
+		display: block;
+		overflow: hidden;
+		padding: 4px 8px 4px 32px;
+		border-radius: 6px;
+		color: #0891a2;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 1.55;
+		text-decoration: none;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		transition: color .2s ease, background .2s ease;
+	}
+
+	.article-content::v-deep .article-inline-toc a:hover {
+		background: rgba(14, 165, 183, .09);
+		color: var(--article-accent-dark);
+	}
+
+	.article-content::v-deep .article-inline-toc-level-1 a { padding-left: 56px; }
+	.article-content::v-deep .article-inline-toc-level-2 a { padding-left: 80px; }
+	.article-content::v-deep .article-inline-toc-level-3 a { padding-left: 104px; }
+	.article-content::v-deep .article-inline-toc-level-4 a { padding-left: 128px; }
+	.article-content::v-deep .article-inline-toc-level-5 a { padding-left: 152px; }
+
+	.article-content::v-deep .article-inline-toc-empty {
+		padding: 8px;
+		color: var(--article-muted);
+		font-size: 13px;
+	}
+
 	.article-content::v-deep blockquote {
-		margin: 24px 0;
-		padding: 16px 20px;
+		margin: 14px 0;
+		padding: 10px 20px;
 		border: 0;
 		border-left: 4px solid #2dd4bf;
 		border-radius: 0 10px 10px 0;
 		background: linear-gradient(90deg, rgba(45, 212, 191, .09), rgba(56, 189, 248, .03));
 		color: #5f6f82;
+		line-height: 1.75;
+	}
+
+	.article-content::v-deep blockquote p {
+		margin: 0;
+		line-height: 1.75;
+	}
+
+	.article-content::v-deep blockquote p + p {
+		margin-top: .6em;
 	}
 
 	.article-content::v-deep code:not([class*="language-"]) {
@@ -400,14 +527,14 @@
 	}
 
 	.article-content::v-deep img {
-		margin: 28px auto;
+		margin: 18px auto;
 		border: 1px solid rgba(148, 163, 184, .18);
 		border-radius: 12px;
 		box-shadow: 0 12px 30px rgba(15, 23, 42, .1);
 	}
 
 	.article-content::v-deep pre {
-		margin: 24px 0;
+		margin: 16px 0;
 		border: 1px solid rgba(148, 163, 184, .15);
 		border-radius: 12px;
 		box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
@@ -417,7 +544,7 @@
 		display: block;
 		overflow-x: auto;
 		width: 100%;
-		margin: 24px 0;
+		margin: 16px 0;
 		border: 1px solid var(--article-border);
 		border-radius: 10px;
 	}
@@ -432,7 +559,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 16px;
-		padding: 22px 8px 2px;
+		padding: 16px 8px 2px;
 		border-top: 1px solid var(--article-border);
 	}
 
@@ -504,17 +631,19 @@
 		.article-page { min-height: 480px; }
 		.article-page.is-loading .article-card { min-height: 440px; }
 		.article-card { padding: 0 18px 22px !important; border-radius: 12px !important; }
-		.article-header { padding: 31px 0 24px; }
-		.article-category { margin-bottom: 13px; }
-		.article-title { margin-bottom: 16px !important; font-size: 25px !important; }
+		.article-header { padding: 26px 0 16px; }
+		.article-category { margin: 0; }
+		.article-title { margin-bottom: 12px !important; font-size: 25px !important; }
 		.article-meta { gap: 7px 12px; }
 		.article-tools { width: 100%; justify-content: center; padding: 7px 0 0; border: 0; }
-		.article-content { padding: 26px 0 20px !important; }
+		.article-content { padding: 18px 0 20px !important; }
 		.article-content::v-deep p,
 		.article-content::v-deep ul,
 		.article-content::v-deep ol { font-size: 15px; line-height: 1.85; }
-		.article-content::v-deep h2 { padding-left: 13px; font-size: 23px; }
-		.article-content::v-deep h3 { font-size: 19px; }
+		.article-content::v-deep h1 { font-size: 23px; }
+		.article-content::v-deep h2 { padding-left: 12px; font-size: 21px; }
+		.article-content::v-deep h3 { font-size: 18px; }
+		.article-content::v-deep h4 { font-size: 16px; }
 		.article-footer { align-items: flex-start; flex-direction: column; padding-right: 0; padding-left: 0; }
 		.article-license, .article-comments { padding: 18px 16px !important; }
 	}

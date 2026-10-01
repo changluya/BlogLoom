@@ -64,7 +64,7 @@
 					// Smooth scroll duration.
 					scrollSmoothDuration: 420,
 					//到顶部导航条的距离
-					scrollSmoothOffset: -55,
+					scrollSmoothOffset: -78,
 					// Headings offset between the headings and the top of the document (this is meant for minor adjustments).
 					// Can also be used to account for scroll height discrepancies from the use of css scroll-padding-top
 					headingsOffset: -18
