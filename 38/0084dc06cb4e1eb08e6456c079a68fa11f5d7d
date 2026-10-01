@@ -1,0 +1,25 @@
+blog-view-ui/src/components/blog/BlogItem.vue
+  s_15f1b642e3d02f::t_cf93dae2acc5df 6-9,87-91
+  s_15f1b642e3d02f::t_880ea5845d200e 86
+  s_15f1b642e3d02f::t_97b16691d01bc4 97,101-102,104,107
+  s_15f1b642e3d02f::t_c6161180348fbc 92-96,98
+blog-view-ui/src/views/home/Home.vue
+  s_15f1b642e3d02f::t_7980976129cefc 17,193,249,290
+  s_15f1b642e3d02f::t_1f82c0ecc35733 252,277
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "380084dc06cb4e1eb08e6456c079a68fa11f5d7d",
+  "prompts": {},
+  "sessions": {
+    "s_15f1b642e3d02f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f59e-79c4-79a3-94e4-3d133b1a85e8",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
