@@ -28,6 +28,8 @@ public interface BlogColumnMapper {
 
 	int findMaxSort(Long parentId);
 
+	List<Long> findSiblingIds(@Param("parentId") Long parentId, @Param("excludeId") Long excludeId);
+
 	int insert(BlogColumn column);
 
 	int update(BlogColumn column);

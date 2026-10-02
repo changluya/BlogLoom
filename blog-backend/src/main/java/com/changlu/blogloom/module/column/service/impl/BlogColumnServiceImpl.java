@@ -70,13 +70,23 @@ public class BlogColumnServiceImpl implements BlogColumnService {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	@Override public void move(Long id, Long targetParentId, Integer targetSort) {
+	@Override public void move(Long id, Long targetParentId, Integer targetSort, Integer targetIndex) {
 		BlogColumn source = getById(id); long parentId = targetParentId == null ? 0L : targetParentId;
 		if (id.equals(parentId)) throw new BadRequestException("专栏不能移动到自身下面");
 		if (parentId != 0L) {
 			BlogColumn parent = getById(parentId);
 			if (parent.getParentId() != 0L) throw new BadRequestException("专栏最多支持两级");
 			if (columnMapper.countChildren(source.getId()) > 0) throw new BadRequestException("包含子专栏的专栏不能移动到第二级");
+		}
+		if (targetIndex != null) {
+			if (targetIndex < 0) throw new BadRequestException("目标位置不能小于 0");
+			List<Long> siblingIds = new ArrayList<>(columnMapper.findSiblingIds(parentId, id));
+			int index = Math.max(0, Math.min(targetIndex, siblingIds.size()));
+			siblingIds.add(index, id);
+			for (int i = 0; i < siblingIds.size(); i++) {
+				if (columnMapper.move(siblingIds.get(i), parentId, (i + 1) * 10) != 1) throw new PersistenceException("移动专栏失败");
+			}
+			return;
 		}
 		int sort = targetSort == null ? columnMapper.findMaxSort(parentId) + 10 : targetSort;
 		if (columnMapper.move(id, parentId, sort) != 1) throw new PersistenceException("移动专栏失败");

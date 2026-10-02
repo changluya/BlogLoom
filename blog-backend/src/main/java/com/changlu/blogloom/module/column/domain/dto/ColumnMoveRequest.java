@@ -8,4 +8,5 @@ import lombok.Setter;
 public class ColumnMoveRequest {
 	private Long targetParentId;
 	private Integer targetSort;
+	private Integer targetIndex;
 }

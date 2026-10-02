@@ -16,7 +16,7 @@ public interface BlogColumnService {
 	BlogColumn getPublicById(Long id);
 	BlogColumn save(BlogColumn column);
 	void update(BlogColumn column);
-	void move(Long id, Long targetParentId, Integer targetSort);
+	void move(Long id, Long targetParentId, Integer targetSort, Integer targetIndex);
 	void updatePublished(Long id, Boolean published);
 	void delete(Long id);
 	Map<String, String> uploadCover(Long id, MultipartFile file);

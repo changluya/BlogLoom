@@ -21,4 +21,4 @@ export function previewColumnImport(file, options) {
 }
 
 export const executeColumnImport = token => axios({url: `columns/import/${token}/execute`, method: 'POST', timeout: 120000})
-export const exportColumns = () => axios({url: 'columns/export', method: 'GET', responseType: 'blob', timeout: 60000})
+export const exportColumns = format => axios({url: 'columns/export', method: 'GET', params: {format}, responseType: 'blob', timeout: 60000})

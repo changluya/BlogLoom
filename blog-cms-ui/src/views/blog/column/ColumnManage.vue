@@ -12,7 +12,7 @@
 			<div class="toolbar-right">
 				<el-button type="primary" plain size="small" icon="el-icon-rank" @click="openQuickMove">快捷移动</el-button>
 				<el-button size="small" icon="el-icon-upload2" @click="openImport">批量导入专栏</el-button>
-				<el-button size="small" icon="el-icon-download" :loading="exporting" @click="exportZip">导出专栏备份</el-button>
+				<el-button size="small" icon="el-icon-download" :loading="exporting" @click="openExport">导出专栏备份</el-button>
 			</div>
 		</div>
 		<el-table ref="columnTable" class="column-tree-table" :data="flatColumns" row-key="id" :row-class-name="rowClassName">
@@ -38,6 +38,21 @@
 				</template>
 			</el-table-column>
 		</el-table>
+
+		<el-dialog title="导出专栏备份" :visible.sync="exportVisible" width="520px" :close-on-click-modal="!exporting">
+			<div class="export-description">只需保存专栏名称、层级和顺序时选择结构备份；需要连同专栏图片一起迁移时选择完整备份。</div>
+			<el-radio-group v-model="exportFormat" class="export-options">
+				<el-radio label="JSON" border @click.native="selectExportFormat('JSON')">
+					<span class="export-option-title"><i class="el-icon-document"></i> 仅备份专栏结构 <el-tag size="mini">推荐</el-tag></span>
+					<span class="export-option-tip">下载 columns.json，包含专栏名称、简介、层级和顺序，不包含图片文件。</span>
+				</el-radio>
+				<el-radio label="ZIP" border @click.native="selectExportFormat('ZIP')">
+					<span class="export-option-title"><i class="el-icon-folder-opened"></i> 完整备份（含专栏图片）</span>
+					<span class="export-option-tip">下载 columns.zip，包含专栏结构和 icons 图片目录，适合整体迁移或完整恢复。</span>
+				</el-radio>
+			</el-radio-group>
+			<span slot="footer"><el-button :disabled="exporting" @click="exportVisible=false">取消</el-button><el-button type="primary" :loading="exporting" @click="exportSelected">开始导出</el-button></span>
+		</el-dialog>
 
 		<el-dialog title="快捷移动专栏" :visible.sync="quickMoveVisible" width="560px" :close-on-click-modal="!quickMoveSaving" :close-on-press-escape="!quickMoveSaving">
 			<div class="quick-move-tip">
@@ -141,7 +156,7 @@ const emptyForm = () => ({id: null, parentId: 0, name: '', description: '', cove
 export default {
 	name: 'ColumnManage',
 	components: {PageTip},
-	data() { return {tree: [], draggingColumn: null, publishedUpdatingId: null, editVisible: false, moveVisible: false, quickMoveVisible: false, quickMoveSaving: false, quickMoveTree: [], quickDragParentId: 0, quickAutoScrollFrame: null, quickAutoScrollSpeed: 0, saving: false, form: emptyForm(), coverFile: null, coverPreview: '', moveTarget: null, moveForm: {targetParentId: 0, targetSort: 0}, importVisible: false, importStep: 'form', importFile: null, previewing: false, importing: false, exporting: false, preview: {}, importResult: {}, importForm: {conflictPolicy: 'SKIP', published: true}, rules: {name: [{required: true, message: '请输入专栏名称', trigger: 'blur'}]}} },
+	data() { return {tree: [], draggingColumn: null, publishedUpdatingId: null, editVisible: false, moveVisible: false, quickMoveVisible: false, quickMoveSaving: false, quickMoveTree: [], quickDragParentId: 0, quickAutoScrollFrame: null, quickAutoScrollSpeed: 0, saving: false, form: emptyForm(), coverFile: null, coverPreview: '', moveTarget: null, moveForm: {targetParentId: 0, targetSort: 0}, importVisible: false, importStep: 'form', importFile: null, previewing: false, importing: false, exportVisible: false, exportFormat: 'JSON', exporting: false, preview: {}, importResult: {}, importForm: {conflictPolicy: 'SKIP', published: true}, rules: {name: [{required: true, message: '请输入专栏名称', trigger: 'blur'}]}} },
 	computed: {
 		rootOptions() { return this.tree.filter(item => item.parentId === 0) },
 		moveParents() { return this.rootOptions.filter(item => !this.moveTarget || item.id !== this.moveTarget.id) },
@@ -195,29 +210,20 @@ export default {
 		async quickNodeDrop(draggingNode, dropNode, type) {
 			this.stopQuickAutoScroll()
 			const source = draggingNode.data
-			const oldParentId = this.quickDragParentId || 0
 			const targetParentId = type === 'inner' ? dropNode.data.id : (dropNode.data.parentId || 0)
 			source.parentId = targetParentId
 			this.quickMoveSaving = true
 			try {
 				const targetSiblings = targetParentId === 0 ? this.quickMoveTree : ((this.quickMoveTree.find(item => String(item.id) === String(targetParentId)) || {}).children || [])
-				await this.saveSiblingOrder(targetSiblings, targetParentId)
-				if (String(oldParentId) !== String(targetParentId)) {
-					const oldSiblings = oldParentId === 0 ? this.quickMoveTree : ((this.quickMoveTree.find(item => String(item.id) === String(oldParentId)) || {}).children || [])
-					await this.saveSiblingOrder(oldSiblings, oldParentId)
-				}
-				this.msgSuccess(String(oldParentId) === String(targetParentId) ? '排序成功' : '移动成功')
+				const targetIndex = targetSiblings.findIndex(item => String(item.id) === String(source.id))
+				if (targetIndex < 0) throw new Error('未找到专栏的目标位置')
+				await moveColumn(source.id, {targetParentId, targetIndex})
+				this.msgSuccess(String(this.quickDragParentId || 0) === String(targetParentId) ? '排序成功' : '移动成功')
 				await this.loadTreeAfterQuickMove()
 			} catch (error) {
 				await this.loadTreeAfterQuickMove()
 			} finally {
 				this.quickMoveSaving = false
-			}
-		},
-		async saveSiblingOrder(siblings, parentId) {
-			for (let index = 0; index < siblings.length; index += 1) {
-				siblings[index].parentId = parentId
-				await moveColumn(siblings[index].id, {targetParentId: parentId, targetSort: (index + 1) * 10})
 			}
 		},
 		async loadTreeAfterQuickMove() {
@@ -267,7 +273,6 @@ export default {
 			if (!this.canDrop(source, target, mode)) return
 			// 一级行中部为放入该一级；上下边缘为根级排序；二级行前后为其所属父专栏内排序。
 			const targetParentId = mode === 'inside' ? target.id : target.parentId
-			const sourceParentId = source.parentId
 			// 后端的 Long 在部分环境中可能被序列化为字符串，统一按字符串比较，避免二级同级列表匹配不到。
 			const sameId = (left, right) => String(left) === String(right)
 			const targetSiblings = this.flatColumns.filter(item => sameId(item.parentId, targetParentId) && !sameId(item.id, source.id))
@@ -277,18 +282,8 @@ export default {
 			targetSiblings.splice(targetIndex, 0, {...source, parentId: targetParentId})
 
 			try {
-				// 排序请求顺序提交，避免并发更新后重新查询时出现二级专栏顺序未生效或抖动。
-				for (let index = 0; index < targetSiblings.length; index += 1) {
-					await moveColumn(targetSiblings[index].id, {targetParentId, targetSort: (index + 1) * 10})
-				}
-				// 跨层级移动后，把原层级剩余专栏的排序值重新压紧。
-				if (!sameId(sourceParentId, targetParentId)) {
-					const sourceSiblings = this.flatColumns.filter(item => sameId(item.parentId, sourceParentId) && !sameId(item.id, source.id))
-					for (let index = 0; index < sourceSiblings.length; index += 1) {
-						await moveColumn(sourceSiblings[index].id, {targetParentId: sourceParentId, targetSort: (index + 1) * 10})
-					}
-				}
-				this.msgSuccess(sameId(sourceParentId, targetParentId) ? '排序成功' : '移动成功')
+				await moveColumn(source.id, {targetParentId, targetIndex})
+				this.msgSuccess(sameId(source.parentId, targetParentId) ? '排序成功' : '移动成功')
 			} finally {
 				this.load()
 			}
@@ -321,15 +316,19 @@ export default {
 			this.importing = true
 			executeColumnImport(this.preview.token).then(res => { this.importResult = res.data || {}; this.importStep = 'result'; this.load() }).finally(() => { this.importing = false })
 		},
-		exportZip() {
+		openExport() { this.exportFormat = 'JSON'; this.exportVisible = true },
+		selectExportFormat(format) { this.exportFormat = format },
+		exportSelected() {
+			const format = this.exportFormat === 'ZIP' ? 'ZIP' : 'JSON'
 			this.exporting = true
-			exportColumns().then(response => {
+			exportColumns(format).then(response => {
 				const url = window.URL.createObjectURL(response.data)
 				const link = document.createElement('a')
 				link.href = url
-				link.download = 'columns.zip'
+				link.download = format === 'ZIP' ? 'columns.zip' : 'columns.json'
 				document.body.appendChild(link); link.click(); document.body.removeChild(link)
 				window.URL.revokeObjectURL(url)
+				this.exportVisible = false
 			}).finally(() => { this.exporting = false })
 		},
 		downloadTemplate() {
@@ -350,6 +349,15 @@ export default {
 .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .toolbar-left { display: flex; align-items: center; gap: 8px; }
 .toolbar-right { display: flex; gap: 8px; }
+.export-description { margin-bottom:14px; color:#606266; font-size:13px; }
+.export-options { display:flex; width:100%; flex-direction:column; gap:12px; }
+.export-options ::v-deep .el-radio { display:flex; box-sizing:border-box; width:100%; height:88px; margin:0 !important; padding:14px 16px; align-items:flex-start; white-space:normal; }
+.export-options ::v-deep .el-radio__input { margin-top:3px; }
+.export-options ::v-deep .el-radio__label { display:flex; min-width:0; flex:1; flex-direction:column; padding-left:10px; }
+.export-option-title { display:flex; height:22px; align-items:center; color:#303133; font-weight:600; line-height:22px; }
+.export-option-title i { width:18px; margin-right:4px; color:#409eff; font-size:16px; text-align:center; }
+.export-option-title .el-tag { margin-left:6px; font-weight:400; }
+.export-option-tip { margin-top:4px; color:#909399; font-size:12px; line-height:18px; }
 .column-tree-table ::v-deep th.el-table__cell { height:44px; background:#f7f8fa; color:#909399; font-weight:500; }
 .column-tree-table ::v-deep .el-table__row { height:76px; transition:background-color .2s, opacity .2s, box-shadow .2s; }
 .column-tree-table ::v-deep .column-drag-row { cursor:grab; }
