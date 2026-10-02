@@ -16,4 +16,5 @@ public interface SiteSettingService {
 
 	void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds);
 	Map<String, String> uploadImage(Integer id, MultipartFile file);
+	Map<String, String> uploadImage(MultipartFile file);
 }

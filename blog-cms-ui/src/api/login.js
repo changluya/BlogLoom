@@ -1,11 +1,9 @@
 import axios from '@/util/request'
 
-export function login(loginForm) {
+export function login({username, password}) {
 	return axios({
 		url: 'login',
 		method: 'POST',
-		data: {
-			...loginForm
-		}
+		data: {username, password}
 	})
 }

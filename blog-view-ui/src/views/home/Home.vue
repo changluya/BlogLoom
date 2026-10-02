@@ -190,7 +190,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 16px;
-		padding: 12px 16px;
+		padding: 9px 16px;
 		border-bottom: 1px solid #eef1f5;
 	}
 

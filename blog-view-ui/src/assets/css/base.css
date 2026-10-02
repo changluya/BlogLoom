@@ -11,6 +11,11 @@ body,
     background-repeat: no-repeat;
 }
 
+html,
+body {
+    overscroll-behavior-y: none;
+}
+
 ::selection {
     color: #ffffff !important;
     background-color: #383838 !important;

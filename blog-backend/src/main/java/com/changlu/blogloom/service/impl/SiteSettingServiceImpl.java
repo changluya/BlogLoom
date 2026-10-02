@@ -111,10 +111,15 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 				continue;
 			}
 			switch (s.getType()) {
-				case 1:
+			case 1:
 					if (SiteSettingConstants.COPYRIGHT.equals(s.getNameEn())) {
 						Copyright copyright = JacksonUtils.readValue(s.getValue(), Copyright.class);
 						siteInfo.put(s.getNameEn(), copyright);
+					} else if (SiteSettingConstants.HERO_CONFIG.equals(s.getNameEn())) {
+						Map heroConfig = JacksonUtils.readValue(s.getValue(), Map.class);
+						if (heroConfig != null) {
+							siteInfo.put(s.getNameEn(), heroConfig);
+						}
 					} else {
 						siteInfo.put(s.getNameEn(), s.getValue());
 					}
@@ -127,8 +132,14 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 						case SiteSettingConstants.NAME:
 							introduction.setName(s.getValue());
 							break;
+						case SiteSettingConstants.PROFILE_LABEL:
+							introduction.setProfileLabel(s.getValue());
+							break;
 						case SiteSettingConstants.GITHUB:
 							introduction.setGithub(normalizeOptionalLink(s.getValue()));
+							break;
+						case SiteSettingConstants.CSDN:
+							introduction.setCsdn(normalizeOptionalLink(s.getValue()));
 							break;
 						case SiteSettingConstants.TELEGRAM:
 							introduction.setTelegram(normalizeOptionalLink(s.getValue()));
@@ -217,6 +228,14 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		setting.setValue(url);
 		updateOneSiteSetting(setting);
 		deleteSiteInfoCache();
+		Map<String, String> result = new LinkedHashMap<>();
+		result.put("url", url);
+		return result;
+	}
+
+	@Override
+	public Map<String, String> uploadImage(MultipartFile file) {
+		String url = siteImageStorageService.save(file);
 		Map<String, String> result = new LinkedHashMap<>();
 		result.put("url", url);
 		return result;

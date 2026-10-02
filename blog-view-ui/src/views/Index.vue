@@ -1,7 +1,7 @@
 <template>
-	<div class="site" :class="{'masked-site': showMaskedBackground, 'home-site': $route.name === 'home'}">
+	<div class="site" :class="{'masked-site': showMaskedBackground, 'home-site': $route.name === 'home', 'blog-site': $route.name === 'blog'}">
 		<!-- 固定在视口的首图；正文向上滚动时由 .main 的浅色遮罩覆盖 -->
-		<div v-if="showMaskedBackground" class="home-hero-background m-mobile-hide"></div>
+		<div v-if="showMaskedBackground" class="home-hero-background m-mobile-hide" :style="heroBackgroundStyle"></div>
 		<!--顶部导航-->
 		<Nav :blogName="siteInfo.blogName"/>
 		<!--首页大图 只在首页且pc端时显示-->
@@ -25,7 +25,7 @@
 							</keep-alive>
 						</div>
 						<!--右侧-->
-						<div class="three wide column m-mobile-hide">
+						<div class="three wide column m-mobile-hide" :class="{'article-toc-column': $route.name === 'blog'}">
 							<!--文章详情页右栏仅显示目录，其他页面显示推荐、分类和标签-->
 							<Tocbot v-if="$route.name === 'blog'"/>
 							<template v-else>
@@ -92,6 +92,11 @@
 		},
 		computed: {
 			...mapState(['focusMode', 'introduction']),
+			heroBackgroundStyle() {
+				const heroConfig = this.siteInfo && this.siteInfo.heroConfig
+				const image = heroConfig && heroConfig.backgroundImage || '/img/banner/home-banner.png'
+				return {backgroundImage: `url(${JSON.stringify(image)})`}
+			},
 			// 需要固定首图 + 浅色遮罩的页面（与首页一致的滚动遮罩效果）
 			showMaskedBackground() {
 				return ['home', 'archives', 'moments', 'friends', 'about', 'category', 'tag', 'blog']
@@ -154,7 +159,12 @@
 		isolation: isolate;
 		display: flex;
 		min-height: 100vh; /* 没有元素时，也把页面撑开至100% */
+		min-height: 100dvh;
 		flex-direction: column;
+	}
+
+	.site > footer {
+		flex-shrink: 0;
 	}
 
 	/* 首图始终固定在视口，不随鼠标或页面滚动 */
@@ -162,7 +172,9 @@
 		position: fixed;
 		inset: 0;
 		z-index: 0;
-		background: url('/img/banner/home-banner.png') center center / cover no-repeat;
+		background-position: center center;
+		background-size: cover;
+		background-repeat: no-repeat;
 		pointer-events: none;
 	}
 
@@ -217,6 +229,21 @@
 
 	.ui.grid .ten.column {
 		padding-top: 0;
+	}
+
+	/* 仅微调文章详情页：正文略宽，目录保持可读宽度并轻微右移。 */
+	@media (min-width: 1200px) {
+		.blog-site .main .ui.stackable.grid > .ten.column {
+			width: 64% !important;
+		}
+
+		.blog-site .main .ui.stackable.grid > .article-toc-column {
+			width: 17.25% !important;
+		}
+
+		.ui.grid .article-toc-column {
+			transform: translateX(8px);
+		}
 	}
 
 	/* 首页中栏面板与行底部对齐，避免面板下方露出空隙 */

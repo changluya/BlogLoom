@@ -1,12 +1,14 @@
 <template>
 	<div>
-		<div class="ui segments m-box">
+		<div class="ui segments m-box introduction-shell">
 			<div class="ui card introduction-card">
+				<div class="introduction-cover" :style="coverStyle" aria-hidden="true"></div>
 				<router-link to="/home" class="image introduction-avatar" title="返回首页">
 					<img :src="introduction.avatar" alt="返回首页">
 				</router-link>
 				<div class="content" align="center">
 					<div class="header">{{ introduction.name }}</div>
+					<div class="introduction-role"><i class="code icon"></i>{{ introduction.profileLabel || 'Java 开发者' }}</div>
 					<div class="blog-statistics">
 						<span><strong>{{ formatCount(introduction.totalViews) }}</strong><em>总访问量</em></span>
 						<span><strong>{{ formatCount(introduction.publishedBlogCount) }}</strong><em>原创</em></span>
@@ -23,6 +25,10 @@
 						<svg style="width: 1em!important;height: 1em!important;" t="1588657335874" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6878" width="200" height="200">
 							<path d="M0 520.886c0-69.368 13.51-135.697 40.498-199.02 26.987-63.323 63.322-117.826 109.006-163.51 45.65-45.65 100.154-81.985 163.51-109.006A502.289 502.289 0 0 1 512 8.92c69.335 0 135.663 13.477 198.986 40.497 63.356 26.988 117.86 63.323 163.51 109.007 45.684 45.65 82.02 100.154 109.006 163.51A502.289 502.289 0 0 1 1024 520.852c0 111.318-32.504 211.472-97.511 300.494-64.975 88.989-148.48 150.825-250.484 185.476-5.351 0-9.348-0.99-11.99-2.973-2.676-1.982-4.196-3.997-4.526-6.012a59.458 59.458 0 0 1-0.495-8.984 7.663 7.663 0 0 1-0.991-3.006v-128.99c0-40.63-14.336-75.314-43.008-103.986 76.667-13.345 134.011-41.819 171.999-85.487 37.987-43.669 57.013-96.52 57.013-158.522 0-58.005-18.663-108.346-56.022-150.99 13.345-42.678 11-87.668-6.97-135.003-18.697-1.322-39.011 1.85-61.01 9.513-22 7.663-38.318 14.831-49.02 21.47-10.637 6.673-20.316 13.016-28.97 19.027-38.68-10.669-81.854-16.02-129.486-16.02-47.7 0-90.509 5.351-128.529 16.02-7.333-5.35-15.855-11.164-25.5-17.507-9.68-6.342-26.493-14.005-50.507-22.99-23.982-9.018-45.65-12.85-65.008-11.495-18.663 47.996-20.645 93.646-5.979 136.984-36.665 42.678-54.998 92.986-54.998 150.99 0 62.002 18.663 114.689 55.99 157.994 37.326 43.339 94.67 72.01 171.998 86.016a142.303 142.303 0 0 0-39.969 70.029c-56.683 13.972-96.355 3.963-119.015-30.06-42.017-61.308-79.674-83.307-113.003-65.965-4.69 4.657-3.997 9.48 1.982 14.501 6.012 4.988 14.996 11.66 27.02 19.985 11.99 8.357 20.976 17.507 26.987 27.515 0.661 1.322 2.51 6.177 5.517 14.502a831.917 831.917 0 0 0 8.985 23.981c2.973 7.663 8.654 16.186 17.011 25.5 8.324 9.349 18.003 17.178 29.003 23.52 11 6.309 26.161 11 45.485 14.006 19.324 2.972 41.323 3.138 65.998 0.495v100.484c0 0.991-0.165 2.643-0.495 5.021-0.33 2.312-0.991 3.964-1.982 4.955-0.991 1.024-2.345 2.015-4.03 3.039a12.52 12.52 0 0 1-6.474 1.486c-2.676 0-6.012-0.33-10.009-0.99-101.343-35.345-183.825-97.182-247.51-185.51C31.842 731.037 0 631.577 0 520.92z" p-id="6879"></path>
 						</svg>
+					</a>
+					<a :href="introduction.csdn" v-if="hasLink(introduction.csdn)" target="_blank" rel="noopener noreferrer"
+					   class="ui circular icon button csdn-button" title="CSDN">
+						<img class="csdn-icon" src="/img/csdn-logo.svg" alt="CSDN">
 					</a>
 					<a :href="introduction.telegram" v-if="hasLink(introduction.telegram)" target="_blank" rel="noopener noreferrer" class="ui circular icon button">
 						<svg style="width: 1em!important;height: 1em!important;" t="1643337487076" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4356" width="1024" height="1024"><path d="M679.424 746.862l84.005-395.996c7.424-34.852-12.581-48.567-35.438-40.009L234.277 501.138c-33.72 13.13-33.134 32-5.706 40.558l126.282 39.424 293.156-184.576c13.714-9.143 26.295-3.986 16.018 5.157L426.898 615.973l-9.143 130.304c13.13 0 18.871-5.706 25.71-12.581l61.696-59.429 128 94.282c23.442 13.129 40.01 6.29 46.3-21.724zM1024 512c0 282.843-229.157 512-512 512S0 794.843 0 512 229.157 0 512 0s512 229.157 512 512z" fill="#1296DB" p-id="4357"></path></svg>
@@ -59,7 +65,7 @@
 						</svg>
 					</a>
 				</div>
-				<div>
+				<div class="introduction-details">
 					<el-collapse accordion>
 						<el-collapse-item :title="item.title" :name="index" v-if="item.title" v-for="(item,index) in introduction.favorites" :key="index">
 							<div>{{ item.content }}</div>
@@ -80,7 +86,12 @@
 			name: "Introduction",
 			components: {UserColumns},
 		computed: {
-			...mapState(['introduction'])
+			...mapState(['introduction', 'siteInfo']),
+			coverStyle() {
+				const heroConfig = this.siteInfo && this.siteInfo.heroConfig
+				const image = heroConfig && heroConfig.backgroundImage || '/img/banner/home-banner.png'
+				return {backgroundImage: `linear-gradient(180deg, rgba(219,238,255,.02), rgba(31,45,61,.06)), url(${JSON.stringify(image)})`}
+			}
 		},
 		methods: {
 			formatCount(value) {
@@ -103,49 +114,118 @@
 </script>
 
 <style scoped>
+	.introduction-shell {
+		overflow: visible;
+		margin: 0 0 16px !important;
+		border: 0 !important;
+		border-radius: 18px !important;
+		background: transparent !important;
+		box-shadow: none !important;
+	}
+
 	.introduction-card {
+		position: relative;
+		overflow: hidden;
 		width: 100% !important;
-		background: #fff !important;
+		margin: 0 !important;
+		border: 0 !important;
+		border-radius: 18px !important;
+		background: transparent !important;
+		box-shadow: 0 14px 34px rgba(31, 45, 61, .12), 0 3px 10px rgba(31, 45, 61, .06) !important;
+	}
+
+	.introduction-cover {
+		height: 148px;
+		margin-bottom: -18px;
+		border-radius: 18px 18px 0 0;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: cover;
 	}
 
 	.introduction-card .introduction-avatar {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 140px;
-		padding: 16px 12px 8px;
+		position: absolute;
+		top: 87px;
+		left: 50%;
+		z-index: 3;
+		display: block;
+		width: 106px;
+		height: 106px;
 		box-sizing: border-box;
-		overflow: hidden;
+		padding: 6px;
+		transform: translateX(-50%);
+		border-radius: 50%;
 		background: #fff !important;
+		box-shadow: 0 9px 26px rgba(31,45,61,.18), 0 2px 8px rgba(31,45,61,.08);
 		cursor: pointer;
 	}
 
 	.introduction-card .introduction-avatar img {
-		width: 112px;
-		height: 112px;
-		object-fit: contain;
-		border: 3px solid #fff;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border: 0;
 		border-radius: 50%;
-		background: #fff;
-		box-shadow: 0 5px 16px rgba(31,45,61,.14);
-		transition: transform .2s, box-shadow .2s;
+		background: #eef2f6;
+		transition: transform .22s ease, box-shadow .22s ease;
 	}
 
 	.introduction-card .introduction-avatar:hover img {
-		transform: translateY(-2px) scale(1.03);
-		box-shadow: 0 8px 20px rgba(31,45,61,.2);
+		transform: translateY(-2px) scale(1.025);
+		box-shadow: 0 7px 18px rgba(31,45,61,.14);
 	}
 
-	.introduction-card > .content {
-		padding: 6px 12px 10px !important;
+	.introduction-card > .content:not(.extra) {
+		position: relative;
+		z-index: 1;
+		padding: 68px 14px 12px !important;
 		border-top: 0 !important;
-		background: #fff !important;
+		border-radius: 18px 18px 0 0 !important;
+		background: rgba(255, 255, 255, .96) !important;
+		text-align: center;
+		backdrop-filter: blur(8px);
 	}
-	.introduction-card > .content .header { font-size: 16px !important; line-height: 1.25; }
+
+	.introduction-card > .content .header {
+		color: #273244 !important;
+		font-size: 17px !important;
+		font-weight: 700 !important;
+		line-height: 1.3;
+	}
+
+	.introduction-role {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		margin-top: 9px;
+		padding: 4px 10px;
+		border-radius: 999px;
+		background: linear-gradient(135deg, #edf6ff, #f4f8ff);
+		color: #6f83a0;
+		font-size: 11px;
+		font-weight: 500;
+		line-height: 1.3;
+	}
+
+	.introduction-role .icon {
+		margin: 0 !important;
+		color: #2388ed;
+		font-size: 10px;
+	}
+
+	/* 覆盖 Semantic UI .card > .image 的默认尺寸与背景。 */
+	.introduction-card > .introduction-avatar.image {
+		display: block;
+		margin: 0;
+	}
+
 	.blog-statistics {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		margin-top: 10px;
+		margin: 14px 4px 0;
+		padding-bottom: 12px;
+		border-bottom: 1px solid rgba(148, 163, 184, .2);
 		color: #7b8491;
 		font-size: 12px;
 		line-height: 1.4;
@@ -163,18 +243,18 @@
 		bottom: 4px;
 		left: 0;
 		width: 1px;
-		background: #e5e7eb;
+		background: rgba(148, 163, 184, .28);
 		content: '';
 	}
 
 	.blog-statistics strong {
 		display: block;
+		overflow: hidden;
 		color: #303846;
 		font-size: 14px;
-		font-weight: 600;
-		white-space: nowrap;
-		overflow: hidden;
+		font-weight: 650;
 		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	.blog-statistics em {
@@ -183,19 +263,77 @@
 		font-style: normal;
 		white-space: nowrap;
 	}
-	.introduction-card > .extra.content { padding: 10px 8px !important; background: #fff !important; }
-	.introduction-card .m-margin-top { margin-top: 8px !important; }
 
-	.ui.circular.icon.button {
-		width: 34px;
-		height: 34px;
-		padding: 9px !important;
+	.introduction-card > .extra.content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 6px;
+		padding: 10px 8px 14px !important;
+		border-top: 0 !important;
+		border-radius: 0 !important;
+		background: rgba(255, 255, 255, .96) !important;
+		text-align: center;
+	}
+
+	.introduction-details {
+		overflow: hidden;
+		border-radius: 0 0 18px 18px;
+		background: rgba(255, 255, 255, .96);
+	}
+
+	.introduction-details ::v-deep .el-collapse {
+		border: 0;
+		background: transparent;
+	}
+
+	.introduction-details ::v-deep .el-collapse-item__header,
+	.introduction-details ::v-deep .el-collapse-item__wrap {
+		background: transparent;
+	}
+
+	.introduction-details ::v-deep .el-collapse-item:last-child .el-collapse-item__header,
+	.introduction-details ::v-deep .el-collapse-item:last-child .el-collapse-item__wrap {
+		border-bottom: 0;
+	}
+
+	.introduction-card .m-margin-top { margin-top: 10px !important; }
+
+	.introduction-card .ui.circular.icon.button {
+		display: inline-flex !important;
+		width: 36px;
+		height: 36px;
+		align-items: center;
+		justify-content: center;
+		margin: 0 !important;
+		padding: 0 !important;
+		vertical-align: middle;
+		border: 0 !important;
+		background: linear-gradient(145deg, #f2f6fa, #e8f2f9) !important;
+		color: #526274 !important;
+		box-shadow: 0 2px 7px rgba(31, 45, 61, .07) !important;
+		transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+	}
+
+	.introduction-card .ui.circular.icon.button:hover {
+		transform: translateY(-2px);
+		background: #e4f2fa !important;
+		box-shadow: 0 6px 14px rgba(31, 45, 61, .11) !important;
+	}
+
+	.introduction-card .csdn-button .csdn-icon {
+		display: block;
+		width: 20px;
+		height: 20px;
+		border-radius: 5px;
+		object-fit: cover;
 	}
 
 	.signature {
 		width: 100%;
-		padding: 0 10px;
 		box-sizing: border-box;
+		padding: 0 8px;
 	}
 
 	.signature-line {
@@ -203,9 +341,9 @@
 		color: #556070;
 		font-size: 13px;
 		line-height: 1.55;
+		overflow-wrap: anywhere;
 		white-space: normal;
 		word-break: break-word;
-		overflow-wrap: anywhere;
 	}
 
 	.signature-line + .signature-line {
@@ -214,6 +352,14 @@
 		font-size: 12px;
 		font-style: italic;
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.introduction-card .introduction-avatar img,
+		.introduction-card .ui.circular.icon.button {
+			transition: none;
+		}
+	}
+
 </style>
 
 <style>

@@ -11,7 +11,10 @@ public class SiteSettingConstants {
 	public static final String FAVICON = "favicon";
 	public static final String AVATAR = "avatar";
 	public static final String NAME = "name";
+	public static final String PROFILE_LABEL = "profileLabel";
+	public static final String HERO_CONFIG = "heroConfig";
 	public static final String GITHUB = "github";
+	public static final String CSDN = "csdn";
 	public static final String TELEGRAM = "telegram";
 	public static final String QQ = "qq";
 	public static final String BILIBILI = "bilibili";

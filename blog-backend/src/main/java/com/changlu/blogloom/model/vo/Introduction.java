@@ -20,7 +20,9 @@ import java.util.List;
 public class Introduction {
 	private String avatar;
 	private String name;
+	private String profileLabel;
 	private String github;
+	private String csdn;
 	private String telegram;
 	private String qq;
 	private String bilibili;

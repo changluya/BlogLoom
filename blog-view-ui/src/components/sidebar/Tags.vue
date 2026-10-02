@@ -1,7 +1,7 @@
 <template>
 	<!--标签云-->
 	<div class="ui segments m-box">
-		<div class="ui secondary segment"><i class="tags icon"></i>标签云<span v-if="tagList.length" class="segment-count">{{ tagList.length }}</span></div>
+		<div class="ui secondary segment sidebar-title"><img src="/img/sidebar/tags.svg" class="sidebar-title-icon" alt=""><span>标签云</span><span v-if="tagList.length" class="segment-count">{{ tagList.length }}</span></div>
 		<div class="ui yellow segment m-padding-small content-segment">
 			<router-link v-if="tagList.length" :to="`/tag/${tag.name}`" class="ui label m-text-500" :class="tag.color"
 			             :style="tag.fontStyle" v-for="tag in sizedTags" :key="tag.id || tag.name">
@@ -48,6 +48,9 @@
 	.secondary.segment {
 		padding: 10px;
 	}
+
+	.sidebar-title { display: flex; align-items: center; gap: 7px; }
+	.sidebar-title-icon { display: block; width: 18px; height: 18px; flex: 0 0 18px; }
 
 	.segment-count {
 		margin-left: 6px;

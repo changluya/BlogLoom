@@ -24,6 +24,12 @@ export function uploadSiteImage(id, file) {
 	return axios({url: `siteSettings/${id}/image`, method: 'POST', data})
 }
 
+export function uploadSiteSettingImage(file) {
+	const data = new FormData()
+	data.append('file', file)
+	return axios({url: 'siteSettings/image', method: 'POST', data})
+}
+
 export function getWebTitleSuffix() {
 	return axios({
 		url: 'webTitleSuffix',

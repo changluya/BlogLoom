@@ -146,17 +146,8 @@ public class ColumnArchiveServiceImpl implements ColumnArchiveService {
 
 	@Override
 	public void exportAll(HttpServletResponse response) throws IOException {
-		List<ColumnTreeVo> tree = columnService.getAdminTree();
-		List<ColumnImportItem> exportItems = new ArrayList<>();
 		Map<String, byte[]> icons = new LinkedHashMap<>();
-		Set<String> usedNames = new HashSet<>();
-		for (ColumnTreeVo root : tree) {
-			ColumnImportItem rootItem = toExportItem(root, icons, usedNames);
-			if (root.getChildren() != null) {
-				for (ColumnTreeVo child : root.getChildren()) rootItem.getChildren().add(toExportItem(child, icons, usedNames));
-			}
-			exportItems.add(rootItem);
-		}
+		List<ColumnImportItem> exportItems = buildExportItems(icons);
 		response.setContentType("application/zip");
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		response.setHeader("Content-Disposition", "attachment; filename=columns.zip");
@@ -173,6 +164,28 @@ public class ColumnArchiveServiceImpl implements ColumnArchiveService {
 			}
 			zip.finish();
 		}
+	}
+
+	@Override
+	public void exportJson(HttpServletResponse response) throws IOException {
+		List<ColumnImportItem> exportItems = buildExportItems(new LinkedHashMap<>());
+		response.setContentType("application/json;charset=UTF-8");
+		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+		response.setHeader("Content-Disposition", "attachment; filename=" + JSON_NAME);
+		response.getOutputStream().write(JacksonUtils.writeValueAsString(exportItems).getBytes(StandardCharsets.UTF_8));
+	}
+
+	private List<ColumnImportItem> buildExportItems(Map<String, byte[]> icons) {
+		List<ColumnImportItem> exportItems = new ArrayList<>();
+		Set<String> usedNames = new HashSet<>();
+		for (ColumnTreeVo root : columnService.getAdminTree()) {
+			ColumnImportItem rootItem = toExportItem(root, icons, usedNames);
+			if (root.getChildren() != null) {
+				for (ColumnTreeVo child : root.getChildren()) rootItem.getChildren().add(toExportItem(child, icons, usedNames));
+			}
+			exportItems.add(rootItem);
+		}
+		return exportItems;
 	}
 
 	private ScanResult scan(Path path) throws IOException {

@@ -53,6 +53,12 @@
         select coalesce(max(sort),0) from blog_column where parent_id=#{parentId}
     </select>
 
+    <!--按当前顺序查询同级专栏，用于单次拖拽请求后在事务内重排-->
+    <select id="findSiblingIds" resultType="long">
+        select id from blog_column where parent_id=#{parentId}
+        and (#{excludeId} is null or id != #{excludeId}) order by sort,id
+    </select>
+
     <!--新增专栏-->
     <insert id="insert" parameterType="com.changlu.blogloom.module.column.domain.entity.BlogColumn"
             useGeneratedKeys="true" keyProperty="id">

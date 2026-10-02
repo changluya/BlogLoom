@@ -12,4 +12,5 @@ public interface ColumnArchiveService {
 	ColumnImportPreview preview(MultipartFile file, ColumnImportOptions options);
 	Map<String, Object> execute(String token);
 	void exportAll(HttpServletResponse response) throws IOException;
+	void exportJson(HttpServletResponse response) throws IOException;
 }

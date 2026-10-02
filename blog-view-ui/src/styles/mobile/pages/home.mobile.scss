@@ -5,8 +5,8 @@
 @include mobile {
   .home-toolbar {
     flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px 12px;
+    gap: 8px;
+    padding: 7px 12px;
   }
 
   .home-filters {
@@ -16,7 +16,7 @@
   .filter-tab {
     flex: 1;
     justify-content: center;
-    padding: 7px 10px;
+    padding: 5px 10px;
   }
 
   .home-search {

@@ -64,7 +64,7 @@
 					// Smooth scroll duration.
 					scrollSmoothDuration: 420,
 					//到顶部导航条的距离
-					scrollSmoothOffset: -55,
+					scrollSmoothOffset: -78,
 					// Headings offset between the headings and the top of the document (this is meant for minor adjustments).
 					// Can also be used to account for scroll height discrepancies from the use of css scroll-padding-top
 					headingsOffset: -18
@@ -140,8 +140,9 @@
 		overflow-x: hidden;
 		overflow-y: auto;
 		box-sizing: border-box;
-		height: min(440px, calc(100vh - 170px));
-		min-height: 240px;
+		height: auto;
+		max-height: min(320px, calc(100vh - 190px));
+		min-height: 0;
 		padding-right: 8px !important;
 		padding-top: 12px !important;
 		padding-bottom: 12px !important;
@@ -149,11 +150,12 @@
 		overscroll-behavior: contain;
 		-webkit-overflow-scrolling: touch;
 		opacity: 1;
-		transition: height .3s ease, min-height .3s ease, padding .3s ease, opacity .2s ease, border-width .3s ease;
+		transition: max-height .3s ease, padding .3s ease, opacity .2s ease, border-width .3s ease;
 	}
 
 	.m-toc .toc-content.is-panel-collapsed {
 		height: 0;
+		max-height: 0;
 		min-height: 0;
 		padding-top: 0 !important;
 		padding-bottom: 0 !important;

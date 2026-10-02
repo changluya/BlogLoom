@@ -7,6 +7,7 @@ import com.changlu.blogloom.module.column.service.BlogColumnService;
 import com.changlu.blogloom.module.column.service.ColumnCoverStorageService;
 import com.changlu.blogloom.module.column.service.impl.ColumnArchiveServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -27,35 +28,13 @@ import static org.mockito.Mockito.when;
 class ColumnArchiveExportTest {
 
 	@Test
+	@DisplayName("完整 ZIP 导出：生成 columns/columns.json 并携带 icons 图标文件")
 	@SuppressWarnings("unchecked")
 	void exportUsesImportStructure() throws Exception {
 		Path upload = Files.createTempDirectory("column-export-");
 		System.setProperty("user.dir.upload", upload.toString());
 		try {
-			Path iconDir = upload.resolve("blogColumn").resolve("1");
-			Files.createDirectories(iconDir);
-			Files.write(iconDir.resolve("logo.png"), new byte[]{(byte) 0x89, 'P', 'N', 'G'});
-
-			ColumnTreeVo root = new ColumnTreeVo();
-			root.setId(1L);
-			root.setParentId(0L);
-			root.setName("根专栏");
-			root.setDescription("根专栏简介");
-			root.setSort(10);
-			root.setCover("http://localhost:8090/static/blogColumn/1/logo.png");
-			ColumnTreeVo child = new ColumnTreeVo();
-			child.setId(2L);
-			child.setParentId(1L);
-			child.setName("子专栏");
-			child.setDescription("子专栏简介");
-			child.setSort(10);
-			child.setCover("");
-			root.getChildren().add(child);
-
-			BlogColumnService columnService = mock(BlogColumnService.class);
-			when(columnService.getAdminTree()).thenReturn(Collections.singletonList(root));
-			ColumnArchiveServiceImpl service = new ColumnArchiveServiceImpl(columnService, mock(BlogColumnMapper.class),
-					mock(ColumnCoverStorageService.class), new UploadProperties());
+			ColumnArchiveServiceImpl service = createService(upload);
 
 			MockHttpServletResponse response = new MockHttpServletResponse();
 			service.exportAll(response);
@@ -85,6 +64,60 @@ class ColumnArchiveExportTest {
 		} finally {
 			System.clearProperty("user.dir.upload");
 		}
+	}
+
+	@Test
+	@DisplayName("单独 JSON 导出：直接下载 columns.json 并保留完整父子结构")
+	@SuppressWarnings("unchecked")
+	void exportJsonUsesSameColumnStructure() throws Exception {
+		Path upload = Files.createTempDirectory("column-json-export-");
+		System.setProperty("user.dir.upload", upload.toString());
+		try {
+			ColumnArchiveServiceImpl service = createService(upload);
+			MockHttpServletResponse response = new MockHttpServletResponse();
+
+			service.exportJson(response);
+
+			assertEquals("application/json;charset=UTF-8", response.getContentType());
+			assertEquals("attachment; filename=columns.json", response.getHeader("Content-Disposition"));
+			List<Map<String, Object>> json = new ObjectMapper().readValue(response.getContentAsByteArray(), List.class);
+			assertEquals(1, json.size());
+			assertEquals("根专栏", json.get(0).get("title"));
+			assertEquals("icons/logo.png", json.get(0).get("icon"));
+			assertEquals(10, json.get(0).get("order"));
+			List<Map<String, Object>> children = (List<Map<String, Object>>) json.get(0).get("children");
+			assertEquals(1, children.size());
+			assertEquals("子专栏", children.get(0).get("title"));
+		} finally {
+			System.clearProperty("user.dir.upload");
+		}
+	}
+
+	private ColumnArchiveServiceImpl createService(Path upload) throws Exception {
+		Path iconDir = upload.resolve("blogColumn").resolve("1");
+		Files.createDirectories(iconDir);
+		Files.write(iconDir.resolve("logo.png"), new byte[]{(byte) 0x89, 'P', 'N', 'G'});
+
+		ColumnTreeVo root = new ColumnTreeVo();
+		root.setId(1L);
+		root.setParentId(0L);
+		root.setName("根专栏");
+		root.setDescription("根专栏简介");
+		root.setSort(10);
+		root.setCover("http://localhost:8090/static/blogColumn/1/logo.png");
+		ColumnTreeVo child = new ColumnTreeVo();
+		child.setId(2L);
+		child.setParentId(1L);
+		child.setName("子专栏");
+		child.setDescription("子专栏简介");
+		child.setSort(10);
+		child.setCover("");
+		root.getChildren().add(child);
+
+		BlogColumnService columnService = mock(BlogColumnService.class);
+		when(columnService.getAdminTree()).thenReturn(Collections.singletonList(root));
+		return new ColumnArchiveServiceImpl(columnService, mock(BlogColumnMapper.class),
+				mock(ColumnCoverStorageService.class), new UploadProperties());
 	}
 
 	private byte[] readAll(InputStream input) throws Exception {
