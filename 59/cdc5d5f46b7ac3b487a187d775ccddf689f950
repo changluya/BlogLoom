@@ -1,0 +1,73 @@
+blog-backend/src/test/java/com/changlu/blogloom/module/column/BlogColumnMoveServiceTest.java
+  s_8f7703af905d2c::t_04d95986d2c20c 68-81,83-95,141-143
+  s_8f7703af905d2c::t_bee83c7cdf74be 18,96-98,100-113,115-130,132-136,138-140
+  s_8f7703af905d2c::t_72fd7bdf4e1390 3,137
+  s_8f7703af905d2c::t_bdce194a2429b7 11,34,50,67,82,99,114,131,144
+  s_8f7703af905d2c::t_526480809caf24 1-2,4-10,12-17,19-33,35-49,51-66,145-150,152-163
+  s_8f7703af905d2c::t_e879cd389907fb 151
+blog-backend/src/main/java/com/changlu/blogloom/module/column/api/ColumnAdminController.java
+  s_8f7703af905d2c::t_cbf9ffed5002a9 52-54
+  s_8f7703af905d2c::t_b6580d84d95e07 32
+blog-backend/src/main/java/com/changlu/blogloom/module/column/domain/dto/ColumnMoveRequest.java
+  s_8f7703af905d2c::t_b6580d84d95e07 11
+blog-backend/src/main/java/com/changlu/blogloom/module/column/dao/BlogColumnMapper.java
+  s_8f7703af905d2c::t_b6580d84d95e07 31-32
+blog-cms-ui/src/views/blog/column/ColumnManage.vue
+  s_8f7703af905d2c::t_b6ede8d0c4724f 218,221,286
+  s_8f7703af905d2c::t_b2d2c309a26acc 15,42,44,48,52-56,159,319,321,331,352-353,355-356,359-360
+  s_8f7703af905d2c::t_f723a0a7e4b6ad 357-358
+  s_8f7703af905d2c::t_72fd7bdf4e1390 219
+  s_8f7703af905d2c::t_895b67b27d16c6 354
+  s_8f7703af905d2c::t_ae81029991141a 45,49,320,322,324,328
+  s_8f7703af905d2c::t_b6580d84d95e07 220,285
+  s_8f7703af905d2c::t_6d878615df63f9 43,46-47,50-51
+blog-backend/src/main/java/com/changlu/blogloom/module/column/service/BlogColumnService.java
+  s_8f7703af905d2c::t_b6580d84d95e07 19
+blog-cms-ui/src/api/column.js
+  s_8f7703af905d2c::t_b2d2c309a26acc 24
+blog-backend/src/main/java/com/changlu/blogloom/module/column/service/impl/ColumnArchiveServiceImpl.java
+  s_8f7703af905d2c::t_cbf9ffed5002a9 150,169-171,173-189
+  s_8f7703af905d2c::t_e93bd7963e81b2 172
+  s_8f7703af905d2c::t_474d84cd9517ef 190
+blog-backend/src/test/java/com/changlu/blogloom/module/column/ColumnArchiveExportTest.java
+  s_8f7703af905d2c::t_e488c0f9baeae9 10,31,37,69-121
+  s_8f7703af905d2c::t_2c2219187c3b96 122
+blog-cms-ui/src/utils/loginCredential.js
+  s_8f7703af905d2c::t_396cc576c5e2c7 1-28
+blog-cms-ui/src/views/login/index.vue
+  s_8f7703af905d2c::t_3945e33d618118 26
+  s_8f7703af905d2c::t_b2e570fc174782 73,76-77
+  s_8f7703af905d2c::t_396cc576c5e2c7 27,39,42-49,51-52,55
+  s_8f7703af905d2c::t_62d9e16d308603 69-71
+  s_8f7703af905d2c::t_c961308e4d5a05 2-4,6-12,14-25,29-33,38,40-41,53-54,57,61,63,78
+  s_8f7703af905d2c::t_bbf44f6e21b37e 13,28
+  s_8f7703af905d2c::t_a7f567cd33cd70 5
+  s_8f7703af905d2c::t_181ec34db39339 62,64-68,72,74-75
+blog-backend/src/main/java/com/changlu/blogloom/module/column/service/ColumnArchiveService.java
+  s_8f7703af905d2c::t_cbf9ffed5002a9 15
+blog-backend/src/main/resources/mapper/BlogColumnMapper.xml
+  s_8f7703af905d2c::t_b6580d84d95e07 56-61
+blog-backend/src/main/java/com/changlu/blogloom/module/column/service/impl/BlogColumnServiceImpl.java
+  s_8f7703af905d2c::t_04d95986d2c20c 83
+  s_8f7703af905d2c::t_b6580d84d95e07 73,81,84-89
+  s_8f7703af905d2c::t_72fd7bdf4e1390 82
+  s_8f7703af905d2c::t_d8a0e1c6082c68 90
+blog-cms-ui/src/api/login.js
+  s_8f7703af905d2c::t_396cc576c5e2c7 3,7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "59cdc5d5f46b7ac3b487a187d775ccddf689f950",
+  "prompts": {},
+  "sessions": {
+    "s_8f7703af905d2c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f81f-3c4c-75a0-9143-8a1860586931",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
