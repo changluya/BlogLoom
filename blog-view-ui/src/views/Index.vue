@@ -246,8 +246,9 @@
 		}
 	}
 
-	/* 首页中栏面板与行底部对齐，避免面板下方露出空隙 */
+	/* 首页中栏按自身内容定高，避免左侧专栏展开时把博客列表同步拉高 */
 	.home-site .main .ui.stackable.grid > .ten.column {
+		align-self: flex-start;
 		padding-bottom: 0;
 	}
 
