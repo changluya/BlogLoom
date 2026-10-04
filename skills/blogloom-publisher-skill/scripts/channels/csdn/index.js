@@ -16,7 +16,10 @@
 
 const { writeContent } = require('../../lib/editor');
 const { estimateImageWaitMs } = require('../../lib/markdown');
+const { loadChannelConf } = require('../../lib/channel-conf');
 const SELECTORS = require('./selectors');
+
+const CONF = loadChannelConf('csdn');
 
 const MOD = process.platform === 'darwin' ? 'Meta' : 'Control';
 
@@ -139,7 +142,10 @@ async function setContent(page, markdown) {
   // 正文含图片时（SOP 顶部 coverImg 等），CSDN 需异步上传/解析图片；
   // 按图片数量估算等待时间，图片越多等待越久，再点「发布文章」，
   // 发布弹窗的「已有图片列表」才会出现可供选择的首图。
-  const waitMs = estimateImageWaitMs(markdown);
+  const waitMs = estimateImageWaitMs(markdown, {
+    base: Number(CONF.imageWaitBase) || 2000,
+    perBlock: Number(CONF.imageWaitPerBlock) || 3000,
+  });
   if (waitMs > 0) {
     await page.waitForTimeout(waitMs);
   }
@@ -362,11 +368,17 @@ async function preparePublish(page, payload = {}) {
 
   const tagResult = await setArticleTags(page, payload.tags);
   await setArticleSummary(page, payload.summary);
-  await setArticleType(page, 'original');
-  await setArticleVisibility(page, 'public');
-  const creation = await setCreationStatement(page);
+  // 渠道级选项来自 conf/csdn.conf（CLI 无对应参数）
+  const blogType = CONF.blogType || 'original';
+  const visibleRange = CONF.visibleRange || 'public';
+  await setArticleType(page, blogType);
+  await setArticleVisibility(page, visibleRange);
+  const creation =
+    CONF.creationStatement !== undefined && CONF.creationStatement !== ''
+      ? await setCreationStatement(page, CONF.creationStatement)
+      : { set: false };
   // 首图列表异步加载，放在最后（分类专栏之前）选取，给缩略图充足加载时间
-  const coverResult = await setCover(page);
+  const coverResult = CONF.cover === 'none' ? { coverSet: false } : await setCover(page);
   // 分类专栏的悬停下拉最后处理，避免其浮层遮挡后续控件
   const categories = (payload.columns && payload.columns.length ? payload.columns : [payload.column]).filter(Boolean);
   const categoryResult = await setArticleCategories(page, categories);

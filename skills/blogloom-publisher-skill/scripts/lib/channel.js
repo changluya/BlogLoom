@@ -19,12 +19,21 @@
  *   checkLogin(page, ctx)       // 返回 { loggedIn, reason, ... }
  *   ensureEditor(page, ctx)     // 确保处于编辑器页
  *   setTitle(page, title)
- *   setContent(page, markdown)  // 写入正文（Markdown 源码）
+ *   setContent(page, markdown, ctx)  // 写入正文（Markdown 源码）
  *   setTags(page, tags)
  *   setCategory(page, column)
  *   setSummary(page, summary)
  *   publish(page, opts)         // 触发发布，返回 { url, status }
  * }
+ *
+ * 可选能力（渠道专属，核心层只按“存在则调用”的方式使用）：
+ *   prepareLogin(page)                                   // 登录前把页面推进到扫码页
+ *   setAuthor(page, author)
+ *   augmentPayload(basePayload, { opts, params, blog })  // 追加渠道专属发布字段
+ *   deleteBlog(page, target, ctx)                        // 删除文章（无则不提供 delete/test）
+ *   testMode: 'publish' | 'draft'                        // test publish 用发布还是草稿
+ *   successStatuses: [...]                               // publish 额外成功态（如 SUBMITTED）
+ *   ctx.convertMarkdown(page, markdown)                  // 可由调用方注入（便于单测）
  */
 
 const fs = require('fs');

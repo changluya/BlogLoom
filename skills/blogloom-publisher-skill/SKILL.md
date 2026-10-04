@@ -1,6 +1,6 @@
 ---
 name: blogloom-publisher-skill
-description: "BlogLoom 博客多渠道分发技能（Playwright 主操作 + CDP 底层增强）。Use when: (1) 把符合「标准生成发布输出博客 SOP」的本地 Markdown 博客分发到第三方渠道（初次对接 csdn），(2) 检测/完成渠道登录 csdn checkLogin / csdn login，(3) 发布或存草稿 csdn publish / csdn publishDraft，(4) 删除博客 csdn delete（内容管理页定位后删除），(5) 组合链路自测 csdn test publish（发布后立即删除）。触发词：分发博客、发布博客、存草稿、删除博客、同步到 CSDN、csdn publish/publishDraft/delete/login/checkLogin、publisher skill。"
+description: "BlogLoom 博客多渠道分发技能（Playwright 主操作 + CDP 底层增强）。Use when: (1) 把符合「标准生成发布输出博客 SOP」的本地 Markdown 博客分发到第三方渠道（csdn / gzh 公众号），(2) 检测/完成渠道登录 csdn|gzh checkLogin / login，(3) 发布、存草稿或删除 csdn|gzh publish / publishDraft / delete，(4) 组合链路自测 csdn|gzh test publish（csdn 发布后删除；gzh 发布草稿后删除）。触发词：分发博客、发布博客、存草稿、删除博客、同步到 CSDN、公众号发布、gzh publish/publishDraft/delete/login/checkLogin、publisher skill。"
 ---
 
 # BlogLoom Publisher Skill
@@ -19,7 +19,8 @@ description: "BlogLoom 博客多渠道分发技能（Playwright 主操作 + CDP 
 
 | 渠道 | SOP | 说明 |
 | --- | --- | --- |
-| **csdn**（初次对接） | [`references/channels/csdn/sop.md`](references/channels/csdn/sop.md) | checkLogin / login / publish 三类操作 |
+| **csdn** | [`references/channels/csdn/sop.md`](references/channels/csdn/sop.md) | checkLogin / login / publishDraft / publish / delete / test publish |
+| **gzh**（公众号） | [`references/channels/gzh/sop.md`](references/channels/gzh/sop.md) | checkLogin / login / publishDraft / publish / delete / test publish（正文经 md.doocs.org 样式化） |
 
 > 新增渠道时，同步在 `references/channels/<channel>/sop.md` 建一份该渠道 SOP，并在此表登记。
 
@@ -31,11 +32,16 @@ description: "BlogLoom 博客多渠道分发技能（Playwright 主操作 + CDP 
 node scripts/publisher.js <channel> <action> [options]
 
 node scripts/publisher.js csdn checkLogin
-node scripts/publisher.js csdn login
 node scripts/publisher.js csdn publish --file "/abs/path/blog.md"
 node scripts/publisher.js csdn publish --file "/abs/path/blog.md" --dry-run   # 干跑，可见全过程
 node scripts/publisher.js csdn publish --file "/abs/path/blog.md" --mode headless
+
+node scripts/publisher.js gzh publishDraft --file "/abs/path/blog.md" --author "长路" --wechat-name "长路Java"
+node scripts/publisher.js gzh publish --file "/abs/path/blog.md" --wechat-name "长路Java"
+node scripts/publisher.js gzh test publish --file "/abs/path/blog.md"        # 发布草稿 → 删除
 ```
+
+> 渠道专属参数（如 gzh 的 `--author` / `--wechat-name` / `--collection` / `--group-send`）按 `--key value` 原样透传给对应渠道，由渠道自行解析；核心 CLI 不感知渠道业务。
 
 ## 环境准备
 

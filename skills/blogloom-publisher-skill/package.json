@@ -2,7 +2,7 @@
   "name": "blogloom-publisher-skill",
   "version": "0.1.0",
   "private": true,
-  "description": "BlogLoom 博客多渠道分发技能（Playwright 主操作 + CDP 底层增强），初次对接 csdn。",
+  "description": "BlogLoom 博客多渠道分发技能（Playwright 主操作 + CDP 底层增强），已对接 csdn、gzh（微信公众号）。",
   "bin": {
     "blogloom-publish": "scripts/publisher.js"
   },

@@ -60,6 +60,10 @@ class BrowserSession {
       await this._launch();
     }
     await this.context.addInitScript(STEALTH_SCRIPT).catch(() => {});
+    // 允许读写剪贴板：正文写入/样式转换策略依赖系统剪贴板复制富文本
+    await this.context
+      .grantPermissions(['clipboard-read', 'clipboard-write'])
+      .catch(() => {});
     return this;
   }
 
