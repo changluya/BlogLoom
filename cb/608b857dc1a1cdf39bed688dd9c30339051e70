@@ -1,0 +1,300 @@
+sql/increment/1.0/20261006000000_v1.0.x.sql
+  s_a10c1ae7756c4f::t_eb559d0d197a0a 1-5
+skills/blogloom-publisher-skill/references/channels/gzh/sop.md
+  s_652a28fcea5777::t_d71f098e7fe79c 85
+  s_652a28fcea5777::t_e3a9dc641c8b8c 96
+blog-cms-ui/src/views/blog/seo/SeoConfig.vue
+  s_a10c1ae7756c4f::t_814add91652c4f 4-9
+  s_a10c1ae7756c4f::t_e1b26b1775f1ce 23-50,55,66-77,105-133,152-155,173-187
+  s_a10c1ae7756c4f::t_b0304a5ebbdc8b 141-151
+  s_a10c1ae7756c4f::t_081cd49c92eab3 1-3,10-12,14,16-22,51-54,56-65,78-104,134-140,156-172,188-189
+  s_a10c1ae7756c4f::t_8e6716ab0fee1d 13,15
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/SitemapService.java
+  s_b71aa883e9073c::t_7f841e26f6b4ef 1-5
+skills/blogloom-publisher-skill/scripts/channels/gzh/format.js
+  s_652a28fcea5777::t_31b67e5900cd77 105-107,116
+  s_652a28fcea5777::t_4423e9470e0c8b 124
+  s_652a28fcea5777::t_b975c46c358710 18-23,25,36-46,49-56,58-68
+  s_652a28fcea5777::t_2943145fd7ca90 47-48,57
+  s_652a28fcea5777::t_f1f3085e195d9b 24
+  s_652a28fcea5777::t_ac78c45531939c 69-70
+blog-view-ui/index.html
+  s_b71aa883e9073c::t_1c471ea2ae3f68 19-20,22-23
+blog-view-ui/vite.config.js
+  s_b71aa883e9073c::t_d6d04e35f6644a 30-31
+  s_b71aa883e9073c::t_c4b62f0ebf0be9 7,27-29,32-37
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoHtmlSupportTest.java
+  s_b71aa883e9073c::t_8bacd4fc6f9686 1-21,47
+  s_b71aa883e9073c::t_99c0617400d2a9 38-46
+  s_b71aa883e9073c::t_603cbe0371284e 29-37
+  s_b71aa883e9073c::t_cc4fd3964c7b10 22-28
+blog-view-ui/.env.development
+  s_b71aa883e9073c::t_c4b62f0ebf0be9 3-5
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoFileController.java
+  s_a10c1ae7756c4f::t_a484746745230e 3,10,12-13,18,23,28
+  s_b71aa883e9073c::t_83758d6f20ca0b 1-2,4-9,11,14-17,19-22,24-27,29-30
+blog-backend/src/main/resources/static/seo-assets/vue-exact.css
+  s_b71aa883e9073c::t_dc6948aaae60c4 1-2
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/support/SeoHtmlSupport.java
+  s_b71aa883e9073c::t_183a9fd6589c0e 1-2,8-11,19-27,80-81
+  s_b71aa883e9073c::t_c6f71f6d34b6d4 3-7,16-17,41-51
+  s_b71aa883e9073c::t_99c0617400d2a9 18,52-79
+  s_b71aa883e9073c::t_cc4fd3964c7b10 12-15,28-40
+blog-backend/src/main/resources/static/seo-assets/themes/default/assets/fonts/outline-icons.svg
+  s_b71aa883e9073c::t_2bc923bb6a0861 1-366
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/SeoSiteLayoutService.java
+  s_b71aa883e9073c::t_c6f71f6d34b6d4 1-7
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoSiteLayoutServiceImplTest.java
+  s_b71aa883e9073c::t_cb152b24a857d1 10-11,32-33,37,53
+  s_b71aa883e9073c::t_46825413f71e57 1-9,12-31,34-36,38-52,54-59
+blog-backend/src/main/resources/static/seo-assets/typo.css
+  s_b71aa883e9073c::t_8f5622c9c02c00 1-386
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/impl/SeoFileServiceImpl.java
+  s_a10c1ae7756c4f::t_a7c7fc848d9bea 1-41
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoFeedServiceTest.java
+  s_b71aa883e9073c::t_77a6167e5d3ef9 1-68
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoEndpointIntegrationTest.java
+  s_b71aa883e9073c::t_b29a300d23fe18 18,37-38,48,101-103,118-132
+  s_b71aa883e9073c::t_ca42c00c4d3f61 1-6,9-17,19-36,39-42,45-47,49-50,52-71,76-100,133-134
+  s_b71aa883e9073c::t_968ffbc79516b3 104-109,115-117
+  s_b71aa883e9073c::t_603cbe0371284e 7-8,43-44,51,73-74
+  s_b71aa883e9073c::t_7208ac5c018c3e 72
+  s_b71aa883e9073c::t_34e81d26d0606e 75
+  s_b71aa883e9073c::t_06cc41a05065b2 110-114
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/RssService.java
+  s_b71aa883e9073c::t_7f841e26f6b4ef 1-5
+blog-backend/src/main/resources/static/seo-assets/themes/default/assets/fonts/brand-icons.svg
+  s_b71aa883e9073c::t_2bc923bb6a0861 1-1008
+blog-cms-ui/src/layout/components/Sidebar/Item.vue
+  s_b71aa883e9073c::t_ac5321513c7537 2-3,22-24
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoMeta.java
+  s_b71aa883e9073c::t_4872552dc760f5 1-25
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/support/SeoUrlResolver.java
+  s_b71aa883e9073c::t_4872552dc760f5 1-41
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/dao/SeoArticleMapper.java
+  s_b71aa883e9073c::t_4872552dc760f5 1-20
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoConfigController.java
+  s_a10c1ae7756c4f::t_a37666415456e7 1-5,7-8,14,16-20,23-36,39-45,47-48,50-55,57-59,61-65,139-140
+  s_a10c1ae7756c4f::t_d2d0ffed44c13b 74,76-87,90-102,105,107,109,111,113-138
+  s_a10c1ae7756c4f::t_83253cf924fa3c 6,9-13,15,21-22,37-38,71-73,75,88-89,103-104,106,108,110,112
+  s_a10c1ae7756c4f::t_1977ebc3ad65f8 46,49,56,60,66-70
+skills/blogloom-publisher-skill/scripts/channels/gzh/index.js
+  s_652a28fcea5777::t_cb83497006f650 283
+  s_652a28fcea5777::t_2a789d97a3a446 315-341,361-365
+  s_652a28fcea5777::t_44a87b3d91c9a2 22
+  s_652a28fcea5777::t_189f5554305833 608-609
+conf/application.properties.conf
+  s_b71aa883e9073c::t_1c471ea2ae3f68 12-15
+blog-backend/src/main/java/com/changlu/blogloom/mapper/SiteSettingMapper.java
+  s_a10c1ae7756c4f::t_dc6f83d0633253 25-27
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoConfig.java
+  s_a10c1ae7756c4f::t_62f7fd07ca2160 1-24
+blog-backend/src/main/resources/templates/seo/fragments/seo-head.html
+  s_b71aa883e9073c::t_3e24acb45094b4 44
+  s_b71aa883e9073c::t_d147dc6fde1442 1-23,28,52,55-56
+  s_b71aa883e9073c::t_99c0617400d2a9 40
+  s_b71aa883e9073c::t_5ab86d29dc102b 46-49,51
+  s_b71aa883e9073c::t_9a5118e73324d2 38-39,41,43,50
+  s_b71aa883e9073c::t_8efd5e24579046 42,45
+  s_b71aa883e9073c::t_cc3350ca256164 53-54
+  s_b71aa883e9073c::t_22a93392b88404 24-27
+  s_b71aa883e9073c::t_3fc802c10f984a 29-37
+blog-cms-ui/src/settings.js
+  s_a10c1ae7756c4f::t_ec863c16e3f9dc 30
+blog-backend/src/main/java/com/changlu/blogloom/config/SpaForwardConfig.java
+  s_b71aa883e9073c::t_4872552dc760f5 37-43,87-91
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoUrlResolverTest.java
+  s_b71aa883e9073c::t_8bacd4fc6f9686 1-34
+blog-backend/src/main/resources/mapper/SiteSettingMapper.xml
+  s_a10c1ae7756c4f::t_47fbd8da3c89fd 25-29
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/impl/SitemapServiceImpl.java
+  s_b71aa883e9073c::t_eb5ab0a437993e 7,18
+  s_b71aa883e9073c::t_7f841e26f6b4ef 1-6,8-17,19-50
+blog-backend/src/test/resources/schema.sql
+  s_b71aa883e9073c::t_d15c2354e500a4 27-33
+blog-backend/src/main/resources/static/seo-assets/themes/default/assets/fonts/icons.svg
+  s_b71aa883e9073c::t_2bc923bb6a0861 1-1518
+blog-backend/src/main/resources/templates/seo/list.html
+  s_b71aa883e9073c::t_d147dc6fde1442 1-22
+blog-cms-ui/src/components/SvgIcon/SeoIcon.vue
+  s_b71aa883e9073c::t_ac5321513c7537 1-22
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoSiteLayout.java
+  s_b71aa883e9073c::t_c6f71f6d34b6d4 1-8,10-27,32
+  s_b71aa883e9073c::t_cb152b24a857d1 9,28-31
+conf/application.properties
+  s_b71aa883e9073c::t_1c471ea2ae3f68 11-14
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/SeoFileService.java
+  s_a10c1ae7756c4f::t_eea332bf2a31f2 1-18
+blog-cms-ui/src/api/seo.js
+  s_a10c1ae7756c4f::t_09d2e837d29b1c 1-16
+  s_a10c1ae7756c4f::t_80f9dcf09e971f 17-33
+blog-cms-ui/src/icons/svg/seo.svg
+  s_b71aa883e9073c::t_de8a1ca066d943 1
+  s_a10c1ae7756c4f::t_e80bb527a2b582 9
+  s_b71aa883e9073c::t_f8a3ccc63aaf32 2-8
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/SiteSettingServiceImpl.java
+  s_a10c1ae7756c4f::t_22daaff16fdf85 195-218
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoArticle.java
+  s_b71aa883e9073c::t_4872552dc760f5 1-17
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/搜索引擎SEO优化改造/搜索引擎SEO优化调研学习02、第一阶段核心改造、服务端直出与站点级文件.md
+  s_a10c1ae7756c4f::t_eed9a629756941 176,1636-1643
+  s_a10c1ae7756c4f::t_c6b65c4ffe1e35 326
+  s_a10c1ae7756c4f::t_04697d2be0b39f 810,813,938-940,987,1123-1124,1126,1202-1204,1220-1226,1228-1240,1318,1391-1393,1395-1417
+  s_a10c1ae7756c4f::t_1b77640862d738 33,83,88,218,275,825,833,850,882,892,902,931,1141,1197,1504,1616-1618,1632-1635,1644-1663,1723
+  s_a10c1ae7756c4f::t_26110eadd8bda3 724
+  s_a10c1ae7756c4f::t_58ba69a994d166 860-864
+  s_a10c1ae7756c4f::t_146c757fb002d9 806
+  s_a10c1ae7756c4f::t_4cf3e29c74d496 820,880,888,896,900,991-995,1019-1020,1022-1025,1031-1033,1035,1040-1047,1060,1131,1191
+  s_a10c1ae7756c4f::t_38d1b6fcefdc0a 1319-1320,1322,1324-1338,1341,1356-1365,1369-1378,1382,1384-1386,1388-1389
+  s_a10c1ae7756c4f::t_65e22c6cf3bfd5 1682
+  s_a10c1ae7756c4f::t_f21a001f5ce531 1720-1722
+  s_a10c1ae7756c4f::t_cafc25e9a37a72 327,465,1253
+  s_a10c1ae7756c4f::t_7c1f876dfb0079 804,807-808
+  s_a10c1ae7756c4f::t_7fb962e00456ee 340
+  s_a10c1ae7756c4f::t_7a5da42715b4d8 377-401,914,929
+  s_a10c1ae7756c4f::t_e7df3b0ca3b048 1693
+  s_a10c1ae7756c4f::t_f704cb2e8aa85e 1049-1059
+  s_a10c1ae7756c4f::t_7ff958bee2373f 1-7
+  s_a10c1ae7756c4f::t_59e40e00fe005b 658-701
+  s_a10c1ae7756c4f::t_37b90697bbf047 75,140,202,265,1245,1418,1420,1424,1426,1512,1514,1516,1518,1520,1530,1532,1585-1587,1589-1595,1597-1608,1687,1715
+  s_a10c1ae7756c4f::t_54d2f982c5d2db 1619,1631
+  s_a10c1ae7756c4f::t_0aa9086de67cb0 812,856,942-983,1070-1110,1125,1151-1185,1206,1227,1394,1425
+  s_a10c1ae7756c4f::t_d9290e2b2eb460 1466,1485
+  s_a10c1ae7756c4f::t_ebb3129e04cbc2 238,989,1000,1007-1008,1012,1018,1034,1036-1038,1061,1246,1248
+  s_a10c1ae7756c4f::t_543fd6fe67041c 1620-1630
+  s_a10c1ae7756c4f::t_478e023a4c4ba5 805
+  s_a10c1ae7756c4f::t_ab2652221f9fb3 703-712
+  s_a10c1ae7756c4f::t_8756bd643a386f 1321,1323,1387,1522-1524,1526,1528
+  s_a10c1ae7756c4f::t_4e03ae1dfd2e94 430-439
+  s_a10c1ae7756c4f::t_fc62d5bc50663f 1614
+  s_a10c1ae7756c4f::t_7dba50e28390a9 1690-1692
+  s_a10c1ae7756c4f::t_c5a0e97176a089 289-325,328-334
+  s_a10c1ae7756c4f::t_5ce1a035aca474 737-771,773-797
+  s_a10c1ae7756c4f::t_5f61ac7aef37a9 468-495
+  s_a10c1ae7756c4f::t_400dc908716937 608-630
+  s_a10c1ae7756c4f::t_19fe1c2401c21c 736,772
+  s_a10c1ae7756c4f::t_b20302edeceff1 1247,1249-1252,1254-1317
+  s_a10c1ae7756c4f::t_1c2845e3a0b3a8 1427
+  s_a10c1ae7756c4f::t_3d82084441f542 996-999,1001-1006,1009-1011,1013-1017,1021,1026-1030,1039,1048
+  s_a10c1ae7756c4f::t_0b2b4ce2c483b0 1381
+  s_a10c1ae7756c4f::t_1927399248fe14 1467-1469
+  s_a10c1ae7756c4f::t_63e25c0d2116dd 222-226,228-234,237,239-259
+  s_a10c1ae7756c4f::t_aa3022baa163f4 881,901,910,1140,1196,1513,1515,1517,1519,1521,1525,1527,1529,1531,1533-1584,1588,1596
+  s_a10c1ae7756c4f::t_d06d3b5d23f4c6 518-539
+  s_a10c1ae7756c4f::t_f33153b9ff81d5 1429-1455,1457,1463-1465,1470-1484,1487-1502,1508-1511
+  s_a10c1ae7756c4f::t_dcef65cd137c24 1129
+  s_a10c1ae7756c4f::t_9be33bf511373f 227,235
+  s_a10c1ae7756c4f::t_4cfd43190777f6 1419,1421-1423
+  s_a10c1ae7756c4f::t_b59984785b9a7e 1486
+  s_a10c1ae7756c4f::t_77c48ee7cd486f 342
+  s_a10c1ae7756c4f::t_54f74a8190c784 562-607,829,835
+  s_a10c1ae7756c4f::t_80e5bf54436dd6 47,60,99,107,125,157,1213,1339-1340,1342-1355,1366-1368,1379-1380,1383,1390,1668,1700
+  s_a10c1ae7756c4f::t_b620c879061bdf 1456,1458-1462
+  s_a10c1ae7756c4f::t_1de2d9edf18dc9 77,81,344-376,402-429,440-464,466-467,496-517,540-561,631-657,702,713-723,725-727,798-799
+  s_a10c1ae7756c4f::t_569b2c93cda6c6 1506
+  s_a10c1ae7756c4f::t_ea0524d735f490 728-735
+  s_a10c1ae7756c4f::t_a2abe8783d6490 8-32,34-46,48-59,61-74,76,78-80,82,84-87,89-98,100-106,108-124,126-139,141-156,158-175,177-201,203-217,219-221,236,260-264,266-274,276-288,335-339,341,343,800-803,809,811,814-819,821-824,826-828,830-832,834,836-849,851-855,857-859,865-879,883-887,889-891,893-895,897-899,903-909,911-913,915-928,930,932-937,941,984-986,988,990,1062-1069,1111-1122,1127-1128,1130,1132-1139,1142-1150,1186-1190,1192-1195,1198-1201,1205,1207-1212,1214-1219,1241-1244,1428,1503,1505,1507,1609-1613,1615,1664-1667,1669-1681,1683-1686,1688-1689,1694-1699,1701-1714,1716-1719,1724-1757
+blog-cms-ui/src/router/index.js
+  s_b71aa883e9073c::t_de8a1ca066d943 137
+  s_b71aa883e9073c::t_c67a897c014a55 144
+  s_b71aa883e9073c::t_f8a3ccc63aaf32 138
+  s_a10c1ae7756c4f::t_4e0a10242d3ca8 140,145
+  s_a10c1ae7756c4f::t_41a6c021c081eb 132-136,139,141-143
+  s_a10c1ae7756c4f::t_d35c9102a38ec1 146-147
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/impl/SeoSiteLayoutServiceImpl.java
+  s_b71aa883e9073c::t_c6f71f6d34b6d4 1-8,10-13,16-29,32-33,36-39,42-58,63,66-68,70-76,91-92
+  s_b71aa883e9073c::t_46825413f71e57 15,64-65,69,77-90
+  s_b71aa883e9073c::t_cb152b24a857d1 9,14,30-31,34-35,40-41,59-62
+blog-backend/src/main/resources/static/seo-assets/base.css
+  s_b71aa883e9073c::t_8f5622c9c02c00 1-303
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoPageController.java
+  s_b71aa883e9073c::t_d147dc6fde1442 54,72,74
+  s_b71aa883e9073c::t_c6f71f6d34b6d4 10,30,32,35,46-47
+  s_b71aa883e9073c::t_83758d6f20ca0b 1-9,11-29,31,33-34,36-42,44-45,48-53,55-71,73,75-95,98-110
+  s_b71aa883e9073c::t_99c0617400d2a9 43
+  s_b71aa883e9073c::t_1c471ea2ae3f68 96-97
+blog-backend/src/main/resources/mapper/BlogMapper.xml
+  s_b71aa883e9073c::t_4872552dc760f5 83-84,86-87,317,319,321
+blog-backend/src/main/resources/templates/seo/blog.html
+  s_b71aa883e9073c::t_99c0617400d2a9 6,8-9
+  s_b71aa883e9073c::t_aabef62f72bedf 18
+  s_b71aa883e9073c::t_966a6af44517b6 22,24,26,41,47
+  s_b71aa883e9073c::t_ef222bb67eaa44 5
+  s_b71aa883e9073c::t_d147dc6fde1442 1-4,32-33,36,53-54
+  s_b71aa883e9073c::t_22a93392b88404 7,10-16,19,23,25,27-31,34-35,37-39,42,48-50
+  s_b71aa883e9073c::t_e3a501f033d3f9 40,51-52
+  s_b71aa883e9073c::t_7085f557e79c22 17,20-21,43-46
+blog-backend/src/main/java/com/changlu/blogloom/service/SiteSettingService.java
+  s_a10c1ae7756c4f::t_d65d9e277b5ac4 17-22
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/skill设计/BlogLoom-分发Skill之CSDN设计思路与功能实现.md
+  s_e0a650a0b178cb::t_c0f996e9a5d2fb 1-78,80,85,87,136-422
+  s_e0a650a0b178cb::t_a5d4cdf1be00b3 79,81-84,86,88-135
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/skill设计/BlogLoom-分发Skill之公众号(gzh)设计思路与功能实现.md
+  s_e0a650a0b178cb::t_3627426c212ff2 72,74-128,130-139,141-149
+  s_e0a650a0b178cb::t_fb411de3baa4c5 1-71,73,129,140,150-440
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/impl/RssServiceImpl.java
+  s_b71aa883e9073c::t_7f841e26f6b4ef 1-7,9-24,27-64
+  s_b71aa883e9073c::t_eb5ab0a437993e 8,25-26
+blog-backend/src/main/java/com/changlu/blogloom/constant/SiteSettingConstants.java
+  s_a10c1ae7756c4f::t_d387640eee1a90 25-26
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoMetaBuilderTest.java
+  s_b71aa883e9073c::t_8bacd4fc6f9686 1-57
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/support/SeoMetaBuilder.java
+  s_b71aa883e9073c::t_183a9fd6589c0e 1-133
+blog-backend/src/main/java/com/changlu/blogloom/model/vo/BlogDetail.java
+  s_b71aa883e9073c::t_4872552dc760f5 26-27,29-30
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoTocItem.java
+  s_b71aa883e9073c::t_c6f71f6d34b6d4 1-12
+blog-backend/src/main/resources/static/seo-assets/semantic.min.css
+  s_b71aa883e9073c::t_7a52f52c08cc19 1-372
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/搜索引擎SEO优化改造/搜索引擎SEO优化调研学习01、文章页优化、站点变现与数据监测.md
+  s_823726d660dafe::t_51577978168fc1 1-1609
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb608b857dc1a1cdf39bed688dd9c30339051e70",
+  "prompts": {},
+  "sessions": {
+    "s_652a28fcea5777": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ef61a732effeMEYSxwJDnNt4kq",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_823726d660dafe": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ef1122992ffenNoyVSGXqm74z1",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_a10c1ae7756c4f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eef6e976dffeEKw4bRhmc9dQ0M",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_b71aa883e9073c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a110d1-db52-7b21-b9eb-15110bcb40e1",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_e0a650a0b178cb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eef2f00deffexnCphfy5SPDqwj",
+        "model": "deepseek-v4-flash-0731"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
