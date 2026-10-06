@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="seo/fragments/seo-head :: head(${seo})"></head>
+<body>
+<main class="page">
+	<nav class="site-nav" aria-label="主导航"><a href="/home" th:text="${seo.siteName}">BlogLoom</a><a href="/archives">文章归档</a></nav>
+	<h1 th:text="${title}">文章列表</h1>
+	<section aria-label="文章列表">
+		<article th:each="article : ${articles}" style="padding:22px 0;border-bottom:1px solid var(--border)">
+			<h2 style="margin:0 0 6px"><a th:href="@{'/blog/' + ${article.id}}" th:text="${article.title}">文章标题</a></h2>
+			<p class="muted" th:text="${article.description}"></p>
+			<time class="muted" th:text="${#dates.format(article.createTime, 'yyyy-MM-dd')}"></time>
+		</article>
+		<article th:each="article : ${archiveArticles}" style="padding:12px 0;border-bottom:1px solid var(--border)">
+			<a th:href="@{'/blog/' + ${article.id}}" th:text="${article.title}">文章标题</a>
+			<span class="muted" th:text="${' · ' + article.day + ' ' + article.time}"></span>
+		</article>
+		<p class="muted" th:if="${articles.isEmpty() and archiveArticles.isEmpty()}">暂无公开文章。</p>
+	</section>
+</main>
+</body>
+</html>

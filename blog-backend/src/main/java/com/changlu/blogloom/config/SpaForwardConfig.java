@@ -34,6 +34,13 @@ public class SpaForwardConfig {
 			"/admin", "/static", "/image", "/tg", "/error", "/actuator"
 	);
 
+	/**
+	 * 由 Spring MVC + Thymeleaf 直出的公开 SEO 页面，不回退到 SPA index.html。
+	 */
+	private static final List<String> SEO_PAGE_PREFIXES = Arrays.asList(
+			"/blog", "/home", "/tag", "/category", "/column", "/archives"
+	);
+
 	@Bean
 	public FilterRegistrationBean<SpaForwardFilter> spaForwardFilter() {
 		FilterRegistrationBean<SpaForwardFilter> registration = new FilterRegistrationBean<>();
@@ -77,6 +84,11 @@ public class SpaForwardConfig {
 				return false;
 			}
 			String path = resolvePath(request);
+			for (String prefix : SEO_PAGE_PREFIXES) {
+				if (path.equals(prefix) || path.startsWith(prefix + "/")) {
+					return false;
+				}
+			}
 			for (String prefix : RESERVED_PREFIXES) {
 				if (path.equals(prefix) || path.startsWith(prefix + "/")) {
 					return false;

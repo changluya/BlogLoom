@@ -23,7 +23,11 @@ import java.util.List;
 public class BlogDetail {
 	private Long id;
 	private String title;//文章标题
+	private String firstPicture;//文章封面
+	private String description;//文章摘要
 	private String content;//文章正文
+	private String authorName;//作者名称
+	private String authorAvatar;//作者头像
 	private Boolean appreciation;//赞赏开关
 	private Boolean commentEnabled;//评论开关
 	private Boolean top;//是否置顶

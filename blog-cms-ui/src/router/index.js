@@ -130,6 +130,22 @@ const routes = [
 		]
 	},
 	{
+		path: '/seo',
+		name: 'Seo',
+		redirect: '/seo/config',
+		component: Layout,
+		alwaysShow: true,
+		meta: {title: 'SEO优化', icon: 'seo'},
+		children: [
+			{
+				path: 'config',
+				name: 'SeoConfig',
+				component: () => import('@/views/blog/seo/SeoConfig'),
+				meta: {title: 'SEO配置', icon: 'el-icon-setting'}
+			},
+		]
+	},
+	{
 		path: '/imageHost',
 		name: 'ImageHost',
 		redirect: '/imageHost/setting',

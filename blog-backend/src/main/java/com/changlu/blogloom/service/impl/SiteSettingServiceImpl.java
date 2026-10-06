@@ -192,6 +192,30 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		return siteSettingMapper.getWebTitleSuffix();
 	}
 
+	@Override
+	public String getSeoDomain() {
+		return siteSettingMapper.getSeoDomain();
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void saveSeoDomain(String value) {
+		String normalized = value == null ? "" : value.trim();
+		SiteSetting setting = siteSettingMapper.getByNameEn(SiteSettingConstants.SEO_DOMAIN);
+		if (setting == null) {
+			setting = new SiteSetting();
+			setting.setNameEn(SiteSettingConstants.SEO_DOMAIN);
+			setting.setNameZh("SEO 域名");
+			setting.setType(1);
+			setting.setValue(normalized);
+			saveOneSiteSetting(setting);
+		} else {
+			setting.setValue(normalized);
+			updateOneSiteSetting(setting);
+		}
+		deleteSiteInfoCache();
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds) {

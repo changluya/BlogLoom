@@ -22,6 +22,8 @@ public class SiteSettingConstants {
 	public static final String EMAIL = "email";
 	public static final String FAVORITE = "favorite";
 	public static final String ROLL_TEXT = "rollText";
+	/** SEO 域名：canonical / sitemap / RSS 等绝对地址统一使用；为空时回退 blog.view */
+	public static final String SEO_DOMAIN = "seoDomain";
 	public static final String CUSTOM_MODULE = "customModule";
 	public static final String UPLOAD_CHANNEL_CHOOSE = "uploadChannelChoose";
 	public static final String UPLOAD_CHANNEL_LOCAL = "uploadChannelLocal";

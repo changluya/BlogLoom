@@ -19,6 +19,7 @@
 const { writeContent } = require('../../lib/editor');
 const { log } = require('../../lib/cli-io');
 const { loadChannelConf } = require('../../lib/channel-conf');
+const { countImages } = require('../../lib/markdown');
 const { convertMarkdownToGzhHtml } = require('./format');
 const SELECTORS = require('./selectors');
 
@@ -279,6 +280,7 @@ async function setContent(page, markdown, ctx = {}) {
   log('正文样式转换：md.doocs.org 渲染 Markdown → 复制富文本');
   const converted = await convert(page, markdown).catch(() => ({ converted: false }));
   if (!converted || !converted.converted) log(`  样式转换未完成（${(converted && converted.reason) || '未知'}），将回退原始写入`);
+  else if (converted.captionHidden !== undefined) log(`图注：${converted.captionHidden ? '已设为「不显示」' : '设置未确认（不影响复制）'}`);
 
   log('粘贴正文到编辑器内容区');
   await editor.click({ timeout: 5000 }).catch(() => {});
@@ -310,8 +312,33 @@ async function setContent(page, markdown, ctx = {}) {
   };
 }
 
-/** 首图：从正文图片中选第一张作为封面，并做上传校验（失败重试一次）。 */
-async function setCover(page, firstBox) {
+/**
+ * 等待正文图片全部上传到微信（封面选择面板按正文顺序增量渲染，未上传完时
+ * 第一张并不是正文首图）。轮询面板 item 数量直到达到期望值，或连续若干秒不再增长。
+ */
+async function waitForContentImages(page, panel, expected, timeoutMs = 45000) {
+  if (!expected || expected <= 0) return 0;
+  const deadline = Date.now() + timeoutMs;
+  let last = -1;
+  let stable = 0;
+  while (Date.now() < deadline) {
+    const count = await panel.locator(SELECTORS.contentImgItem).count().catch(() => 0);
+    if (count >= expected) return count;
+    if (count === last) {
+      stable += 1;
+      if (stable >= 4 && count > 0) return count; // 连续 4s 不再增长，按当前数量继续
+    } else {
+      stable = 0;
+    }
+    last = count;
+    await page.waitForTimeout(1000);
+  }
+  return last;
+}
+
+/** 首图：从正文图片中选第一张作为封面，并做上传校验（失败重试一次）。
+ *  expectedImages 为正文图片总数；待全部上传完成后再取首图，避免选错。 */
+async function setCover(page, firstBox, expectedImages = 0) {
   const pick = async () => {
     const coverArea = firstBox.locator(SELECTORS.coverArea).first();
     if (!(await has(coverArea))) return false;
@@ -331,6 +358,11 @@ async function setCover(page, firstBox) {
 
     const panel = page.locator(SELECTORS.imgCropPanel).first();
     await panel.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
+    // 等待正文中的图片全部上传完成，确保列表第一张就是正文首图
+    if (expectedImages > 1) {
+      log(`封面：等待正文 ${expectedImages} 张图片上传完成`);
+      await waitForContentImages(page, panel, expectedImages);
+    }
     const pic = panel.locator(SELECTORS.contentImgItem).first();
     if (!(await has(pic))) return false;
     log('封面：选中正文第一张图');
@@ -573,7 +605,8 @@ async function preparePublish(page, payload = {}) {
     const firstBox = bottomBox.locator(SELECTORS.coverDescriptionArea).first();
     if (await has(firstBox)) {
       if (CONF.cover !== 'none') {
-        result.coverSet = await setCover(page, firstBox).catch(() => false);
+        const expectedImages = countImages(payload.content || '');
+        result.coverSet = await setCover(page, firstBox, expectedImages).catch(() => false);
       }
       result.summarySet = await inputArticleSummary(page, firstBox, payload.summary).catch(() => false);
     }

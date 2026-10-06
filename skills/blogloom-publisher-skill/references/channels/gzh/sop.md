@@ -82,7 +82,7 @@ node scripts/publisher.js gzh publishDraft --file "/abs/blog.md" --author "长�
 2. 点「新的创作」`button:has-text("新的创作")` → 点下拉「文章」`.weui-desktop-dropdown__list-ele:has-text("文章")`（**新标签页打开编辑器**，自动切换）；
 3. 填标题：`.title-editor__input .ProseMirror`（contenteditable，**注意不是隐藏的 `#title` textarea**）；
 4. 填作者：`#js_author_area #author`（可选）；
-5. **正文样式转换**：在 md.doocs.org 新开转换页 → 粘贴 Markdown → 等渲染完成 → 点「复制」（`button:has-text("复制"), button:has-text("Copy")`）把**富文本 HTML** 写入剪贴板 → 回编辑页粘贴进内容 ProseMirror `.rich_media_content .ProseMirror`；
+5. **正文样式转换**：在 md.doocs.org 新开转换页 → 粘贴 Markdown → 等渲染完成 → **点右上角「样式」，在右侧面板滚动到「图注」区块选中「不显示」**（避免图片下方渲染出图注文字）→ 点「复制」（`button:has-text("复制"), button:has-text("Copy")`）把**富文本 HTML** 写入剪贴板 → 回编辑页粘贴进内容 ProseMirror `.rich_media_content .ProseMirror`；
    - 粘贴后微信弹出「**内容结构检测**」确认框，需点「继续插入」`button:has-text("继续插入")` 内容才真正写入；
    - 可选：正文顶部插入公众号名片（`#js_editor_insertProfile` 搜索 `--wechat-name` 选第一个卡片）；
    - 转换失败自动回退为原始 Markdown 写入策略（`paste → cdp → keyboard`）；
@@ -93,7 +93,7 @@ node scripts/publisher.js gzh publishDraft --file "/abs/blog.md" --author "长�
 | 配置项 | 默认策略 |
 | --- | --- |
 | 标题 / 作者 | 标题必填；**作者必须先填**（否则「原创」弹窗无法勾选） |
-| 封面 | 从正文图片选第一张（从正文选择 → 下一步 → 编辑封面「确认」） |
+| 封面 | 从正文图片选第一张（**先等正文图片全部上传完成**，再从正文选择 → 下一步 → 编辑封面「确认」） |
 | 描述 | 取 `articleSummary`，**自动裁剪至 ≤120 字** |
 | 原创 | 文字原创 → 勾「我已阅读」→ 确定（该弹窗为自定义组件，首次可能不响应，会自动关闭重开再试） |
 | 赞赏 | 默认开启（需先声明原创）；弹「赞赏设置」→ 赞赏作者 + 赞赏账户 → 勾协议 → 确定（best-effort） |
