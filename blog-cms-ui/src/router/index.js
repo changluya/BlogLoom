@@ -143,6 +143,12 @@ const routes = [
 				component: () => import('@/views/blog/seo/SeoConfig'),
 				meta: {title: 'SEO配置', icon: 'el-icon-setting'}
 			},
+			{
+				path: 'verification',
+				name: 'SeoVerification',
+				component: () => import('@/views/blog/seo/SeoVerification'),
+				meta: {title: 'SEO平台关联', icon: 'el-icon-link'}
+			},
 		]
 	},
 	{

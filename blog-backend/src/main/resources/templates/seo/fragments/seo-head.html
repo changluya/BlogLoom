@@ -7,6 +7,9 @@
 	<meta name="description" th:content="${seo.description}">
 	<link rel="canonical" th:href="${seo.canonicalUrl}">
 	<link rel="alternate" type="application/rss+xml" th:title="${seo.siteName}" th:href="${seo.baseUrl + '/rss.xml'}">
+	<meta name="baidu-site-verification" th:if="${!#strings.isEmpty(seo.baiduVerification)}" th:content="${seo.baiduVerification}">
+	<meta name="msvalidate.01" th:if="${!#strings.isEmpty(seo.bingVerification)}" th:content="${seo.bingVerification}">
+	<meta name="google-site-verification" th:if="${!#strings.isEmpty(seo.googleVerification)}" th:content="${seo.googleVerification}">
 
 	<meta property="og:type" th:content="${seo.type}">
 	<meta property="og:title" th:content="${seo.title}">

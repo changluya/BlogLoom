@@ -51,7 +51,7 @@
 			<img src="/img/paper-plane.png" style="width: 40px;height: 40px;">
 		</el-backtop>
 		<!--底部footer-->
-		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :introduction="introduction" :hitokoto="hitokotoText" :compact="$route.name === 'column'"/>
+		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :introduction="introduction" :hitokoto="hitokotoText"/>
 	</div>
 </template>
 

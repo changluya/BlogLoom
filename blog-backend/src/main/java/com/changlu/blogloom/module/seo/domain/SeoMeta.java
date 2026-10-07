@@ -22,4 +22,9 @@ public class SeoMeta {
 	private String type = "website";
 	private String ldJson;
 	private List<String> tags = new ArrayList<>();
+
+	/** 站点验证 content（SSR 页面 <head> 输出，未配置时为空） */
+	private String baiduVerification;
+	private String bingVerification;
+	private String googleVerification;
 }

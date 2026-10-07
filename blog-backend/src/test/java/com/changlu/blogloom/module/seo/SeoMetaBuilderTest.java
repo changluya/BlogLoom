@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -53,5 +55,26 @@ class SeoMetaBuilderTest {
 		assertEquals(meta.getCanonicalUrl(), json.get("mainEntityOfPage").asText());
 		assertTrue(json.get("keywords").isArray());
 		assertFalse(meta.getPublishedTime().isEmpty());
+	}
+
+	@Test
+	void shouldCarrySiteVerificationIntoListMeta() {
+		SiteSettingService settings = mock(SiteSettingService.class);
+		Map<String, String> codes = new LinkedHashMap<>();
+		codes.put("baidu", "codeva-xxx");
+		codes.put("bing", "B58F82BA49351743C97F925B1A2FE58C");
+		codes.put("google", "");
+		when(settings.getSeoVerifications()).thenReturn(codes);
+		BlogProperties properties = new BlogProperties();
+		properties.setName("Test Blog");
+		properties.setView("https://blog.example.com");
+		SeoMetaBuilder builder = new SeoMetaBuilder(new SeoUrlResolver(settings, properties), settings, properties, new ObjectMapper());
+
+		// /home、/tag、/category、/column、/archives 等聚合页都走 forList
+		SeoMeta meta = builder.forList("首页", "最新博客文章", "/home");
+
+		assertEquals("codeva-xxx", meta.getBaiduVerification());
+		assertEquals("B58F82BA49351743C97F925B1A2FE58C", meta.getBingVerification());
+		assertEquals("", meta.getGoogleVerification());
 	}
 }

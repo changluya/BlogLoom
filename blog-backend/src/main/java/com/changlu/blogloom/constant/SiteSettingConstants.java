@@ -24,6 +24,12 @@ public class SiteSettingConstants {
 	public static final String ROLL_TEXT = "rollText";
 	/** SEO 域名：canonical / sitemap / RSS 等绝对地址统一使用；为空时回退 blog.view */
 	public static final String SEO_DOMAIN = "seoDomain";
+	/** 百度站点验证 content（baidu-site-verification） */
+	public static final String BAIDU_SITE_VERIFICATION = "baiduSiteVerification";
+	/** Bing 站点验证 content（msvalidate.01） */
+	public static final String BING_SITE_VERIFICATION = "bingSiteVerification";
+	/** Google 站点验证 content（google-site-verification） */
+	public static final String GOOGLE_SITE_VERIFICATION = "googleSiteVerification";
 	public static final String CUSTOM_MODULE = "customModule";
 	public static final String UPLOAD_CHANNEL_CHOOSE = "uploadChannelChoose";
 	public static final String UPLOAD_CHANNEL_LOCAL = "uploadChannelLocal";

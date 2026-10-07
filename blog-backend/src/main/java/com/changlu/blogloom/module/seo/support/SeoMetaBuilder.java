@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -74,6 +75,12 @@ public class SeoMetaBuilder {
 		SeoMeta meta = new SeoMeta();
 		meta.setBaseUrl(urlResolver.baseUrl());
 		meta.setSiteName(StringUtils.hasText(blogProperties.getName()) ? blogProperties.getName() : "BlogLoom");
+		Map<String, String> verifications = siteSettingService.getSeoVerifications();
+		if (verifications != null) {
+			meta.setBaiduVerification(verifications.get("baidu"));
+			meta.setBingVerification(verifications.get("bing"));
+			meta.setGoogleVerification(verifications.get("google"));
+		}
 		return meta;
 	}
 

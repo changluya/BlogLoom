@@ -31,3 +31,19 @@ export function downloadSeoFile(name) {
 		responseType: 'blob'
 	})
 }
+
+// SEO 平台关联（站点验证）
+export function getSeoVerification() {
+	return axios({
+		url: 'seo/verification',
+		method: 'GET'
+	})
+}
+
+export function updateSeoVerification(data) {
+	return axios({
+		url: 'seo/verification',
+		method: 'POST',
+		data
+	})
+}

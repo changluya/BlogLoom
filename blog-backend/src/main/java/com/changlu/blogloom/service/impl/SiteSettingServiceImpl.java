@@ -200,12 +200,45 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveSeoDomain(String value) {
+		upsertBasicSetting(SiteSettingConstants.SEO_DOMAIN, "SEO 域名", value);
+		deleteSiteInfoCache();
+	}
+
+	@Override
+	public Map<String, String> getSeoVerifications() {
+		Map<String, String> result = new LinkedHashMap<>(4);
+		result.put("baidu", settingValue(SiteSettingConstants.BAIDU_SITE_VERIFICATION));
+		result.put("bing", settingValue(SiteSettingConstants.BING_SITE_VERIFICATION));
+		result.put("google", settingValue(SiteSettingConstants.GOOGLE_SITE_VERIFICATION));
+		return result;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void saveSeoVerifications(Map<String, String> values) {
+		upsertBasicSetting(SiteSettingConstants.BAIDU_SITE_VERIFICATION, "百度站点验证",
+				values == null ? null : values.get("baidu"));
+		upsertBasicSetting(SiteSettingConstants.BING_SITE_VERIFICATION, "Bing 站点验证",
+				values == null ? null : values.get("bing"));
+		upsertBasicSetting(SiteSettingConstants.GOOGLE_SITE_VERIFICATION, "Google 站点验证",
+				values == null ? null : values.get("google"));
+		deleteSiteInfoCache();
+	}
+
+	private String settingValue(String nameEn) {
+		SiteSetting setting = siteSettingMapper.getByNameEn(nameEn);
+		String value = setting == null ? null : setting.getValue();
+		return value == null ? "" : value.trim();
+	}
+
+	/** 按 name_en 新增或更新一条 type=1 基础设置 */
+	private void upsertBasicSetting(String nameEn, String nameZh, String value) {
 		String normalized = value == null ? "" : value.trim();
-		SiteSetting setting = siteSettingMapper.getByNameEn(SiteSettingConstants.SEO_DOMAIN);
+		SiteSetting setting = siteSettingMapper.getByNameEn(nameEn);
 		if (setting == null) {
 			setting = new SiteSetting();
-			setting.setNameEn(SiteSettingConstants.SEO_DOMAIN);
-			setting.setNameZh("SEO 域名");
+			setting.setNameEn(nameEn);
+			setting.setNameZh(nameZh);
 			setting.setType(1);
 			setting.setValue(normalized);
 			saveOneSiteSetting(setting);
@@ -213,7 +246,6 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 			setting.setValue(normalized);
 			updateOneSiteSetting(setting);
 		}
-		deleteSiteInfoCache();
 	}
 
 	@Transactional(rollbackFor = Exception.class)

@@ -225,6 +225,8 @@ SEO 不是一个单点功能，而是一套"内容基础设施"。对博客平�
 blog-backend/src/main/java/com/changlu/blogloom/module/seo/
 ├── api/                               # 接口层（Controller，对外提供 HTTP / 视图）
 │   ├── SeoConfigController.java       # 后台 SEO 配置（GET/POST /admin/seo/config）✅ 已落地
+│   ├── SeoVerificationController.java # 后台 SEO 平台关联（GET/POST /admin/seo/verification）✅ 已落地
+│   ├── SpaIndexController.java        # SPA 入口注入站点验证 meta（方案 B）✅ 已落地
 │   ├── SeoPageController.java         # 内容页直出（@Controller，返回 Thymeleaf 视图）
 │   └── SeoFileController.java         # robots / sitemap / rss（@RestController，产出文本/XML）
 ├── service/                           # 业务层
@@ -233,6 +235,7 @@ blog-backend/src/main/java/com/changlu/blogloom/module/seo/
 │   └── RssService.java                # 生成 rss.xml
 ├── domain/                            # 领域模型
 │   ├── SeoConfig.java                 # 后台 SEO 配置载体（seoDomain 等）✅ 已落地
+│   ├── SeoVerification.java           # 站点验证载体（baidu/bing/google）✅ 已落地
 │   └── SeoMeta.java                   # 公共 meta 载体（title/description/canonical/og/ldJson）
 ├── support/                           # 辅助工具
 │   ├── SeoUrlResolver.java            # 统一 canonical / 绝对 URL 拼接（读后台 seoDomain，兜底 blog.view）
@@ -1389,6 +1392,61 @@ SeoConfigController
 + 保存后清理站点缓存，前台生成的绝对地址使用该域名。
 + 「核心文件」卡片可对 `robots.txt` / `sitemap.xml` / `rss.xml` 逐个**查看**（弹窗展示内容）与**下载**（保存到本地）。
 
+#### 5.1.5.4、SEO 平台关联（站点验证，方案 B）
+
+**目标：**在后台「SEO优化 → SEO平台关联」配置百度 / Bing / Google 的站点验证 `content`，保存后**自动注入站点首页 `<head>`**，无需改代码、无需重新部署。
+
+**页面位置：**侧边栏顶级栏目 **SEO优化** → **SEO平台关联**。
+
+**页面字段与配置键：**
+
+| 平台 | 验证 meta | 配置键（site_setting） |
+| --- | --- | --- |
+| 百度 | `baidu-site-verification` | `baiduSiteVerification` |
+| Bing | `msvalidate.01` | `bingSiteVerification` |
+| Google | `google-site-verification` | `googleSiteVerification` |
+
+> 每平台一个配置：用户从平台后台复制整段验证代码中的 `content` 值填入即可；页面提供「复制 meta」按钮。
+
+**接口：**
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| GET | `/admin/seo/verification` | 返回 `{ baidu, bing, google }` |
+| POST | `/admin/seo/verification` | body `{ baidu, bing, google }`，保存 |
+
+**注入实现（方案 B：SPA 入口注入）：**
+
+由于根路径 `/` 由 SPA 的 `index.html` 承载，而百度验证不执行 JS，必须在**服务端返回的 HTML** 里就有验证 meta。实现方式：
+
+```plain
+GET /  或  /index.html
+   ↓ SpaForwardFilter：/ 回退到 /index.html（其它 SPA 路由同理）
+SpaIndexController（@Controller）
+   ↓ 读取前台构建产物 conf/static/view/index.html
+   ↓ 取 site_setting 中的三个验证 content，SeoVerificationSupport 拼接 meta
+   ↓ 注入 </head> 之前
+返回注入后的 HTML（浏览器 URL 不变）
+```
+
+> `SpaIndexController` 映射 `/`、`/index.html`，因此所有回退到 SPA 的页面（`/moments`、`/friends` 等）都会带上验证 meta；未配置时原样返回。
+
+**已落地文件清单：**
+
+| 层 | 文件 |
+| --- | --- |
+| 常量 | `constant/SiteSettingConstants.java`（`BAIDU_/BING_/GOOGLE_SITE_VERIFICATION`） |
+| Service | `service/SiteSettingService.java` + `impl/SiteSettingServiceImpl.java`（`getSeoVerifications` / `saveSeoVerifications`） |
+| 支持类 | `module/seo/support/SeoVerificationSupport.java`（meta 拼接与注入） |
+| API | `module/seo/api/SeoVerificationController.java`（GET/POST `/admin/seo/verification`）、`module/seo/api/SpaIndexController.java`（方案 B 注入）、`module/seo/domain/SeoVerification.java` |
+| CMS | `blog-cms-ui/src/api/seo.js`、`views/blog/seo/SeoVerification.vue`、`router/index.js`（新增"SEO平台关联"菜单） |
+
+**验收：**
+
++ 后台「SEO优化 → SEO平台关联」可打开，三个平台各有一个 content 输入框与「复制 meta」按钮。
++ 填入并保存后，`curl -s https://域名/ | grep 'baidu-site-verification'` 能命中对应 meta。
++ 清空后保存，对应 meta 从首页源码消失。
+
 ### 5.1.6、阅读页性能优化
 
 #### 5.1.6.1、代码优化：阅读页性能与资源加载
@@ -1520,11 +1578,59 @@ gtag('event', 'click_rss', { event_category: 'subscribe', event_label: 'rss' });
 
 1. **验证所有权**：添加资源，选"网域"方式填 `blog.changlu.cloud`，在 DNS 服务商加 TXT 记录后验证；或选"网址前缀" `https://blog.changlu.cloud/`，用 HTML 文件 / `<meta name="google-site-verification" content="...">` 验证。
 
-   ![image-20261006183505691](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610061835953.png)  
+   ![image-20261006183505691](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610061835953.png)   ![image-20261006214051311](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062140807.png)  
+
+   需要在dns域名映射配置中填写txt：
+
+   ![image-20261006214646547](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062146663.png)  
+
+   配置的腾讯云DNS配置如下：
+
+   ![img](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062151157.png)  
+
+   保存好进行google console验证即可，验证通过：
+
+   ![image-20261006215219058](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062152232.png)      
 
 2. **提交 Sitemap**：左侧"站点地图"，提交 `https://blog.changlu.cloud/sitemap.xml`。
 
+   选择对应的博客域名然后进行站点地图配置：
+
+   ![image-20261006215356368](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062153435.png)  
+
+   提交成功：
+
+   ![image-20261006215432122](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062154230.png)  
+
+   后续就是进行等待提交了：
+
+   ![image-20261006215933774](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062159940.png)  
+
+   自己测试验证为：
+
+   ```      shell
+   # 测试curl
+   curl -A "Googlebot" \
+   -sS -o /dev/null \
+   -w "HTTP=%{http_code}\nTYPE=%{content_type}\nSIZE=%{size_download}\n" \
+   https://blog.changlu.cloud/sitemap.xml
+   
+   # 返回值
+   HTTP=200
+   TYPE=application/xml;charset=UTF-8
+   SIZE=52765
+   ```
+   Google 官方明确把 `robots.txt` 阻止 Sitemap、404、服务器暂时不可用等列为 Sitemap `Couldn't fetch` 的主要原因。[谷歌帮助](https://support.google.com/webmasters/answer/7451001?hl=en-EN&utm_source=chatgpt.com)，所以如果
+
 3. **请求编入索引（新文章）**：用"网址检查"输入 `https://blog.changlu.cloud/blog/513`，确认"网址可编入索引"后点"请求编入索引"。
+
+   搜索对应的google search console即可：
+
+   ![image-20261007101844677](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610071018090.png)
+
+   进行测试并进行请求编入索引即可：
+
+   ![image-20261007101920785](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610071019928.png)    
 
 4. **等待抓取与收录**：通常数天到数周，**不要反复狂点**，重点是把内容与结构做好。
 
@@ -1534,14 +1640,40 @@ gtag('event', 'click_rss', { event_category: 'subscribe', event_label: 'rss' });
 
 ### 5.2.3、百度平台收录（国内）
 
+> 说明：需要绑定微信、手机号、邮箱以及进行身份验证
+
 **平台入口：**https://ziyuan.baidu.com/
 
-**目标：**让 `blog.changlu.cloud` 的文章进入百度索引（国内主战场）。
+**目标：**让 `blog.changlu.cloud` 的文章进入百度索引（国内主战场），点击进入到百度平台的站点管理：https://ziyuan.baidu.com/site/index。
 
 **操作步骤：**
 
 1. **验证站点**：添加站点 `https://blog.changlu.cloud`，用文件验证 / HTML 标签 / CNAME 任一种方式验证。
+
+   ![image-20261006220244456](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062202551.png)  
+
+   添加网站：
+
+   ![image-20261006220759536](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062207605.png)
+
+   添加站点属性：
+
+   ![image-20261006221915228](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062219424.png)  
+
+   选择使用html标签验证：
+
+   ![image-20261007005606721](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070056866.png)配置如下：
+
+   ![image-20261007005649226](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070056313.png)  
+
+   验证通过：
+
+   ![image-20261007005833197](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070058288.png)          
+
 2. **提交 Sitemap**：在"普通收录 → sitemap"提交 `https://blog.changlu.cloud/sitemap.xml`。
+
+   ![image-20261007102257719](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610071022059.png)  
+
 3. **主动推送（F13，可三选一或组合）**：
    + **API 主动推送（推荐，最快）**：发布文章时服务端 POST 到推送接口；
    + **自动推送 `push.js`（最省事）**：页面被访问时自动推送；
@@ -1563,7 +1695,33 @@ gtag('event', 'click_rss', { event_category: 'subscribe', event_label: 'rss' });
 **操作步骤：**
 
 1. **验证站点**：添加 `blog.changlu.cloud`，可直接**从 Google Search Console 导入**，或用 DNS / meta 验证。
+
+   ![image-20261006221133125](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610062211822.png)  
+
+   验证方式选择html验证即可：
+
+   ![image-20261007004403388](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070044584.png)  
+
+   在网站后台配置配置即可：
+
+   ![image-20261007004720695](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070047758.png)
+
+   点击Verify即可进行验证通过：   ![image-20261007004642975](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070046128.png)  
+
 2. **提交 Sitemap**：提交 `https://blog.changlu.cloud/sitemap.xml`。
+
+   提交sitemap：
+
+   ![image-20261007004749290](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070047521.png)  
+
+   此时状态就是在处理中：
+
+   ![image-20261007004828462](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070048597.png)
+
+   等待一会即可成功：
+
+   ![image-20261007005106416](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610070051582.png)    
+
 3. **IndexNow 主动推送（F13）**：在站点根目录放 `<你的key>.txt`（内容即 key），发布文章时 POST：
 
 ```json
