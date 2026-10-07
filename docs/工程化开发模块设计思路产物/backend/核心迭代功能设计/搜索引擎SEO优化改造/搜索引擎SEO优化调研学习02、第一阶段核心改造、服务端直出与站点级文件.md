@@ -1622,6 +1622,10 @@ gtag('event', 'click_rss', { event_category: 'subscribe', event_label: 'rss' });
    ```
    Google 官方明确把 `robots.txt` 阻止 Sitemap、404、服务器暂时不可用等列为 Sitemap `Couldn't fetch` 的主要原因。[谷歌帮助](https://support.google.com/webmasters/answer/7451001?hl=en-EN&utm_source=chatgpt.com)，所以如果
 
+   记录：过了一天半收录成功～
+
+   ![image-20261008010438029](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610080104295.png)  
+
 3. **请求编入索引（新文章）**：用"网址检查"输入 `https://blog.changlu.cloud/blog/513`，确认"网址可编入索引"后点"请求编入索引"。
 
    搜索对应的google search console即可：
