@@ -22,6 +22,9 @@ public interface SiteSettingMapper {
 
 	String getWebTitleSuffix();
 
+	/** 查询 SEO 域名配置值（未配置返回 null） */
+	String getSeoDomain();
+
 	int updateSiteSetting(SiteSetting siteSetting);
 
 	int deleteSiteSettingById(Integer id);

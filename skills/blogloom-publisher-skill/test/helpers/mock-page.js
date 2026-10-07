@@ -24,6 +24,12 @@ function parsePart(part) {
   return { cleaned, last: tokens[tokens.length - 1] || '', hasTexts };
 }
 
+/** 纯 class 选择器 → class 列表；含组合符/属性/标签则返回 null。 */
+function classTokens(selector) {
+  if (!selector.startsWith('.') || /[\s[\]()>+~,]/.test(selector)) return null;
+  return selector.slice(1).split('.').filter(Boolean);
+}
+
 function el(selector, options = {}) {
   return {
     selector,
@@ -52,6 +58,13 @@ function partMatches(element, part) {
   if (!cleaned) return hasTexts.length > 0;
   const sel = element.selector;
   if (sel === cleaned) return true;
+  // 纯 class 选择器按 class token 匹配，避免 `.a` 误配 `.a__b`
+  const qTokens = classTokens(cleaned);
+  const eTokens = classTokens(sel);
+  if (qTokens && eTokens) {
+    const set = new Set(eTokens);
+    return qTokens.every((t) => set.has(t));
+  }
   if (last && (sel === last || sel.includes(last) || last.includes(sel))) return true;
   return false;
 }
@@ -144,6 +157,7 @@ class MockLocator {
   async click(options = {}) {
     const element = this._one();
     this.page.calls.push({ type: 'click', selector: this.selector, opts: options });
+    this.page.lastClickedElement = element;
     if (typeof element.onClick === 'function') element.onClick(this.page, element);
   }
 
@@ -162,6 +176,11 @@ class MockLocator {
   async isVisible() {
     const list = this._resolve();
     return list.length > 0 && list.some((element) => element.visible);
+  }
+
+  async isChecked() {
+    const element = this._resolve()[0];
+    return !!(element && element.checked);
   }
 
   async hover() {
@@ -234,9 +253,18 @@ class MockPage {
     this.currentUrl = 'about:blank';
     this.calls = [];
     this.keyboard = {
-      press: async (key) => this.calls.push({ type: 'keyPress', key }),
-      type: async (text) => this.calls.push({ type: 'keyType', text }),
-      insertText: async (text) => this.calls.push({ type: 'insertText', text }),
+      press: async (key) => {
+        this.calls.push({ type: 'keyPress', key });
+        if (key === 'Backspace' && this.lastClickedElement) this.lastClickedElement.value = '';
+      },
+      type: async (text) => {
+        this.calls.push({ type: 'keyType', text });
+        if (this.lastClickedElement) this.lastClickedElement.value = (this.lastClickedElement.value || '') + text;
+      },
+      insertText: async (text) => {
+        this.calls.push({ type: 'insertText', text });
+        if (this.lastClickedElement) this.lastClickedElement.value = (this.lastClickedElement.value || '') + text;
+      },
     };
     this.contextObj = {
       newCDPSession: async () => ({ send: async (method, params) => this.calls.push({ type: 'cdp', method, params }) }),

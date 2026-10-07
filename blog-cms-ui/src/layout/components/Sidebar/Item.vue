@@ -1,4 +1,6 @@
 <script>
+import SeoIcon from '@/components/SvgIcon/SeoIcon'
+
 export default {
   name: 'MenuItem',
   functional: true,
@@ -17,7 +19,9 @@ export default {
     const vnodes = []
 
     if (icon) {
-      if (icon.includes('el-icon')) {
+	  if (icon === 'seo') {
+		vnodes.push(h(SeoIcon))
+      } else if (icon.includes('el-icon')) {
         vnodes.push(h('i', {class: [icon, 'sub-el-icon']}))
       } else {
         vnodes.push(h('svg-icon', {props: {iconClass: icon}}))

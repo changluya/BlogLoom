@@ -1,0 +1,25 @@
+# ============================================================
+# CSDN 渠道发布配置「模板」
+# ------------------------------------------------------------
+# 复制为 conf/csdn.conf 后按需修改（conf/*.conf 已在 .gitignore 中忽略）。
+#   cp conf/csdn.conf.template conf/csdn.conf
+# 这里只放「渠道级发布选项」，不放文章自身属性（标题/标签/分类/
+# 摘要/专栏/封面等来自博客顶部 SOP 元数据，见 lib/markdown.js 解析）。
+# 语法：key=value，一行一项，# 开头为注释；布尔值 true/false。
+# ============================================================
+
+# 文章类型：original（原创）/ repost（转载）/ translated（翻译）
+blogType=original
+
+# 可见范围：public（公开）/ private（私有）/ read_need_fans（粉丝可见）/ read_need_vip（VIP可见）
+visibleRange=public
+
+# 创作声明（留空则不设置）：个人观点，仅供参考
+creationStatement=个人观点，仅供参考
+
+# 首图策略：first（自动选正文第一张图）/ none（不设置首图）
+cover=first
+
+# 正文含图片时，粘贴后的等待基数（毫秒）与每批递增（毫秒）
+imageWaitBase=2000
+imageWaitPerBlock=3000

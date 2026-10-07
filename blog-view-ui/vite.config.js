@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 const sourceRoot = fileURLToPath(new URL('./src', import.meta.url))
 const sourcePath = (directory) => fileURLToPath(new URL(`./src/${directory}`, import.meta.url))
+const backendTarget = process.env.VITE_SSR_TARGET || 'http://127.0.0.1:8090'
 
 export default defineConfig({
   plugins: [createVuePlugin()],
@@ -23,7 +24,17 @@ export default defineConfig({
   },
   server: {
     host: '127.0.0.1',
-    port: Number(process.env.npm_config_port || process.env.PORT || 8080)
+    port: Number(process.env.npm_config_port || process.env.PORT || 8080),
+    // 开发环境的硬刷新/爬虫请求交给 Spring SEO 直出；Vue Router 的站内跳转不受影响。
+    proxy: {
+	  // SEO HTML 引用的原站样式、Semantic UI 字体与图片均由 Spring 托管。
+	  '^/seo-assets(?:/.*)?$': { target: backendTarget },
+      '^/blog/\\d+(?:[/?].*)?$': { target: backendTarget },
+      '^/(?:home|archives)(?:[/?].*)?$': { target: backendTarget },
+      '^/(?:tag|category)/[^/?]+(?:[/?].*)?$': { target: backendTarget },
+      '^/column/\\d+(?:[/?].*)?$': { target: backendTarget },
+      '^/(?:robots\\.txt|sitemap\\.xml|rss\\.xml)$': { target: backendTarget }
+    }
   },
   css: {
     preprocessorOptions: {
