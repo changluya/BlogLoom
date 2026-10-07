@@ -1,0 +1,89 @@
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/搜索引擎SEO优化改造/搜索引擎SEO优化调研学习02、第一阶段核心改造、服务端直出与站点级文件.md
+  s_a10c1ae7756c4f::t_ee5282b52bd3d7 1581
+  s_a10c1ae7756c4f::t_4c2ea04fd24a90 228-229,238
+  s_a10c1ae7756c4f::t_bce6ed831f5b6e 1395-1449
+  s_a10c1ae7756c4f::t_807632d9dcac1a 1701-1710,1712-1723
+  s_a10c1ae7756c4f::t_9e922505401e48 1582-1584
+  s_a10c1ae7756c4f::t_79b276220fee2e 1698-1700
+  s_a10c1ae7756c4f::t_fc1c3004e53d58 1724
+docker/scripts/package.sh
+  s_a10c1ae7756c4f::t_1b076242d4f9ef 41-43
+  s_a10c1ae7756c4f::t_02aa5aca34d1c7 53-57
+blog-cms-ui/src/views/blog/seo/SeoVerification.vue
+  s_a10c1ae7756c4f::t_896c777cd926ae 1-6,8-10,34,37-55,59-74,78-88,102-161,175-176,182,215-217,219-230
+  s_a10c1ae7756c4f::t_977afe3aee1520 26,35-36
+  s_a10c1ae7756c4f::t_3a2b0e74fa1014 7,11-25,27-33,162-174,177-181,183-214,218
+  s_a10c1ae7756c4f::t_affddc4ec82d0e 56-58
+  s_a10c1ae7756c4f::t_1ec97c4a5a66fb 75-77,89-101
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SpaIndexController.java
+  s_a10c1ae7756c4f::t_ec2e8161824176 27-31
+  s_a10c1ae7756c4f::t_091692c09ee9f7 1-26,32-51
+blog-cms-ui/src/api/seo.js
+  s_a10c1ae7756c4f::t_069c32338ea54e 34-49
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoVerificationSupportTest.java
+  s_a10c1ae7756c4f::t_c586f05d66a461 1-55
+blog-backend/src/main/resources/templates/seo/fragments/seo-head.html
+  s_a10c1ae7756c4f::t_61be2b86396731 10-12
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoMeta.java
+  s_a10c1ae7756c4f::t_6a80f117d7a2e2 25-29
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoVerificationController.java
+  s_a10c1ae7756c4f::t_c84ddf58fa9ec1 1-47
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/support/SeoVerificationSupport.java
+  s_a10c1ae7756c4f::t_a5029a8aaa8372 1-56
+docker/Dockerfile
+  s_a10c1ae7756c4f::t_e76042ff2472fb 54,57-61
+  s_a10c1ae7756c4f::t_5548ee3ce581f5 69,72-76
+  s_a10c1ae7756c4f::t_42362e8010a24e 9-11
+  s_a10c1ae7756c4f::t_ee12326e1eb5ec 6-8,12
+  s_a10c1ae7756c4f::t_20497bbebde3a3 39,42-44
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/support/SeoMetaBuilder.java
+  s_a10c1ae7756c4f::t_2798662900d5b9 20
+  s_a10c1ae7756c4f::t_6a1b2fa244d6ad 79-83
+  s_a10c1ae7756c4f::t_25e087135fa1ea 78
+blog-cms-ui/src/router/index.js
+  s_a10c1ae7756c4f::t_77e75eb2964474 146-151
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/SiteSettingServiceImpl.java
+  s_a10c1ae7756c4f::t_805c940265edd0 203-235,237,240-241
+blog-backend/src/main/java/com/changlu/blogloom/constant/SiteSettingConstants.java
+  s_a10c1ae7756c4f::t_8a0254fee3b838 27-32
+docker/scripts/push.sh
+  s_a10c1ae7756c4f::t_2bac70363ea27c 109
+  s_a10c1ae7756c4f::t_8322476f5034ba 20
+  s_a10c1ae7756c4f::t_bb0f07aebd0225 100,110
+  s_a10c1ae7756c4f::t_8a23f3a70a3e1c 42-45
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoVerification.java
+  s_a10c1ae7756c4f::t_f54106db77f7be 1-24
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SpaIndexControllerTest.java
+  s_a10c1ae7756c4f::t_8487080e426043 1-60
+blog-backend/src/main/java/com/changlu/blogloom/service/SiteSettingService.java
+  s_a10c1ae7756c4f::t_5f6526a6426071 23-28
+blog-view-ui/src/views/Index.vue
+  s_b71aa883e9073c::t_8d2acbf0a3835c 54
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoMetaBuilderTest.java
+  s_a10c1ae7756c4f::t_8b09bfe4a1d174 59-79
+  s_a10c1ae7756c4f::t_82f766aaf3d1b6 17-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3040ca7341f46dc80608127503f7cfaac5834ebd",
+  "prompts": {},
+  "sessions": {
+    "s_a10c1ae7756c4f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eef6e976dffeEKw4bRhmc9dQ0M",
+        "model": "deepseek-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_b71aa883e9073c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a110d1-db52-7b21-b9eb-15110bcb40e1",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
