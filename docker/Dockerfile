@@ -3,6 +3,13 @@
 # =============================================================================
 # BlogLoom 一体化镜像
 # =============================================================================
+# npm 源可通过构建参数覆盖（默认官方源，国内可换成镜像源）：
+#   docker buildx build --build-arg NPM_REGISTRY=https://registry.npmmirror.com ...
+ARG NPM_REGISTRY=https://registry.npmjs.org
+# Maven 源可通过构建参数覆盖（默认官方源，国内可换成镜像源）：
+#   docker buildx build --build-arg MAVEN_MIRROR=https://maven.aliyun.com/repository/public ...
+ARG MAVEN_MIRROR=https://repo.maven.apache.org/maven2
+#
 # 一个镜像同时包含：Spring Boot 后端 + 博客前台（blog-view-ui）+ 内容管理后台（blog-cms-ui）。
 # 运行时不依赖外部 Web 服务器，前端静态资源由后端直接提供。
 #
@@ -29,8 +36,12 @@
 
 # ---------- 1. 构建后端（Maven + JDK8） ----------
 FROM maven:3.8-jdk-8 AS backend-build
+ARG MAVEN_MIRROR
 # 部分 arm64 / 虚拟化环境下 JDK8 的 PerfData 会导致 JVM 崩溃，这里显式关闭。
 ENV MAVEN_OPTS="-XX:-UsePerfData"
+# 写入 Maven 镜像源（默认官方源，国内可用 --build-arg MAVEN_MIRROR=... 切换）。
+RUN mkdir -p /root/.m2 \
+ && printf '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"><mirrors><mirror><id>central-mirror</id><mirrorOf>*</mirrorOf><url>%s</url></mirror></mirrors></settings>\n' "$MAVEN_MIRROR" > /root/.m2/settings.xml
 WORKDIR /workspace
 # 先只拷贝 pom 预热依赖，利用 Docker 层缓存加速后续构建。
 COPY blog-backend/pom.xml ./blog-backend/pom.xml
@@ -40,9 +51,14 @@ RUN cd blog-backend && mvn -B -q clean package -Dmaven.test.skip=true
 
 # ---------- 2. 构建博客前台（blog-view-ui） ----------
 FROM node:18 AS view-build
+ARG NPM_REGISTRY
 WORKDIR /workspace/blog-view-ui
 COPY blog-view-ui/package.json ./
-RUN npm install --no-audit --no-fund
+RUN npm config set registry "$NPM_REGISTRY" \
+ && npm config set fetch-retries 5 \
+ && npm config set fetch-retry-mintimeout 20000 \
+ && npm config set fetch-retry-maxtimeout 120000 \
+ && npm install --no-audit --no-fund
 COPY blog-view-ui/ ./
 # 同源部署：接口走根路径（VITE_API_URL=/）；
 # 产物目录改为 assets（VITE_ASSETS_DIR=assets），避免与后台上传资源 /static/** 冲突。
@@ -50,9 +66,14 @@ RUN VITE_API_URL=/ VITE_ASSETS_DIR=assets npm run build
 
 # ---------- 3. 构建内容管理后台（blog-cms-ui） ----------
 FROM node:18 AS cms-build
+ARG NPM_REGISTRY
 WORKDIR /workspace/blog-cms-ui
 COPY blog-cms-ui/package.json ./
-RUN npm install --no-audit --no-fund
+RUN npm config set registry "$NPM_REGISTRY" \
+ && npm config set fetch-retries 5 \
+ && npm config set fetch-retry-mintimeout 20000 \
+ && npm config set fetch-retry-maxtimeout 120000 \
+ && npm install --no-audit --no-fund
 COPY blog-cms-ui/ ./
 # 同源部署：后台挂载在 /cms/（--base=/cms/），接口走 /admin/（VITE_API_URL=/admin/）。
 RUN VITE_API_URL=/admin/ npm run build -- --base=/cms/

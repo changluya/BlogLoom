@@ -24,6 +24,13 @@ CREATE TABLE IF NOT EXISTS schedule_job (
 
 CREATE TABLE IF NOT EXISTS blog (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	title VARCHAR(255),
+	description VARCHAR(1000),
+	first_picture VARCHAR(1000),
+	create_time TIMESTAMP,
+	update_time TIMESTAMP,
+	is_published TINYINT DEFAULT 0,
+	password VARCHAR(255) DEFAULT '',
     views INT DEFAULT 0,
     is_deleted TINYINT DEFAULT 0
 );

@@ -4,13 +4,15 @@ const test = require('node:test');
 const assert = require('node:assert');
 const { availableChannels, loadChannel } = require('../scripts/lib/channel');
 
-const REQUIRED = ['checkLogin', 'enterEditor', 'setTitle', 'setContent', 'preparePublish', 'publish', 'saveDraft', 'deleteBlog'];
+const REQUIRED = ['checkLogin', 'enterEditor', 'setTitle', 'setContent', 'preparePublish', 'publish', 'saveDraft'];
 
-test('availableChannels: 至少包含 csdn', () => {
-  assert.ok(availableChannels().includes('csdn'));
+test('availableChannels: 至少包含 csdn 与 gzh', () => {
+  const channels = availableChannels();
+  assert.ok(channels.includes('csdn'));
+  assert.ok(channels.includes('gzh'));
 });
 
-test('loadChannel: csdn 适配实现完整', () => {
+test('loadChannel: csdn 适配实现完整（含 delete）', () => {
   const csdn = loadChannel('csdn');
   assert.strictEqual(csdn.name, 'csdn');
   assert.ok(csdn.loginUrl && csdn.editorUrl && csdn.homeUrl);
@@ -18,6 +20,18 @@ test('loadChannel: csdn 适配实现完整', () => {
   for (const fn of REQUIRED) {
     assert.strictEqual(typeof csdn[fn], 'function', `缺少方法: ${fn}`);
   }
+  assert.strictEqual(typeof csdn.deleteBlog, 'function');
+});
+
+test('loadChannel: gzh 适配实现完整（含 delete）', () => {
+  const gzh = loadChannel('gzh');
+  assert.strictEqual(gzh.name, 'gzh');
+  assert.ok(gzh.loginUrl && gzh.editorUrl && gzh.homeUrl);
+  assert.ok(Array.isArray(gzh.loginCookieNames) && gzh.loginCookieNames.length > 0);
+  for (const fn of REQUIRED) {
+    assert.strictEqual(typeof gzh[fn], 'function', `缺少方法: ${fn}`);
+  }
+  assert.strictEqual(typeof gzh.deleteBlog, 'function');
 });
 
 test('loadChannel: 未知渠道报错并提示可用渠道', () => {

@@ -17,6 +17,7 @@
 #   ./scripts/push.sh --no-latest           # 只推送指定 tag，不推送 latest
 #   ./scripts/push.sh --prune               # 构建前清理 buildx 缓存，释放磁盘空间
 #   ./scripts/push.sh --single              # 使用本地已构建镜像推送（旧行为，单架构）
+#   NPM_REGISTRY=https://registry.npmmirror.com ./scripts/push.sh 1.0.0   # 国内切换 npm 镜像源
 #
 # 前置条件：
 #   1) 已登录 Docker Hub：docker login -u <DOCKERHUB_USER>
@@ -38,6 +39,10 @@ PLATFORMS="linux/amd64,linux/arm64"
 SINGLE=false
 PUSH_LATEST=true
 PRUNE=false
+# 依赖源：默认走国内镜像（阿里云 Maven / npmmirror），可用环境变量覆盖为官方源：
+#   NPM_REGISTRY=https://registry.npmjs.org MAVEN_MIRROR=https://repo.maven.apache.org/maven2 ./scripts/push.sh <版本>
+NPM_REGISTRY="${NPM_REGISTRY:-https://registry.npmmirror.com}"
+MAVEN_MIRROR="${MAVEN_MIRROR:-https://maven.aliyun.com/repository/public}"
 VERSION=""
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -92,6 +97,7 @@ else
     fi
 
     printf '[push] 多架构构建并推送 %s:%s（平台：%s）\n' "$REPO" "$VERSION" "$PLATFORMS"
+    printf '[push] 依赖源：npm=%s maven=%s\n' "$NPM_REGISTRY" "$MAVEN_MIRROR"
     TAGS=(-t "${REPO}:${VERSION}")
     if [ "$PUSH_LATEST" = true ]; then
         TAGS+=(-t "${REPO}:latest")
@@ -100,6 +106,8 @@ else
         --builder "$BUILDX_BUILDER" \
         --platform "$PLATFORMS" \
         --provenance=false \
+        --build-arg "NPM_REGISTRY=${NPM_REGISTRY}" \
+        --build-arg "MAVEN_MIRROR=${MAVEN_MIRROR}" \
         -f "$DOCKERFILE" \
         "${TAGS[@]}" \
         --push \

@@ -22,6 +22,11 @@
         select value from site_setting where name_en='webTitleSuffix'
     </select>
 
+    <!--查询 SEO 域名配置值-->
+    <select id="getSeoDomain" resultType="java.lang.String">
+        select value from site_setting where name_en='seoDomain' limit 1
+    </select>
+
     <!--更新-->
     <update id="updateSiteSetting">
         update site_setting set value=#{value} where id=#{id}

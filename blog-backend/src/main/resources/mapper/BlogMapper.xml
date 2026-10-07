@@ -80,7 +80,11 @@
     <resultMap id="searchBlog" type="com.changlu.blogloom.model.vo.SearchBlog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
+		<result property="firstPicture" column="first_picture"/>
+		<result property="description" column="description"/>
         <result property="content" column="content"/>
+		<result property="authorName" column="author_name"/>
+		<result property="authorAvatar" column="author_avatar"/>
     </resultMap>
 
     <!--按关键字根据文章内容搜索公开且无密码保护的博客文章-->
@@ -310,11 +314,11 @@
 
     <!--按id查询公开博客-->
     <select id="getBlogByIdAndIsPublished" resultMap="blogDetail">
-        select b.id, b.title, b.content, b.is_appreciation, b.is_comment_enabled, b.is_top,
+		select b.id, b.title, b.first_picture, b.description, b.content, b.is_appreciation, b.is_comment_enabled, b.is_top,
         b.create_time, b.update_time, b.views, b.words, b.read_time, b.password,
-        c.category_name,
+		c.category_name, u.nickname as author_name, u.avatar as author_avatar,
         t.tag_name as tag_name, t.color
-        from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id)
+		from ((((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) left join user as u on b.user_id=u.id)
         where b.id=#{id} and b.is_published=true and b.is_deleted=0
     </select>
 

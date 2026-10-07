@@ -1,3 +1,7 @@
 node_modules/
 *.log
 .DS_Store
+
+# 渠道发布配置（可能含个人默认值，勿提交；模板见 conf/*.conf.template）
+conf/*.conf
+!conf/*.conf.template

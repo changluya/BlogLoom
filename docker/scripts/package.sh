@@ -38,6 +38,9 @@ require_docker
 # ---------------------------------------------------------------------------
 VERSION="${1:-$(read_env_value IMAGE_TAG 1.0.0)}"
 IMAGE="blogloom:${VERSION}"
+# 依赖源：默认走国内镜像（阿里云 Maven / npmmirror），可用环境变量覆盖为官方源。
+NPM_REGISTRY="${NPM_REGISTRY:-https://registry.npmmirror.com}"
+MAVEN_MIRROR="${MAVEN_MIRROR:-https://maven.aliyun.com/repository/public}"
 
 mkdir -p "$DIST_DIR"
 
@@ -47,8 +50,11 @@ mkdir -p "$DIST_DIR"
 #   因为 Dockerfile 需要访问 blog-backend/、blog-view-ui/、blog-cms-ui/、conf/、docker/container/。
 #   镜像内阶段：backend-build（Maven）→ view-build（Node）→ cms-build（Node）→ runtime。
 # ---------------------------------------------------------------------------
-printf '[build] 构建镜像 %s（上下文：%s）\n' "$IMAGE" "$REPO_ROOT"
-docker build -f "$DOCKERFILE" -t "$IMAGE" "$REPO_ROOT"
+printf '[build] 构建镜像 %s（上下文：%s，npm 源：%s，maven 源：%s）\n' "$IMAGE" "$REPO_ROOT" "$NPM_REGISTRY" "$MAVEN_MIRROR"
+docker build \
+    --build-arg "NPM_REGISTRY=${NPM_REGISTRY}" \
+    --build-arg "MAVEN_MIRROR=${MAVEN_MIRROR}" \
+    -f "$DOCKERFILE" -t "$IMAGE" "$REPO_ROOT"
 
 # ---------------------------------------------------------------------------
 # 步骤 3：导出镜像 tar（供服务器 docker load 使用，适合离线/无构建环境）

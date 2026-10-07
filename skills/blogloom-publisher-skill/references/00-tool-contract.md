@@ -12,12 +12,12 @@
 | `login` | 打开浏览器，让用户扫码登录并持久化登录态 | 否 |
 | `publishDraft` | 按 SOP 元数据保存为**草稿** | 是 |
 | `publish` | 按 SOP 元数据**发布**博客 | 是 |
-| `delete` | 删除博客（进入内容管理页定位后删除，含二次确认与结果校验） | 是 |
-| `test <scenario>` | 组合链路自测，当前支持 `test publish`（发布后立即删除） | 是 |
+| `delete` | 删除博客（进入内容管理页定位后删除，含二次确认与结果校验；渠道支持时可用） | 是 |
+| `test <scenario>` | 组合链路自测，当前支持 `test publish`（csdn：发布后删除；gzh：发布草稿后删除） | 是 |
 
 ## 2. 渠道（channel）
 
-渠道按目录维护：`scripts/channels/<channel>/`。当前可用：`csdn`。
+渠道按目录维护：`scripts/channels/<channel>/`。当前可用：`csdn`、`gzh`（微信公众号）。
 
 ## 3. 参数
 
@@ -42,6 +42,7 @@
 | `--headed` / `--headless` | 否 | — | `--mode` 的快捷写法 |
 | `--timeout <ms>` | 否 | 600000 | 登录等待 / 连接超时（默认 10 分钟） |
 | `--params '<json>'` | 否 | — | 以 JSON 传入参数（Agent 调用友好） |
+| 渠道专属参数 | 否 | — | 任意 `--key value` 原样透传给渠道，由渠道自行解析（如 gzh 的 `--author` / `--wechat-name` / `--collection` / `--group-send`），核心 CLI 不感知 |
 
 > 默认**有头模式**：发布全过程可见，便于用户确认操作。CI / 无人值守可用 `--mode headless`。
 
@@ -103,15 +104,24 @@
 
 `status`：
 - publish/publishDraft：`PUBLISHED`（发布成功）/ `DRAFT_SAVED`（草稿已保存）/ `DRY_RUN`（仅填写）/ `UNKNOWN`（未确认）；
+  - 渠道可追加自己的终态（`channel.successStatuses`），如 gzh 发表后为 `SUBMITTED`（已提交，需管理员扫码/审核）；
 - delete：`DELETED`（已删除并校验）/ `DELETE_UNVERIFIED`（点击后未确认到已删除）。
 
 `test publish`：
 
 ```json
+// csdn：发布 → 删除
 { "ok": true, "channel": "csdn", "action": "test publish",
   "data": { "status": "PUBLISHED_AND_DELETED",
             "publish": { "status": "PUBLISHED", "url": "https://blog.csdn.net/x/article/details/123", "publishConfig": {} },
             "delete": { "status": "DELETED", "id": "123" } },
+  "error": null }
+
+// gzh：发布草稿 → 删除（channel.testMode=draft，避免自动群发/审核）
+{ "ok": true, "channel": "gzh", "action": "test publish",
+  "data": { "status": "DRAFT_SAVED_AND_DELETED", "mode": "draft",
+            "publish": { "status": "DRAFT_SAVED", "url": "https://mp.weixin.qq.com/..." },
+            "delete": { "status": "DELETED", "title": "..." } },
   "error": null }
 ```
 
