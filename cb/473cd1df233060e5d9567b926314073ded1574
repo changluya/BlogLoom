@@ -1,0 +1,30 @@
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoEndpointIntegrationTest.java
+  s_940fe05fbe6c46::t_08323b6ed59f54 59,71
+  s_940fe05fbe6c46::t_8ac1886689bee3 89-90
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoPageController.java
+  s_940fe05fbe6c46::t_8ac1886689bee3 100
+blog-backend/src/main/resources/mapper/BlogMapper.xml
+  s_940fe05fbe6c46::t_08323b6ed59f54 296-297,299-300
+blog-view-ui/src/views/Index.vue
+  s_940fe05fbe6c46::t_8ac1886689bee3 102
+blog-backend/src/main/resources/templates/seo/list.html
+  s_940fe05fbe6c46::t_8ac1886689bee3 5-29
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/搜索引擎SEO优化改造/搜索引擎SEO优化调研学习02、第一阶段核心改造、服务端直出与站点级文件.md
+  s_940fe05fbe6c46::t_1c1745c83c6ad1 143,162,467,817,819,821-828,834,837,843,848,853,865-873
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb473cd1df233060e5d9567b926314073ded1574",
+  "prompts": {},
+  "sessions": {
+    "s_940fe05fbe6c46": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11ffe-6fde-75f1-857a-6c5ac0b25604",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
