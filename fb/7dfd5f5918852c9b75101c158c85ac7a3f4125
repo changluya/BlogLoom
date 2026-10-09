@@ -1,0 +1,22 @@
+blog-view-ui/src/views/home/Home.vue
+  s_940fe05fbe6c46::t_f2f3c5ba88e15a 16-24,295-329
+  s_940fe05fbe6c46::t_c456c3e15f2d88 330
+blog-view-ui/src/styles/mobile/pages/home.mobile.scss
+  s_940fe05fbe6c46::t_f2f3c5ba88e15a 22-33,35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fb7dfd5f5918852c9b75101c158c85ac7a3f4125",
+  "prompts": {},
+  "sessions": {
+    "s_940fe05fbe6c46": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11ffe-6fde-75f1-857a-6c5ac0b25604",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
