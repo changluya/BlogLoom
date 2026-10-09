@@ -56,6 +56,7 @@ class SeoEndpointIntegrationTest {
 		BlogDetail article = new BlogDetail();
 		article.setId(1L);
 		article.setTitle("SEO article");
+		article.setFirstPicture("https://cdn.example.com/seo-cover.png");
 		article.setContent("<h1>inner heading</h1><img src=\"/image/a.png\">");
 		article.setDescription("article summary");
 		article.setCreateTime(new Date());
@@ -67,6 +68,7 @@ class SeoEndpointIntegrationTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("seo/blog"))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("<title>SEO article - BlogLoom</title>")))
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("<meta property=\"og:image\" content=\"https://cdn.example.com/seo-cover.png\">")))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("https://blog.example.com/blog/1")))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("loading=\"lazy\"")))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("class=\"three wide column m-mobile-hide\"")))
@@ -84,6 +86,8 @@ class SeoEndpointIntegrationTest {
 		mockMvc.perform(get("/tag/Java").accept(MediaType.TEXT_HTML))
 				.andExpect(status().isOk())
 				.andExpect(view().name("seo/list"))
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("class=\"site masked-site\"")))
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("class=\"home-hero-background m-mobile-hide\"")))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("/blog/2")));
 	}
 

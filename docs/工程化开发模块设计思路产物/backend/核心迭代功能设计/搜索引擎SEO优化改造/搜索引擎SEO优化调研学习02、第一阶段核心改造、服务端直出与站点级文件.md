@@ -140,7 +140,7 @@ SEO 不是一个单点功能，而是一套"内容基础设施"。对博客平�
 | --- | --- | --- | --- |
 | 独立 URL | 有 `/blog/:id`（前端路由），后端无同名内容页 | `blog-view-ui/src/router/index.js:30-35` | 后端无服务端直出页面 |
 | 独立 `<title>` | 仅靠 JS 改 `document.title` | `views/blog/Blog.vue:180`、`views/Index.vue:134` | 首屏 HTML 固定为 `BlogLoom` |
-| `description` | 文章实体有此字段，但**详情接口不返回** | `entity/Blog.java:26`；`model/vo/BlogDetail.java:23-39` | `BlogDetail` 无 `description` |
+| `description` | 详情接口已返回，空值时由正文生成摘要 | `model/vo/BlogDetail.java`；`BlogMapper.xml:293-323` | 已补齐详情字段映射 |
 | canonical | 无 | — | 全缺 |
 | 结构化数据 | 无 | — | 全缺 |
 | Open Graph | 无 | — | 全缺 |
@@ -159,7 +159,7 @@ SEO 不是一个单点功能，而是一套"内容基础设施"。对博客平�
 | 2 | `.xml` / `.txt` 端点不受影响 | 过滤器对"最后一段带扩展名"的请求不回退（`SpaForwardConfig.java:85-87`），所以 `/sitemap.xml`、`/rss.xml`、`/robots.txt` 可直接由 Controller 提供 |
 | 3 | 公开接口全部免鉴权 | `SecurityConfig` 中 `anyRequest().permitAll()`（`config/SecurityConfig.java:56`），新增 SEO 端点默认公开 |
 | 4 | 无 `slug` 字段 | `blog` 表及实体均无 slug，路由用数字 id，一阶段可继续用 id |
-| 5 | 详情接口缺字段 | `BlogDetail` 缺 `firstPicture`、`description`、作者信息，而 `blog` 表里都有 |
+| 5 | 详情接口字段必须与 SEO 数据流同步 | `BlogDetail`、`BlogMapper.xml:293-323` 显式映射封面、摘要、作者信息，避免列表接口有数据而详情接口丢失 |
 | 6 | 同源部署 | 生产环境 API 用相对路径（`VITE_API_URL=/`、`/admin/`），meta 里的 URL 需用 `blog.view` 配置拼接真实域名 |
 
 **重点：**约束 1 是最容易被忽略、也最致命的坑。如果不改过滤器，后面写再多 Controller 都不会生效。
@@ -464,7 +464,7 @@ HTML <head>
 
 **改造要点：**
 
-+ 详情接口 `BlogDetail` 当前**缺 `description` 和 `firstPicture`**（`BlogDetail.java:23-39`、`BlogMapper.xml:312-319` 都没查），必须先补，否则 meta/OG 无数据可填。
++ 详情接口 `BlogDetail` 必须带齐 `firstPicture`、`description`、`authorName`、`authorAvatar`。SQL 虽然查询了这些列，但 `blogDetail` resultMap 仍要显式映射，否则可能出现“文章列表有封面、详情接口封面为 null”，进而导致 `og:image` 不输出。
 + 域名不能硬编码，统一由 `SeoUrlResolver` 取后台 SEO 域名 `seoDomain`（兜底 `blog.view`）拼接绝对 URL，保证 canonical / `og:url` / sitemap `loc` 三者一致。
 + `title` 后缀复用站点配置 `webTitleSuffix`，与现有 `document.title` 逻辑保持同源。
 
@@ -814,35 +814,43 @@ Core Web Vitals 的三大指标，各自对应一类浏览器行为：
 
 #### 5.1.1.1、数据层补齐（详情接口）
 
-**问题：**文章页拿不到封面和摘要。
+**问题：**文章页的 SEO 元信息依赖详情接口；即使文章列表已经有封面，如果详情查询没有把封面映射到 `BlogDetail`，服务端直出页仍然无法生成 `og:image`。
 
-**现状：**`getBlogByIdAndIsPublished` 的 SQL（`mapper/BlogMapper.xml:312-319`）未查 `first_picture`、`description`，`BlogDetail`（`model/vo/BlogDetail.java:23-39`）也没有这两个字段。
-
-**改造点 1：**`BlogDetail.java` 增加字段。
+**实现状态：**`BlogDetail` 已包含封面、摘要和作者字段，详情查询 `getBlogByIdAndIsPublished` 已查询并显式映射以下列：
 
 ```java
 private String firstPicture;  // 封面，用于 og:image / JSON-LD image
 private String description;   // 摘要，用于 meta description / og:description
 private String authorName;    // 作者名
-private String authorUrl;     // 作者主页
+private String authorAvatar;  // 作者头像
 ```
 
-**改造点 2：**`BlogMapper.xml` 的 `blogDetail` resultMap 与查询补齐列（并 join 作者）。
+**实现点 1：**`BlogDetail.java` 保持 SEO 所需字段完整。
+
+```java
+private String firstPicture;  // 封面，用于 og:image / JSON-LD image
+private String description;   // 摘要，用于 meta description / og:description
+private String authorName;    // 作者名
+private String authorAvatar;  // 作者头像
+```
+
+**实现点 2：**`BlogMapper.xml` 的 `blogDetail` resultMap 与查询补齐列（并 join 作者）。
 
 ```xml
 <result property="firstPicture" column="first_picture"/>
 <result property="description" column="description"/>
 <result property="authorName" column="author_name"/>
+<result property="authorAvatar" column="author_avatar"/>
 ```
 
 ```xml
 <select id="getBlogByIdAndIsPublished" resultMap="blogDetail">
-    select b.id, b.title, b.content, b.first_picture, b.description,
+    select b.id, b.title, b.first_picture, b.description, b.content,
            b.is_appreciation, b.is_comment_enabled, b.is_top,
            b.create_time, b.update_time, b.views, b.words, b.read_time, b.password,
            c.category_name,
            t.tag_name as tag_name, t.color,
-           u.nickname as author_name
+           u.nickname as author_name, u.avatar as author_avatar
     from ((((blog as b
         left join category as c on b.category_id=c.id)
         left join blog_tag as bt on b.id=bt.blog_id)
@@ -854,7 +862,15 @@ private String authorUrl;     // 作者主页
 
 **注意：**若 `user` 表无 `nickname` 字段，改用实际字段（如 `username`）；也可退化为从站点配置读博主信息。作者 URL 可由 `blog.view + /about` 拼出，不强制。
 
-**验收：**`GET /blog?id=513` 返回中包含 `firstPicture`、`description`、`authorName`。
+**验收：**
+
+- `GET /blog?id=513` 返回中包含 `firstPicture`、`description`、`authorName`、`authorAvatar`；
+- `GET /blog/513` 的 HTML `<head>` 包含以 `firstPicture` 生成的绝对地址 `og:image`；
+- `SeoEndpointIntegrationTest` 覆盖封面图进入 SSR HTML 的场景。
+
+**线上问题复盘（2026-10-09）：**
+
+文章 `517` 的列表接口已经返回封面地址，但详情接口返回 `firstPicture: null`，导致 `/blog/517` 的 HTML 中没有 `og:image`。正文里虽然存在 `alt="coverImg"` 的图片，但 QQ 分享抓取的是页面 `<head>` 中的 Open Graph 元信息，不应依赖正文图片或前端懒加载属性。最终定位为 `blogDetail` resultMap 漏掉 `firstPicture`、`description`、作者字段映射，已通过显式 `<result>` 修复。
 
 #### 5.1.1.2、文章详情页服务端直出
 

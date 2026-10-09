@@ -99,7 +99,7 @@
 			},
 			// 需要固定首图 + 浅色遮罩的页面（与首页一致的滚动遮罩效果）
 			showMaskedBackground() {
-				return ['home', 'archives', 'moments', 'friends', 'about', 'category', 'tag', 'blog']
+				return ['home', 'archives', 'moments', 'friends', 'about', 'category', 'tag', 'column', 'blog']
 					.includes(this.$route.name)
 			}
 		},

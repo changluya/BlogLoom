@@ -293,7 +293,11 @@
     <resultMap id="blogDetail" type="com.changlu.blogloom.model.vo.BlogDetail">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="description" column="description"/>
         <result property="content" column="content"/>
+        <result property="authorName" column="author_name"/>
+        <result property="authorAvatar" column="author_avatar"/>
         <result property="appreciation" column="is_appreciation"/>
         <result property="commentEnabled" column="is_comment_enabled"/>
         <result property="top" column="is_top"/>
