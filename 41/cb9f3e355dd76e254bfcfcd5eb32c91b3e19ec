@@ -1,0 +1,32 @@
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/SkillAdminController.java
+  s_91ef9b88fb4791::t_b6d292c9fb5859 11,35,37-94,108
+blog-backend/src/main/java/com/changlu/blogloom/util/JwtUtils.java
+  s_91ef9b88fb4791::t_b6d292c9fb5859 80-98
+  s_91ef9b88fb4791::t_afbe4188a3d087 79
+blog-backend/src/main/java/com/changlu/blogloom/service/SkillPackageService.java
+  s_91ef9b88fb4791::t_b6d292c9fb5859 53-54,74-81,164
+blog-backend/src/main/resources/skill/blogloom-skill/skill.env.sh
+  s_91ef9b88fb4791::t_b6d292c9fb5859 2-3
+blog-backend/src/test/java/com/changlu/blogloom/controller/admin/SkillAdminControllerTest.java
+  s_91ef9b88fb4791::t_b6d292c9fb5859 1-34
+blog-backend/src/test/java/com/changlu/blogloom/service/SkillPackageServiceTest.java
+  s_91ef9b88fb4791::t_b6d292c9fb5859 5,62-64,69-73,116
+  s_91ef9b88fb4791::t_6f10e616388cc0 8,21,65-66,68,74-87
+  s_91ef9b88fb4791::t_892aa0e6ab48b8 67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "41cb9f3e355dd76e254bfcfcd5eb32c91b3e19ec",
+  "prompts": {},
+  "sessions": {
+    "s_91ef9b88fb4791": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12b5b-17e5-7c13-8331-a4eecc8c693f",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
