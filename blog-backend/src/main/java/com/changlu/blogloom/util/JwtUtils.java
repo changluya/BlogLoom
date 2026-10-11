@@ -77,6 +77,26 @@ public class JwtUtils {
 	}
 
 	/**
+	 * 生成不含过期时间的长期 token。
+	 *
+	 * <p>仅用于用户主动下载的 Skill 凭证；普通登录 token 仍遵循
+	 * {@code token.expireTime} 配置。该 token 可通过更换 {@code token.secretKey}
+	 * 统一失效。</p>
+	 */
+	public static String generatePermanentToken(String subject,
+			Collection<? extends GrantedAuthority> authorities) {
+		StringBuilder sb = new StringBuilder();
+		for (GrantedAuthority authority : authorities) {
+			sb.append(authority.getAuthority()).append(",");
+		}
+		return Jwts.builder()
+				.setSubject(subject)
+				.claim("authorities", sb)
+				.signWith(SignatureAlgorithm.HS512, secretKey)
+				.compact();
+	}
+
+	/**
 	 * 生成自定义过期时间token
 	 *
 	 * @param subject
