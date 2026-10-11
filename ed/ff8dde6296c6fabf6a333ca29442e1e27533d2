@@ -1,0 +1,22 @@
+blog-view-ui/src/styles/mobile/components/nav.mobile.scss
+  s_91ef9b88fb4791::t_bb727d09a72238 54-73
+blog-view-ui/src/components/index/Nav.vue
+  s_91ef9b88fb4791::t_bb727d09a72238 2-5,244-282
+  s_91ef9b88fb4791::t_8f9c0a7f3cd366 283
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "edff8dde6296c6fabf6a333ca29442e1e27533d2",
+  "prompts": {},
+  "sessions": {
+    "s_91ef9b88fb4791": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12b5b-17e5-7c13-8331-a4eecc8c693f",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
