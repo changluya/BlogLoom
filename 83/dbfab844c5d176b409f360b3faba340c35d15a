@@ -1,0 +1,240 @@
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/support/SeoMetaBuilder.java
+  s_91ef9b88fb4791::t_4cbd9806327ae6 86
+  s_91ef9b88fb4791::t_843c73f24a62a0 84
+  s_91ef9b88fb4791::t_1c26cc38e3a933 85
+skills/blogloom-publisher-skill/scripts/channels/gzh/index.js
+  s_7b04a52b6391fd::t_5d7eecdda96a28 706-724
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoFileController.java
+  s_91ef9b88fb4791::t_843c73f24a62a0 30-34
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/AdSlot.java
+  s_a75a3573c3fa4f::t_86a344fce43b87 15
+  s_91ef9b88fb4791::t_c5a555ba2a6749 1-8,10-13,16,18
+  s_91ef9b88fb4791::t_f0db7f9ca17319 9,14,17
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/SiteSettingServiceImpl.java
+  s_91ef9b88fb4791::t_ee15bf9851ae54 248-253
+  s_91ef9b88fb4791::t_1c26cc38e3a933 258-259,268
+  s_91ef9b88fb4791::t_c5a555ba2a6749 16-17,117-119,232-247,254-257,260-267,269-276,278
+  s_91ef9b88fb4791::t_66f961b719d818 277
+  s_91ef9b88fb4791::t_4c9c9399c6bc12 279
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoMeta.java
+  s_91ef9b88fb4791::t_1c26cc38e3a933 33
+  s_91ef9b88fb4791::t_843c73f24a62a0 7,9,32
+blog-backend/src/main/resources/templates/seo/fragments/seo-head.html
+  s_91ef9b88fb4791::t_08bdb5db56f074 58-59
+  s_14bf3132d2db1c::t_14df1e092d7425 47
+  s_91ef9b88fb4791::t_843c73f24a62a0 27-29
+blog-backend/src/main/java/com/changlu/blogloom/service/SiteSettingService.java
+  s_91ef9b88fb4791::t_c5a555ba2a6749 4,31-37,39-41
+  s_91ef9b88fb4791::t_1c26cc38e3a933 5,38
+  s_91ef9b88fb4791::t_cd362ea02ef484 42
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoEndpointIntegrationTest.java
+  s_91ef9b88fb4791::t_445b00fc46cda1 8,24-25,110-118,128-141
+  s_91ef9b88fb4791::t_1c26cc38e3a933 119-127
+  s_91ef9b88fb4791::t_9795a001f7031c 142-143
+docker/scripts/common.sh
+  s_a75a3573c3fa4f::t_e5f7a3d38995ac 160-161,165-172
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoConfigController.java
+  s_91ef9b88fb4791::t_843c73f24a62a0 110-111,125-126,140-141
+blog-cms-ui/src/router/index.js
+  s_91ef9b88fb4791::t_08bdb5db56f074 152-157
+blog-view-ui/src/util/adsense.js
+  s_91ef9b88fb4791::t_74d27995a74a74 1-2,5,7-23
+  s_91ef9b88fb4791::t_95ebe785b371dd 3-4
+  s_91ef9b88fb4791::t_67768df9f76e9e 6
+blog-cms-ui/src/views/blog/seo/SeoConfig.vue
+  s_91ef9b88fb4791::t_08bdb5db56f074 27,70-71
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/SeoFileService.java
+  s_91ef9b88fb4791::t_843c73f24a62a0 18-19
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/impl/SeoFileServiceImpl.java
+  s_91ef9b88fb4791::t_843c73f24a62a0 7-8,21,23-24,28,46-56
+  s_91ef9b88fb4791::t_51d5cd41476543 57
+blog-cms-ui/src/api/seo.js
+  s_a75a3573c3fa4f::t_c3dd75756a4322 58-65
+  s_91ef9b88fb4791::t_08bdb5db56f074 50-57,66-72
+blog-view-ui/src/views/Index.vue
+  s_91ef9b88fb4791::t_74d27995a74a74 75,135
+  s_a75a3573c3fa4f::t_7280c0e9eb2441 79
+  s_a75a3573c3fa4f::t_589b1363bb95e9 29-31
+  s_a75a3573c3fa4f::t_2f3fe4b97cfc68 70
+  s_14bf3132d2db1c::t_387997c517a81d 241,244,246
+"docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/搜索引擎SEO优化改造/搜索引擎SEO优化调研学习03、Google AdSense 广告接入配置指南.md"
+  s_a75a3573c3fa4f::t_163983a94a0aad 430-431,434-442
+  s_a75a3573c3fa4f::t_e27422f7b44aee 1-276,278-282,284-403,405-407,409-429,432-433,443-500,502,504-515,517-521,523,525,527,535,537,547-637,639-641,643-721,724-789,802-839,847-906,908-966,1026-1037,1039-1046,1060-1077,1079,1082,1087,1089,1091,1123,1131,1133-1135,1137,1139,1223-1225,1227,1277-1290,1292-1342,1344-1349,1351-1352,1354-1386
+  s_a75a3573c3fa4f::t_3c537f6b43c292 1229-1238,1240-1265,1267-1276
+  s_a75a3573c3fa4f::t_b9c2e993c25d9d 522,524,526,528-534,536,538-546
+  s_a75a3573c3fa4f::t_be0491deb212aa 277,283
+  s_a75a3573c3fa4f::t_509a73732429f6 967
+  s_a75a3573c3fa4f::t_d59bda0773a3a6 1343
+  s_a75a3573c3fa4f::t_c2e6836e739971 840-846
+  s_a75a3573c3fa4f::t_7d6d4cd4cf48ae 1038
+  s_a75a3573c3fa4f::t_4b6a6ccb14ffa2 1000
+  s_a75a3573c3fa4f::t_304a56bdb78eea 1078,1080-1081,1083-1086
+  s_a75a3573c3fa4f::t_461237b2da6153 1353
+  s_a75a3573c3fa4f::t_bf0e11826f9a17 642
+  s_a75a3573c3fa4f::t_e774bbac01ccd1 722-723
+  s_a75a3573c3fa4f::t_a5919558a3cae9 968-999,1001-1025
+  s_a75a3573c3fa4f::t_9d6cc0d2642c87 638
+  s_a75a3573c3fa4f::t_ff4e58f8095d19 1088,1090,1092-1095,1097-1122,1124-1130,1132,1136,1138,1143-1184,1186-1208
+  s_a75a3573c3fa4f::t_e4a0513fdaf687 404,408
+  s_a75a3573c3fa4f::t_806c73557c4d73 1291
+  s_a75a3573c3fa4f::t_42327ff5fd4c3f 501,503,516
+  s_a75a3573c3fa4f::t_4d0841767ef9b1 1350
+  s_a75a3573c3fa4f::t_c202051ea584ec 790-801
+  s_a75a3573c3fa4f::t_2340827a2a8cdc 907
+  s_a75a3573c3fa4f::t_3dae568b8e1beb 1047-1049,1057-1059
+  s_a75a3573c3fa4f::t_70176c2db12d4a 1096
+  s_a75a3573c3fa4f::t_3494234a15122b 1140-1142
+  s_a75a3573c3fa4f::t_31594b20846b83 1185
+  s_a75a3573c3fa4f::t_ce8762007e0158 1209-1211,1220-1222
+  s_a75a3573c3fa4f::t_4d35e0e5b06def 1226
+  s_a75a3573c3fa4f::t_7909bb7fd6c5a2 1228
+  s_a75a3573c3fa4f::t_03199338ebdb6d 1239
+  s_a75a3573c3fa4f::t_615a778cd1d192 1266
+blog-backend/src/main/java/com/changlu/blogloom/constant/SiteSettingConstants.java
+  s_91ef9b88fb4791::t_c5a555ba2a6749 33-34
+blog-view-ui/src/components/ads/AdsenseSlot.vue
+  s_a75a3573c3fa4f::t_2ef2a0d765232b 7
+  s_91ef9b88fb4791::t_6a53bdab7efc2c 3,6,8,22
+  s_91ef9b88fb4791::t_74d27995a74a74 1-2,4-5,9-21,23-28,34-43
+  s_91ef9b88fb4791::t_98999287c1e66a 29-33
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SpaIndexController.java
+  s_91ef9b88fb4791::t_4cbd9806327ae6 43-47,56-59
+  s_91ef9b88fb4791::t_7d5b6b73010c23 60
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/AdsenseConfigController.java
+  s_91ef9b88fb4791::t_445b00fc46cda1 94,98
+  s_a75a3573c3fa4f::t_795b4afa79b2b6 58-69
+  s_91ef9b88fb4791::t_3711506f9e3ad8 97
+  s_a75a3573c3fa4f::t_b19ef7c8e10f48 14,16-18,24-26,30-35,38
+  s_91ef9b88fb4791::t_1c26cc38e3a933 27-28,36-37,39-44,99-102
+  s_91ef9b88fb4791::t_ee15bf9851ae54 85-90,103,105-106
+  s_91ef9b88fb4791::t_c5a555ba2a6749 1-13,15,19-23,29,45-57,70-84,91-93,95-96,104,107-113
+blog-backend/src/main/resources/templates/seo/blog.html
+  s_91ef9b88fb4791::t_843c73f24a62a0 34,36-37,39,41-42
+  s_a75a3573c3fa4f::t_16c303b9c61234 40
+  s_a75a3573c3fa4f::t_805dad22800cfb 49-52
+  s_a75a3573c3fa4f::t_5b95f613e84548 35
+docker/Dockerfile
+  s_a75a3573c3fa4f::t_5dc9f0ebfa7079 42-83
+  s_a75a3573c3fa4f::t_cd417cf76f7e0d 87,89
+blog-cms-ui/src/views/blog/seo/AdvertisingPlatform.vue
+  s_a75a3573c3fa4f::t_e586c9ff0f8707 66-67
+  s_91ef9b88fb4791::t_6a53bdab7efc2c 75,86-93,95-98
+  s_a75a3573c3fa4f::t_85e4721861db20 94
+  s_a75a3573c3fa4f::t_d7da4abedf1db2 99
+  s_91ef9b88fb4791::t_41be18c8d21bd2 1-7,9-11,16,19-21,24-26,31-38,40,54-55,57-62,64-65,68-70,73,77,100-103,105
+  s_a75a3573c3fa4f::t_2b7baa2e5dff51 104
+  s_91ef9b88fb4791::t_d68736261a33f7 27-30,78-85
+  s_a75a3573c3fa4f::t_fa7330c302e007 63
+  s_a75a3573c3fa4f::t_e22e135c0dee60 71-72,74
+  s_a75a3573c3fa4f::t_c1c425ab41f7ea 56
+  s_91ef9b88fb4791::t_f0db7f9ca17319 12-15,17-18,22-23,41-44,51,53
+  s_91ef9b88fb4791::t_6d0fbdf1ea787e 8,39,76
+  s_a75a3573c3fa4f::t_9cdacd672af473 45-50,52
+blog-view-ui/src/views/blog/Blog.vue
+  s_91ef9b88fb4791::t_74d27995a74a74 32,36,78,84,93-95
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/搜索引擎SEO优化改造/搜索引擎SEO优化调研学习02、第一阶段核心改造、服务端直出与站点级文件.md
+  s_fe4c37c81c31e4::t_392289136f9cf2 2503,2505-2508
+  s_fe4c37c81c31e4::t_650bb7a0809d7c 2499-2500,2502,2668-2673,2675,2677-2679
+  s_fe4c37c81c31e4::t_dbe06e4658da9b 2034
+  s_fe4c37c81c31e4::t_b962ac47bd4b04 935,937,939,942-951,954,956-962,1015
+  s_fe4c37c81c31e4::t_84e4a7615952b2 2241-2242,2245,2247,2249,2251-2252,2291-2293,2299,2316,2318,2320-2321,2323,2325-2327,2329-2330,2333-2334,2338-2339,2343-2344,2346-2351,2353-2354,2356-2358,2360,2362-2363,2365,2369,2372-2375,2378,2380,2382,2386-2390,2392,2394-2395,2397,2399-2401,2403-2404,2411-2413,2680,2682,2687,2691,2694-2695,2813,2815-2816,2821,2824
+  s_fe4c37c81c31e4::t_3a2838b012b018 2256-2257,2272,2283-2285,2287,2290,2302
+  s_fe4c37c81c31e4::t_b5f213b1b7d16e 926-927
+  s_fe4c37c81c31e4::t_7b61e627fdda5c 2415,2417,2419-2420,2441,2443-2453,2457-2461,2465-2468,2472-2477,2479-2481,2483,2485-2486,2488,2490,2492,2494,2496,2498
+  s_91ef9b88fb4791::t_3b156588c30386 2731,2733-2800,2814,2823
+  s_fe4c37c81c31e4::t_21ec906cd6c7fb 2248,2250,2254-2255,2258-2271,2273-2282,2294-2298,2300-2301,2303-2315
+  s_fe4c37c81c31e4::t_311ed69549c51b 2947
+  s_fe4c37c81c31e4::t_66b3d56b2d978d 2243-2244,2246,2253,2286,2288-2289,2317,2319,2332,2337,2359,2361,2370,2379,2383-2385,2391,2393,2396,2398,2407,2414,2416,2442,2454-2456,2462-2464,2469-2471,2478,2482,2484,2487,2489,2491,2493,2495,2497,2501,2504,2509,2661-2664,2666-2667,2674,2676,2683-2686,2688-2690,2692-2693,2696,2698,2700,2702-2711,2714-2717,2719-2725,2802-2803,2806,2808,2810,2812,2817-2820,2822,2825-2827
+  s_fe4c37c81c31e4::t_f8bcf22371160f 963-1014
+  s_fe4c37c81c31e4::t_e0944fcfcbc3de 871-893
+  s_fe4c37c81c31e4::t_76b591999af0cd 330
+  s_fe4c37c81c31e4::t_7da0845ac13de2 1659
+  s_fe4c37c81c31e4::t_b2bcc0ef03b565 2328,2331,2335-2336,2342,2345,2364,2366-2368,2371,2376-2377,2381,2402,2405-2406,2408-2410,2418,2421-2440
+  s_fe4c37c81c31e4::t_605f6d2a8fdcae 2665
+  s_fe4c37c81c31e4::t_7e3ff93db1a304 2322,2324
+  s_fe4c37c81c31e4::t_01107699806089 1582
+  s_fe4c37c81c31e4::t_0db3ab77427ba1 2697,2699,2701,2712-2713,2726-2730,2732,2801,2804-2805,2807,2809,2811
+  s_fe4c37c81c31e4::t_e93baa9292c6c3 2913
+  s_fe4c37c81c31e4::t_78ecb4698c557c 2510-2660
+  s_fe4c37c81c31e4::t_13ce6a8a39e94c 803-870,894-925,928-934,936,938,940-941,952-953,955,1016-1138
+  s_fe4c37c81c31e4::t_5c5191127f391e 2718
+  s_fe4c37c81c31e4::t_d97d2b93a1c178 2681
+  s_940fe05fbe6c46::t_93bc7aa3c58099 1338-1395
+  s_940fe05fbe6c46::t_56733b800fc918 1396-1451
+  s_fe4c37c81c31e4::t_3885ac0a030882 111
+  s_fe4c37c81c31e4::t_0618b5238191ac 2340-2341,2352,2355
+  s_fe4c37c81c31e4::t_10efe2a7f283cd 1948
+  s_940fe05fbe6c46::t_11146b81664beb 1452
+  s_fe4c37c81c31e4::t_6fa30e358ad52e 1949
+  s_fe4c37c81c31e4::t_94086df1625fea 2828
+  s_91ef9b88fb4791::t_fd49a2081952f3 2106-2109,2841-2849,2855,2857-2862
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/AdsenseConfig.java
+  s_91ef9b88fb4791::t_ee15bf9851ae54 12,15
+  s_91ef9b88fb4791::t_c5a555ba2a6749 1-11,13-14,16-18
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/BlogLoom未来详细博客专栏规划.md
+  s_3a1d30a32d9d0f::t_7746021dd3331a 1-542
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83dbfab844c5d176b409f360b3faba340c35d15a",
+  "prompts": {},
+  "sessions": {
+    "s_14bf3132d2db1c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eced5324bffecqms9sL8io2oe6",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_3a1d30a32d9d0f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11fac-30e7-7332-8e04-f3e34da7b266",
+        "model": "unknown"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_7b04a52b6391fd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ed1e07b81ffe5uvd74aUbh0liK",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_91ef9b88fb4791": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12b5b-17e5-7c13-8331-a4eecc8c693f",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_940fe05fbe6c46": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11ffe-6fde-75f1-857a-6c5ac0b25604",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_a75a3573c3fa4f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ed3fc4ef9ffe9OGTEWvBowuKbc",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_fe4c37c81c31e4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_edb0395f0ffe2VUWzCGCRDgNzm",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
