@@ -108,7 +108,7 @@ Vue 在浏览器里渲染正文，用 document.title 改标题
 | 一阶段 | 内容页服务端直出 + 页面级 meta + 站点级文件（robots / sitemap / rss）+ 收录控制 | ✅ 本文 |
 | 一阶段 | 数据监测接入（Search Console / GA4 或 Umami） | ✅ 本文（偏配置，少量代码） |
 | 二阶段 | 阅读页性能（Core Web Vitals）、站内互链深化、主动推送 | ⏳ 后续 |
-| 三阶段 | 变现（AdSense / CPS / 赞助） | ⏳ 后续 |
+| 三阶段 | 变现（AdSense / CPS / 赞助） | ✅ 本文预习（见 5.3，先接 Google AdSense） |
 | 四阶段 | GEO（`geo:*` 元信息 + 可信度建设） | ⏳ 后续 |
 
 **重点：先能被抓，才谈得上收录；先被收录，数据才有得看。** 所以阶段一、二的技术底座必须先做扎实。
@@ -327,7 +327,7 @@ blog 表（已有字段）
 | --- | --- | --- | --- | --- | --- |
 | **F11** | 收录控制 | P1 | `blog-cms-ui/index.html` 加 `noindex` + `/cms`、`/admin` 响应头 `X-Robots-Tag` | 防止后台被收录 | `/cms/` 与 `/admin/` 输出 `noindex` |
 | **F12** | 数据监测接入 | P1 | Search Console + GA4 统计脚本注入公共片段 | 能看收录与流量 | Search Console 验证成功；GA4 有数据 |
-| **F15** | SEO 后台配置支持 | P1 | 后台站点设置新增 SEO 域名（`seoDomain`）、GA4 统计脚本、事件上报开关；后端按配置注入 | SEO 域名 / 统计脚本 / 事件上报均可后台配置 | 后台填 SEO 域名即用于 canonical/sitemap；填 GA4 ID 即生效；开关控制事件上报 |
+| **F15** | SEO 后台配置支持 | P1 | 后台站点设置新增 SEO 域名（`seoDomain`）、GA4 统计脚本、事件上报开关；后端按配置注入；**（5.3 扩展）** AdSense 发布商 ID 与广告位配置 | SEO 域名 / 统计脚本 / 事件上报 / 广告配置均可后台配置 | 后台填 SEO 域名即用于 canonical/sitemap；填 GA4 ID 即生效；填 AdSense ID 即注入广告；开关控制事件上报 |
 
 **第六组：加速与性能优化（P2）**
 
@@ -800,6 +800,342 @@ Core Web Vitals 的三大指标，各自对应一类浏览器行为：
 
 **一句话理解本节：**SEO 的所有工作，本质是让内容**在爬虫不经 JS 就能理解的层（HTML 源码 + 站点级文件 + 协议信号）**里完整呈现；BlogLoom 的改造重点，就是打通"数据库 → 服务端直出 → head/站点文件"这条链路，并绕开 SPA 回退这个总闸。
 
+## 4.4、广告接入需求与原理分析（Google AdSense）
+
+> **本节定位：**广告属于 1.4 提到的**三阶段（变现）**，不在"收录最小闭环"里，但 AdSense 审核依赖一阶段产出的"可抓取内容 + sitemap + 隐私政策 + 清晰结构"，所以在此做**需求与原理分析**。本节只讲"为什么、是什么、有哪些规范与红线"；具体代码与申请步骤见 **5.3**。
+
+### 4.4.1、为什么先接 Google AdSense
+
+广告平台有很多：Google AdSense、国内联盟（如百度联盟）、CPS 带货、品牌赞助……为什么第一阶段只选 Google AdSense？
+
+| 选择 | 门槛 | 与博客的匹配度 | 结算 | 结论 |
+| --- | --- | --- | --- | --- |
+| **Google AdSense** | 有网站即可申请，需内容审核 | 与"原创技术博客"高度契合，自动匹配技术/工具类广告 | 满 100 美元电汇，国内可用 | **首选** |
+| 国内广告联盟 | 多要求备案、流量门槛高 | 个人站一般达不到 | 人民币，门槛不一 | 后续可选 |
+| CPS / 带货 | 需选品、写推广文 | 会稀释内容调性 | 佣金制 | 不强求 |
+| 品牌赞助 | 需议价、接洽 | 依赖流量 | 一单一议 | 有流量后再说 |
+
+**核心判断：**AdSense 是"接入成本最低、对内容破坏最小、又能覆盖全球技术流量"的起步方案。先把 AdSense 跑通，就等于验证了"内容 → 流量 → 收益"这条路是通的。
+
+**重点：**AdSense 不是"申请了就批"。它有一套**内容与合规红线**（见 4.4.6），其中很大一部分（隐私政策、可抓取、sitemap、站点结构清晰）**正是本阶段 5.1 已经做完的事**。换句话说：**SEO 改造做扎实，AdSense 过审会顺很多。**
+
+### 4.4.2、AdSense 工作原理与关键概念
+
+在写代码前，先把概念理清，否则会"代码贴了，广告却不显示"。
+
+**① 三样东西：AdSense 代码、广告单元、自动广告。**
+
+| 概念 | 英文 | 作用 | 放在哪 |
+| --- | --- | --- | --- |
+| **AdSense 代码**（加载器） | AdSense code / adsbygoogle.js | 加载 AdSense SDK，是所有广告的基础脚本 | 每个页面的 `<head>` |
+| **广告单元** | Ad unit | 一个具体的广告位，带唯一 `data-ad-slot` | 页面正文里，用 `<ins class="adsbygoogle">` 占位 |
+| **自动广告** | Auto ads | 由 Google 自动决定在页面哪里插广告 | 只要加载器在，Google 自己插 |
+
+官方说明：**"要把 AdSense 代码放在每个页面的 `<head>` 和 `</head>` 之间"**，才能覆盖全站、让 Auto ads 生效（[About the AdSense code](https://support.google.com/adsense/answer/9274634)）。
+
+**关键更新：**官方已说明 **Auto ads 现在可以通过任意 AdSense 广告单元代码生效**，不再强制要求单独粘贴 Auto ads 代码——**只放一个"广告单元"代码，也能吃到 Auto ads 的自动投放**。
+
+**② 加载器与广告单元的代码形态。**
+
+```html
+<!-- 加载器：放在 <head> 里，ca-pub-XXXXXXXXXXXXXXXX 换成你的发布商 ID -->
+<script async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+  crossorigin="anonymous"></script>
+```
+
+```html
+<!-- 自适应广告单元：data-ad-client 是发布商 ID，data-ad-slot 是该广告位 ID -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+```
+
+参数含义（官方 [自适应广告代码参数](https://support.google.com/adsense/answer/9183460)）：
+
+| 参数 | 含义 | 取值 |
+| --- | --- | --- |
+| `data-ad-client` | 发布商 ID | `ca-pub-…` |
+| `data-ad-slot` | 广告单元 ID | 数字串 |
+| `data-ad-format` | 大体形状（桌面） | `auto` / `rectangle` / `horizontal` / `vertical` |
+| `data-full-width-responsive` | 移动端是否全宽展开 | `true`（官方推荐）/ `false` |
+
+**重点：**
++ **加载器只需一次**（`<head>`），**每出现一个 `<ins>` 广告位，就要紧跟一次 `push({})`**；少 push 不显示，多 push 会报错。
++ 自适应广告的父容器要**有稳定宽度**；父容器为 `width:auto` 或运行时才算宽，可能出现移动端布局异常。
+
+**⑤ 到底配几个 slot？只配 1 个行不行？和 Auto ads 是什么关系？**
+
+这是接入时最常问的问题，先把三者关系理清：
+
+| 东西 | 作用 | 是否必需 |
+| --- | --- | --- |
+| **加载器**（`client`） | 总开关；Auto ads 靠它生效 | **必需**（配了才有广告） |
+| **slot**（`<ins>`） | 你指定"这里放一个广告单元"（手动位） | 可选，**0~N 个** |
+| **Auto ads** | Google 自动在页面插入广告 | 由加载器决定，可开关 |
+
+**结论：**
++ **可以只配 1 个 slot**，也可以配多个，甚至 0 个。数量完全由你定。
++ **只配 1 个 slot 不影响 Auto ads**：官方已说明 Auto ads 通过**任意一个广告单元代码**即可生效，不强制多配。
++ 因此"只配 1 个"的实际效果 = **1 个你指定的手动位 + Google 自动补位**；"0 个"则 = **纯靠 Auto ads**。
+
+| 你的配置 | 页面效果 |
+| --- | --- |
+| 0 个 slot + 开 Auto ads | 没有任何手动位，全由 Google 自动插广告 |
+| **1 个 slot + 开 Auto ads** | **1 个手动位（如文章顶部）+ Google 自动补位**（推荐起步） |
+| 多个 slot | 每个想精确控制的位置各配一个手动位 + Auto ads 补位 |
+
+> **建议：**起步就**只配 1 个**（文章顶部 `articleTop`），把加载器（`client`）放上去、其余交给 Auto ads。等有数据、想精确调 CTR 时，再往 `slots` 里加第二条——**不用改代码、不用重新部署**。
+
+**③ ads.txt：站点级"授权售卖"文件。**
+
+`ads.txt` 是 IAB Tech Lab 规范（[官方说明](https://developers.google.com/adsense/platforms/transparent/ads-txt)）：**非强制，但不放会损失部分预算**——很多广告主只对"已验证 ads.txt"的广告请求出价。文件放**域名根目录**，内容一行：
+
+```plain
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+```
+
+> `pub-0000000000000000` 是发布商 ID（去掉 `ca-` 前缀）；`f08c47fec0942fa0` 是 Google 固定认证标识。这与本项目 `robots/sitemap/rss` 的站点级文件机制同构（见 5.1.3）。
+
+**④ 站点验证：代码 或 meta 标签 二选一。**
+
+| 方式 | 做法 | 适用 |
+| --- | --- | --- |
+| **AdSense 代码** | 把加载器代码放进首页 `<head>` | 首页就要展示广告的常规站 |
+| **meta 标签** | 在首页 `<head>` 放一段验证 meta | **不想在首页放广告**时（官方新增） |
+
+官方（[站点管理改进](https://support.google.com/adsense/answer/13996652)）：新增 `meta tag` 验证，**"不想在首页展示广告时，可用 meta 标签替代 AdSense 代码片段验证"**。BlogLoom 首页是 SPA，已有 `SpaIndexController`（见 5.1.5.4）向 SPA 入口注入 meta 的能力，可直接沿用方案 B。
+
+### 4.4.3、一个发布商 ID，可以有 N 个广告位
+
+这是最容易搞混、也最该先搞清的一点。AdSense 里的标识分**两级**：
+
+| 标识 | 数量 | 是什么 | 出现在哪 |
+| --- | --- | --- | --- |
+| **发布商 ID**（`ca-pub-XXXX`） | **全站唯一** | 整个 AdSense 账号的 ID | 加载器脚本、每个广告位的 `data-ad-client` |
+| **广告位 ID**（`data-ad-slot`） | **可以有多个** | 一个"广告单元"一个 ID | 每个 `<ins>` 广告位 |
+
+**"是否有多个"要分开看：**
+
+| 参数 | 单/多 | 说明 |
+| --- | --- | --- |
+| `client`（发布商 ID） | **单** | 一个账号一个，全站所有广告位共用同一个 |
+| `slots[].slot`（广告位 ID） | **多** | 顶部、文内、底部各放一个 → 建 3 个"广告单元" → 拿 3 个 slot ID |
+| `adsTxt` | 单文件、多行 | 只接 Google 通常 1 行；接多家联盟才多行 |
+
+**结论：**
++ **发布商 ID 永远只配一个**，它是总开关。
++ **广告位想放几个就建几个**，不写死"顶部/文内/底部"三个字段——增删位置不应改代码。
++ 三个 slot 不是"同一广告单元的多个参数"，而是**三个互相独立的广告单元**（各自独立报表、独立样式）。
+
+**因此后台只保留「一个配置项」，值是一组 JSON**（而不是拆成发布商 ID、广告位列表、ads.txt 多个字段）：
+
+| 配置键（nameEn） | 中文名 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `adsense` | AdSense 广告配置 | JSON（字符串） | 后台唯一入口；发布商 ID、广告位列表、ads.txt 全在这一个 JSON 里 |
+
+```json
+{
+  "enabled": true,
+  "client": "ca-pub-1234567890123456",
+  "adsTxt": "",
+  "slots": [
+    { "slot": "1234567890", "position": "articleTop",       "enabled": true },
+    { "slot": "2345678901", "position": "articleInArticle", "enabled": true },
+    { "slot": "3456789012", "position": "articleBottom",    "enabled": false }
+  ]
+}
+```
+
+字段含义：
+
+| 字段 | 必填 | 说明 |
+| --- | --- | --- |
+| `enabled` | 否（默认 true） | 全站广告总开关；`false` 则整块忽略 |
+| `client` | 是 | AdSense 发布商 ID（`ca-pub-…`），**全站唯一**；为空 = 全站不注入 |
+| `adsTxt` | 否 | ads.txt 自定义内容；为空时按 `client` 自动生成一行 |
+| `slots[]` | 否 | 广告位列表；`slot`=广告位 ID，`position`=位置枚举，`enabled`=单个开关 |
+
+**这组 JSON 最终落到页面上是什么样？** 以文章 `513` 为例，同一份配置会变成两处产物：
+
+**产物 1：`<head>` 里的加载器（来自 `client`）。** 只要 `client` 非空就输出，全站每个页面一份：
+
+```html
+<!-- 由 seo-head.html 注入（SSR 页）或 main.js 注入（SPA 页） -->
+<script async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456"
+  crossorigin="anonymous"></script>
+```
+
+**产物 2：`<body>` 里按 `slots[]` 渲染的广告位。** 模板 `adslot` 片段按 `position` 取 slot，**取到才渲染**：
+
+```html
+<body>
+  <!-- slots[0]：position=articleTop → slot=1234567890 → 渲染 -->
+  <div class="article-ad">
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <article>
+    <h1 th:text="${article.title}">文章标题</h1>
+
+    <!-- slots[1]：position=articleInArticle → slot=2345678901 → 渲染（正文第 2~3 段后） -->
+    <div class="article-ad">
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-1234567890123456" data-ad-slot="2345678901"
+           data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="content" th:utext="${article.content}">正文</div>
+
+    <!-- slots[2]：position=articleBottom 且 enabled=false → 不渲染，这里什么都不输出 -->
+  </article>
+</body>
+```
+
+**字段 ↔ 页面产物对照：**
+
+| JSON 字段 | 页面产物 | 说明 |
+| --- | --- | --- |
+| `client` | `<head>` 的 `adsbygoogle.js` 加载器 | 全站一份，Auto ads 也靠它 |
+| `slots[]` 里 `enabled=true` | `<body>` 里对应位置的一段 `<ins>` + `push` | 有几个生效位就有几段 |
+| `slots[]` 里 `enabled=false` | **不出现**（被过滤） | 上面 `articleBottom` 即此例 |
+| `adsTxt=""` | `/ads.txt` 自动生成一行 | `google.com, pub-1234567890123456, DIRECT, …` |
+
+> 想加/去广告位、临时开关某一位、换发布商 ID，**都只改这一组 JSON**：加一条 `slots` 就多一段 `<ins>`，把 `enabled` 改 `false` 就少一段，`client` 清空就整站无广告——**模板与代码都不用动**。
+
+> **设计理由：**后台只维护一个 JSON，前端表单本质是"一个文本框 + 一段校验"，后端只当字符串存取、解析时做兜底；新增/删除位置、临时关广告、改发布商 ID 都只动这一处，**不新增表、不新增字段、不改代码**。
+
+### 4.4.4、广告位规划与布局原则
+
+广告放哪，直接决定"体验"和"收益"。参考眼动 F 型浏览路径，**放在读者自然经过的阅读动线上**，比"多塞几个格子"有效得多。
+
+| 位置 | 说明 | BlogLoom 落点 | 建议 |
+| --- | --- | --- | --- |
+| **首屏之下** | 所有人进门都会经过 | 文章标题后 / 正文前 | 响应式横幅，控制高度，**别让首屏只有广告没正文** |
+| **文内第一条** | 第 2~3 段之后，读者已确认"值得读" | 正文中部 | CTR 通常最高；二阶段做 |
+| **正文结束处** | 读者处于"接下来看什么"的过渡期 | 正文末尾、相关推荐前 | 矩形 / 信息流样式 |
+| **桌面侧栏** | 宽屏才有，可 sticky | 文章页左右栏 | 仅桌面；移动端隐藏 |
+| **页脚 / 侧栏最底** | 长期 CTR 极低还伤体验 | — | **果断砍掉** |
+
+**布局原则：**
+1. **数量克制：**3~4 个高质量位置，通常优于 6~7 个鸡肋位。
+2. **预留尺寸防 CLS：**广告容器给 `min-height` 或 `aspect-ratio`，避免加载后正文乱跳（呼应 4.3.9）。
+3. **融入而非伪装：**配色接近站点主题可以；**绝不能**做成"下载按钮""播放键"或伪装成正文（见 4.4.6）。
+4. **移动端优先：**用自适应单元（`data-full-width-responsive="true"`），少用手动固定大尺寸撑爆首屏。
+
+### 4.4.5、广告位与页面的对应关系（需求视角）
+
+| 页面 | 渲染方式 | 适合的广告位 | 接入方式 |
+| --- | --- | --- | --- |
+| 文章详情页 `/blog/{id}` | SSR 直出 | `articleTop` / `articleInArticle` / `articleBottom` | 后端模板输出 `<ins>`（5.3.1.2） |
+| 首页 / 列表 / 归档 | Vue SPA | `listTop`（可选） | 前端注入 + 路由 push（5.3.1.3） |
+| 后台 `/cms`、`/admin` | SPA | **不投** | 后台不对外开放，无需广告 |
+
+**核心场景是文章页**：它既是收录主体，也是读者停留最久的地方；SPA 页广告属于锦上添花。
+
+### 4.4.6、合规与审核要点
+
+AdSense 审核的本质是判断"**你是不是在做对用户有用的网站**"。与 BlogLoom 直接相关的要点如下。
+
+**① 申请前的站点条件（与 SEO 改造强相关）：**
+
+| 要求 | BlogLoom 现状 | 对应章节 |
+| --- | --- | --- |
+| 内容可抓取（非空壳） | 已完成服务端直出 | 5.1.1.2 |
+| 有 sitemap 并提交 Search Console | 已完成 | 5.1.3.2、5.2.1 |
+| 有隐私政策页（含 Cookie / 第三方说明） | **需确认/补齐** | 新增 |
+| 有关于 / 联系页面 | 站点已有 About | 现有 |
+| 全站 HTTPS + 自有顶级域名 | 已满足（blog.changlu.cloud） | 现有 |
+| 导航清晰、无死链、移动端可用 | 基本满足 | 现有 + 5.1.6 |
+
+> **注意：**隐私政策页是审核里最容易漏的一项，需写明：使用了 Cookie、接入了 Google AdSense 等第三方、第三方可能基于用户兴趣投放广告。
+
+**② 广告实现红线（官方 [广告投放政策](https://support.google.com/adsense/answer/1346295)）：**
+
+| 红线 | 说明 | 对 BlogLoom 的约束 |
+| --- | --- | --- |
+| 诱导点击 | 禁止"点广告支持本站"等文案或布局 | 广告旁不放诱导性文字/箭头 |
+| 伪装成内容 | 禁止做成导航、下载按钮、正文样式 | 广告位有清晰边界与留白 |
+| 误导性标题 | 禁止用"资源""有用链接"等标题盖在广告上 | 广告上方不放大标题 |
+| 未经请求的自动刷新 | 禁止定时器自动刷新广告"刷曝光" | SPA 只允许"用户切路由后 push 新广告位" |
+| 图片与广告对齐 | 禁止让站内图片像广告配图 | 广告与正文图片保持视觉区隔 |
+| 放在登录墙后 | Google 无法评估的内容不投放 | 私密/密码文章页**不投广告**（与 sitemap 排除一致，见 5.1.3.2） |
+
+**③ 内容质量（决定能不能过审）：**
+
++ **原创、垂直、有信息量**：同一细分领域 8~15 篇能解决具体问题的原创长文，比"50 篇模板短文"更稳。
++ **不是机翻/洗稿**：多平台搬运、机翻当原创，属于高危重复内容。
++ **有稳定更新节奏**：几周内持续更新，比"同一天批量发完"更像认真运营。
++ **被拒后**：读懂拒信关键词 → 做**可见的整改**（补隐私政策、删违规、修 404、改导航）→ **等 7~14 天**再申请，**不要连续刷申请**。
+
+**④ 与 SEO 阶段的正向循环：**
+
+```plain
+SEO 改造（可抓取 + sitemap + 隐私政策 + 清晰结构）
+        ↓
+通过 Search Console 被收录、有自然流量
+        ↓
+AdSense 申请时"看起来像认真运营的站"
+        ↓
+过审 → 投放 → 收益
+```
+
+### 4.4.7、收益与指标：看什么、怎么算
+
+| 指标 | 全称 | 含义 | 用途 |
+| --- | --- | --- | --- |
+| **Page RPM** | 每千次网页浏览收益 | 1000 次页面浏览能赚多少 | 衡量页面整体变现效率 |
+| **Impressions RPM** | 每千次广告展示收益 | 1000 次广告展示能赚多少 | 衡量广告位本身质量 |
+| **CTR** | 点击率 | 点击 ÷ 展示 | 判断位置/样式是否"被看到" |
+| **CPC** | 每次点击成本 | 广告主为一次点击付的钱 | 受内容主题（技术类偏高）影响 |
+
+**经验参考（非承诺）：**内容站 CTR 常见 1~3%，长期低于 0.5% 通常意味着位置或匹配有问题；RPM 波动大，**看周趋势而非单日**。
+
+**结算门槛：**账户余额累计满 **100 美元**才触发支付；需完成身份验证（PIN 码）与收款方式（国内电汇需 SWIFT/BIC）。
+
+> **重要：广告费的主要变量不是"广告位数量"，而是"内容主题 × 流量质量 × 页面浏览深度"。** 技术博客 CPC 通常不低，把 5.1 的性能与 5.2 的收录做扎实、让文章被更多人看到，比多塞几个广告位更划算。
+
+### 4.4.8、常见问题排查（广告不显示）
+
+| 现象 | 可能原因 | 排查/解决 |
+| --- | --- | --- |
+| 源码里有 `<ins>`，但页面空白 | 加载器没注入成功 / 顺序不对 | 确认 `<head>` 有 `adsbygoogle.js`；加载器必须在 `<ins>` 之前 |
+| 有加载器，但广告不出现 | 账号/站点还在审核中 | Sites 状态是否 Ready；审核通过前不投放 |
+| 只显示一次，切路由后消失 | SPA 路由切换后没重新 push | 见 5.3.1.3 的 `router.afterEach`；确认是"新的 `<ins>`" |
+| 控制台报 `All ins elements already have ads` | 同一 `<ins>` 被 push 多次 | 每个元素只 push 一次；SPA 切换要渲染出新的 `<ins>` |
+| 控制台报 `No slot size` | 父容器宽度为 0 或未定义 | 给广告容器固定/最小宽度（见 4.4.4） |
+| 移动端撑破布局 | 自适应父容器宽度不稳 | 用 `data-full-width-responsive="true"` + 容器 `width:100%` |
+| 本机看到广告、线上看不到 | 广告拦截插件 / 地区无库存 | 换无插件浏览器、清缓存；部分地区库存本就少 |
+| ads.txt 一直 Not found | 路径/内容/缓存问题 | `curl` 确认根目录可访问；内容格式一行；点 Check for updates |
+| 被拒："内容不足 / 低价值" | 篇数或质量不够 | 补垂直原创长文、清理模板文，7~14 天后再申 |
+
+> 调试：浏览器 **Network** 过滤 `adsbygoogle` 看 SDK 是否加载；**Console** 看 `push()` 报错。广告竞价有延迟（通常几秒内），刚打开空白属正常。
+
+### 4.4.9、参考索引（广告相关的调研出处）
+
+| 主题 | 官方/来源链接 |
+| --- | --- |
+| AdSense 代码说明 | https://support.google.com/adsense/answer/9274634 |
+| 代码放置位置（`<head>`） | https://support.google.com/adsense/answer/9274516 |
+| 站点管理改进（meta 验证 / ads.txt） | https://support.google.com/adsense/answer/13996652 |
+| 自适应广告代码参数 | https://support.google.com/adsense/answer/9183460 |
+| 广告投放政策 | https://support.google.com/adsense/answer/1346295 |
+| ads.txt 指南 | https://support.google.com/adsense/answer/12171612 |
+| ads.txt 技术规范（Google for Developers） | https://developers.google.com/adsense/platforms/transparent/ads-txt |
+| 广告代码（AFP 参数参考） | https://developers.google.cn/adsense/platforms/direct/ad-tags |
+| SPA 接入 AdSense 实践 | https://jasonwatmore.com/add-google-adsense-to-a-single-page-app-react-angular-vue-next-etc |
+| 申请与审核经验（2026） | https://eastondev.com/blog/zh/posts/media/20260108-google-adsense-approval-guide/ |
+| 布局与 CTR 优化（2026） | https://eastondev.com/blog/zh/posts/media/20260108-adsense-placement-optimization/ |
+
 ---
 
 # 五、实战代码：逐项改造
@@ -999,6 +1335,121 @@ for (String prefix : SSR_PREFIXES) {
 
 **验收：**查看源码只有一个 `<title>`；description 非空；canonical 与 sitemap、站内链接三者一致。
 
+##### 分享卡片抓取链路（QQ / CSDN 类平台）
+
+文章分享到 QQ、CSDN 等平台时，平台服务端通常会先请求文章 URL，再解析响应 HTML 的 `<head>` 元信息生成分享卡片。这个过程不依赖用户当前浏览器是否执行 Vue，也不能依赖正文里的图片懒加载。
+
+```plain
+用户分享 https://blog.changlu.cloud/blog/517
+        ↓
+QQ / 分享平台服务端 GET 文章 URL
+        ↓
+SpaForwardFilter 放行 HTML 导航请求
+        ↓
+SeoPageController.blogPage(/blog/{id})
+        ↓
+BlogService 查询 BlogDetail（包含 firstPicture）
+        ↓
+SeoMetaBuilder 将 firstPicture 转成绝对 URL
+        ↓
+Thymeleaf seo-head.html 输出 Open Graph 标签
+        ↓
+平台读取 og:title / og:description / og:image / og:url
+        ↓
+平台请求 og:image，生成分享封面
+```
+
+文章详情页至少需要输出以下字段：
+
+```html
+<meta property="og:type" content="article">
+<meta property="og:title" content="文章标题 - BlogLoom">
+<meta property="og:description" content="文章摘要">
+<meta property="og:image" content="https://cdn.example.com/cover.png">
+<meta property="og:url" content="https://blog.changlu.cloud/blog/517">
+<meta property="og:site_name" content="BlogLoom">
+```
+
+其中 `og:image` 是封面能否出现的关键字段，必须使用完整的公网绝对地址。封面资源还应满足：
+
+- 未登录即可访问，不能依赖 Cookie、JWT 或后台权限；
+- 返回 `200`，并返回正确的 `Content-Type`（如 `image/png`、`image/jpeg`）；
+- 图片地址不能被防盗链策略拦截；
+- 建议使用接近 `1200×630` 的横图；`og:image:width`、`og:image:height`、`og:image:alt` 属于增强字段，不是替代 `og:image` 的必需条件。
+
+**正文图片不能替代 `og:image`：**正文中的 `<img>` 可能只有 `data-src`，或者要等 JavaScript 执行后才补成 `src`。分享平台抓取首屏 HTML 时通常不会执行这套前端逻辑，因此必须把博客封面字段 `firstPicture` 直接渲染进 `<head>`。
+
+**RSS 与分享卡片无关：**`<link rel="alternate" type="application/rss+xml">` 只用于订阅源发现，不会为 QQ 分享提供封面。
+
+**线上验收方式：**
+
+```bash
+curl -L -sS https://域名/blog/517 \
+  | rg 'og:(title|description|image|url)'
+
+curl -L -sS -o /dev/null -w '%{http_code} %{content_type}\n' \
+  'https://图片域名/封面.png'
+```
+
+本次线上问题的关键对比是：文章列表接口 `firstPicture` 有值，但文章详情接口曾返回 `firstPicture: null`，所以服务端直出页没有 `og:image`。补齐 `blogDetail` resultMap 后，详情接口、SSR 页面和 QQ 分享卡片使用同一张博客封面图。
+
+##### 社交媒体分享规范（Open Graph / Twitter Card）
+
+社交平台分享卡片应遵循标准化的页面元信息协议。第一阶段以 **Open Graph（OG）** 为主，兼容 QQ、微信、CSDN、Slack、Facebook 等平台；Twitter/X 的 Card 字段作为可选增强。
+
+**Open Graph 核心字段：**
+
+| 字段 | 必要性 | 用途 | BlogLoom 实现 |
+| --- | --- | --- | --- |
+| `og:type` | 必需 | 内容类型，文章使用 `article` | `SeoMeta.type` |
+| `og:title` | 必需 | 分享卡片标题 | `article.title + webTitleSuffix` |
+| `og:description` | 必需 | 分享卡片摘要 | `article.description`，为空时取正文摘要 |
+| `og:url` | 必需 | 当前内容的标准地址 | `SeoUrlResolver.articleUrl(id)` |
+| `og:site_name` | 推荐 | 站点名称 | `blog.name` |
+| `og:image` | 强烈推荐 | 分享封面图 | `article.firstPicture` 的绝对 URL |
+| `og:image:alt` | 推荐 | 封面图无障碍描述 | 可使用文章标题 |
+| `og:image:width` / `og:image:height` | 可选 | 提供封面尺寸，减少平台预览判断时间 | 当前不强制输出 |
+| `article:published_time` | 推荐 | 文章发布时间 | `create_time`，ISO 8601 |
+| `article:modified_time` | 推荐 | 文章修改时间 | `update_time`，ISO 8601 |
+| `article:author` / `article:section` / `article:tag` | 推荐 | 作者、分类、标签 | `BlogDetail` 对应字段 |
+
+最小可用的文章分享头信息如下：
+
+```html
+<meta property="og:type" content="article">
+<meta property="og:title" content="文章标题 - BlogLoom">
+<meta property="og:description" content="文章摘要">
+<meta property="og:url" content="https://blog.changlu.cloud/blog/517">
+<meta property="og:site_name" content="BlogLoom">
+<meta property="og:image" content="https://图片域名/封面.png">
+```
+
+**Twitter/X Card 可选兼容：**如果后续需要覆盖 Twitter/X，可在公共 head 中补充以下字段；它们不替代 Open Graph，两个协议可以同时输出。
+
+```html
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="文章标题 - BlogLoom">
+<meta name="twitter:description" content="文章摘要">
+<meta name="twitter:image" content="https://图片域名/封面.png">
+```
+
+**封面图规范：**
+
+1. 使用 `https` 的完整绝对地址，不能使用相对路径、`data:` URL 或仅在前端运行后才出现的 `data-src`。
+2. 图片必须允许分享平台匿名访问，返回 `200` 和正确的图片 `Content-Type`。
+3. 推荐 `1200×630` 横向封面，主体内容尽量位于中心安全区域，避免平台裁剪后丢失标题或主体。
+4. 页面没有封面时可以不输出 `og:image`，但不能输出失效地址、登录页地址或站点 Logo 作为文章封面。
+5. 分享平台可能缓存卡片。部署修复后应先用源码和图片 URL 验证，再等待平台刷新缓存；不要为了绕过缓存修改 canonical 地址。
+
+**规范验收清单：**
+
+- 首屏 HTML 源码中存在唯一的 `og:title`、`og:description`、`og:url`、`og:image`；
+- `og:url` 与 canonical、站内标准文章 URL 一致；
+- `og:image` 是当前文章的 `firstPicture`，且匿名请求返回图片；
+- 禁用 JavaScript 后，上述 meta 仍存在；
+- 修改文章封面后，详情接口、SSR 页面和分享卡片使用同一张图片；
+- RSS 自动发现标签存在，但不把 RSS 当作分享卡片协议。
+
 #### 5.1.2.2、canonical 与 URL 策略
 
 **现状：**无 canonical；前端路由参数可能带 `?spm=`、`?from=` 等，易产生重复 URL。
@@ -1128,7 +1579,7 @@ logo.put("url", abs(siteLogo));
 
 #### 5.1.2.4、Open Graph
 
-Open Graph 的标签已包含在 5.3 的公共片段里，这里补充几个关键点：
+Open Graph 的标签已包含在 5.1.2.1 的公共片段里，这里补充几个关键点：
 
 1. `og:image` 必须**完整 URL 且公开可访问**（`/static/**` 上传图是公开的，符合）。
 2. SEO 与 OG 复用同一份 `article.title/summary/cover`，只维护一处数据。
@@ -1205,7 +1656,7 @@ public String sitemap() {
 
 **现状：**404。
 
-**改造点：**提供 `/rss.xml`（RSS 2.0，输出最近约 20 篇公开文章），并把 `<link rel="alternate">` 放进公共 head 片段（已在 5.3）。Atom 一阶段可不做，RSS 已覆盖绝大多数阅读器。
+**改造点：**提供 `/rss.xml`（RSS 2.0，输出最近约 20 篇公开文章），并把 `<link rel="alternate">` 放进公共 head 片段（已在 5.1.2.1）。Atom 一阶段可不做，RSS 已覆盖绝大多数阅读器。
 
 ```java
 @GetMapping(value = "/rss.xml", produces = "application/rss+xml;charset=UTF-8")
@@ -1494,6 +1945,8 @@ SpaIndexController（@Controller）
 
 代码改完只是**"具备被收录的条件"**，并不等于马上被收录。下面这部分讲清楚：如何针对 **blog.changlu.cloud** 一步步推动**国外（Google、Bing）**与**国内（百度）**搜索引擎真正收录文章，并持续监测。
 
+> 5.3 为**变现预习**（Google AdSense 广告接入）。它不在"收录最小闭环"内，属于 1.4 的三阶段；但 AdSense 审核依赖一阶段产出的可抓取内容、sitemap 与合规页面，故提前规划。
+
 > 三个平台的通用前提：F7/F8 已完成，`https://blog.changlu.cloud/sitemap.xml` 能公开访问（`curl` 返回 200）。
 
 ### 5.2.1、数据监测接入
@@ -1578,7 +2031,7 @@ gtag('event', 'click_rss', { event_category: 'subscribe', event_label: 'rss' });
 | --- | --- |
 | 收录、搜索关键词、展示/点击/排名 | Search Console |
 | 用户数、PV、来源、热门文章 | GA4（或 Umami） |
-| 广告展示、收益、结算 | 广告联盟后台（二阶段） |
+| ⑤ | 广告展示、收益、结算 | 广告联盟后台（见 5.3，AdSense） |
 
 > 官方帮助：Search Console 验证站点所有权 https://support.google.com/webmasters/answer/9008080 ；GA4 创建数据流 https://support.google.com/analytics/answer/9304153 。
 
@@ -1649,6 +2102,10 @@ gtag('event', 'click_rss', { event_category: 'subscribe', event_label: 'rss' });
    ![image-20261007101920785](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610071019928.png)    
 
 4. **等待抓取与收录**：通常数天到数周，**不要反复狂点**，重点是把内容与结构做好。
+
+**大概10.11日，过了一周左右就可以看到数据了：**
+
+![image-20261011141836023](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610111418267.png)
 
 **主动推送：**Google **没有开放的主动推送 API，也不采用 IndexNow**。所以 Google 这边不用找"推送接口"，做法就是 **Sitemap + 站内内链 + Search Console 手动请求**。
 
@@ -1781,6 +2238,594 @@ POST https://api.indexnow.org/indexnow
 
 另外可定期用 `site:blog.changlu.cloud` 粗略核对收录数量，并与 Search Console 的"已编入索引"页面数交叉验证。
 
+## 5.3、广告接入（Google AdSense）
+
+> **本节定位：**只讲两件事——**核心代码实现**与**核心申请步骤**。
+> 广告的选型理由、概念、配置规范、布局原则、合规红线、指标与 FAQ 等"需求与原理分析"，已统一移到 **4.4、广告接入需求与原理分析**。本节默认读者已读过 4.4，直接进入落地。
+
+### 5.3.1、核心代码实现
+
+#### 5.3.1.1、后台配置项（一个 JSON 配置）
+
+后台**只有一个配置项**，值是一组 JSON（设计理由见 4.4.3）。常量与解析模型：
+
+```java
+// SiteSettingConstants.java
+/** AdSense 广告配置（单个 JSON 字符串，含 client / adsTxt / slots） */
+public static final String ADSENSE = "adsense";
+```
+
+```json
+// site_setting.adsense 的值（后台唯一入口）
+{
+  "enabled": true,
+  "client": "ca-pub-1234567890123456",
+  "adsTxt": "",
+  "slots": [
+    { "slot": "1111111111", "position": "articleTop",       "enabled": true },
+    { "slot": "2222222222", "position": "articleInArticle", "enabled": true },
+    { "slot": "3333333333", "position": "articleBottom",    "enabled": false }
+  ]
+}
+```
+
+```java
+// module/seo/domain/AdsenseConfig.java —— 整个 JSON 的载体
+@Getter @Setter
+public class AdsenseConfig {
+    private Boolean enabled;          // 总开关，null 视为 true
+    private String client;            // ca-pub-…
+    private String adsTxt;            // 可选
+    private List<AdSlot> slots = new ArrayList<>();
+}
+
+// module/seo/domain/AdSlot.java —— 单个广告位
+@Getter @Setter
+public class AdSlot {
+    private String slot;       // data-ad-slot
+    private String position;   // articleTop / articleInArticle / articleBottom / listTop …
+    private Boolean enabled;   // null 视为 true
+    private String format;     // 可选：auto（默认）
+    private Boolean fullWidth; // 可选：默认 true
+}
+```
+
+```java
+// SiteSettingService 扩展：读一次，解析成对象；组装时都从这里取
+AdsenseConfig getAdsenseConfig();                  // 读 site_setting.adsense → 解析 JSON；空/异常返回空对象
+String getAdsenseClient();                         // = getAdsenseConfig().getClient()，空则不注入
+Map<String, String> getAdsenseSlotsByPosition();   // 只放 enabled != false 的位置 → slot，便于模板取
+void saveAdsenseConfig(String json);               // 写 site_setting.adsense + deleteSiteInfoCache
+```
+
+**解析兜底（关键）：**`getAdsenseConfig()` 必须容错——JSON 为空、格式错、`client` 为空时都返回"空配置"，这样下游"拿不到就不输出"，与 4.3.8 的 GA4 处理一致：
+
+```java
+@Override
+public AdsenseConfig getAdsenseConfig() {
+    String json = settingValue(SiteSettingConstants.ADSENSE);
+    if (json == null || json.trim().isEmpty()) return new AdsenseConfig();
+    try {
+        AdsenseConfig cfg = JacksonUtils.parse(json, AdsenseConfig.class);
+        return cfg == null ? new AdsenseConfig() : cfg;
+    } catch (Exception e) {
+        return new AdsenseConfig(); // 配置损坏 = 不注入，绝不报错中断页面
+    }
+}
+```
+
+#### 5.3.1.2、SSR 页面注入（`seo-head.html` + `seo/blog.html`）
+
+**① 加载器注入公共 head**（与 GA4 的 `th:if` 同款；配了 ID 才输出）：
+
+```html
+<script th:if="${seo.adsenseClient != null and !seo.adsenseClient.isEmpty()}"
+        async
+        th:src="'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ${seo.adsenseClient}"
+        crossorigin="anonymous"></script>
+```
+
+`SeoMeta` 增加字段，由 `SeoMetaBuilder` 从 `getAdsenseConfig()` 组装时填充：
+
+```java
+private String adsenseClient;                          // = config.getClient()，空则不注入加载器
+private Map<String, String> adsenseSlots = new HashMap<>(); // 位置 → slot（只放 enabled != false）
+```
+
+> **真正组装的地方**就是 `SeoMetaBuilder`：读一次 `siteSettingService.getAdsenseConfig()`，把 `client` 作为加载器开关、把 `slots` 过滤后转成 `position → slot` 的 map，注入 `SeoMeta`；模板只消费这个 map，不感知原始 JSON。
+
+**② 文章模板按位置渲染广告位**（`templates/seo/blog.html`），用 `adslot` 片段，**取不到 slot 就不渲染**：
+
+```html
+<div class="article-ad"
+     th:fragment="adslot(seo, pos)"
+     th:if="${seo.adsenseClient != null and seo.adsenseSlots[${pos}] != null}">
+  <ins class="adsbygoogle"
+       style="display:block"
+       th:attr="data-ad-client=${seo.adsenseClient},data-ad-slot=${seo.adsenseSlots[${pos}]}"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<article>
+  <div th:replace="~{seo/blog :: adslot(${seo}, 'articleTop')}"></div>
+  <h1 th:text="${article.title}">文章标题</h1>
+  <div class="content" th:utext="${article.content}">正文</div>
+  <div th:replace="~{seo/blog :: adslot(${seo}, 'articleBottom')}"></div>
+</article>
+```
+
+文内位（`articleInArticle`）需在 `SeoHtmlSupport` 里按 `</p>` 计数插入占位，作为进阶项，一阶段可先不做。
+
+#### 5.3.1.3、SPA 页面注入（`main.js` + 路由切换）
+
+```js
+// main.js：读 /site 拿 adsense 配置，动态注入加载器；后台改配置无需重新构建
+fetch('/site').then(r => r.json()).then(res => {
+  const cfg = res.data.siteInfo.adsense;      // 与后端同一份 JSON（见 5.3.1.1）
+  if (!cfg || !cfg.client || cfg.enabled === false) return;
+  window.__adsenseClient = cfg.client;
+  const s = document.createElement('script');
+  s.async = true; s.crossOrigin = 'anonymous';
+  s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${cfg.client}`;
+  document.head.appendChild(s);
+});
+```
+
+> `/site` 的 `siteInfo` 里把 `adsense` 作为**对象**返回（后端已解析），前端不必再 parse 字符串。
+
+```js
+// router/index.js：用户切路由（主动行为）后，为新页面的 <ins> push 一次
+router.afterEach(() => {
+  if (!window.__adsenseClient) return;
+  setTimeout(() => {
+    document.querySelectorAll('ins.adsbygoogle:not([data-pushed])').forEach(el => {
+      el.setAttribute('data-pushed', '1');            // 标记，避免重复 push
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    });
+  }, 0);
+});
+```
+
+> **合规底线：**只允许"用户切换路由后 push 新广告位"；禁止定时器反复刷同一广告位，否则违反 4.4.6 的自动刷新政策。
+
+#### 5.3.1.4、ads.txt 站点级文件（复用 SeoFileService）
+
+```java
+// SeoFileController
+@GetMapping(value = "/ads.txt", produces = "text/plain;charset=UTF-8")
+public String adsTxt() { return seoFileService.adsTxt(); }
+```
+
+```java
+// SeoFileServiceImpl：从同一个 adsense 配置里取，自定义优先，否则按 client 自动生成
+@Override
+public String adsTxt() {
+    AdsenseConfig cfg = siteSettingService.getAdsenseConfig();
+    String custom = cfg.getAdsTxt();
+    if (custom != null && !custom.trim().isEmpty()) return custom;
+    String client = cfg.getClient();
+    if (client == null || client.trim().isEmpty()) return "";
+    return "google.com, " + client.replace("ca-", "") + ", DIRECT, f08c47fec0942fa0\n";
+}
+```
+
+后台「SEO 配置 → 核心文件」把 `ads.txt` 加进 `SeoConfigController` 的 `contentOf/fileNameOf/contentTypeOf` 三处 `switch` 即可查看/下载（见 5.1.5.3）。
+
+#### 5.3.1.5、配置 → 成品对照（文章页）
+
+**后台配置（唯一入口：`site_setting.adsense` 一组 JSON）：**
+
+```json
+{
+  "enabled": true,
+  "client": "ca-pub-9876543210987654",
+  "adsTxt": "",
+  "slots": [
+    { "slot": "1111111111", "position": "articleTop",       "enabled": true },
+    { "slot": "2222222222", "position": "articleInArticle", "enabled": true },
+    { "slot": "3333333333", "position": "articleBottom",    "enabled": true }
+  ]
+}
+```
+
+**后端组装（`SeoMetaBuilder` 从上面 JSON 读一次）：**
+
+```plain
+getAdsenseConfig()  →  enabled=true, client=ca-pub-9876…, slots=[…]
+   ↓ 过滤 enabled != false
+SeoMeta.adsenseClient = "ca-pub-9876543210987654"
+SeoMeta.adsenseSlots  = { articleTop: "1111111111", articleInArticle: "2222222222", articleBottom: "3333333333" }
+```
+
+**渲染出的 `/blog/513` HTML（精简）：**
+
+```html
+<head>
+  <title>Java基础学习笔记 09、IO流 - BlogLoom</title>
+  <link rel="canonical" href="https://blog.changlu.cloud/blog/513">
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9876543210987654"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="article-ad">
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-9876543210987654" data-ad-slot="1111111111"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+  <article>
+    <h1>Java基础学习笔记 09、IO流</h1>
+    <div class="article-ad">
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-9876543210987654" data-ad-slot="2222222222"
+           data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+    <div class="content">……完整正文……</div>
+    <div class="article-ad">
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-9876543210987654" data-ad-slot="3333333333"
+           data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </article>
+</body>
+```
+
+**页面实际看到的样子（文章页 demo）：**
+
+```plain
+┌──────────────────────────────────────────────────────────────┐
+│  BlogLoom  首页  归档  标签  分类                      🔍       │
+├──────────────────────────────────────────────────────────────┤
+│              Java基础学习笔记 09、IO流                        │
+│              2026-10-01 · Java · 阅读 1.2w                    │
+│   ┌──────────────────────────────────────────────────────┐   │
+│   │           广告位 articleTop / slot 1111111111         │   │  ← 标题下方横幅
+│   └──────────────────────────────────────────────────────┘   │
+│   从 File 类入手……（第 1 段）…（第 2 段）                       │
+│   ┌──────────────────────────────────────────────────────┐   │
+│   │        广告位 articleInArticle / slot 2222222222      │   │  ← 文内矩形
+│   └──────────────────────────────────────────────────────┘   │
+│   ……（第 4 段及以后正文、代码块、图片）……                      │
+│   ┌──────────────────────────────────────────────────────┐   │
+│   │        广告位 articleBottom / slot 3333333333         │   │  ← 正文结束、推荐前
+│   └──────────────────────────────────────────────────────┘   │
+│   #Java  #IO流                                               │
+└──────────────────────────────────────────────────────────────┘
+```
+
+**配置 ↔ 成品对应：**
+
+| 后台 JSON 字段 | 生成/展示位置 | 页面上看到 |
+| --- | --- | --- |
+| `client = ca-pub-9876…` | `<head>` 的 `adsbygoogle.js` | 全页广告能加载 |
+| `slots[].position=articleTop` / `slot=1111…` | `<h1>` 之后、正文之前 | 标题下横幅 |
+| `slots[].position=articleInArticle` / `slot=2222…` | 正文第 2~3 段后 | 文内矩形 |
+| `slots[].position=articleBottom` / `slot=3333…` | 正文末尾、推荐前 | 结尾信息流 |
+| `adsTxt` 留空 | `/ads.txt` | 一行 `google.com, pub-9876543210987654, DIRECT, …` |
+
+#### 5.3.1.6、只接 1 个 slot 的最小示范（推荐起步）
+
+很多人只想先放 1 个广告位。**完全可以**：把 `slots` 只留一条，模板就只渲染这一个位置；其余位置"取不到 slot 直接跳过"。配合 Auto ads，效果是"**1 个手动位 + Google 自动补位**"（原理见 4.4.2 ⑤）。
+
+**后台配置（唯一入口 JSON）：**
+
+```json
+{
+  "enabled": true,
+  "client": "ca-pub-9876543210987654",
+  "adsTxt": "",
+  "slots": [
+    { "slot": "1111111111", "position": "articleTop", "enabled": true }
+  ]
+}
+```
+
+**后端组装（`SeoMetaBuilder`）：**
+
+```plain
+SeoMeta.adsenseClient = "ca-pub-9876543210987654"
+SeoMeta.adsenseSlots  = { articleTop: "1111111111" }   // 只有这一个键
+```
+
+**渲染出的 `/blog/513` HTML（精简，注意只有 1 个广告位）：**
+
+```html
+<head>
+  <title>Java基础学习笔记 09、IO流 - BlogLoom</title>
+  <link rel="canonical" href="https://blog.changlu.cloud/blog/513">
+  <!-- 加载器照常注入（Auto ads 靠它生效） -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9876543210987654"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- articleTop 有 slot → 渲染 -->
+  <div class="article-ad">
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-9876543210987654" data-ad-slot="1111111111"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+  <article>
+    <h1>Java基础学习笔记 09、IO流</h1>
+    <div class="content">……完整正文……</div>
+    <!-- articleInArticle / articleBottom 取不到 slot → 这两处不渲染任何 <ins> -->
+  </article>
+</body>
+```
+
+**页面效果：**
+
+```plain
+┌──────────────────────────────────────────────────────────────┐
+│  BlogLoom  首页  归档  标签  分类                      🔍       │
+├──────────────────────────────────────────────────────────────┤
+│              Java基础学习笔记 09、IO流                        │
+│   ┌──────────────────────────────────────────────────────┐   │
+│   │      广告位 articleTop / slot 1111111111（唯一手动位）  │   │
+│   └──────────────────────────────────────────────────────┘   │
+│   正文……（其余位置没有手动广告位；若开了 Auto ads，          │
+│          Google 可能自行在别处插入广告）                     │
+│   #Java  #IO流                                               │
+└──────────────────────────────────────────────────────────────┘
+```
+
+**要点：**
++ 只配 1 个 slot ≠ 页面只显示 1 个广告；**Auto ads 开着时可能还有 Google 自动插的广告**。
++ 想从 1 个变多个，只需在后台 JSON 的 `slots` 里加一条，**不改代码**。
++ 完全不要手动位时，把 `slots` 留空数组 `[]`，纯靠 Auto ads 也能有广告。
+
+#### 5.3.1.7、多 slot 时的完整生成代码（顶/文内/底全放）
+
+如果希望精确控制多个位置，就把三个 slot 都配上。**每个位置都是独立的广告单元**，各自在自己的位置渲染一段 `<ins>` + 一次 `push`。
+
+**后台配置：**
+
+```json
+{
+  "enabled": true,
+  "client": "ca-pub-9876543210987654",
+  "adsTxt": "",
+  "slots": [
+    { "slot": "1111111111", "position": "articleTop",       "enabled": true },
+    { "slot": "2222222222", "position": "articleInArticle", "enabled": true, "format": "rectangle" },
+    { "slot": "3333333333", "position": "articleBottom",    "enabled": true }
+  ]
+}
+```
+
+**后端组装：**
+
+```plain
+SeoMeta.adsenseClient = "ca-pub-9876543210987654"
+SeoMeta.adsenseSlots  = {
+  articleTop:       "1111111111",
+  articleInArticle: "2222222222",
+  articleBottom:    "3333333333"
+}
+```
+
+**渲染出的 `/blog/513` HTML（精简）—— 模板 `adslot` 片段被调用 3 次：**
+
+```html
+<head>
+  <title>Java基础学习笔记 09、IO流 - BlogLoom</title>
+  <link rel="canonical" href="https://blog.changlu.cloud/blog/513">
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9876543210987654"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- ① articleTop -->
+  <div class="article-ad">
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-9876543210987654" data-ad-slot="1111111111"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <article>
+    <h1>Java基础学习笔记 09、IO流</h1>
+
+    <!-- ② articleInArticle：由 SeoHtmlSupport 在第 2~3 段后插入占位 -->
+    <div class="article-ad">
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-9876543210987654" data-ad-slot="2222222222"
+           data-ad-format="rectangle" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="content">……完整正文……</div>
+
+    <!-- ③ articleBottom -->
+    <div class="article-ad">
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-9876543210987654" data-ad-slot="3333333333"
+           data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </article>
+</body>
+```
+
+> **关键点：**
+> + **加载器只有 1 个**（在 `<head>`，来自 `client`）；`<ins>` 有几个，就有几次 `push({})`。
+> + 每个 `<ins>` 的 `data-ad-slot` 不同，对应后台 `slots` 里不同的广告单元。
+> + `format`（如 `rectangle`）只影响桌面显示形状，不改"能不能出广告"。
+> + 想临时去掉某一位：该条 `enabled` 改成 `false`，**源码里就不再出现这段 `<ins>`**。
+
+**变体：**
++ 只配 `articleTop` → 页面只有标题下一个广告位，其它位置不渲染（`th:if` 兜底）。
++ 某位 `enabled:false` → 该位在 `SeoMetaBuilder` 组装时被过滤，**源码里不出现**。
++ `client` 留空（或整段 JSON 清空）→ `<head>` 无加载器、所有广告位不渲染、`ads.txt` 为空 = **全站关广告**，无需改代码。
+
+**SPA 页对照（首页 demo）：**加载器由 `main.js` 注入，`<ins>` 由 Vue 组件渲染、`router.afterEach` 统一 push；页面效果：
+
+```plain
+┌──────────────────────────────────────────────────────────────┐
+│  BlogLoom  首页  归档  标签  分类                      🔍       │
+├──────────────────────────────────────────────────────────────┤
+│   ┌──────────────────────────────────────────────────────┐   │
+│   │          广告位 listTop / slot 4444444444             │   │  ← 列表顶部横幅
+│   └──────────────────────────────────────────────────────┘   │
+│   [封面]  Java基础学习笔记 09、IO流      2026-10-01           │
+│   [封面]  Spring Boot 定时任务入门        2026-09-28           │
+└──────────────────────────────────────────────────────────────┘
+```
+
+#### 5.3.1.8、验收（curl）
+
+```bash
+# 文章页加载器 + 广告位
+curl -s -H 'Accept: text/html' https://blog.changlu.cloud/blog/513 \
+  | grep -Eo 'adsbygoogle[^"]*|data-ad-slot="[0-9]+"'
+
+# ads.txt
+curl -s https://blog.changlu.cloud/ads.txt
+# 期望：google.com, pub-9876543210987654, DIRECT, f08c47fec0942fa0
+
+# 未配置时不注入（后台先清空发布商 ID）
+curl -s -H 'Accept: text/html' https://blog.changlu.cloud/blog/513 | grep -c 'adsbygoogle'  # 期望 0
+```
+
+### 5.3.2、核心申请步骤
+
+#### 5.3.2.1、申请前自查（8 项）
+
+| # | 项 | 怎么查 | 达标 |
+| --- | --- | --- | --- |
+| 1 | 内容可抓取 | `curl -H 'Accept: text/html' …/blog/513 \| grep '<h1>'` | 源码有正文 |
+| 2 | sitemap 可访问 | `curl -s …/sitemap.xml` | 200 |
+| 3 | 被 Google 收录 | Search Console → 页面 | 部分已编入索引 |
+| 4 | 隐私政策页 | 打开 `/privacy` | 含 Cookie + AdSense + 第三方 |
+| 5 | 关于/联系页 | `/about`、有邮箱 | 页脚可进入 |
+| 6 | 全站 HTTPS + 自有域名 | 浏览器地址栏 | 小锁 |
+| 7 | 移动端可用 | 手机 / PageSpeed | 无红色硬伤 |
+| 8 | 无死链 | 抽查导航/内链 | 无 404 |
+
+#### 5.3.2.2、申请与站点验证
+
+```plain
+① https://adsense.google.com/ 登录注册
+② 填账号信息（国家/时区/收款姓名地址，须真实）
+③ Sites → 添加站点 blog.changlu.cloud（只填域名）
+④ 选验证方式：
+     A. AdSense 代码 —— 首页 <head> 放加载器（本项目后台配 adsense JSON 里的 client 即自动注入）
+     B. meta 标签  —— 不想首页放广告时用（复用 5.1.5.4 方案 B，由 SpaIndexController 注入）
+⑤ 点 Verify（实时校验）
+⑥ 进入审核（数天~两周），期间勿频繁改结构
+⑦ 通过 → Ready → 广告开始展示（≤1h）；被拒 → 按拒信整改，等 7~14 天再申
+```
+
+BlogLoom 推荐**方式 B**，让首页源码直接带上验证 meta（校验器不执行 JS）：
+
+```html
+<meta name="google-adsense-account" content="ca-pub-1234567890123456">
+```
+
+#### 5.3.2.3、选择投放方式：按网站、按广告单元或同时使用
+
+Google AdSense 中的「按网站」和「按广告单元」不是二选一，它们可以独立使用，也可以同时使用：
+
+| 方式 | AdSense 后台入口 | 位置由谁决定 | BlogLoom 对应配置 |
+| --- | --- | --- | --- |
+| **按网站（自动广告）** | Ads → By site | Google 根据页面自动选择 | `autoAds=true`，可以不配置 `slots` |
+| **按广告单元（手动广告）** | Ads → By ad unit | BlogLoom 根据 `position` 精确渲染 | `autoAds=false`，配置一个或多个 `slots` |
+| **混合投放** | 两处都配置 | Google 自动补位 + BlogLoom 手动位 | `autoAds=true`，同时配置多个 `slots` |
+
+BlogLoom 的推荐配置结构为：
+
+```json
+{
+  "enabled": true,
+  "client": "ca-pub-1234567890123456",
+  "autoAds": true,
+  "adsTxt": "",
+  "slots": [
+    {
+      "position": "articleTop",
+      "slot": "1111111111",
+      "enabled": true,
+      "format": "auto",
+      "fullWidth": true
+    },
+    {
+      "position": "articleBottom",
+      "slot": "2222222222",
+      "enabled": true,
+      "format": "auto",
+      "fullWidth": true
+    }
+  ]
+}
+```
+
+**全局加载器的输出条件：**
+
+```plain
+enabled = true
+并且 client 不为空
+并且（autoAds = true 或至少存在一个 enabled != false 的 slot）
+```
+
+满足条件时，BlogLoom 在页面 `<head>` 中输出：
+
+```html
+<script async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456"
+  crossorigin="anonymous"></script>
+```
+
+| `autoAds` | 存在已启用 slot | BlogLoom 是否加载全局脚本 | 实际投放方式 |
+| --- | --- | --- | --- |
+| `false` | 否 | 否 | 不投放 |
+| `true` | 否 | 是 | 仅自动广告 |
+| `false` | 是 | 是 | 仅手动广告单元 |
+| `true` | 是 | 是 | 自动广告 + 手动广告单元 |
+
+> **关键边界：**`adsbygoogle.js` 是自动广告和手动广告共用的加载器，脚本 URL 本身没有 `autoAds=true/false` 参数。`autoAds` 表示 BlogLoom 的投放意图，**Google 是否真正自动插入广告，最终仍由 AdSense 后台「按网站」开关决定**。
+
+因此需要同步完成以下操作：
+
+1. 选择「仅自动广告」或「混合投放」时，需在 AdSense 后台 `Ads → By site` 中开启该站点的自动广告。
+2. 选择「仅手动广告单元」时，需在 AdSense 后台关闭该站点的自动广告；否则即使 BlogLoom 配置 `autoAds=false`，Google 仍可能通过同一加载器自动插入广告。
+3. `slots` 可以为空，也可以配置多个；每个 slot 对应一个独立广告单元，不同 `position` 不应复用同一个后台单元名称和统计口径。
+
+#### 5.3.2.4、创建广告单元拿 slot
+
+```plain
+AdSense 后台 → Ads → By ad unit → 新建"展示广告(Responsive)"
+  → 保存 → Get code → 复制 <ins> 里的 data-ad-slot
+```
+
+| 单元名 | position | 位置 |
+| --- | --- | --- |
+| `blog-article-top` | `articleTop` | 标题下、正文上 |
+| `blog-article-inarticle` | `articleInArticle` | 正文第 2~3 段后（进阶） |
+| `blog-article-bottom` | `articleBottom` | 正文结束、推荐前 |
+
+把 slot 填进后台「SEO 优化 → 广告接入」的广告位表格。
+
+#### 5.3.2.5、ads.txt 上线与状态确认
+
+```plain
+① 打开 https://blog.changlu.cloud/ads.txt 确认一行内容
+② AdSense → Sites → Ads.txt 看 "last crawled" 状态
+③ 异常 → 点 Check for updates 重新抓取
+④ 状态 Authorized → 正常投放
+```
+
+#### 5.3.2.6、结算与监控
+
++ **结算门槛：**余额满 **100 美元** 触发支付；需完成 PIN 身份验证与收款方式（国内电汇填 SWIFT/BIC）。
++ **核心指标：**Page RPM / Impressions RPM / CTR / CPC（含义见 4.4.7），**看周趋势而非单日**。
++ **监控节奏：**每周固定看广告展示、点击、RPM；出现"无效流量""政策提醒"邮件立即处理（见 4.4.6）。
+
 ---
 
 # 六、验证测试
@@ -1793,28 +2838,28 @@ POST https://api.indexnow.org/indexnow
 
 | 序号 | 功能点 | 操作 | 预期结果（截图依据） | 截图 |
 | --- | --- | --- | --- | --- |
-| 1 | 文章详情页直出 | 打开 `/blog/{id}` | 标题、正文、目录、评论占位正常渲染 | |
-| 2 | 文章页 SEO 信息齐全 | 查看网页源代码 | 唯一 `<title>`、`description`、canonical、Open Graph、`application/ld+json` 齐全 | |
-| 3 | 分享卡片 | 分享文章链接到微信 / QQ | 出现标题 + 摘要 + 封面卡片 | |
-| 4 | 聚合页直出 | 打开 `/home`、`/tag/x`、`/category/x`、`/archives`、`/column/1` | 均正常展示文章列表 | |
-| 5 | 站点级文件可访问 | 浏览器打开 `/robots.txt`、`/sitemap.xml`、`/rss.xml` | 分别展示抓取规则 / 文章地图 / 订阅内容 | |
-| 6 | SEO 域名配置 | 后台「SEO优化 → SEO配置」填域名并保存 | 保存成功；canonical / sitemap / RSS 使用新域名 | |
-| 7 | 核心文件查看 / 下载 | 后台「SEO配置 → 核心文件」点「查看」「下载」 | 弹窗展示内容；下载得到三个文件 | |
-| 8 | 阅读页性能 | Lighthouse / PageSpeed Insights | 性能指标达标 | |
-| 9 | 收录情况 | 搜索 `site:域名` / Search Console | 有收录与搜索词数据 | |
+| 1 | 文章详情页直出 | 打开 `/blog/{id}` | 标题、正文、目录、评论占位正常渲染 | ![image-20261009182337719](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091823921.png) |
+| 2 | 文章页 SEO 信息齐全 | 查看网页源代码 | 唯一 `<title>`、`description`、canonical、Open Graph、`application/ld+json` 齐全 | ![image-20261009182359573](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091823631.png) |
+| 3 | 分享卡片 | 分享文章链接到微信 / QQ | 出现标题 + 摘要 + 封面卡片 | ![image-20261009182428994](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091824101.png) |
+| 4 | 聚合页直出 | 打开 `/home`、`/tag/x`、`/category/x`、`/archives`、`/column/1` | 均正常展示文章列表 | 归档：![image-20261009182507238](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091825300.png)<br />分类：<br />![image-20261009182725412](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091827472.png)<br />标签：<br />![image-20261009182740502](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091827578.png) |
+| 5 | 站点级文件可访问 | 浏览器打开 `/robots.txt`、`/sitemap.xml`、`/rss.xml` | 分别展示抓取规则 / 文章地图 / 订阅内容 | /robots.txt：<br />![image-20261009182809229](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091828289.png) <br />/sitemap.xml：<br />![image-20261009182828875](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091828927.png)<br />/rss.xml：<br />![image-20261009182848443](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091828502.png) |
+| 6 | SEO 域名配置 | 后台「SEO优化 → SEO配置」填域名并保存 | 保存成功；canonical / sitemap / RSS 使用新域名 | ![image-20261009183002944](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091830002.png) |
+| 7 | 核心文件查看 / 下载 | 后台「SEO配置 → 核心文件」点「查看」「下载」 | 弹窗展示内容；下载得到三个文件 | ![image-20261009183012627](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091830663.png) |
+| 8 | 阅读页性能 | Lighthouse / PageSpeed Insights | 性能指标达标 | ✅ |
+| 9 | 收录情况 | 搜索 `site:域名` / Search Console | 有收录与搜索词数据 | ![image-20261009183117018](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610091831110.png) |
 
 ### 6.1.2、curl 测试验证（整份输出，可直接复制）
 
 > 约定：`https://blog.changlu.cloud` 换成你的 SEO 域名；`513` 换成实际文章 id。
 
-| 序号 | 功能点 | 完整 curl 命令 | 预期结果 | 截图 |
+| 序号 | 功能点 | 完整 curl 命令 | 预期结果 | 是否验证 |
 | --- | --- | --- | --- | --- |
-| 1 | 详情页直出 | `curl -s -H 'Accept: text/html' https://blog.changlu.cloud/blog/513` | 返回完整文章 HTML | |
-| 2 | robots.txt | `curl -s https://blog.changlu.cloud/robots.txt` | 返回规则与 `Sitemap:` 行 | |
-| 3 | sitemap.xml | `curl -s https://blog.changlu.cloud/sitemap.xml` | 返回 `<urlset>` 文章地图 | |
-| 4 | rss.xml | `curl -s https://blog.changlu.cloud/rss.xml` | 返回 RSS 2.0 订阅源 | |
-| 5 | 聚合页 | `curl -s -H 'Accept: text/html' https://blog.changlu.cloud/home` | 返回文章列表 HTML | |
-| 6 | 后台收录控制 | `curl -sI https://blog.changlu.cloud/cms/` | 响应头含 `X-Robots-Tag` | |
+| 1 | 详情页直出 | `curl -s -H 'Accept: text/html https://blog.changlu.cloud/blog/513` | 返回完整文章 HTML | ✅ |
+| 2 | robots.txt | `curl -s https://blog.changlu.cloud/robots.txt` | 返回规则与 `Sitemap:` 行 | ✅ |
+| 3 | sitemap.xml | `curl -s https://blog.changlu.cloud/sitemap.xml` | 返回 `<urlset>` 文章地图 | ✅ |
+| 4 | rss.xml | `curl -s https://blog.changlu.cloud/rss.xml` | 返回 RSS 2.0 订阅源 | ✅ |
+| 5 | 聚合页 | `curl -s -H 'Accept: text/html' https://blog.changlu.cloud/home` | 返回文章列表 HTML | ✅ |
+| 6 | 后台收录控制 | `curl -sI https://blog.changlu.cloud/cms/` | 响应头含 `X-Robots-Tag` | ✅ |
 
 ### 6.1.3、细粒度校验（收敛到单元测试）
 
@@ -1865,6 +2910,7 @@ mvn -Dtest='Seo*Test' test
 | **M4 站点级文件** | F7 robots + F8 sitemap + F9 rss | 三个端点 200 | 1 Controller + Generator |
 | **M5 聚合页与收录控制** | F10 聚合页直出 + F11 noindex | 聚合页可抓取、后台不被收录 | 复用列表模板 |
 | **M6 收录推进与数据监测** | F12 Search Console + GA4；F13 主动推送；F15 SEO 后台配置 | 有收录与流量数据 | 配置 + 片段注入 + 推送 + 后台配置项 |
+| **M7 广告接入（变现预习，见 5.3）** | AdSense 配置项 + SSR/SPA 加载器注入 + 广告位 + `ads.txt` | 广告位可展示、`ads.txt` 可访问 | 配置项 + 片段 + `SeoFileService` + 模板 |
 
 **建议顺序：**M1 → M2 → M3 → M4 完成即"能抓能收"，可先提交 Search Console；M5、M6 紧随。
 
@@ -1898,7 +2944,7 @@ mvn -Dtest='Seo*Test' test
 
 **一句话总结：一阶段先改 `SpaForwardConfig` 放行、补齐 `BlogDetail` 字段、用 Thymeleaf 把 `/blog/{id}` 正文与 meta 直出，再补 `robots / sitemap / rss` 三个端点，最后接上 Search Console 与统计。做完这些，BlogLoom 才真正从"爬虫眼里的空壳"变成"能被收录的博客"。**
 
-至于第二阶段（性能、内链）、第三阶段（变现）、第四阶段（GEO），都建立在这一阶段的内容与流量之上，不必颠倒顺序。
+至于第二阶段（性能、内链）、第三阶段（变现，本文已在 5.3 预习 Google AdSense 接入方案）、第四阶段（GEO），都建立在这一阶段的内容与流量之上，不必颠倒顺序。
 
 ---
 

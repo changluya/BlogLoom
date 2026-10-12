@@ -81,6 +81,9 @@ public class SeoMetaBuilder {
 			meta.setBingVerification(verifications.get("bing"));
 			meta.setGoogleVerification(verifications.get("google"));
 		}
+		meta.setAdsenseClient(siteSettingService.getAdsenseClient());
+		Map<String, com.changlu.blogloom.module.seo.domain.AdSlot> adsenseSlots = siteSettingService.getAdsenseSlotsByPosition();
+		if (adsenseSlots != null) meta.setAdsenseSlots(adsenseSlots);
 		return meta;
 	}
 

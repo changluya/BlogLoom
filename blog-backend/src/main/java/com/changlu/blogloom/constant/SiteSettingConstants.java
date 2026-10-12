@@ -30,6 +30,8 @@ public class SiteSettingConstants {
 	public static final String BING_SITE_VERIFICATION = "bingSiteVerification";
 	/** Google 站点验证 content（google-site-verification） */
 	public static final String GOOGLE_SITE_VERIFICATION = "googleSiteVerification";
+	/** Google AdSense 广告配置（JSON） */
+	public static final String ADSENSE = "adsense";
 	public static final String CUSTOM_MODULE = "customModule";
 	public static final String UPLOAD_CHANNEL_CHOOSE = "uploadChannelChoose";
 	public static final String UPLOAD_CHANNEL_LOCAL = "uploadChannelLocal";

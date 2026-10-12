@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -27,4 +29,6 @@ public class SeoMeta {
 	private String baiduVerification;
 	private String bingVerification;
 	private String googleVerification;
+	private String adsenseClient;
+	private Map<String, AdSlot> adsenseSlots = new LinkedHashMap<>();
 }

@@ -39,15 +39,54 @@ FROM maven:3.8-jdk-8 AS backend-build
 ARG MAVEN_MIRROR
 # 部分 arm64 / 虚拟化环境下 JDK8 的 PerfData 会导致 JVM 崩溃，这里显式关闭。
 ENV MAVEN_OPTS="-XX:-UsePerfData"
-# 写入 Maven 镜像源（默认官方源，国内可用 --build-arg MAVEN_MIRROR=... 切换）。
-RUN mkdir -p /root/.m2 \
- && printf '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"><mirrors><mirror><id>central-mirror</id><mirrorOf>*</mirrorOf><url>%s</url></mirror></mirrors></settings>\n' "$MAVEN_MIRROR" > /root/.m2/settings.xml
+# 写入 Maven 源：主源 MAVEN_MIRROR（push.sh 默认阿里云，可切官方），
+# 并把官方 Central 作为回退源 —— 主源 DNS/网络/TLS 偶发失败时自动切到回退源，避免构建中断。
+RUN mkdir -p /root/.m2 && cat > /root/.m2/settings.xml <<EOF
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0">
+  <profiles>
+    <profile>
+      <id>repos</id>
+      <repositories>
+        <repository>
+          <id>primary-mirror</id>
+          <url>${MAVEN_MIRROR}</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+          <id>central-fallback</id>
+          <url>https://repo.maven.apache.org/maven2</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>primary-mirror</id>
+          <url>${MAVEN_MIRROR}</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>false</enabled></snapshots>
+        </pluginRepository>
+        <pluginRepository>
+          <id>central-fallback</id>
+          <url>https://repo.maven.apache.org/maven2</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>false</enabled></snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>repos</activeProfile>
+  </activeProfiles>
+</settings>
+EOF
 WORKDIR /workspace
 # 先只拷贝 pom 预热依赖，利用 Docker 层缓存加速后续构建。
 COPY blog-backend/pom.xml ./blog-backend/pom.xml
-RUN cd blog-backend && mvn -B -q dependency:resolve
+RUN cd blog-backend && mvn -B -q -Dmaven.wagon.http.retryHandler.count=3 dependency:resolve
 COPY blog-backend/src ./blog-backend/src
-RUN cd blog-backend && mvn -B -q clean package -Dmaven.test.skip=true
+RUN cd blog-backend && mvn -B -q -Dmaven.wagon.http.retryHandler.count=3 clean package -Dmaven.test.skip=true
 
 # ---------- 2. 构建博客前台（blog-view-ui） ----------
 FROM node:18 AS view-build

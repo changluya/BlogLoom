@@ -31,13 +31,25 @@
 				<span class="meta-item" th:if="${article.readTime != null}"><i class="small clock outline icon"></i><span th:text="${'约 ' + article.readTime + ' 分钟'}"></span></span>
 			</p>
 		</header>
+		<div class="article-ad" th:if="${seo.adsenseClient != null and !seo.adsenseClient.isEmpty() and seo.adsenseSlots['articleTop'] != null}">
+			<ins class="adsbygoogle" th:style="'display:block;text-align:' + (${seo.adsenseSlots['articleTop'].alignment} ?: 'center')" th:attr="data-ad-client=${seo.adsenseClient},data-ad-slot=${seo.adsenseSlots['articleTop'].slot},data-ad-format=${seo.adsenseSlots['articleTop'].format} ?: 'auto',data-ad-layout=${seo.adsenseSlots['articleTop'].layout},data-ad-layout-key=${seo.adsenseSlots['articleTop'].layoutKey},data-full-width-responsive=${seo.adsenseSlots['articleTop'].fullWidth}"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
 		<div class="typo js-toc-content match-braces rainbow-braces article-content" th:utext="${article.content}">正文</div>
+		<div class="article-ad" th:if="${seo.adsenseClient != null and !seo.adsenseClient.isEmpty() and seo.adsenseSlots['articleBottom'] != null}">
+			<ins class="adsbygoogle" th:style="'display:block;text-align:' + (${seo.adsenseSlots['articleBottom'].alignment} ?: 'center')" th:attr="data-ad-client=${seo.adsenseClient},data-ad-slot=${seo.adsenseSlots['articleBottom'].slot},data-ad-format=${seo.adsenseSlots['articleBottom'].format} ?: 'auto',data-ad-layout=${seo.adsenseSlots['articleBottom'].layout},data-ad-layout-key=${seo.adsenseSlots['articleBottom'].layoutKey},data-full-width-responsive=${seo.adsenseSlots['articleBottom'].fullWidth}"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
 		<div class="article-footer"><div class="article-tags" th:if="${article.tags != null and !article.tags.isEmpty()}"><a class="article-tag" th:each="tag : ${article.tags}" th:href="@{'/tag/' + ${tag.name}}"><i class="tag icon"></i><span th:text="${tag.name}"></span></a></div></div>
 	</article>
 	<div class="ui attached positive message article-license"><ul class="list"><li th:text="${'作者：' + (layout.introduction.name ?: seo.siteName)}"></li><li th:text="${'发表时间：' + #dates.format(article.createTime, 'yyyy-MM-dd HH:mm')}"></li><li th:if="${article.updateTime != null}" th:text="${'最后修改：' + #dates.format(article.updateTime, 'yyyy-MM-dd HH:mm')}"></li><li>本站点采用<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank"> 署名 4.0 国际 (CC BY 4.0) </a>创作共享协议。</li></ul></div>
 	<div class="ui bottom teal attached segment threaded comments article-comments"><h3 class="ui header">评论区请在客户端页面查看</h3></div></div></section>
 	<aside class="three wide column m-mobile-hide article-toc-column" aria-label="文章辅助导航">
 		<div class="ui segments m-toc toc-wrapper m-box"><div class="ui secondary segment toc-header"><div class="toc-title"><i class="list ul icon"></i>本文目录</div><button type="button" class="toc-toggle" aria-expanded="true" title="收拢目录"><i class="angle up icon"></i></button></div><div class="ui yellow segment toc-content"><div class="js-toc"></div></div></div>
+		<div class="article-ad article-ad-sidebar" style="margin-top:16px" th:if="${seo.adsenseClient != null and !seo.adsenseClient.isEmpty() and seo.adsenseSlots['articleSidebarToc'] != null}">
+			<ins class="adsbygoogle" th:style="'display:block;text-align:' + (${seo.adsenseSlots['articleSidebarToc'].alignment} ?: 'center')" th:attr="data-ad-client=${seo.adsenseClient},data-ad-slot=${seo.adsenseSlots['articleSidebarToc'].slot},data-ad-format=${seo.adsenseSlots['articleSidebarToc'].format} ?: 'auto',data-ad-layout=${seo.adsenseSlots['articleSidebarToc'].layout},data-ad-layout-key=${seo.adsenseSlots['articleSidebarToc'].layoutKey},data-full-width-responsive=${seo.adsenseSlots['articleSidebarToc'].fullWidth}"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
 	</aside>
 </div></div></div></main>
 <footer class="site-footer"><div class="footer-container">
