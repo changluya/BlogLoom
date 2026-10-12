@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.Principal;
 
@@ -31,9 +32,66 @@ public class SkillAdminController {
 	 * 下载当前用户专属的 BlogLoom Skill 包。
 	 */
 	@GetMapping("/download")
-	public void download(Principal principal, HttpServletResponse response) throws IOException {
+	public void download(Principal principal, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String username = resolveUsername(principal);
-		skillPackageService.download(username, response);
+		skillPackageService.download(username, resolveBaseUrl(request), response);
+	}
+
+	/**
+	 * 优先使用反向代理传递的外部协议、主机和路径前缀，使下载包指向
+	 * 用户实际访问的部署服务，而不是容器内部地址。
+	 */
+	String resolveBaseUrl(HttpServletRequest request) {
+		String scheme = firstHeaderValue(request, "X-Forwarded-Proto");
+		if (isBlank(scheme)) {
+			scheme = request.getScheme();
+		}
+
+		String host = firstHeaderValue(request, "X-Forwarded-Host");
+		if (isBlank(host)) {
+			host = request.getHeader("Host");
+		}
+		if (isBlank(host)) {
+			host = request.getServerName();
+			int port = request.getServerPort();
+			if (port > 0 && !("http".equalsIgnoreCase(scheme) && port == 80)
+					&& !("https".equalsIgnoreCase(scheme) && port == 443)) {
+				host += ":" + port;
+			}
+		}
+
+		String prefix = firstHeaderValue(request, "X-Forwarded-Prefix");
+		if (isBlank(prefix)) {
+			prefix = request.getContextPath();
+		}
+		prefix = normalizePrefix(prefix);
+		return scheme + "://" + host + prefix;
+	}
+
+	private String firstHeaderValue(HttpServletRequest request, String name) {
+		String value = request.getHeader(name);
+		if (isBlank(value)) {
+			return null;
+		}
+		return value.split(",", 2)[0].trim();
+	}
+
+	private String normalizePrefix(String prefix) {
+		if (isBlank(prefix) || "/".equals(prefix.trim())) {
+			return "";
+		}
+		String value = prefix.trim();
+		if (!value.startsWith("/")) {
+			value = "/" + value;
+		}
+		while (value.endsWith("/")) {
+			value = value.substring(0, value.length() - 1);
+		}
+		return value;
+	}
+
+	private boolean isBlank(String value) {
+		return value == null || value.trim().isEmpty();
 	}
 
 	private String resolveUsername(Principal principal) {

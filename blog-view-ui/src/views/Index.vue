@@ -26,8 +26,9 @@
 						</div>
 						<!--右侧-->
 						<div class="three wide column m-mobile-hide" :class="{'article-toc-column': $route.name === 'blog'}">
-							<!--文章详情页右栏仅显示目录，其他页面显示推荐、分类和标签-->
-							<Tocbot v-if="$route.name === 'blog'"/>
+						<!--文章详情页右栏仅显示目录，其他页面显示推荐、分类和标签-->
+						<Tocbot v-if="$route.name === 'blog'"/>
+						<AdsenseSlot v-if="$route.name === 'blog'" :config="siteInfo.adsense || {}" position="articleSidebarToc"/>
 							<template v-else>
 								<RandomBlog :randomBlogList="randomBlogList" :class="{'m-display-none':focusMode}"/>
 								<Categories :categoryList="categoryList" :class="{'m-display-none':focusMode}"/>
@@ -66,14 +67,16 @@
 	import Tags from "@/components/sidebar/Tags";
 	import RandomBlog from "@/components/sidebar/RandomBlog";
 	import Tocbot from "@/components/sidebar/Tocbot";
+	import AdsenseSlot from "@/components/ads/AdsenseSlot";
 	import BlogPasswordDialog from "@/components/index/BlogPasswordDialog";
 	import {mapState} from 'vuex'
 	import {SAVE_CLIENT_SIZE, SAVE_INTRODUCTION, SAVE_SITE_INFO, RESTORE_COMMENT_FORM} from "@/store/mutations-types";
 	import {setFavicon} from '@/util/favicon'
+	import {initAdsense} from '@/util/adsense'
 
 	export default {
 		name: "Index",
-		components: {Header, BlogPasswordDialog, Tocbot, RandomBlog, Categories, Tags, Nav, Footer, Introduction, CustomModule},
+		components: {Header, BlogPasswordDialog, Tocbot, RandomBlog, Categories, Tags, Nav, Footer, Introduction, CustomModule, AdsenseSlot},
 		data() {
 			return {
 				siteInfo: {
@@ -99,7 +102,7 @@
 			},
 			// 需要固定首图 + 浅色遮罩的页面（与首页一致的滚动遮罩效果）
 			showMaskedBackground() {
-				return ['home', 'archives', 'moments', 'friends', 'about', 'category', 'tag', 'blog']
+				return ['home', 'archives', 'moments', 'friends', 'about', 'category', 'tag', 'column', 'blog']
 					.includes(this.$route.name)
 			}
 		},
@@ -129,6 +132,7 @@
 						res.data.introduction.publishedBlogCount = res.data.publishedBlogCount || 0
 						res.data.introduction.totalBlogViews = res.data.totalBlogViews || 0
 						this.$store.commit(SAVE_SITE_INFO, this.siteInfo)
+						initAdsense(this.siteInfo.adsense)
 						setFavicon(this.siteInfo.favicon)
 						this.$store.commit(SAVE_INTRODUCTION, res.data.introduction)
 						document.title = this.$route.meta.title + this.siteInfo.webTitleSuffix
@@ -234,15 +238,16 @@
 	/* 仅微调文章详情页：正文略宽，目录保持可读宽度并轻微右移。 */
 	@media (min-width: 1200px) {
 		.blog-site .main .ui.stackable.grid > .ten.column {
-			width: 64% !important;
+			width: calc(64% - 20px) !important;
 		}
 
+		/* 目录框加宽 20px；正文同步收窄 20px 保持整行 100%，左边缘用平移补偿，位置不变 */
 		.blog-site .main .ui.stackable.grid > .article-toc-column {
-			width: 17.25% !important;
+			width: calc(17.25% + 20px) !important;
 		}
 
 		.ui.grid .article-toc-column {
-			transform: translateX(8px);
+			transform: translateX(10px);
 		}
 	}
 

@@ -1,5 +1,8 @@
 <template>
-	<div ref="nav" class="ui fixed inverted stackable pointing menu" :class="{'transparent':$route.name==='home' && clientSize.clientWidth>768}">
+	<div ref="nav" class="ui fixed inverted stackable pointing menu" :class="{
+		'transparent': $route.name === 'home' && clientSize.clientWidth > 768,
+		'article-compact-nav': $route.name === 'blog'
+	}">
 		<div class="ui container">
 			<router-link to="/">
 				<h3 class="ui header item m-blue">{{ blogName }}</h3>
@@ -236,6 +239,46 @@
 
 	.ui.inverted.menu .header.item:hover {
 		background: transparent !important;
+	}
+
+	/* 阅读详情页使用更紧凑的顶部栏，不影响其他页面的导航尺寸 */
+	.ui.fixed.menu.article-compact-nav {
+		min-height: 46px;
+		box-shadow: 0 5px 20px rgba(5, 12, 24, .1);
+	}
+
+	.ui.inverted.menu.article-compact-nav .item {
+		min-height: 32px;
+		padding-right: 11px;
+		padding-left: 11px;
+		font-size: 13px;
+	}
+
+	.ui.inverted.menu.article-compact-nav .item > i.icon {
+		margin-right: 5px;
+		font-size: .92em;
+	}
+
+	.ui.inverted.menu.article-compact-nav .header.item {
+		min-width: 132px;
+		margin-right: 5px;
+		padding-left: 0;
+		font-size: 15px;
+	}
+
+	.ui.inverted.menu.article-compact-nav .m-search {
+		min-height: 30px !important;
+	}
+
+	.ui.inverted.menu.article-compact-nav .m-search input {
+		height: 30px;
+		padding-right: 36px;
+		padding-left: 14px;
+		font-size: 13px;
+	}
+
+	.ui.inverted.menu.article-compact-nav .m-search i {
+		line-height: 30px !important;
 	}
 
 	.el-dropdown {

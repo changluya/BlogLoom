@@ -51,4 +51,24 @@
   .m-search {
     margin: 8px 12px 12px !important;
   }
+
+  .ui.fixed.menu.article-compact-nav {
+    min-height: 46px;
+  }
+
+  .ui.inverted.menu.article-compact-nav .header.item {
+    min-height: 46px;
+    font-size: 15px;
+  }
+
+  .ui.inverted.menu.article-compact-nav .item {
+    min-height: 38px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+  }
+
+  .ui.inverted.menu.article-compact-nav .m-search {
+    margin-top: 6px !important;
+    margin-bottom: 9px !important;
+  }
 }

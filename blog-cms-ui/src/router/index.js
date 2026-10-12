@@ -149,6 +149,12 @@ const routes = [
 				component: () => import('@/views/blog/seo/SeoVerification'),
 				meta: {title: 'SEO平台关联', icon: 'el-icon-link'}
 			},
+			{
+				path: 'advertising',
+				name: 'AdvertisingPlatform',
+				component: () => import('@/views/blog/seo/AdvertisingPlatform'),
+				meta: {title: '广告平台关联', icon: 'el-icon-s-marketing'}
+			},
 		]
 	},
 	{

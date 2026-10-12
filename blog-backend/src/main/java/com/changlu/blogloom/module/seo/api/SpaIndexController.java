@@ -40,6 +40,11 @@ public class SpaIndexController {
 		try {
 			String html = new String(Files.readAllBytes(indexFile), StandardCharsets.UTF_8);
 			String tags = SeoVerificationSupport.buildMetaTags(siteSettingService.getSeoVerifications());
+			String adsenseClient = siteSettingService.getAdsenseClient();
+			if (adsenseClient != null && !adsenseClient.isEmpty()) {
+				tags += "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="
+						+ escapeAttribute(adsenseClient) + "\" crossorigin=\"anonymous\"></script>\n";
+			}
 			html = SeoVerificationSupport.injectBeforeHeadEnd(html, tags);
 			return ResponseEntity.ok()
 					.contentType(MediaType.valueOf("text/html;charset=UTF-8"))
@@ -47,5 +52,10 @@ public class SpaIndexController {
 		} catch (IOException e) {
 			return ResponseEntity.status(500).body("读取前台入口文件失败：" + e.getMessage());
 		}
+	}
+
+	private String escapeAttribute(String value) {
+		return value.replace("&", "&amp;").replace("\"", "&quot;")
+				.replace("<", "&lt;").replace(">", "&gt;");
 	}
 }

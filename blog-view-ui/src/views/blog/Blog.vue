@@ -29,9 +29,11 @@
 					</div>
 				</div>
 			</header>
+			<AdsenseSlot :config="adsenseConfig" position="articleTop"/>
 
 			<!--文章Markdown正文-->
 			<div class="typo js-toc-content match-braces rainbow-braces article-content" v-lazy-container="{selector: 'img'}" v-viewer :class="{'m-big-fontsize':bigFontSize}" v-html="blog.content"></div>
+			<AdsenseSlot :config="adsenseConfig" position="articleBottom"/>
 
 			<div class="article-footer">
 				<div class="article-tags" v-if="blog.tags && blog.tags.length">
@@ -73,12 +75,13 @@
 <script>
 	import {getBlogById} from "@/api/blog";
 	import CommentList from "@/components/comment/CommentList";
+	import AdsenseSlot from '@/components/ads/AdsenseSlot'
 	import {mapState} from "vuex";
 	import {SET_FOCUS_MODE, SET_IS_BLOG_RENDER_COMPLETE} from '@/store/mutations-types';
 
 	export default {
 		name: "Blog",
-		components: {CommentList},
+		components: {CommentList, AdsenseSlot},
 		data() {
 			return {
 				blog: {},
@@ -87,6 +90,9 @@
 			}
 		},
 		computed: {
+			adsenseConfig() {
+				return this.siteInfo && this.siteInfo.adsense || {}
+			},
 			blogId() {
 				return parseInt(this.$route.params.id)
 			},

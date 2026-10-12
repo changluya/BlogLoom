@@ -1,6 +1,8 @@
 package com.changlu.blogloom.service;
 
 import com.changlu.blogloom.entity.SiteSetting;
+import com.changlu.blogloom.module.seo.domain.AdsenseConfig;
+import com.changlu.blogloom.module.seo.domain.AdSlot;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashMap;
@@ -25,6 +27,18 @@ public interface SiteSettingService {
 
 	/** 保存各搜索引擎站点验证 content（key：baidu / bing / google） */
 	void saveSeoVerifications(java.util.Map<String, String> values);
+
+	/** 读取 AdSense JSON 配置；空值或损坏配置返回空对象 */
+	AdsenseConfig getAdsenseConfig();
+
+	/** 只返回总开关开启时的发布商 ID */
+	String getAdsenseClient();
+
+	/** 按 position 返回已启用的广告位 */
+	Map<String, AdSlot> getAdsenseSlotsByPosition();
+
+	/** 保存 AdSense 原始 JSON */
+	void saveAdsenseConfig(String json);
 
 	void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds);
 	Map<String, String> uploadImage(Integer id, MultipartFile file);

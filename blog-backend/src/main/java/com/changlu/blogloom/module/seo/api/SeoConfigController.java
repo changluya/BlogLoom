@@ -107,6 +107,8 @@ public class SeoConfigController {
 				return seoFileService.sitemap();
 			case "rss":
 				return seoFileService.rss();
+			case "ads":
+				return seoFileService.adsTxt();
 			default:
 				return null;
 		}
@@ -120,6 +122,8 @@ public class SeoConfigController {
 				return "sitemap.xml";
 			case "rss":
 				return "rss.xml";
+			case "ads":
+				return "ads.txt";
 			default:
 				return name;
 		}
@@ -133,6 +137,8 @@ public class SeoConfigController {
 				return "application/xml";
 			case "rss":
 				return "application/rss+xml";
+			case "ads":
+				return "text/plain";
 			default:
 				return "application/octet-stream";
 		}

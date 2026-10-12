@@ -703,9 +703,25 @@ async function saveDraft(page) {
   }
   await btn.waitFor({ state: 'visible', timeout: 15000 });
   log('点击「保存为草稿」');
-  await btn.click({ timeout: 5000 });
-  await page.waitForTimeout(3000);
-  return { status: 'DRAFT_SAVED', url: page.url() };
+
+  // 保存是异步的，长文（多图/大正文）耗时可能超过数秒；需轮询 URL 是否回写 appmsgid 做回读校验，
+  // 否则会话关闭会中断保存，导致「假成功」（返回 DRAFT_SAVED 但草稿箱实际没有）。
+  const savedId = () => (page.url().match(/appmsgid=(\d+)/) || [])[1] || '';
+  let id = '';
+  for (let attempt = 0; attempt < 2 && !id; attempt += 1) {
+    await btn.click({ timeout: 5000 }).catch(() => {});
+    for (let i = 0; i < 20; i += 1) {
+      await page.waitForTimeout(1500);
+      id = await savedId();
+      if (id) break;
+    }
+  }
+  if (!id) {
+    log('未确认到草稿保存成功（URL 未出现 appmsgid）');
+    return { status: 'UNKNOWN', url: page.url() };
+  }
+  log(`草稿已保存（appmsgid=${id}）`);
+  return { status: 'DRAFT_SAVED', url: page.url(), appmsgid: id };
 }
 
 /** 进入「内容管理 → 草稿箱」列表页。 */

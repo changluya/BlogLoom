@@ -157,17 +157,19 @@ prune_buildx_cache() {
 }
 
 # -----------------------------------------------------------------------------
-# print_docker_disk_help：构建因磁盘空间不足失败时输出清理指引。
+# print_docker_disk_help：构建失败时输出排查指引。
+# 注意：构建失败原因不一定是磁盘；也可能是依赖源 / DNS 不可达。
 # -----------------------------------------------------------------------------
 print_docker_disk_help() {
     local builder="${1:-$BUILDX_BUILDER}"
-    printf '[ERROR] 构建失败，疑似 Docker 磁盘空间不足（no space left on device）。\n' >&2
-    printf '        可尝试以下清理后重试：\n' >&2
-    printf '        - 清理 buildx 构建缓存：docker buildx prune -af --builder %s\n' "$builder" >&2
-    printf '        - 清理未使用镜像/容器/缓存：docker system prune -af\n' >&2
-    printf '        - 清理未使用数据卷（谨慎，会删数据）：docker volume prune\n' >&2
-    printf '        - Docker Desktop → Settings → Resources 增大磁盘容量后重启\n' >&2
-    printf '        - 或直接带 --prune 重试：./scripts/push.sh --prune <版本号>\n' >&2
+    printf '[ERROR] 构建失败。常见原因与处理：\n' >&2
+    printf '        1) 磁盘空间不足（日志含 "no space left on device"）：\n' >&2
+    printf '           docker buildx prune -af --builder %s\n' "$builder" >&2
+    printf '           docker system prune -af\n' >&2
+    printf '        2) 依赖源 / DNS 不可达（如日志含 "Temporary failure in name resolution"）：\n' >&2
+    printf '           切换依赖源后重试，例如：\n' >&2
+    printf '           MAVEN_MIRROR=https://repo.maven.apache.org/maven2 \\\n' >&2
+    printf '           NPM_REGISTRY=https://registry.npmjs.org ./scripts/push.sh <版本号>\n' >&2
 }
 
 # -----------------------------------------------------------------------------
