@@ -13,6 +13,8 @@ import com.changlu.blogloom.model.vo.Copyright;
 import com.changlu.blogloom.model.vo.CustomModule;
 import com.changlu.blogloom.model.vo.Favorite;
 import com.changlu.blogloom.model.vo.Introduction;
+import com.changlu.blogloom.module.seo.domain.AdSlot;
+import com.changlu.blogloom.module.seo.domain.AdsenseConfig;
 import com.changlu.blogloom.service.BlogCacheService;
 import com.changlu.blogloom.service.SiteSettingService;
 import com.changlu.blogloom.service.SiteImageStorageService;
@@ -112,7 +114,9 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 			}
 			switch (s.getType()) {
 			case 1:
-					if (SiteSettingConstants.COPYRIGHT.equals(s.getNameEn())) {
+					if (SiteSettingConstants.ADSENSE.equals(s.getNameEn())) {
+						siteInfo.put(s.getNameEn(), getAdsenseConfig());
+					} else if (SiteSettingConstants.COPYRIGHT.equals(s.getNameEn())) {
 						Copyright copyright = JacksonUtils.readValue(s.getValue(), Copyright.class);
 						siteInfo.put(s.getNameEn(), copyright);
 					} else if (SiteSettingConstants.HERO_CONFIG.equals(s.getNameEn())) {
@@ -222,6 +226,54 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 				values == null ? null : values.get("bing"));
 		upsertBasicSetting(SiteSettingConstants.GOOGLE_SITE_VERIFICATION, "Google 站点验证",
 				values == null ? null : values.get("google"));
+		deleteSiteInfoCache();
+	}
+
+	@Override
+	public AdsenseConfig getAdsenseConfig() {
+		String json = settingValue(SiteSettingConstants.ADSENSE);
+		if (json.isEmpty()) {
+			return new AdsenseConfig();
+		}
+		AdsenseConfig config = JacksonUtils.readValue(json, AdsenseConfig.class);
+		return config == null ? new AdsenseConfig() : config;
+	}
+
+	@Override
+	public String getAdsenseClient() {
+		AdsenseConfig config = getAdsenseConfig();
+		if (Boolean.FALSE.equals(config.getEnabled())) {
+			return "";
+		}
+		boolean hasEnabledSlot = config.getSlots() != null && config.getSlots().stream()
+				.anyMatch(item -> item != null && !Boolean.FALSE.equals(item.getEnabled())
+						&& item.getSlot() != null && !item.getSlot().trim().isEmpty());
+		if (!Boolean.TRUE.equals(config.getAutoAds()) && !hasEnabledSlot) {
+			return "";
+		}
+		return config.getClient() == null ? "" : config.getClient().trim();
+	}
+
+	@Override
+	public Map<String, AdSlot> getAdsenseSlotsByPosition() {
+		Map<String, AdSlot> result = new LinkedHashMap<>();
+		AdsenseConfig config = getAdsenseConfig();
+		if (Boolean.FALSE.equals(config.getEnabled()) || config.getSlots() == null) {
+			return result;
+		}
+		for (AdSlot item : config.getSlots()) {
+			if (item == null || Boolean.FALSE.equals(item.getEnabled())) continue;
+			String position = item.getPosition() == null ? "" : item.getPosition().trim();
+			String slot = item.getSlot() == null ? "" : item.getSlot().trim();
+			if (!position.isEmpty() && !slot.isEmpty()) result.put(position, item);
+		}
+		return result;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void saveAdsenseConfig(String json) {
+		upsertBasicSetting(SiteSettingConstants.ADSENSE, "AdSense 广告配置", json);
 		deleteSiteInfoCache();
 	}
 

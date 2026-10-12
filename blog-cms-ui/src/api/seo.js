@@ -47,3 +47,26 @@ export function updateSeoVerification(data) {
 		data
 	})
 }
+
+export function getAdsenseConfig() {
+	return axios({
+		url: 'seo/adsense',
+		method: 'GET'
+	})
+}
+
+// 广告投放位置选项（后台下拉数据源，与后端白名单保持一致）
+export function getAdsensePositions() {
+	return axios({
+		url: 'seo/adsense/positions',
+		method: 'GET'
+	})
+}
+
+export function updateAdsenseConfig(data) {
+	return axios({
+		url: 'seo/adsense',
+		method: 'POST',
+		data
+	})
+}

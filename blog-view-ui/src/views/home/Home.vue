@@ -13,9 +13,15 @@
 					<i class="fire icon"></i>按访问量
 				</span>
 			</div>
-			<div class="home-search">
-				<el-input v-model="keyword" size="small" placeholder="搜索文章..." clearable prefix-icon="el-icon-search"
-				          @keyup.enter.native="doSearch" @clear="clearSearch"></el-input>
+			<div class="home-actions">
+				<a class="rss-subscribe" href="/rss.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS订阅">
+					<i class="rss icon" aria-hidden="true"></i>
+					<span>RSS订阅</span>
+				</a>
+				<div class="home-search">
+					<el-input v-model="keyword" size="small" placeholder="搜索文章..." clearable prefix-icon="el-icon-search"
+					          @keyup.enter.native="doSearch" @clear="clearSearch"></el-input>
+				</div>
 			</div>
 		</div>
 
@@ -284,6 +290,42 @@
 
 	.filter-icon {
 		fill: currentColor;
+	}
+
+	.home-actions {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.rss-subscribe {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		height: 32px;
+		padding: 0 12px;
+		border: 1px solid #d8e0e9;
+		border-radius: 18px;
+		background: rgba(255, 255, 255, .72);
+		color: #657184;
+		font-size: 13px;
+		line-height: 1;
+		text-decoration: none;
+		white-space: nowrap;
+		transition: border-color .2s, color .2s, background .2s, box-shadow .2s;
+	}
+
+	.rss-subscribe:hover {
+		border-color: #f59e0b;
+		background: #fffaf0;
+		color: #d97706;
+		box-shadow: 0 2px 8px rgba(245, 158, 11, .12);
+	}
+
+	.rss-subscribe .icon {
+		margin: 0 !important;
+		color: #f59e0b;
+		font-size: 14px;
 	}
 
 	.home-search {

@@ -2,8 +2,10 @@ package com.changlu.blogloom.service;
 
 import com.changlu.blogloom.env.EnvironmentContext;
 import com.changlu.blogloom.util.JwtUtils;
+import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.ByteArrayInputStream;
@@ -16,6 +18,7 @@ import java.util.zip.ZipInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -56,6 +59,32 @@ class SkillPackageServiceTest {
 		assertTrue(env.contains("http://localhost:8090"), "应注入 BASE_URL");
 		assertFalse(env.contains("__BLOOM_API_TOKEN__"), "token 占位符应被替换");
 		assertTrue(env.contains("export BLOOM_API_TOKEN=\"ey"), "应注入可用 JWT");
+		String token = env.substring(env.indexOf("export BLOOM_API_TOKEN=\"") + 24, env.lastIndexOf('"'));
+		Claims claims = JwtUtils.getTokenBody(token);
+		assertEquals("admin:admin", claims.getSubject());
+		assertNull(claims.getExpiration(), "Skill token 不应包含过期时间");
+	}
+
+	@Test
+	void shouldUseRequestBaseUrl() throws Exception {
+		Map<String, String> entries = unzip(service.buildZip("admin", "https://blog.example.com/api"));
+		String env = entries.get("blogloom-skill/skill.env.sh");
+		assertTrue(env.contains("export BLOOM_BASE_URL=\"https://blog.example.com/api\""));
+		assertFalse(env.contains("__BLOOM_BASE_URL__"));
+	}
+
+	@Test
+	void shouldDownloadUsableZip() throws Exception {
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		service.download("admin", "https://deploy.example.com", response);
+
+		assertEquals("application/zip", response.getContentType());
+		assertTrue(response.getHeader("Content-Disposition").contains("blogloom-skill.zip"));
+		Map<String, String> entries = unzip(response.getContentAsByteArray());
+		String env = entries.get("blogloom-skill/skill.env.sh");
+		assertTrue(env.contains("export BLOOM_BASE_URL=\"https://deploy.example.com\""));
+		String token = env.substring(env.indexOf("export BLOOM_API_TOKEN=\"") + 24, env.lastIndexOf('"'));
+		assertNull(JwtUtils.getTokenBody(token).getExpiration());
 	}
 
 	@Test

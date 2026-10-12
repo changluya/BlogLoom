@@ -15,4 +15,6 @@ public interface SeoFileService {
 
 	/** rss.xml 内容 */
 	String rss();
+
+	String adsTxt();
 }

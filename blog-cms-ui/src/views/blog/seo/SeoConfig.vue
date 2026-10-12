@@ -24,7 +24,7 @@
 		<el-card class="file-card">
 			<div slot="header">
 				<span class="card-title">核心文件</span>
-				<span class="card-tip">robots.txt / sitemap.xml / rss.xml，支持快捷查看与下载</span>
+					<span class="card-tip">robots.txt / sitemap.xml / rss.xml / ads.txt，支持快捷查看与下载</span>
 			</div>
 			<el-table :data="files" size="small" border>
 				<el-table-column prop="label" label="文件" width="130"/>
@@ -67,7 +67,8 @@
 				files: [
 					{name: 'robots', label: 'robots.txt', path: '/robots.txt', desc: '抓取规则，声明 Sitemap 地址'},
 					{name: 'sitemap', label: 'sitemap.xml', path: '/sitemap.xml', desc: '公开文章地图，辅助搜索引擎发现'},
-					{name: 'rss', label: 'rss.xml', path: '/rss.xml', desc: '最近公开文章的订阅源'}
+					{name: 'rss', label: 'rss.xml', path: '/rss.xml', desc: '最近公开文章的订阅源'},
+					{name: 'ads', label: 'ads.txt', path: '/ads.txt', desc: 'Google AdSense 授权售卖声明'}
 				],
 				dialog: {
 					visible: false,

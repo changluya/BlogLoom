@@ -50,8 +50,8 @@ public class SkillPackageService {
 	 * @param username 当前登录用户名，用于签发 token
 	 * @param response HTTP 响应
 	 */
-	public void download(String username, HttpServletResponse response) throws IOException {
-		byte[] zip = buildZip(username);
+	public void download(String username, String baseUrl, HttpServletResponse response) throws IOException {
+		byte[] zip = buildZip(username, baseUrl);
 
 		String fileName = "blogloom-skill.zip";
 		String encoded = URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
@@ -71,8 +71,14 @@ public class SkillPackageService {
 	 * 组装 Skill ZIP 字节流（便于测试）。
 	 */
 	public byte[] buildZip(String username) {
-		String baseUrl = environmentContext.getBlogApi();
-		String token = JwtUtils.generateToken(JwtConstants.ADMIN_PREFIX + username,
+		return buildZip(username, environmentContext.getBlogApi());
+	}
+
+	/**
+	 * 使用当次下载请求对应的服务地址组装 Skill ZIP。
+	 */
+	public byte[] buildZip(String username, String baseUrl) {
+		String token = JwtUtils.generatePermanentToken(JwtConstants.ADMIN_PREFIX + username,
 				AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_admin"));
 
 		List<Resource> resources = resolveResources();

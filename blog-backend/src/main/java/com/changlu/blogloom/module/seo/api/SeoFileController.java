@@ -27,4 +27,9 @@ public class SeoFileController {
 	public String rss() {
 		return seoFileService.rss();
 	}
+
+	@GetMapping(value = "/ads.txt", produces = "text/plain;charset=UTF-8")
+	public String adsTxt() {
+		return seoFileService.adsTxt();
+	}
 }

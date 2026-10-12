@@ -5,6 +5,51 @@
 本日志格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 并且项目遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
+## v1.0.1 - 2026.09.22-2026.10.13
+
+### Added
+
+- [cb608b8] 新增搜索引擎 SEO 优化一期：公开页面（文章详情 / 首页 / 标签 / 分类 / 专栏 / 归档）由后端 Thymeleaf 服务端直出并绕开 SPA 回退，新增 `robots.txt`、`sitemap.xml`、`rss.xml` 站点级文件与页面级 title / description / canonical / OpenGraph / JSON-LD 结构化数据；后台新增「SEO优化」顶级菜单与「SEO配置」页，支持 SEO 域名配置（优先后台配置、兜底 blog.view）及核心文件快捷查看与下载。
+- [3040ca7] 新增「SEO 平台关联」（站点验证）：后台配置百度 / Bing / Google 验证 content，支持整段验证代码自动提取 content、空值不输出；采用方案 B 由 `SpaIndexController` 把验证 meta 注入 SPA index.html，SSR `seo-head` 同步输出，覆盖 `/` 与 `/home` 等页面。
+- [83dbfab] 新增搜索引擎广告变现（Google AdSense）接入：新增 AdSense 配置项与 `AdSlot` / `AdsenseConfig` 领域模型，支持发布商 ID、自动 / 手动广告位（顶部 / 文内 / 底部 / 右侧目录下方）与 `ads.txt` 自定义内容，可粘贴广告单元代码自动识别并校验 `client` / `slot`、空值不注入；SSR 与 SPA 双端按位置注入广告位，新增 `/ads.txt` 端点随后台配置自动生成；后台新增「广告平台关联」配置页。
+- [fb7dfd5] 新增首页文章列表 RSS 订阅入口，并完成移动端适配。
+- [625a6b5] 新增 BlogLoom 分发 Skill（Playwright + CDP 多渠道发布）与「BlogLoom 分发 Skill」专栏（中英文）。
+- [2b5d856] 新增公众号（gzh）分发渠道与渠道级 `conf` 配置，重构 publisher 为分层模块，补充 CSDN / 公众号能力与发布流程文档。
+- [c0f7d87] 新增 Windows PowerShell 一键安装与升级支持。
+- [f1019d9] 部署脚本支持多架构镜像，`push.sh` 改用 buildx 构建推送 amd64 / arm64 manifest。
+- [fef02a0] 本地图床渠道新增访问地址配置，后台可视化展示与修改，未配置时回退 `blog.api`。
+- [b18a385] 用户版首次部署自动生成随机 MySQL 密码与令牌密钥，MySQL 映射 13306 供外网连接，并同步运维说明。
+- [659198c] 新增「联系我」区块与开源社区文件（CONTRIBUTING、SECURITY、Issue 与 PR 模板）。
+- [4beb50c] 新增后端 Maven 与前后端构建 CI，跟踪 `package-lock.json` 并补充 README 构建 / 发布徽章。
+- [59cdc5d] 新增专栏备份导出。
+- [41cb9f3] 优化 CMS Skill 下载凭证：为下载包签发无过期时间的专属 Token，并基于 `X-Forwarded` 请求头及当前请求动态注入部署服务 BaseURL。
+- [5569347] 新增 v1.0.0 发布说明留档（与 GitHub Release 内容一致）。
+
+### Changed
+
+- [60db32e] 优化文章目录、详情页阅读排版与首页导航布局。
+- [edff8dd] 优化博客阅读详情页顶部导航栏：新增详情页专属紧凑样式，缩减导航高度并同步调整栏目字号、内边距、图标间距、站点标题与搜索框尺寸，补充移动端适配。
+- [83dbfab] 微调文章详情页右侧目录宽度与横向位置（Vue 站内页与 SEO 直出页保持一致）。
+- [380084d] 优化首页封面加载与博客列表排版，调整筛选搜索栏尺寸。
+- [c35a85d] 优化首页首屏与资料卡视觉，新增可配置首屏及 CSDN 信息。
+- [0e57fd3] 优化博客首页左侧自定义模块与博客详情阅读页右侧栏目。
+- [358682b] 新增专栏快捷树形移动与拖拽边缘自动滚动。
+- [cb608b8] 阅读页性能优化：补齐详情接口封面 / 摘要 / 作者字段，正文 h1 降级与目录，图片懒加载、脚本 defer 与 HTTP 压缩。
+- [3040ca7] docker 构建脚本新增 `NPM_REGISTRY` / `MAVEN_MIRROR` 可配置依赖源（默认国内源），修复官方源网络中断导致的构建失败。
+- [83dbfab] docker 构建补齐 Maven 依赖源回退与失败排查指引。
+- [2b5d856] 公众号分发 Skill 保存草稿改为轮询 URL 回读校验，避免「假成功」。
+- [7819eec] README 新增社交预览图并加入产品展示，移除顶部 NBlog 提及。
+- [4e329a6] README 补全目录结构，忽略 `codes` 目录。
+- [9eaf568] README 弱化 MySQL 缓存实现细节，移除 `cache_entry` 相关描述。
+- [659198c] 调整 README 章节顺序。
+
+### Fixed
+
+- [59cdc5d] 修复专栏单次移动与层级排序，优化后台登录及记住密码。
+- [cb473cd] 修复专栏背景缺失并补齐 SEO 分享封面映射。
+- [b5c6c6d] 修复首页专栏展开拉高列表，补充开发环境与部署运维说明。
+- [41cb9f3] 修复 `skill.env.sh` 地址占位符未生效问题，补充 ZIP 下载、Token 验签及反向代理地址解析测试。
+
 ## v1.0.0 - 2026.09.13-2026.09.22
 
 ### Added

@@ -5,6 +5,7 @@ import com.changlu.blogloom.model.vo.BlogDetail;
 import com.changlu.blogloom.model.vo.BlogInfo;
 import com.changlu.blogloom.model.vo.PageResult;
 import com.changlu.blogloom.module.seo.domain.SeoSiteLayout;
+import com.changlu.blogloom.module.seo.domain.AdsenseConfig;
 import com.changlu.blogloom.module.seo.service.SeoSiteLayoutService;
 import com.changlu.blogloom.service.BlogService;
 import com.changlu.blogloom.service.SiteSettingService;
@@ -20,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -56,6 +59,7 @@ class SeoEndpointIntegrationTest {
 		BlogDetail article = new BlogDetail();
 		article.setId(1L);
 		article.setTitle("SEO article");
+		article.setFirstPicture("https://cdn.example.com/seo-cover.png");
 		article.setContent("<h1>inner heading</h1><img src=\"/image/a.png\">");
 		article.setDescription("article summary");
 		article.setCreateTime(new Date());
@@ -67,6 +71,7 @@ class SeoEndpointIntegrationTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("seo/blog"))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("<title>SEO article - BlogLoom</title>")))
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("<meta property=\"og:image\" content=\"https://cdn.example.com/seo-cover.png\">")))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("https://blog.example.com/blog/1")))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("loading=\"lazy\"")))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("class=\"three wide column m-mobile-hide\"")))
@@ -84,6 +89,8 @@ class SeoEndpointIntegrationTest {
 		mockMvc.perform(get("/tag/Java").accept(MediaType.TEXT_HTML))
 				.andExpect(status().isOk())
 				.andExpect(view().name("seo/list"))
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("class=\"site masked-site\"")))
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("class=\"home-hero-background m-mobile-hide\"")))
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("/blog/2")));
 	}
 
@@ -98,6 +105,40 @@ class SeoEndpointIntegrationTest {
 		mockMvc.perform(get("/rss.xml"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(org.hamcrest.Matchers.containsString("<rss version=\"2.0\">")));
+	}
+
+	@Test
+	void shouldRenderAdsenseAndExposeAdsTxtWhenConfigured() throws Exception {
+		BlogDetail article = new BlogDetail();
+		article.setId(1L);
+		article.setTitle("AdSense article");
+		article.setContent("<p>content</p>");
+		article.setCreateTime(new Date());
+		when(blogService.getBlogByIdAndIsPublished(1L)).thenReturn(article);
+		when(siteSettingService.getAdsenseClient()).thenReturn("ca-pub-1234567890123456");
+		Map<String, com.changlu.blogloom.module.seo.domain.AdSlot> slots = new LinkedHashMap<>();
+		com.changlu.blogloom.module.seo.domain.AdSlot topSlot = new com.changlu.blogloom.module.seo.domain.AdSlot();
+		topSlot.setSlot("1111111111");
+		topSlot.setFormat("fluid");
+		topSlot.setLayout("in-article");
+		com.changlu.blogloom.module.seo.domain.AdSlot bottomSlot = new com.changlu.blogloom.module.seo.domain.AdSlot();
+		bottomSlot.setSlot("2222222222");
+		slots.put("articleTop", topSlot);
+		slots.put("articleBottom", bottomSlot);
+		when(siteSettingService.getAdsenseSlotsByPosition()).thenReturn(slots);
+		AdsenseConfig config = new AdsenseConfig();
+		config.setEnabled(true);
+		config.setClient("ca-pub-1234567890123456");
+		when(siteSettingService.getAdsenseConfig()).thenReturn(config);
+
+		mockMvc.perform(get("/blog/1").accept(MediaType.TEXT_HTML))
+				.andExpect(status().isOk())
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("adsbygoogle.js?client=ca-pub-1234567890123456")))
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("data-ad-slot=\"1111111111\"")))
+				.andExpect(content().string(org.hamcrest.Matchers.containsString("data-ad-slot=\"2222222222\"")));
+		mockMvc.perform(get("/ads.txt"))
+				.andExpect(status().isOk())
+				.andExpect(content().string("google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0\n"));
 	}
 
 	@Test

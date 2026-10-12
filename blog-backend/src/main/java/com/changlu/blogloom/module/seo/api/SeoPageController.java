@@ -97,6 +97,7 @@ public class SeoPageController {
 				? new ArrayList<>() : new ArrayList<>(page.getList());
 		articles.removeIf(article -> StringUtils.hasText(article.getPassword()));
 		model.addAttribute("seo", metaBuilder.forList(title, description, path));
+		model.addAttribute("layout", siteLayoutService.getLayout());
 		model.addAttribute("title", title);
 		model.addAttribute("articles", articles);
 		model.addAttribute("archiveArticles", Collections.emptyList());
