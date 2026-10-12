@@ -1,0 +1,130 @@
+docs/prd/产品功能文档-CMS系统.md
+  s_14bf3132d2db1c::t_35a73e1eafc489 4,14-18,24,26,28,32,36,44-46,53,56-57,59,62,69,74-75,77,80-81,83,86-87,89,92-93,95,98-99,101,104,111,114-115,117,120-121,123,126-127,129,139,143-167,171-174,177-180,183-186,189,193-195,199-202,205-208,211,215,219,222-243
+blog-backend/src/main/java/com/changlu/blogloom/util/JwtUtils.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 80-98
+  s_14bf3132d2db1c::t_fb2d0ea494d51f 79
+blog-view-ui/src/components/ads/AdsenseSlot.vue
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-43
+"docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/搜索引擎SEO优化改造/搜索引擎SEO优化调研学习03、Google AdSense 广告接入配置指南.md"
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-1386
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoPageController.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 100
+blog-cms-ui/src/views/blog/seo/SeoConfig.vue
+  s_14bf3132d2db1c::t_35a73e1eafc489 27,70-71
+skills/blogloom-publisher-skill/scripts/channels/gzh/index.js
+  s_14bf3132d2db1c::t_35a73e1eafc489 706-724
+blog-view-ui/src/styles/mobile/pages/home.mobile.scss
+  s_14bf3132d2db1c::t_35a73e1eafc489 22-33,35
+docs/prd/产品功能文档-博客前台.md
+  s_14bf3132d2db1c::t_35a73e1eafc489 4,14,20,22,30,39,42-43,45,48-49,51,54-55,57,60-61,63,66-67,69,72,81,84-85,87,90-91,93,96-97,99,102-103,105,108,117,120-121,123,126-127,129,132,141,144-145,147,150-151,153,156-157,159,162-163,165,168,176,187-205
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SpaIndexController.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 43-47,56-59
+  s_14bf3132d2db1c::t_a486292274013d 60
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/AdsenseConfig.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-18
+blog-view-ui/src/views/Index.vue
+  s_14bf3132d2db1c::t_35a73e1eafc489 29-31,70,75,79,105,135,241,244,246,250
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoConfigController.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 110-111,125-126,140-141
+blog-backend/src/main/resources/mapper/BlogMapper.xml
+  s_14bf3132d2db1c::t_35a73e1eafc489 296-297,299-300
+blog-view-ui/src/components/index/Nav.vue
+  s_14bf3132d2db1c::t_35a73e1eafc489 2-5,244-282
+  s_14bf3132d2db1c::t_c43cce6ca03576 283
+blog-backend/src/main/java/com/changlu/blogloom/service/SkillPackageService.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 53-54,74-81,164
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/SiteSettingServiceImpl.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 16-17,117-119,232-276,278
+  s_14bf3132d2db1c::t_2226d0ede27937 277,279
+blog-view-ui/src/views/blog/Blog.vue
+  s_14bf3132d2db1c::t_35a73e1eafc489 32,36,78,84,93-95
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/搜索引擎SEO优化改造/搜索引擎SEO优化调研学习02、第一阶段核心改造、服务端直出与站点级文件.md
+  s_14bf3132d2db1c::t_35a73e1eafc489 111,143,162,330,467,803-1138,1153-1155,1157-1162,1164,1170,1173,1179,1184,1189,1201-1209,1338-1452,1582,1659,1948-1949,2034,2110-2113,2245-2832,2845-2853,2859,2861-2866,2917,2951
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/SeoFileService.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 18-19
+blog-backend/src/test/java/com/changlu/blogloom/service/SkillPackageServiceTest.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 5,8,21,62-87,116
+blog-cms-ui/src/api/seo.js
+  s_14bf3132d2db1c::t_35a73e1eafc489 50-72
+blog-view-ui/src/views/home/Home.vue
+  s_14bf3132d2db1c::t_35a73e1eafc489 16-24,295-329
+  s_14bf3132d2db1c::t_c74a73ffa39391 330
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/SkillAdminController.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 11,35,37-94,108
+blog-backend/src/main/java/com/changlu/blogloom/constant/SiteSettingConstants.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 33-34
+README.md
+  s_14bf3132d2db1c::t_df1539a1aafa26 84
+  s_14bf3132d2db1c::t_35a73e1eafc489 8,12-16,31,33,35,38,41-57,59-65,67,69,71,78,86,88-90,92,96-97,100,102,104,106-113,115,117-128,130,132-139,141,143,145,147,149,151,153,155,157,159,161-164,169,181,185,187,189-195,197,201-203,205-214,216-217,219-228,230-231,234,236,238,240,248,251,255,257,264,266,274,276,284,286,288,291-292,295,297,299-308,310,312,314,316-319,321,323,325,327,330,333,335,339
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/support/SeoMetaBuilder.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 84-86
+README.zh-CN.md
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-338
+blog-backend/src/main/resources/templates/seo/blog.html
+  s_14bf3132d2db1c::t_35a73e1eafc489 34-37,39-42,49-52
+blog-view-ui/src/util/adsense.js
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-23
+blog-backend/src/main/resources/skill/blogloom-skill/skill.env.sh
+  s_14bf3132d2db1c::t_35a73e1eafc489 2-3
+blog-backend/src/main/resources/templates/seo/fragments/seo-head.html
+  s_14bf3132d2db1c::t_35a73e1eafc489 27-29,47,58-59
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/service/impl/SeoFileServiceImpl.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 7-8,21,23-24,28,46-56
+  s_14bf3132d2db1c::t_0b6e728dba074c 57
+blog-backend/src/main/resources/templates/seo/list.html
+  s_14bf3132d2db1c::t_35a73e1eafc489 5-29
+CHANGELOG.md
+  s_14bf3132d2db1c::t_35a73e1eafc489 8-52
+blog-backend/src/test/java/com/changlu/blogloom/module/seo/SeoEndpointIntegrationTest.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 8,24-25,62,74,92-93,110-141
+  s_14bf3132d2db1c::t_3976989b38a86a 142-143
+docker/Dockerfile
+  s_14bf3132d2db1c::t_35a73e1eafc489 42-83,87,89
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/AdsenseConfigController.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-113
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/SeoMeta.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 7,9,32-33
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/BlogLoom未来详细博客专栏规划.md
+  s_3a1d30a32d9d0f::t_f4670045e1bf21 1-542
+blog-view-ui/src/styles/mobile/components/nav.mobile.scss
+  s_14bf3132d2db1c::t_35a73e1eafc489 54-73
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/api/SeoFileController.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 30-34
+blog-backend/src/main/java/com/changlu/blogloom/service/SiteSettingService.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 4-5,31-41
+  s_14bf3132d2db1c::t_5d1917528df7b2 42
+blog-cms-ui/src/views/blog/seo/AdvertisingPlatform.vue
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-105
+docker/scripts/common.sh
+  s_14bf3132d2db1c::t_35a73e1eafc489 160-161,165-172
+blog-cms-ui/src/router/index.js
+  s_14bf3132d2db1c::t_35a73e1eafc489 152-157
+blog-backend/src/test/java/com/changlu/blogloom/controller/admin/SkillAdminControllerTest.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-34
+blog-backend/src/main/java/com/changlu/blogloom/module/seo/domain/AdSlot.java
+  s_14bf3132d2db1c::t_35a73e1eafc489 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0c6e70169e158ea5afe8736edaafe47027a359da",
+  "prompts": {},
+  "sessions": {
+    "s_14bf3132d2db1c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eced5324bffecqms9sL8io2oe6",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_3a1d30a32d9d0f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11fac-30e7-7332-8e04-f3e34da7b266",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
