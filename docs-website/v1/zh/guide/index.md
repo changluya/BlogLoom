@@ -21,9 +21,18 @@ Markdown 创作 → 内容组织 → 审核与发布 → 前台展示 → 评论
 | --- | --- | --- |
 | `blog-view-ui` | 面向访客的博客门户、文章阅读与互动 | `http://localhost:8080` |
 | `blog-cms-ui` | 面向站长的内容管理与运营后台 | `http://localhost:8079` |
-| `blog-backend` | REST API、认证、业务逻辑、数据访问与任务调度 | `http://localhost:8090` |
+| `blog-backend` | REST API、认证、业务逻辑、数据访问、SEO 直出与任务调度 | `http://localhost:8090` |
 | MySQL | 文章、用户、评论、配置及日志等持久化数据 | 数据库名 `blogloom` |
 | 缓存（`cache_entry`） | 站点配置等热点数据缓存 | 随 MySQL 存储 |
+
+## 核心能力
+
+- **内容闭环**：Markdown 创作、分类标签、专栏、动态、评论、回收站与本地知识库。
+- **站点配置**：站名、图标、头像、首页 Banner、社交链接、友链、关于页与自定义展示模块。
+- **SEO 与订阅**：公开页面服务端直出，自动生成 `robots.txt` / `sitemap.xml` / `rss.xml`，支持站长平台验证与 Google AdSense 广告接入。
+- **AI Skill 同步**：下载专属技能包，用自然语言导入、更新与查询本地 Markdown 文章。
+- **运营数据**：访问次数、访客人数、内容数量、分类标签分布与访客地图。
+- **一键部署**：Docker 一体化镜像 + MySQL，命令化完成部署与增量升级。
 
 ## 下一步
 

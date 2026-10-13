@@ -1,30 +1,31 @@
 ---
 title: "Dashboard"
-description: An operations overview of content and traffic.
+description: An operational overview of site content and traffic data.
 ---
 
-The dashboard is the first screen after signing in, showing an overview of site operations.
+After logging into the admin console, the home page is the dashboard, showing an overview of site operations.
 
 ## What it shows
 
-- PV / UV traffic
-- Post, comment, category and tag counts (category/tag post aggregation)
-- Latest comments and content needing attention
+- PV / UV visits, visitor count and traffic trend
+- Article, comment, category and tag count distribution (aggregated article counts per category/tag)
 - Visitor map and geographic distribution
+- Latest comments and pending content
 
 ## Data sources
 
-- Traffic is recorded by the backend and combined with IP geolocation.
-- Content counts are computed from the database in real time.
+- Traffic data is recorded by the backend, combined with IP geo-resolution for the visitor distribution.
+- Content counts are aggregated live from the database.
 - Charts are rendered with ECharts.
 
-## Tips
+## Usage tips
 
-- Use traffic trends to see which content performs well.
-- Use category and tag distribution to plan content.
-- Watch for anomalies and investigate traffic sources.
+- Observe content popularity through traffic trends.
+- Adjust content planning based on the category/tag distribution.
+- Watch for abnormal fluctuations and investigate sources promptly.
 
 ## Next steps
 
-- [System and logs](/v1/en/guide/admin/system)
-- [Authoring](/v1/en/guide/admin/article-editor)
+- [Visitor stats and logs](/v1/en/guide/admin/system)
+- [Article authoring](/v1/en/guide/admin/article-editor)
+- [SEO, feeds and monetization](/v1/en/blogs/features/seo-and-monetization)

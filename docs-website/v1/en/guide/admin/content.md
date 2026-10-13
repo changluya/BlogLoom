@@ -1,35 +1,39 @@
 ---
-title: "Content management"
-description: Centralized maintenance of posts, moments, categories, tags and comments.
+title: "Content Management"
+description: Central maintenance of articles, moments, categories, tags, comments, columns and the recycle bin.
 ---
 
-Content management covers day-to-day maintenance of every content object on the site.
+Content management covers the daily maintenance of all content objects — the most frequently used module in the admin console.
 
 ## Objects
 
-| Object | Actions |
+| Object | Operations |
 | --- | --- |
-| Posts | Create, edit, publish, unpublish, delete |
-| Recycle bin | View deleted posts, restore or delete permanently, with bulk actions |
-| Moments | Create, edit, delete |
-| Categories | Create, rename, reorder, delete |
-| Tags | Create, rename, delete |
-| Columns | Two-level columns with cover, summary and import/export; link posts |
-| Local knowledge base | Manage posts as a directory tree; bulk ZIP import/export |
+| Articles | Create, edit, publish, unpublish, delete (moves to recycle bin) |
+| Recycle bin | View deleted articles, restore or permanently delete, single or batch |
+| Moments | Create, edit, delete, with images |
+| Categories | Create, rename, sort, delete (one category per article) |
+| Tags | Create, rename, delete (multiple tags per article) |
+| Columns | Two-level management with cover, intro, sorting, import/export and article association |
+| Local knowledge base | Directory-tree article management, batch ZIP import/export |
 | Comments | Review, reply, delete |
 
 ## Organization tips
 
-- Use categories for stable sections and tags for topics.
-- Use columns to group series for continuous reading; columns support two levels, a cover and a summary.
-- Use the local knowledge base to organize posts as a directory tree and bulk import/export as ZIP, parsing metadata such as title, tags, category, summary, columns, create/update time and knowledge-base path on import; mark the cover in the body with `![coverImg](image-url)` — ordinary images are not treated as covers.
-- On import, missing tags and categories are created and linked automatically; columns only match existing ones (including two-level columns) and are never auto-created.
-- The Posts page offers a **Skill download** in the top-right corner, which lets an AI assistant sync local posts in natural language; see [AI Skill sync](/v1/en/integration/ai-skill).
-- Clean up unused tags regularly to keep search clear.
+- Use categories for stable sections and tags for topic markers.
+- Aggregate series with columns; columns support two levels with cover and intro.
+- Organize articles in the knowledge base with a directory tree and batch ZIP import/export; import parses title, tags, category, summary, columns, create/update time and knowledge-base path metadata. The cover is marked in the body with `![coverImg](image-URL)` (only the `coverImg` alt is recognized; normal images aren't covers).
+- On import, missing tags/categories are created and associated; columns are only matched (including second-level), never auto-created.
+- Deleting an article moves it to the recycle bin: it's hidden from the front end and lists immediately, but its category, tags, columns and comments are preserved and it can be restored at any time.
+- The "Skill download" button in the top right of the article management page provides a skill package for AI-assisted Markdown sync — see [AI Skill sync](/v1/en/integration/ai-skill).
+
+## Relation to SEO
+
+Public articles enter `sitemap.xml` and `rss.xml`, while drafts, recycle bin and password-protected articles do not. Consider the impact on already-indexed content before deleting an article.
 
 ## Next steps
 
-- [Authoring](/v1/en/guide/admin/article-editor)
+- [Article authoring](/v1/en/guide/admin/article-editor)
 - [Content model](/v1/en/guide/concepts/content-model)
 - [AI Skill sync](/v1/en/integration/ai-skill)
-- [Comments](/v1/en/guide/concepts/comments)
+- [Comments and interaction](/v1/en/guide/concepts/comments)

@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "BlogLoom",
-  "description": "BlogLoom 是一套基于 Spring Boot 与 Vue 的开源博客 CMS，覆盖 Markdown 创作、内容管理、站点配置、评论互动与访问统计。",
+  "description": "BlogLoom 是一套支持全站 SEO 与 Google AdSense 接入的自托管开源博客 CMS，提供 Markdown 创作、内容管理、一键部署与升级。",
   "theme": "mint",
   "colors": {
     "primary": "#5B5BD6",
@@ -80,6 +80,7 @@
                       "v1/en/guide/admin/article-editor",
                       "v1/en/guide/admin/content",
                       "v1/en/guide/admin/site",
+                      "v1/en/guide/admin/seo-and-monetization",
                       "v1/en/guide/admin/media",
                       "v1/en/guide/admin/system"
                     ]
@@ -168,10 +169,37 @@
                     "pages": [
                       "v1/en/blogs/index",
                       "v1/en/blogs/v1-release",
+                      "v1/en/blogs/roadmap-blog-column-plan",
                       {
                         "group": "BlogLoom Publisher Skill",
                         "pages": [
-                          "v1/en/blogs/blogloom-publisher-skill/01-publisher-skill"
+                          "v1/en/blogs/blogloom-publisher-skill/01-publisher-skill",
+                          "v1/en/blogs/publisher-skill/csdn-design",
+                          "v1/en/blogs/publisher-skill/gzh-design",
+                          "v1/en/blogs/publisher-skill/csdn-channel",
+                          "v1/en/blogs/publisher-skill/gzh-channel"
+                        ]
+                      },
+                      {
+                        "group": "AI Skill",
+                        "pages": [
+                          "v1/en/blogs/blogloom-skill/01-skill-design",
+                          "v1/en/blogs/features/content-workflow"
+                        ]
+                      },
+                      {
+                        "group": "SEO and Monetization",
+                        "pages": [
+                          "v1/en/blogs/seo/01-article-page-monetization",
+                          "v1/en/blogs/seo/02-ssr-and-site-files",
+                          "v1/en/blogs/seo/03-adsense-guide",
+                          "v1/en/blogs/features/seo-and-monetization"
+                        ]
+                      },
+                      {
+                        "group": "Feature Deep Dives",
+                        "pages": [
+                          "v1/en/blogs/features/reading-experience"
                         ]
                       },
                       {
@@ -257,6 +285,7 @@
                       "v1/zh/guide/admin/article-editor",
                       "v1/zh/guide/admin/content",
                       "v1/zh/guide/admin/site",
+                      "v1/zh/guide/admin/seo-and-monetization",
                       "v1/zh/guide/admin/media",
                       "v1/zh/guide/admin/system"
                     ]
@@ -345,10 +374,37 @@
                     "pages": [
                       "v1/zh/blogs/index",
                       "v1/zh/blogs/v1-release",
+                      "v1/zh/blogs/roadmap-blog-column-plan",
                       {
                         "group": "BlogLoom 分发 Skill",
                         "pages": [
-                          "v1/zh/blogs/blogloom-publisher-skill/01-publisher-skill"
+                          "v1/zh/blogs/blogloom-publisher-skill/01-publisher-skill",
+                          "v1/zh/blogs/publisher-skill/csdn-design",
+                          "v1/zh/blogs/publisher-skill/gzh-design",
+                          "v1/zh/blogs/publisher-skill/csdn-channel",
+                          "v1/zh/blogs/publisher-skill/gzh-channel"
+                        ]
+                      },
+                      {
+                        "group": "AI 技能",
+                        "pages": [
+                          "v1/zh/blogs/blogloom-skill/01-skill-design",
+                          "v1/zh/blogs/features/content-workflow"
+                        ]
+                      },
+                      {
+                        "group": "SEO 与变现",
+                        "pages": [
+                          "v1/zh/blogs/seo/01-article-page-monetization",
+                          "v1/zh/blogs/seo/02-ssr-and-site-files",
+                          "v1/zh/blogs/seo/03-adsense-guide",
+                          "v1/zh/blogs/features/seo-and-monetization"
+                        ]
+                      },
+                      {
+                        "group": "核心功能专题",
+                        "pages": [
+                          "v1/zh/blogs/features/reading-experience"
                         ]
                       },
                       {

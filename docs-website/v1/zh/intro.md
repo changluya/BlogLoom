@@ -1,6 +1,6 @@
 ---
-title: "BlogLoom v1"
-description: 一套面向个人开发者与内容创作者的开源博客平台
+title: "BlogLoom：支持全站 SEO 与 Google AdSense 的开源博客 CMS"
+description: 自托管博客与内容管理，提供 Markdown 创作、全站 SEO、Google AdSense 接入以及一键部署与升级。
 mode: custom
 toc: false
 ---
@@ -12,11 +12,11 @@ toc: false
 <div>
 
 <h1 className="hs-hero__headline">
-从 Markdown 创作到站点运营，<span className="hs-hero__accent">一站式的开源博客 CMS</span>。
+自托管开源博客 CMS，<span className="hs-hero__accent">全站 SEO 与 Google AdSense 接入</span>。
 </h1>
 
 <p className="hs-hero__desc">
-BlogLoom 基于 Spring Boot、MyBatis 与 Vue 构建，由博客前台、内容管理后台与后端服务组成。创作、审核、展示、评论、统计集中在一套前后端分离系统中完成，适合搭建个人技术博客、开源项目主页或可持续二次开发的内容平台。
+BlogLoom 将 Markdown 创作、内容管理、读者互动和运营分析集中到一套可自托管平台。后台统一维护全站 SEO、订阅文件和 Google AdSense 广告配置，支持 Docker 一键部署与版本升级。
 </p>
 
 <div className="hs-cta">
@@ -126,29 +126,35 @@ BlogLoom 把文章、分类、标签、专栏、动态、评论与站点配置�
   <a href="/v1/zh/guide/frontend/home">了解更多 →</a>
  </div>
 
- <div className="hs-card">
-  <h3>管理后台</h3>
-  <p>仪表盘、内容管理、回收站、页面设置与日志中心。</p>
-  <a href="/v1/zh/guide/admin/dashboard">了解更多 →</a>
- </div>
+  <div className="hs-card">
+   <h3>管理后台</h3>
+   <p>仪表盘、内容管理、回收站、站点设置、SEO 与广告、日志中心。</p>
+   <a href="/v1/zh/guide/admin/dashboard">了解更多 →</a>
+  </div>
 
- <div className="hs-card">
-  <h3>图床存储</h3>
-  <p>本地上传与阿里云 OSS 等存储接入，支持连通性测试。</p>
-  <a href="/v1/zh/integration/storage/local">了解更多 →</a>
- </div>
+  <div className="hs-card">
+   <h3>SEO 与变现</h3>
+   <p>公开页面服务端直出，robots / sitemap / rss，站长平台验证与 Google AdSense。</p>
+   <a href="/v1/zh/guide/admin/seo-and-monetization">了解更多 →</a>
+  </div>
 
- <div className="hs-card">
-  <h3>运营数据</h3>
-  <p>PV、UV、内容数量、分类标签文章数聚合与访客地域。</p>
-  <a href="/v1/zh/guide/admin/dashboard">了解更多 →</a>
- </div>
+  <div className="hs-card">
+   <h3>图床存储</h3>
+   <p>本地上传与阿里云 OSS 等存储接入，支持连通性测试。</p>
+   <a href="/v1/zh/integration/storage/local">了解更多 →</a>
+  </div>
 
- <div className="hs-card">
-  <h3>部署运维</h3>
-  <p>环境要求、安装部署、Docker 一键部署、配置与故障排查。</p>
-  <a href="/v1/zh/deploy/index">了解更多 →</a>
- </div>
+  <div className="hs-card">
+   <h3>运营数据</h3>
+   <p>PV、UV、内容数量、分类标签文章数聚合与访客地域。</p>
+   <a href="/v1/zh/guide/admin/dashboard">了解更多 →</a>
+  </div>
+
+  <div className="hs-card">
+   <h3>部署运维</h3>
+   <p>环境要求、安装部署、Docker 一键部署、配置与故障排查。</p>
+   <a href="/v1/zh/deploy/index">了解更多 →</a>
+  </div>
 
 </div>
 
