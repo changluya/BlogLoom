@@ -1,29 +1,31 @@
 ---
-title: "Media"
-description: Upload configuration for local and Aliyun OSS storage.
+title: "Image Host"
+description: Local and Aliyun OSS upload configuration and connectivity test.
 ---
 
-Media management handles storage for post images and site assets, supporting local and Aliyun OSS storage.
+Image host management configures storage for article images and site assets, supporting local and Aliyun OSS storage.
 
 ## Supported storage
 
 | Storage | Description |
 | --- | --- |
-| Local | Upload to a local server directory |
-| Aliyun OSS | Upload to Aliyun object storage |
+| Local | Upload to a local server directory; works out of the box with no parameters |
+| Aliyun OSS | Upload to Alibaba Cloud Object Storage |
 
 ## Configuration
 
-In the console under Media, choose a storage provider and fill in the credentials, such as the bucket, region, storage path and access keys, then run the connectivity test to verify the configuration.
+In the admin console's "Image Host" page, choose the storage method and fill in the credentials, such as the access key, bucket name, region and storage path. The selected method's config is highlighted, and switching takes effect immediately without a restart.
 
-## Security notes
+Each method provides a "connectivity test": it actually uploads and deletes an image to confirm the parameters are correct and read/write works, helping you rule out problems before real use.
 
-- Never commit object storage keys or access tokens to version control.
-- Use dedicated buckets and least-privilege credentials in production.
-- Review the access permissions of the upload directory regularly.
+## Security tips
+
+- Never commit object-storage keys or access tokens to the repository.
+- In production, use a dedicated bucket and least-privilege credentials.
+- Periodically review the access permissions of the upload directory.
 
 ## Next steps
 
-- [Image storage integrations](/v1/en/integration/storage/local)
-- [Aliyun OSS image storage](/v1/en/integration/storage/aliyun)
+- [Image storage integration](/v1/en/integration/storage/local)
+- [Aliyun OSS storage](/v1/en/integration/storage/aliyun)
 - [Site settings](/v1/en/guide/admin/site)

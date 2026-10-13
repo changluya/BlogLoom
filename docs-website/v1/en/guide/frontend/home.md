@@ -1,30 +1,31 @@
 ---
-title: "Home and navigation"
-description: Home page structure and site navigation.
+title: "Home and Navigation"
+description: The home page structure and site navigation configuration.
 ---
 
-The home page is the visitor's first screen, composed of a banner, navigation, profile card and content modules.
+The home page is the visitor's first screen, made up of a banner, navigation, a personal card and content modules.
 
-## Home page parts
+## Structure
 
-- **Banner**: the site's main visual, configurable in the console.
-- **Navigation**: entries for home, archive, categories, tags, moments, friends and about.
-- **Profile card**: avatar, nickname, bio and social links.
-- **Content modules**: featured posts, latest posts and moments.
-- **Custom section**: custom content configured in the console, shown in the blog sidebar.
+- **Home banner**: the site's key visual, configurable in the backend.
+- **Site navigation**: home, archive, category, tag, moments, friends, about and more.
+- **Personal card**: avatar, nickname, site stats (total visits, original count, total reads) and social links.
+- **Content module**: defaults to "latest" and can switch to "most viewed".
+- **Custom display module**: front-end sidebar content configured in the backend.
+- **RSS entry**: the article list offers an RSS subscription entry.
 
-## Site information
+## Site info configuration
 
-The site name, logo, avatar, carousel, social links and footer are maintained in the console under Pages, and rendered from site configuration.
+Site name, favicon, avatar, home banner, social links and footer are maintained under "Site settings", read by the front end.
 
 ## Reading experience
 
-- Responsive layout for desktop and mobile
-- Lazy-loaded assets for a faster first paint
+- Responsive layout for desktop, tablet and mobile
+- Lazy-loaded assets for a faster first screen
 - Back-to-top and other basic interactions
 
 ## Next steps
 
-- [Reading articles](/v1/en/guide/frontend/article)
+- [Article reading](/v1/en/guide/frontend/article)
 - [Archive and search](/v1/en/guide/frontend/archive-search)
 - [Site settings](/v1/en/guide/admin/site)

@@ -1,6 +1,6 @@
 ---
-title: "BlogLoom v1"
-description: An open-source blogging platform for developers and creators
+title: "BlogLoom: Open-source Blog CMS with Site-wide SEO and Google AdSense"
+description: A self-hosted blog and CMS with Markdown authoring, site-wide SEO, Google AdSense integration, and one-command deployment and upgrades.
 mode: custom
 toc: false
 ---
@@ -12,11 +12,11 @@ toc: false
 <div>
 
 <h1 className="hs-hero__headline">
-From Markdown to publishing, <span className="hs-hero__accent">an open-source blog CMS in one place</span>.
+A self-hosted open-source blog CMS with <span className="hs-hero__accent">site-wide SEO and Google AdSense</span>.
 </h1>
 
 <p className="hs-hero__desc">
-BlogLoom is built with Spring Boot, MyBatis and Vue, and ships as three parts: a public blog frontend, a content management console, and a backend service. Writing, review, publishing, comments and analytics all live in one decoupled system — ideal for personal tech blogs, open-source project sites, or a content platform you can keep extending.
+BlogLoom brings Markdown authoring, content management, reader interaction and analytics into one self-hosted platform. Manage SEO, feeds and Google AdSense settings from the console, with one-command Docker deployment and version upgrades.
 </p>
 
 <div className="hs-cta">
@@ -128,8 +128,14 @@ BlogLoom brings posts, categories, tags, columns, moments, comments and site con
 
  <div className="hs-card">
   <h3>Admin console</h3>
-  <p>Dashboard, content management, recycle bin, site settings and logs.</p>
+  <p>Dashboard, content management, recycle bin, site settings, SEO & ads, and logs.</p>
   <a href="/v1/en/guide/admin/dashboard">Learn more →</a>
+ </div>
+
+ <div className="hs-card">
+  <h3>SEO &amp; monetization</h3>
+  <p>Server-rendered public pages, robots / sitemap / rss, site verification and Google AdSense.</p>
+  <a href="/v1/en/guide/admin/seo-and-monetization">Learn more →</a>
  </div>
 
  <div className="hs-card">

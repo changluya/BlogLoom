@@ -7,10 +7,10 @@ description: 站点内容与访问数据的运营概览。
 
 ## 展示内容
 
-- PV / UV 访问量
+- PV / UV 访问量、访客人数与访问趋势
 - 文章、评论、分类与标签数量分布（分类/标签文章数聚合）
-- 最新评论与待处理内容
 - 访客地图与地域分布
+- 最新评论与待处理内容
 
 ## 数据来源
 
@@ -28,3 +28,4 @@ description: 站点内容与访问数据的运营概览。
 
 - [访客统计与日志](/v1/zh/guide/admin/system)
 - [文章创作](/v1/zh/guide/admin/article-editor)
+- [SEO、订阅与变现](/v1/zh/blogs/features/seo-and-monetization)
