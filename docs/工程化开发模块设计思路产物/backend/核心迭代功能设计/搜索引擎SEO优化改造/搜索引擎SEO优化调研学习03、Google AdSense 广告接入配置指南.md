@@ -1150,7 +1150,11 @@ google.com, pub-8054136469344898, DIRECT, f08c47fec0942fa0
 
 同时在blogloom中也要进行开启：
 
-![image-20261012024538975](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610120245027.png)  
+![image-20261012024538975](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610120245027.png) 
+
+**注意这块审批时间大概2-4周左右：**
+
+![image-20261013131701425](https://pictured-bed.oss-cn-beijing.aliyuncs.com/img/2024/202610131317652.png)   
 
 ## 6.6、核心步骤三：创建手动广告单元（展示广告 · 纵向）
 

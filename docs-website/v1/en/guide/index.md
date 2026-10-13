@@ -21,9 +21,18 @@ Markdown authoring → Content organization → Review & publish → Presentatio
 | --- | --- | --- |
 | `blog-view-ui` | Public blog portal, reading and interaction | `http://localhost:8080` |
 | `blog-cms-ui` | Content management and operations console | `http://localhost:8079` |
-| `blog-backend` | REST API, auth, business logic, data access, scheduling | `http://localhost:8090` |
+| `blog-backend` | REST API, auth, business logic, data access, SEO rendering and scheduling | `http://localhost:8090` |
 | MySQL | Posts, users, comments, config and logs | Database `blogloom` |
 | Cache (`cache_entry`) | Hot data such as site configuration | Stored with MySQL |
+
+## Core capabilities
+
+- **Content loop**: Markdown authoring, categories/tags, columns, moments, comments, recycle bin and local knowledge base.
+- **Site configuration**: site name, favicon, avatar, home banner, social links, friend links, about page and custom display module.
+- **SEO and subscription**: server-rendered public pages, auto-generated `robots.txt` / `sitemap.xml` / `rss.xml`, search-platform verification and Google AdSense integration.
+- **AI Skill sync**: download a skill package to import, update and query local Markdown with natural language.
+- **Operations data**: visits, visitor count, content counts, category/tag distribution and visitor map.
+- **One-command deployment**: a Docker all-in-one image + MySQL with command-based deploy and incremental upgrade.
 
 ## Next steps
 

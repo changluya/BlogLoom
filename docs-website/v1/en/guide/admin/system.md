@@ -1,35 +1,35 @@
 ---
-title: "System and logs"
-description: Accounts, scheduled jobs and the log center.
+title: "System Management and Logs"
+description: Accounts, scheduled tasks and the log center.
 ---
 
-System management covers console account security and runtime logs, a key entry for daily operations.
+System management covers backend account security and runtime logs, an important entry for daily operations.
 
-## Accounts
+## Account management
 
-- Maintain admin accounts and passwords.
+- Maintain backend administrator accounts and passwords.
 - Change the default password immediately after the first login.
-- Use a long, random secret for production.
+- In production, use a sufficiently long and random login secret.
 
-## Scheduled jobs
+## Scheduled tasks
 
-Quartz-based jobs handle periodic work; their status and history are visible in the console.
+Quartz-based scheduled tasks handle periodic jobs (such as data sync). You can view execution status and history, and run them manually.
 
 ## Log center
 
-| Log | Description |
+| Log type | Description |
 | --- | --- |
-| Job log | Scheduled job executions |
-| Login log | Console sign-ins |
-| Operation log | Key write operations |
-| Exception log | System stack traces |
+| Task log | Scheduled task execution records |
+| Login log | Backend login information |
+| Operation log | Key write-operation records |
+| Exception log | System exception stack traces |
 | Access log | Visitor access records |
 
-## Tips
+## Usage tips
 
-- Trace key content changes through operation logs.
-- Locate backend issues quickly through exception logs.
-- Analyze traffic with access logs.
+- Trace key content changes through the operation log.
+- Locate backend issues quickly through the exception log.
+- Analyze site traffic with the access log.
 
 ## Next steps
 

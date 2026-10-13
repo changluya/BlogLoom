@@ -56,6 +56,8 @@ Markdown authoring → Content organization → Review & publish → Blog presen
 
 ## Recent Updates
 
+### 2026.09.22 – 2026.10.13 (v1.0.1)
+
 - **SEO server-side rendering (phase 1)**: public pages such as article detail, home, tag, category, column and archive are server-rendered with Thymeleaf, adding title / description / canonical / Open Graph / JSON-LD structured data.
 - **Site-level SEO files**: added `robots.txt`, `sitemap.xml` and `rss.xml`, with a configurable SEO domain and quick view/download in the console.
 - **Search platform site verification**: the "SEO platform association" page injects Baidu / Bing / Google verification meta tags.
@@ -64,11 +66,15 @@ Markdown authoring → Content organization → Review & publish → Blog presen
 - **Reading page refinements**: a compact top navigation for article pages, adjusted width/position of the right-hand table of contents, and fixes for column backgrounds and share covers.
 - **WeChat Official Account publishing skill**: added a WeChat (gzh) channel whose draft saving now polls and re-reads the result to avoid false "success".
 
+### 2026.09.13 – 2026.09.22 (v1.0.0)
+
+- **First open-source release**: a blog front end, an admin console and a Spring Boot backend covering Markdown authoring, categories and tags, archives, comments, moments, friend links and the about page, together with initialization SQL, deployment scripts and basic documentation.
+
 ## Quick Start
 
 ### One-command deployment (recommended)
 
-Just want the blog running quickly? With Docker and Docker Compose v2 installed on the server, one command is enough — no JDK / Node / Maven and no need to clone the repo:
+Just want the blog running quickly? A **minimum of 2 vCPU / 4 GB RAM** is recommended (server and MySQL on the same host). With Docker and Docker Compose v2 installed on the server, one command is enough — no JDK / Node / Maven and no need to clone the repo:
 
 ```bash
 mkdir blogloom && cd blogloom
@@ -96,7 +102,7 @@ cd blogloom
 ./upgrade.sh 1.0.1      # upgrade to a specific version
 ```
 
-See [docker/README.md](./docker/README.md) for details.
+See [docker/README.md](./docker/README.md) for details, or the author's walkthrough: [BlogLoom one-command Docker Compose deployment in practice](https://blog.changlu.cloud/blog/42).
 
 ## Feature Scope
 
@@ -152,6 +158,17 @@ See [docker/README.md](./docker/README.md) for details.
 | Dashboard | Articles | Columns | Knowledge Base | Image Host | Site Stats | Visit Log |
 | --- | --- | --- | --- | --- | --- | --- |
 | ![Dashboard](./assets/后台/后台数据概览页.png) | ![Articles](./assets/后台/后台（博客管理-文章）.png) | ![Columns](./assets/后台/后台（博客管理-专栏）.png) | ![Knowledge Base](./assets/后台/后台（博客管理-知识库）.png) | ![Image Host](./assets/后台/后台（图床管理-图床）.png) | ![Site Stats](./assets/后台/后台（页面管理-站点数据）.png) | ![Visit Log](./assets/后台/后台（日志管理-访问日志）.png) |
+
+| SEO Settings | AdSense Settings |
+| --- | --- |
+| ![SEO Settings](./assets/product-pages/seo-settings.jpg) | ![AdSense Settings](./assets/product-pages/adsense-settings.jpg) |
+
+## Real-World Case
+
+BlogLoom is the very blog system the author runs in production. The site below is fully powered by BlogLoom — from content authoring and site configuration to SEO and ad delivery — and serves as a real reference for how the project's capabilities land in practice:
+
+- **Live site**: <https://blog.changlu.cloud/>
+- **Practical coverage**: Markdown authoring, knowledge base organization, column aggregation, SEO server-side rendering and Google AdSense monetization all run stably online.
 
 ## System Composition
 

@@ -1,28 +1,29 @@
 ---
-title: "Archive and search"
-description: Browse posts by category, tag and timeline, plus site search.
+title: "Archive and Search"
+description: Browse by category, tag and archive, plus on-site search.
 ---
 
-BlogLoom offers several ways for visitors to find content by time or topic.
+BlogLoom offers several discovery entries to help visitors find content by time or topic. Public category, tag, column and archive pages are also server-rendered for easier indexing.
 
 ## Browsing
 
 | Entry | Description |
 | --- | --- |
-| Category | Grouped by post category |
-| Tag | Grouped by topic tag |
-| Archive | Organized along a timeline |
-| Column | Grouped by series |
+| Category | Aggregated by article category |
+| Tag | Aggregated by topic tag |
+| Archive | Articles organized on a timeline, grouped by year and month |
+| Column | Articles aggregated by series (the "TA's columns" sidebar) |
 
-## Site search
+## On-site search
 
-- Search posts by keyword.
-- Results are ordered by relevance and time.
-- The search entry lives in the site navigation.
+- Search articles by keyword, showing a summary snippet containing the keyword.
+- Results are sorted by relevance and time.
+- The search box is in the top navigation.
+- A clear message appears when nothing matches.
 
 ## Pagination
 
-List pages are paginated on the backend with PageHelper and loaded page by page to avoid returning large payloads.
+List pages paginate on the backend with PageHelper, loaded page by page to avoid returning large datasets at once.
 
 ## Next steps
 
