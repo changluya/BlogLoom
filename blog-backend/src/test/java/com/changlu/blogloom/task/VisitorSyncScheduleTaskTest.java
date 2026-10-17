@@ -54,7 +54,10 @@ class VisitorSyncScheduleTaskTest {
 				new VisitLogUuidTime("u1", now, null),
 				new VisitLogUuidTime("u2", now, null)));
 		when(visitorService.getNewVisitorIpSourceByYesterday()).thenReturn(Arrays.asList(
-				"中国|广东省|深圳市|电信"));
+				"中国|广东省|深圳市|电信|CN",
+				"中国|广东省|深圳市|电信",
+				"United States|California|San Jose|Comcast|US",
+				"中国|广东省|0|电信|CN"));
 
 		task.syncVisitInfoToDatabase();
 
@@ -68,6 +71,8 @@ class VisitorSyncScheduleTaskTest {
 		// 两位访客的 PV/最后访问时间都更新
 		verify(visitorService, times(2)).updatePVAndLastTimeByUUID(Mockito.any());
 		// 城市新增访客 UV 记录
-		verify(cityVisitorService).saveCityVisitor(Mockito.argThat(cv -> "深圳市".equals(cv.getCity())));
+		verify(cityVisitorService).saveCityVisitor(Mockito.argThat(cv ->
+				"深圳市".equals(cv.getCity()) && Integer.valueOf(2).equals(cv.getUv())));
+		verify(cityVisitorService, times(1)).saveCityVisitor(Mockito.any());
 	}
 }

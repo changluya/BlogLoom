@@ -152,13 +152,13 @@ BlogLoom/
 
 ```bash
 cd docker
-./scripts/package.sh 1.0.0
+./scripts/package.sh 1.0.1
 ```
 
 产物位于 `docker/dist/`：
 
-- `blogloom-1.0.0.tar`：镜像包（`docker load` 使用）；
-- `blogloom-deploy-1.0.0.tar.gz`：离线部署包（含 `docker/`、`conf/` 配置与 `sql/increment`）。
+- `blogloom-1.0.1.tar`：镜像包（`docker load` 使用）；
+- `blogloom-deploy-1.0.1.tar.gz`：离线部署包（含 `docker/`、`conf/` 配置与 `sql/increment`）。
 
 ### 5. 一键部署（仓库版）
 
@@ -172,7 +172,7 @@ cd docker
 方式 B：离线部署包
 
 ```bash
-tar xzf blogloom-deploy-1.0.0.tar.gz
+tar xzf blogloom-deploy-1.0.1.tar.gz
 cd docker
 ./scripts/deploy.sh
 ```
@@ -207,9 +207,9 @@ cd docker
 
 ```bash
 docker login -u codercl          # 步骤 1：登录（PAT 需 Read/Write/Delete 权限）
-./scripts/push.sh 1.0.0          # 步骤 2：一键多架构构建并推送 <DOCKERHUB_USER>/blogloom:1.0.0 与 :latest
+./scripts/push.sh 1.0.1          # 步骤 2：一键多架构构建并推送 <DOCKERHUB_USER>/blogloom:1.0.1 与 :latest
 ./scripts/push.sh --no-latest    # 只推送指定 tag
-./scripts/push.sh --prune 1.0.0  # 构建前清理 buildx 缓存，释放 Docker 磁盘空间
+./scripts/push.sh --prune 1.0.1  # 构建前清理 buildx 缓存，释放 Docker 磁盘空间
 ```
 
 `push.sh` 默认用 `docker buildx` 构建 **多架构镜像**（`linux/amd64` + `linux/arm64`）并直接推送，生成多平台 manifest：
@@ -241,7 +241,7 @@ codercl/blogloom:latest         → linux/amd64 + linux/arm64
 | --- | --- | --- |
 | `WEB_PORT` | `18080` | 服务对外端口（前台/后台/API 共用） |
 | `MYSQL_PORT` | `13306` | MySQL 对外端口 |
-| `IMAGE_TAG` | `1.0.0` | 镜像版本，与打包版本一致（push.sh 也按此 tag 推送） |
+| `IMAGE_TAG` | `1.0.1` | 镜像版本，与打包版本一致（push.sh 也按此 tag 推送） |
 | `IMAGE_REPO` | `blogloom` | 镜像仓库；从 Docker Hub 部署时设为 `codercl/blogloom` |
 | `DOCKERHUB_USER` | `codercl` | Docker Hub 用户名（push.sh 推送镜像时使用） |
 | `MYSQL_DATABASE` | `blogloom` | 数据库名 |

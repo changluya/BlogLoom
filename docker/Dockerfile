@@ -30,8 +30,8 @@ ARG MAVEN_MIRROR=https://repo.maven.apache.org/maven2
 #   - Java 运行时从 eclipse-temurin 镜像拷贝。
 #
 # 构建上下文为仓库根目录（注意末尾的 .）：
-#   docker build -f docker/Dockerfile -t blogloom:1.0.0 .
-# 或直接使用一键脚本：cd docker && ./scripts/package.sh 1.0.0
+#   docker build -f docker/Dockerfile -t blogloom:1.0.1 .
+# 或直接使用一键脚本：cd docker && ./scripts/package.sh 1.0.1
 # =============================================================================
 
 # ---------- 1. 构建后端（Maven + JDK8） ----------

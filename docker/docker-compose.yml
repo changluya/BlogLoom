@@ -61,7 +61,7 @@ services:
   # ---------------------------------------------------------------------------
   blogloom:
     # IMAGE_REPO 默认 blogloom（本地构建/加载）；从 Docker Hub 部署时设为 codercl/blogloom
-    image: ${IMAGE_REPO:-blogloom}:${IMAGE_TAG:-1.0.0}
+    image: ${IMAGE_REPO:-blogloom}:${IMAGE_TAG:-1.0.1}
     container_name: blogloom-app
     restart: unless-stopped
     depends_on:

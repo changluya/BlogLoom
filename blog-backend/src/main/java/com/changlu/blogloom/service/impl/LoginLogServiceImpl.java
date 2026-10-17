@@ -24,6 +24,8 @@ public class LoginLogServiceImpl implements LoginLogService {
 	LoginLogMapper loginLogMapper;
 	@Autowired
 	UserAgentUtils userAgentUtils;
+	@Autowired
+	IpAddressUtils ipAddressUtils;
 
 	@Override
 	public List<LoginLog> getLoginLogListByDate(String startDate, String endDate) {
@@ -33,7 +35,7 @@ public class LoginLogServiceImpl implements LoginLogService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveLoginLog(LoginLog log) {
-		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
+		String ipSource = ipAddressUtils.getCityInfo(log.getIp());
 		UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
 		log.setIpSource(ipSource);
 		log.setOs(userAgentDTO.getOs());

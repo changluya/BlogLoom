@@ -110,6 +110,8 @@ async function convertMarkdownToGzhHtml(page, markdown) {
     if (!(await has(copy))) {
       return { converted: false, reason: '未找到 md.doocs 复制按钮' };
     }
+    // 复制依赖页面焦点与选区：必须把转换页切到前台，否则只写入纯文本（粘贴回公众号会变成 Markdown 源码）
+    await converter.bringToFront().catch(() => {});
     await copy.click({ timeout: 5000 }).catch(() => {});
     // 剪贴板写入是异步的，关闭转换页前需等待其完成，否则无法粘贴富文本
     await converter.waitForTimeout(2000);

@@ -9,7 +9,7 @@
 #
 # 用法（在 docker/ 目录执行）：
 #   ./scripts/package.sh [版本号]
-#   ./scripts/package.sh 1.0.0        # 不传则取 .env 的 IMAGE_TAG，默认 1.0.0
+#   ./scripts/package.sh 1.0.1        # 不传则取 .env 的 IMAGE_TAG，默认 1.0.1
 #
 # 产物（docker/dist/）：
 #   blogloom-<版本号>.tar           仅镜像包（docker load 使用）
@@ -34,9 +34,9 @@ require_docker
 
 # ---------------------------------------------------------------------------
 # 步骤 1：解析版本号与镜像名
-#   优先使用命令行参数；否则读取 .env 的 IMAGE_TAG；再否则默认 1.0.0。
+#   优先使用命令行参数；否则读取 .env 的 IMAGE_TAG；再否则默认 1.0.1。
 # ---------------------------------------------------------------------------
-VERSION="${1:-$(read_env_value IMAGE_TAG 1.0.0)}"
+VERSION="${1:-$(read_env_value IMAGE_TAG 1.0.1)}"
 IMAGE="blogloom:${VERSION}"
 # 依赖源：默认走国内镜像（阿里云 Maven / npmmirror），可用环境变量覆盖为官方源。
 NPM_REGISTRY="${NPM_REGISTRY:-https://registry.npmmirror.com}"

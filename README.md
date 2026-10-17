@@ -47,7 +47,7 @@ Markdown authoring → Content organization → Review & publish → Blog presen
 - **AI Skill sync**: download a dedicated AI skill package and use natural language to import, update or query local Markdown articles — identical to the in-console import.
 - **Configurable site**: site name, icon, avatar, footer, social links, friends, about page and a custom display module, all maintained in one place.
 - **SEO & feeds**: public pages are server-rendered with built-in robots / sitemap / RSS and structured data, ready for search-console verification and ad platforms.
-- **Operational analytics**: the console summarizes visits, unique visitors, content counts and category/tag distribution.
+- **Operational analytics**: the console summarizes visits, unique visitors, content counts, category/tag distribution, and a global 3D visitor globe with country/city PV and UV.
 - **Content safety**: deleted articles go to the recycle bin and can be restored or permanently removed.
 - **Multiple image storages**: local upload and Aliyun OSS, with connectivity testing in the console.
 - **One-command Docker deployment**: an all-in-one image (back end serves both front ends) plus MySQL, with command-line deploy and incremental upgrade.
@@ -56,7 +56,7 @@ Markdown authoring → Content organization → Review & publish → Blog presen
 
 ## Recent Updates
 
-### 2026.09.22 – 2026.10.13 (v1.0.1)
+### 2026.09.22 – 2026.10.17 (v1.0.1)
 
 - **SEO server-side rendering (phase 1)**: public pages such as article detail, home, tag, category, column and archive are server-rendered with Thymeleaf, adding title / description / canonical / Open Graph / JSON-LD structured data.
 - **Site-level SEO files**: added `robots.txt`, `sitemap.xml` and `rss.xml`, with a configurable SEO domain and quick view/download in the console.
@@ -65,6 +65,7 @@ Markdown authoring → Content organization → Review & publish → Blog presen
 - **RSS subscription entry**: the home article list now offers an RSS entry, with mobile adaptation.
 - **Reading page refinements**: a compact top navigation for article pages, adjusted width/position of the right-hand table of contents, and fixes for column backgrounds and share covers.
 - **WeChat Official Account publishing skill**: added a WeChat (gzh) channel whose draft saving now polls and re-reads the result to avoid false "success".
+- **Global 3D visitor globe**: a standalone page renders visitors for the selected time range (all / today / yesterday / last 7 days / custom) on a rotatable Canvas globe, with country heat, city dots scaled by UV, China/overseas Top 20 rankings, bilingual labels and 10-second auto refresh for the "today" view. The old China-only 2D map is hidden from the overview page.
 
 ### 2026.09.13 – 2026.09.22 (v1.0.0)
 
