@@ -9,7 +9,7 @@
 #
 # 用法（在 docker/ 目录执行）：
 #   ./scripts/deploy.sh                          # 使用 .env 的 IMAGE_TAG，必要时从 dist/ 加载镜像
-#   ./scripts/deploy.sh dist/blogloom-1.0.0.tar  # 指定镜像包
+#   ./scripts/deploy.sh dist/blogloom-1.0.1.tar  # 指定镜像包
 #
 # 核心流程：
 #   1. 生成/加载 .env（含随机密码与密钥）；

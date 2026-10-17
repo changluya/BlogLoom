@@ -17,7 +17,7 @@
 #   ./scripts/push.sh --no-latest           # 只推送指定 tag，不推送 latest
 #   ./scripts/push.sh --prune               # 构建前清理 buildx 缓存，释放磁盘空间
 #   ./scripts/push.sh --single              # 使用本地已构建镜像推送（旧行为，单架构）
-#   NPM_REGISTRY=https://registry.npmmirror.com ./scripts/push.sh 1.0.0   # 国内切换 npm 镜像源
+#   NPM_REGISTRY=https://registry.npmmirror.com ./scripts/push.sh 1.0.1   # 国内切换 npm 镜像源
 #
 # 前置条件：
 #   1) 已登录 Docker Hub：docker login -u <DOCKERHUB_USER>
@@ -54,7 +54,7 @@ while [ $# -gt 0 ]; do
         *)            VERSION="$1"; shift ;;
     esac
 done
-[ -n "$VERSION" ] || VERSION="${IMAGE_TAG:-1.0.0}"
+[ -n "$VERSION" ] || VERSION="${IMAGE_TAG:-1.0.1}"
 [ -n "$PLATFORMS" ] || { echo "[ERROR] --platform 不能为空" >&2; exit 1; }
 
 HUB_USER="${DOCKERHUB_USER:-codercl}"

@@ -5,7 +5,7 @@
 本日志格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 并且项目遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
-## v1.0.1 - 2026.09.22-2026.10.13
+## v1.0.1 - 2026.09.22-2026.10.17
 
 ### Added
 
@@ -24,6 +24,9 @@
 - [59cdc5d] 新增专栏备份导出。
 - [41cb9f3] 优化 CMS Skill 下载凭证：为下载包签发无过期时间的专属 Token，并基于 `X-Forwarded` 请求头及当前请求动态注入部署服务 BaseURL。
 - [5569347] 新增 v1.0.0 发布说明留档（与 GitHub Release 内容一致）。
+- [0e93de7] 新增全球 3D 访客地图：新增 `visitor_geo` 标准地域维表与 `visit_log` 的 `is_page_view` / `geo_id` / `geo_status` 及组合索引，IP 双栈解析统一落库为「城市命中 / 国家兜底 / 内网 / 未知」四类状态；新增 `GET /admin/visitor-map/global` 接口，按 Provider 分层（数据库默认实现 + Mock）返回 `meta` / `summary` / `countries` / `cities` / `quality`，支持全部 / 今日 / 昨日 / 前 7 天 / 自定义时间范围（默认全部，仅今日 10 秒自动刷新）。
+- [0e93de7] 新增前端「全球访客地图」独立路由页与 Canvas 2D 正交投影地球渲染器：国家热度着色、城市光点按 UV 对数缩放并夹紧上下限、Top5 波纹与标签、中国按省着色、中英双语、全屏展示、拖拽旋转与滚轮缩放，刷新数据时不重置视角、不重播点亮动画。
+- [0e93de7] 新增访客地图增量 SQL、本地模拟数据脚本与全链路测试（地域匹配、时间窗口解析、接口契约、国内外流量聚合），并整理访客地图设计文档与效果截图。
 
 ### Changed
 
@@ -42,6 +45,8 @@
 - [4e329a6] README 补全目录结构，忽略 `codes` 目录。
 - [9eaf568] README 弱化 MySQL 缓存实现细节，移除 `cache_entry` 相关描述。
 - [659198c] 调整 README 章节顺序。
+- [0e93de7] 数据概览页隐藏旧「访客地图」（中国二维地图），改由独立「全球访客地图」页面承接；旧 `city_visitor` 累计统计链路保持不变。
+- [0e93de7] docker 默认镜像版本同步升级至 `1.0.1`（`docker-compose.yml`、`.env.example`、`push.sh`、`package.sh` 与相关文档示例）。
 
 ### Fixed
 
