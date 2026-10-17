@@ -1,0 +1,193 @@
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/GlobalVisitorMapAdminController.java
+  s_0e1f90dcdd95a5::t_618f72a057fc70 1-21,26-27
+  s_62a4b10f453eca::t_56a18acda82845 22-25
+blog-cms-ui/src/api/visitorMap.js
+  s_0e1f90dcdd95a5::t_c98ba82e6c19da 1-9
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/provider/DatabaseGlobalVisitorMapProvider.java
+  s_0e1f90dcdd95a5::t_d6433709f54778 1-3,5,8-14,16-24,30-39,45-52,58-59
+  s_62a4b10f453eca::t_42e2b8f93b99a3 4,7,25-29,40-44,53-57
+  s_0e1f90dcdd95a5::t_86eb7dbbcb6bea 6,15
+blog-cms-ui/src/components/VisitorGlobe/GlobeCanvas.vue
+  s_4eb8df934f9a31::t_7bd3fc6b32b7b9 19-21
+  s_0e1f90dcdd95a5::t_a3134705b9ead1 1-18,22-63
+blog-backend/src/test/java/com/changlu/blogloom/module/visitormap/DatabaseGlobalVisitorMapProviderTest.java
+  s_62a4b10f453eca::t_d2ca31a7e602d6 4,36
+  s_0e1f90dcdd95a5::t_8279c6c73168e4 9,14
+  s_0e1f90dcdd95a5::t_023d351fd3d7f6 1-3,5-8,10-13,15-35,37-55
+blog-backend/src/test/java/com/changlu/blogloom/controller/admin/GlobalVisitorMapAdminControllerTest.java
+  s_0e1f90dcdd95a5::t_da762426c134d1 1-18,20-21,23-26,28-29
+  s_62a4b10f453eca::t_d2ca31a7e602d6 19,22,27
+blog-backend/src/test/java/com/changlu/blogloom/controller/admin/GlobalVisitorMapEndpointIntegrationTest.java
+  s_0e1f90dcdd95a5::t_86eb7dbbcb6bea 13,26,28-31
+  s_0e1f90dcdd95a5::t_153951aa498334 1-12,14-25,27,32-33
+bin/local/sql/global-visitor-map-mock.sql
+  s_0e1f90dcdd95a5::t_7c025393bdc1de 1-27
+bin/local/README.md
+  s_0e1f90dcdd95a5::t_de405f240e802f 33-42,44
+  s_0e1f90dcdd95a5::t_86eb7dbbcb6bea 43
+blog-backend/src/main/resources/mapper/VisitorGeoMapper.xml
+  s_0e1f90dcdd95a5::t_73230897981578 1-21
+blog-cms-ui/src/views/dashboard/index.vue
+  s_62a4b10f453eca::t_eae60810d3e2db 80
+  s_62a4b10f453eca::t_5d75e8b29166f6 494
+blog-cms-ui/src/views/dashboard/global-visitor-map/index.vue
+  s_4eb8df934f9a31::t_542fb3fb00eb53 124-125
+  s_0e1f90dcdd95a5::t_c98ba82e6c19da 4,12,140,142,163,181,219,228,231,291,293,296,301-306,309-322,438-439
+  s_0e1f90dcdd95a5::t_02fedebc0c2021 35-41,52-57,166,178-179,183-185,188,346-356,389,402-403
+  s_62a4b10f453eca::t_cbdcaad45b09a7 250,252,257-267
+  s_62a4b10f453eca::t_8c17d159a48883 190-217
+  s_62a4b10f453eca::t_99b97e8a0dccac 284-289,292
+  s_4eb8df934f9a31::t_5e3b3b980da314 144,157,168-171,180,186-187
+  s_4eb8df934f9a31::t_f97fe08990c5c3 332-338
+  s_62a4b10f453eca::t_6c3971661b3cce 390-396
+  s_4eb8df934f9a31::t_c426a0fa2dffa6 404-409
+  s_4eb8df934f9a31::t_3e2b5484ed5246 235-243,249,251,253-256,268-273,275-283,290,294-295,297-300,307-308
+  s_0e1f90dcdd95a5::t_185fd4b21c0c52 95-110,160,387,410-411,413-414,416,419-420
+  s_0e1f90dcdd95a5::t_5fc92e4a96a192 383,385
+  s_62a4b10f453eca::t_45b8eb4579038c 172-175,182
+  s_4eb8df934f9a31::t_0bb960ef34e175 126-133
+  s_0e1f90dcdd95a5::t_da762426c134d1 25,247-248,274
+  s_62a4b10f453eca::t_2416493ad56ef7 121
+  s_4eb8df934f9a31::t_3e72357843b402 145-156
+  s_62a4b10f453eca::t_11266502d0431e 33,60-85
+  s_0e1f90dcdd95a5::t_a3134705b9ead1 1-3,5-11,13-24,26-32,34,58-59,86-94,111-120,122-123,134-139,141,143,158-159,161-162,164-165,167,176-177,189,218,220-227,229-230,232-234,244-246,323-331,339-345,357-382,384,386,388,397-401,412,415,417-418,421-437,440-461
+  s_4eb8df934f9a31::t_e662d584f03272 42-51
+blog-backend/src/main/java/com/changlu/blogloom/mapper/VisitorGeoMapper.java
+  s_0e1f90dcdd95a5::t_73230897981578 1-13
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/mapper/GlobalVisitorMapMapper.java
+  s_0e1f90dcdd95a5::t_d6433709f54778 1-25
+blog-backend/src/main/resources/mapper/GlobalVisitorMapMapper.xml
+  s_4eb8df934f9a31::t_4467b72b98cba6 40,49
+  s_0e1f90dcdd95a5::t_d6433709f54778 1-5,13-39,41-48,50-74
+  s_62a4b10f453eca::t_8d299f05e6ca91 8,11
+  s_62a4b10f453eca::t_aa0c0c664c8542 6-7,9-10,12
+blog-backend/src/test/resources/schema.sql
+  s_0e1f90dcdd95a5::t_023d351fd3d7f6 37-70
+"docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/后台功能/访客地图/从中国城市散点到 3D 全球访客地球：BlogLoom 访客地图的设计与实现.md"
+  s_62a4b10f453eca::t_21fb0ee7eda30a 1673-1679,1681,1683,1685,1687,1689,1691,1693,1695,1697,1699
+  s_62a4b10f453eca::t_9d28d9f8687d3b 1,7,9,11,13,15-17,19,21,23,25-33,35,37,39-47,49,51-69,71,73,75-78,80-104,107-116,119-163,165-169,171-177,179-271,274-277,280-325,327-336,338,340,342-348,350,352-370,372-377,379-385,387,389-395,397-402,404,406-407,409,411-420,422,424-430,432-434,437-440,443,445-463,465,467,469-474,476,478-479,481,483-493,495-499,501-507,510-615,618-623,626-657,659,661-669,671-675,677,679-714,717-727,730,732-738,740,742-744,746,748,750-899,901-914,916-922,925,930,933-934,938-939,941-946,949,951-977,979-991,993-1000,1003,1005-1012,1014-1017,1020,1022,1025-1139,1143,1145-1151,1153,1155,1157,1159-1308,1310,1312,1314-1325,1327-1364,1367-1380,1383,1385-1390,1392,1394,1397-1398,1401,1403-1407,1409-1414,1416-1418,1420,1422-1425,1427-1668
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/provider/GlobalVisitorMapProvider.java
+  s_0e1f90dcdd95a5::t_618f72a057fc70 1-3,5-6,8
+  s_62a4b10f453eca::t_ab42d1b1e30a9a 4,7
+blog-backend/src/test/java/com/changlu/blogloom/module/visitormap/GlobalVisitorMapServiceImplTest.java
+  s_0e1f90dcdd95a5::t_d1711920183d0d 1-4,6-9,14,16-19,21-23,25,30-34,66,73-75,77-78,81-84
+  s_62a4b10f453eca::t_2a1f9c2b2c0086 5,10-13,15,20,24,26-29,35-65,67-72,76,79-80
+blog-backend/src/test/java/com/changlu/blogloom/enums/VisitBehaviorTest.java
+  s_0e1f90dcdd95a5::t_d1711920183d0d 1-18
+blog-backend/src/test/java/com/changlu/blogloom/module/visitormap/GlobalVisitorMapTrafficIntegrationTest.java
+  s_62a4b10f453eca::t_a267a19e77cb3b 69,105-121
+  s_0e1f90dcdd95a5::t_ad6a041b95ef86 1-4,6-68,70-78,80-104,122-144
+  s_62a4b10f453eca::t_0b7fd460719987 5,79
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/VisitLogServiceImpl.java
+  s_0e1f90dcdd95a5::t_73230897981578 9,17,32-33,51,59-103
+  s_0e1f90dcdd95a5::t_c0b4ea1ada8d06 104
+blog-cms-ui/src/components/VisitorGlobe/renderer.js
+  s_4eb8df934f9a31::t_788b658fc8623a 537-538,550-551
+  s_4eb8df934f9a31::t_d03d143235cdb2 568,570-573,578
+  s_4eb8df934f9a31::t_c1c8e82855300e 210
+  s_4eb8df934f9a31::t_46e5faf9e3a814 615-618
+  s_4eb8df934f9a31::t_97cc4a3b61d9f6 641
+  s_4eb8df934f9a31::t_3d6ad0bcb3de80 412,414-418
+  s_0e1f90dcdd95a5::t_1f770e02b5b7a8 1-31,36-131,143,149-153,156,224-347,367-411,428-431,435,437-444,446-450,452-521,552-562,579-594,596-614,619-640,642-643,645-674
+  s_4eb8df934f9a31::t_39024fa0198db0 34
+  s_4eb8df934f9a31::t_d8201d527cd3dc 154-155,158-177,179-180,183,185-204,211
+  s_4eb8df934f9a31::t_b2f288581b235f 436
+  s_4eb8df934f9a31::t_0e803b96d1a890 644
+  s_4eb8df934f9a31::t_962e825fbb6c48 522-536,539-549
+  s_4eb8df934f9a31::t_f61532fd5dba85 132-142
+  s_4eb8df934f9a31::t_09e1fa14ab3c2f 445
+  s_4eb8df934f9a31::t_1f47058ade700a 144-148,157,206-209,212-216,221-222
+  s_4eb8df934f9a31::t_a8cc2bf5a19846 595
+  s_4eb8df934f9a31::t_22ad78bcb1dfa0 348-355,357-366
+  s_4eb8df934f9a31::t_eda57795d39759 356
+  s_4eb8df934f9a31::t_4c069d68301a57 32-33,35
+  s_4eb8df934f9a31::t_991bd53d4c0aed 178,181-182,184
+  s_4eb8df934f9a31::t_68ad262bd11a65 413,423-424,432,434
+  s_4eb8df934f9a31::t_dc9cb8242aedfa 565-567
+  s_4eb8df934f9a31::t_40603083b7ad94 425-427
+  s_4eb8df934f9a31::t_6876d3fb2e9e8a 205,217-220,223
+  s_4eb8df934f9a31::t_e4131c7a301344 563-564,569,574-577
+  s_4eb8df934f9a31::t_179dac7c232370 419-422,433,451
+blog-backend/src/main/java/com/changlu/blogloom/aspect/VisitLogAspect.java
+  s_0e1f90dcdd95a5::t_9a39de1ef89497 165
+blog-backend/src/main/java/com/changlu/blogloom/enums/VisitBehavior.java
+  s_0e1f90dcdd95a5::t_9a39de1ef89497 10-24,35-38,40,43,53-55
+  s_0e1f90dcdd95a5::t_c9bac920f20359 56
+blog-backend/src/main/resources/visitor-map/global-visitor-map.mock.json
+  s_0e1f90dcdd95a5::t_d37187bf388b1c 1-203,206-216,219-229,232-242,245-255,258-268,271-281,284-294,297-307,310-320,323-333,336-346,349-359,362-372,375-385,388-398,401-411,414-424,427-437,440-450,453-463,466-476,479-489,492-502,505-515,518-528,531-541,544-554,557-567,570-580,583-593,596-606,609-619,622-632,635-645,648-658,661-671,674-684,687-697,700-710,713-715
+  s_0e1f90dcdd95a5::t_7676e64f9db82d 204-205,217-218,230-231,243-244,256-257,269-270,282-283,295-296,308-309,321-322,334-335,347-348,360-361,373-374,386-387,399-400,412-413,425-426,438-439,451-452,464-465,477-478,490-491,503-504,516-517,529-530,542-543,555-556,568-569,581-582,594-595,607-608,620-621,633-634,646-647,659-660,672-673,685-686,698-699,711-712
+blog-cms-ui/src/components/VisitorGlobe/data/adm1-mvp.js
+  s_0e1f90dcdd95a5::t_25d49e5ed011d5 1-2
+blog-backend/src/main/java/com/changlu/blogloom/entity/VisitLog.java
+  s_0e1f90dcdd95a5::t_9a39de1ef89497 26,31-32
+blog-backend/src/test/java/com/changlu/blogloom/module/visitormap/MockGlobalVisitorMapProviderTest.java
+  s_0e1f90dcdd95a5::t_d1711920183d0d 1-3,5-27,29-39,41-50
+  s_62a4b10f453eca::t_d2ca31a7e602d6 4,28,40
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/domain/GlobalVisitorMapVO.java
+  s_4eb8df934f9a31::t_4467b72b98cba6 82
+  s_0e1f90dcdd95a5::t_618f72a057fc70 1-81,83-89
+sql/increment/1.0/20261017100000_v1.0.x.sql
+  s_4eb8df934f9a31::t_f77dcb5c936f67 1-5,7,28-265,267-269,303-619
+  s_4eb8df934f9a31::t_26c878a91cb55c 8-27
+  s_4eb8df934f9a31::t_81e0e7e6f4c1f1 6,266,270-302
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/domain/VisitorMapWindow.java
+  s_62a4b10f453eca::t_033d0f93a81944 1-137
+blog-cms-ui/src/router/index.js
+  s_0e1f90dcdd95a5::t_08fbec07366b1f 24-25,27-29,32-33,35-41,45-48
+  s_0e1f90dcdd95a5::t_3ba0d2e843e894 49
+sql/increment/1.0/20261017000000_v1.0.x.sql
+  s_0e1f90dcdd95a5::t_9a39de1ef89497 1-23
+  s_0e1f90dcdd95a5::t_7853e10ded2395 24-47,88-126
+  s_0e1f90dcdd95a5::t_16e9803458ebdb 48-87
+blog-backend/src/main/resources/mapper/VisitLogMapper.xml
+  s_0e1f90dcdd95a5::t_9a39de1ef89497 12,17-18
+  s_0e1f90dcdd95a5::t_73230897981578 53-54
+blog-backend/src/test/java/com/changlu/blogloom/service/impl/VisitLogServiceImplGeoTest.java
+  s_0e1f90dcdd95a5::t_a16655e158241b 57
+  s_0e1f90dcdd95a5::t_73230897981578 1-56,58-87
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/service/GlobalVisitorMapService.java
+  s_0e1f90dcdd95a5::t_618f72a057fc70 1-5,12
+  s_62a4b10f453eca::t_0ee2b757633e68 6-11
+blog-cms-ui/src/components/VisitorGlobe/data/visitor-stats.json
+  s_0e1f90dcdd95a5::t_4c0832a12476c2 204-205,217-218,230-231,243-244,256-257,269-270,282-283,295-296,308-309,321-322,334-335,347-348,360-361,373-374,386-387,399-400,412-413,425-426,438-439,451-452,464-465,477-478,490-491,503-504,516-517,529-530,542-543,555-556,568-569,581-582,594-595,607-608,620-621,633-634,646-647,659-660,672-673,685-686,698-699,711-712
+  s_0e1f90dcdd95a5::t_82f2a02f13d160 1-203,206-216,219-229,232-242,245-255,258-268,271-281,284-294,297-307,310-320,323-333,336-346,349-359,362-372,375-385,388-398,401-411,414-424,427-437,440-450,453-463,466-476,479-489,492-502,505-515,518-528,531-541,544-554,557-567,570-580,583-593,596-606,609-619,622-632,635-645,648-658,661-671,674-684,687-697,700-710,713-715
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/provider/MockGlobalVisitorMapProvider.java
+  s_62a4b10f453eca::t_632e84e08925c2 4,12,42,44-49
+  s_0e1f90dcdd95a5::t_618f72a057fc70 1-3,5-11,13-41,51-92
+  s_0e1f90dcdd95a5::t_d1711920183d0d 43,50
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/service/impl/GlobalVisitorMapServiceImpl.java
+  s_62a4b10f453eca::t_995d693a1919d7 4,18-20
+  s_0e1f90dcdd95a5::t_618f72a057fc70 1-3,5-17,21-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0e93de7d4f20cdbb49a72380576fa36260b6e73d",
+  "prompts": {},
+  "sessions": {
+    "s_0e1f90dcdd95a5": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a144ec-e05c-7bd0-bca4-183aab67fde7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_4eb8df934f9a31": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eb75c3b0affeXMhQHK5E9Vdm9b",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_62a4b10f453eca": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eb7061988ffeJYbGS2eJsfhzTm",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
