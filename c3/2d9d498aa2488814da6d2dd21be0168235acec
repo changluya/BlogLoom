@@ -1,0 +1,19 @@
+skills/blogloom-publisher-skill/scripts/channels/gzh/format.js
+  s_deb0bd6475789f::t_a01b7732d1de1a 113-114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c32d9d498aa2488814da6d2dd21be0168235acec",
+  "prompts": {},
+  "sessions": {
+    "s_deb0bd6475789f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eb6959bbdffenGy8uNJ9ltkDYP",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
