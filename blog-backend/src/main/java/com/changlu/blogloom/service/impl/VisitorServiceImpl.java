@@ -29,6 +29,8 @@ public class VisitorServiceImpl implements VisitorService {
 	BlogCacheService cacheService;
 	@Autowired
 	UserAgentUtils userAgentUtils;
+	@Autowired
+	IpAddressUtils ipAddressUtils;
 
 	@Override
 	public List<Visitor> getVisitorListByDate(String startDate, String endDate) {
@@ -48,7 +50,7 @@ public class VisitorServiceImpl implements VisitorService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveVisitor(Visitor visitor) {
-		String ipSource = IpAddressUtils.getCityInfo(visitor.getIp());
+		String ipSource = ipAddressUtils.getCityInfo(visitor.getIp());
 		UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(visitor.getUserAgent());
 		visitor.setIpSource(ipSource);
 		visitor.setOs(userAgentDTO.getOs());

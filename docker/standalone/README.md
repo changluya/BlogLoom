@@ -49,7 +49,7 @@ TOKEN_SECRET=your-long-random-secret       # 不设置则首次自动生成随�
 BLOG_API=http://your-domain:8080
 BLOG_CMS=http://your-domain:8080/cms
 BLOG_VIEW=http://your-domain:8080
-IMAGE_TAG=1.0.0        # 默认 latest
+IMAGE_TAG=1.0.1        # 默认 latest
 ```
 
 修改后重新 `docker compose up -d` 生效。

@@ -28,7 +28,7 @@
 #   BLOG_API=http://your-domain:8080
 #   BLOG_CMS=http://your-domain:8080/cms
 #   BLOG_VIEW=http://your-domain:8080
-#   IMAGE_TAG=1.0.0        # 默认 latest
+#   IMAGE_TAG=1.0.1        # 默认 latest
 # =============================================================================
 
 name: blogloom

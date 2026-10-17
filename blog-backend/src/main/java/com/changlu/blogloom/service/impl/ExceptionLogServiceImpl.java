@@ -24,6 +24,8 @@ public class ExceptionLogServiceImpl implements ExceptionLogService {
 	ExceptionLogMapper exceptionLogMapper;
 	@Autowired
 	UserAgentUtils userAgentUtils;
+	@Autowired
+	IpAddressUtils ipAddressUtils;
 
 	@Override
 	public List<ExceptionLog> getExceptionLogListByDate(String startDate, String endDate) {
@@ -33,7 +35,7 @@ public class ExceptionLogServiceImpl implements ExceptionLogService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveExceptionLog(ExceptionLog log) {
-		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
+		String ipSource = ipAddressUtils.getCityInfo(log.getIp());
 		UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
 		log.setIpSource(ipSource);
 		log.setOs(userAgentDTO.getOs());

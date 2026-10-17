@@ -2,15 +2,15 @@ package com.changlu.blogloom.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.lionsoul.ip2region.xdb.Searcher;
+import org.lionsoul.ip2region.service.Config;
+import org.lionsoul.ip2region.service.Ip2Region;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.FileCopyUtils;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -61,49 +61,78 @@ public class IpAddressUtils {
 		return StringUtils.substringBefore(ip, ",");
 	}
 
-	private static Searcher searcher;
-	private static Method method;
+	private Ip2Region ip2Region;
 
 	/**
-	 * 在服务启动时加载 ip2region.db 到内存中
-	 * 解决打包jar后找不到 ip2region.db 的问题
+	 * 同时加载官方 IPv4 / IPv6 数据库。
+	 * XDB 通过 classpath 流读取，兼容 Spring Boot 可执行 JAR；BufferCache 会将两份数据驻留内存。
 	 *
-	 * @throws Exception 出现异常应该直接抛出终止程序启动，避免后续invoke时出现更多错误
+	 * @throws Exception 初始化失败时终止启动，避免运行期地域查询静默失效
 	 */
 	@PostConstruct
-	private void initIp2regionResource() throws Exception {
-		InputStream inputStream = new ClassPathResource("/ipdb/ip2region.xdb").getInputStream();
-		//将 ip2region.db 转为 ByteArray
-		byte[] dbBinStr = FileCopyUtils.copyToByteArray(inputStream);
-		// 2、使用上述的 dbBinStr 创建一个完全基于内存的查询对象。
-		searcher = new Searcher(null, null, dbBinStr);
-		//二进制方式初始化 DBSearcher，需要使用基于内存的查找算法 memorySearch
-		method = searcher.getClass().getMethod("search", String.class);
+	void initIp2regionResource() throws Exception {
+		try (InputStream v4InputStream = new ClassPathResource("ipdb/ip2region_v4.xdb").getInputStream();
+			 InputStream v6InputStream = new ClassPathResource("ipdb/ip2region_v6.xdb").getInputStream()) {
+			Config v4Config = Config.custom()
+					.setCachePolicy(Config.BufferCache)
+					.setXdbInputStream(v4InputStream)
+					.asV4();
+			Config v6Config = Config.custom()
+					.setCachePolicy(Config.BufferCache)
+					.setXdbInputStream(v6InputStream)
+					.asV6();
+			ip2Region = Ip2Region.create(v4Config, v6Config);
+		}
+		log.info("ip2region IPv4 / IPv6 数据库加载完成");
 	}
 
 	/**
-	 * 根据ip从 ip2region.db 中获取地理位置
+	 * 根据 IP 自动识别 IPv4 / IPv6 并查询地域。
+	 * 返回字段保持为 Country|Province|City|ISP|ISO-Alpha2，缺失字段以空字符串占位。
 	 *
 	 * @param ip
 	 * @return
 	 */
-	public static String getCityInfo(String ip) {
+	public String getCityInfo(String ip) {
+		if (StringUtils.isBlank(ip) || ip2Region == null) {
+			return "";
+		}
 		try {
-			String ipInfo = (String) method.invoke(searcher, ip);
-			if (!StringUtils.isEmpty(ipInfo)) {
-				ipInfo = ipInfo.replace("|0", "");
-				ipInfo = ipInfo.replace("0|", "");
-			}
-			return ipInfo;
+			return normalizeRegion(ip2Region.search(ip.trim()));
 		} catch (Exception e) {
-			log.error("getCityInfo exception:", e);
+			log.warn("ip2region 查询失败，ip={}", ip, e);
 		}
 		return "";
 	}
-	public static void main(String[] args) throws Exception {
-		IpAddressUtils ipAddressUtils = new IpAddressUtils();
-		ipAddressUtils.initIp2regionResource();
-		String cityInfo = IpAddressUtils.getCityInfo("14.215.177.39");
-		System.out.println(cityInfo);
+
+	private String normalizeRegion(String region) {
+		if (StringUtils.isBlank(region)) {
+			return "";
+		}
+		String[] fields = region.split("\\|", -1);
+		boolean hasValue = false;
+		for (int i = 0; i < fields.length; i++) {
+			fields[i] = StringUtils.trimToEmpty(fields[i]);
+			if ("0".equals(fields[i])) {
+				fields[i] = "";
+			}
+			if (StringUtils.isNotBlank(fields[i])) {
+				hasValue = true;
+			}
+		}
+		return hasValue ? String.join("|", fields) : "";
+	}
+
+	@PreDestroy
+	void closeIp2region() {
+		if (ip2Region != null) {
+			try {
+				ip2Region.close();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				log.warn("等待 ip2region 查询服务关闭时线程被中断", e);
+			}
+			ip2Region = null;
+		}
 	}
 }

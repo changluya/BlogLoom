@@ -1,5 +1,6 @@
 package com.changlu.blogloom.task;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -81,12 +82,15 @@ public class VisitorSyncScheduleTask {
 		//按每日新增UV 300的标准初始化map
 		Map<String, Integer> cityVisitorMap = new HashMap<>(512);
 		ipSource.forEach(i -> {
-			if (i.startsWith("中国")) {
-				String[] split = i.split("\\|");
-				if (split.length == 4) {
-					String city = split[2];
-					cityVisitorMap.merge(city, 1, Integer::sum);
-				}
+			if (i == null) {
+				return;
+			}
+			String[] split = i.split("\\|", -1);
+			// 新版格式为 Country|Province|City|ISP|ISO-Alpha2；兼容旧版四段地域字符串。
+			if (split.length >= 4 && "中国".equals(split[0])
+					&& StringUtils.isNotBlank(split[2]) && !"0".equals(split[2])) {
+				String city = split[2].trim();
+				cityVisitorMap.merge(city, 1, Integer::sum);
 			}
 		});
 		//更新城市新增访客UV数

@@ -24,6 +24,8 @@ public class OperationLogServiceImpl implements OperationLogService {
 	OperationLogMapper operationLogMapper;
 	@Autowired
 	UserAgentUtils userAgentUtils;
+	@Autowired
+	IpAddressUtils ipAddressUtils;
 
 	@Override
 	public List<OperationLog> getOperationLogListByDate(String startDate, String endDate) {
@@ -33,7 +35,7 @@ public class OperationLogServiceImpl implements OperationLogService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveOperationLog(OperationLog log) {
-		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
+		String ipSource = ipAddressUtils.getCityInfo(log.getIp());
 		UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
 		log.setIpSource(ipSource);
 		log.setOs(userAgentDTO.getOs());

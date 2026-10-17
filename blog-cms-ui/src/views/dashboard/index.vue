@@ -77,7 +77,7 @@
 			</el-col>
 		</el-row>
 
-		<el-row class="panel-group charts" :gutter="20">
+		<el-row v-if="false" class="panel-group charts" :gutter="20">
 			<el-col :xs="24">
 				<el-card class="chart-card" shadow="never">
 					<div class="chart-heading"><strong>访客地图</strong><span>访客地域实时分布</span></div>
@@ -491,6 +491,7 @@
 				this.tagEcharts.setOption(this.tagOption)
 			},
 			initMapEcharts() {
+				if (!this.$refs.mapEcharts) return
 				this.mapEcharts = echarts.init(this.$refs.mapEcharts)
 				this.mapEcharts.setOption(this.mapOption)
 			},

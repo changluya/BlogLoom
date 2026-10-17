@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.changlu.blogloom.mapper.VisitorGeoMapper">
+	<select id="findCityGeoId" resultType="long">
+		SELECT id
+		FROM visitor_geo
+		WHERE geo_level = 2
+		  AND (city_name_zh = #{cityName} OR city_name_en = #{cityName})
+		<if test="countryCode != null and countryCode != ''">
+		  AND country_code = #{countryCode}
+		</if>
+		LIMIT 1
+	</select>
+
+	<select id="findCountryGeoId" resultType="long">
+		SELECT id
+		FROM visitor_geo
+		WHERE geo_level = 1 AND country_code = #{countryCode}
+		LIMIT 1
+	</select>
+</mapper>

@@ -34,3 +34,37 @@ CREATE TABLE IF NOT EXISTS blog (
     views INT DEFAULT 0,
     is_deleted TINYINT DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS visitor_geo (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    geo_key VARCHAR(160) NOT NULL,
+    geo_level TINYINT NOT NULL,
+    country_code CHAR(2) NOT NULL,
+    region_name VARCHAR(128),
+    city_name_zh VARCHAR(128),
+    city_name_en VARCHAR(128),
+    longitude DECIMAL(10, 6),
+    latitude DECIMAL(9, 6)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS uk_test_visitor_geo_key ON visitor_geo (geo_key);
+
+CREATE TABLE IF NOT EXISTS visit_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    uuid VARCHAR(255),
+    uri VARCHAR(255),
+    method VARCHAR(32),
+    param VARCHAR(2000),
+    behavior VARCHAR(255),
+    is_page_view BOOLEAN,
+    content VARCHAR(255),
+    remark VARCHAR(255),
+    ip VARCHAR(255),
+    ip_source VARCHAR(255),
+    geo_id BIGINT,
+    geo_status TINYINT DEFAULT 0,
+    os VARCHAR(255),
+    browser VARCHAR(255),
+    times INT,
+    create_time TIMESTAMP,
+    user_agent VARCHAR(2000)
+);

@@ -1,0 +1,1104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BlogLoom · Global Visitor Globe</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #03070d;
+      --panel: rgba(8, 17, 29, 0.78);
+      --panel-strong: rgba(11, 24, 40, 0.95);
+      --line: rgba(125, 185, 222, 0.18);
+      --text: #e7f7ff;
+      --muted: #7e9bac;
+      --cyan: #5de3ff;
+      --blue: #4a8cff;
+      --green: #73f0b1;
+      --orange: #ffbd72;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; }
+    body {
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(25, 75, 115, 0.15), transparent 34%),
+        radial-gradient(circle at 82% 10%, rgba(46, 91, 152, 0.1), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #app { position: relative; width: 100%; height: 100%; isolation: isolate; }
+    #globe { position: absolute; inset: 0; cursor: grab; }
+    #globe:active { cursor: grabbing; }
+    .vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, transparent 42%, rgba(3, 7, 13, 0.48) 100%);
+      z-index: 1;
+    }
+
+    .topbar, .side-panel, .legend, .status {
+      position: absolute;
+      z-index: 3;
+    }
+
+    .topbar { left: 34px; top: 28px; max-width: 470px; }
+    .eyebrow {
+      margin-bottom: 8px;
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0; font-size: clamp(24px, 3vw, 42px); letter-spacing: -0.04em; line-height: 1.05; }
+    .subtitle { margin: 12px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    .top-actions { display: flex; gap: 8px; margin-top: 18px; }
+    button {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--text);
+      background: rgba(12, 29, 47, 0.72);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, transform .2s;
+    }
+    button:hover { border-color: rgba(93, 227, 255, .7); background: rgba(22, 57, 83, .82); }
+    button:active { transform: translateY(1px); }
+    button[aria-pressed="true"] { border-color: rgba(93, 227, 255, .85); color: var(--cyan); }
+
+    .side-panel {
+      top: 28px;
+      right: 28px;
+      width: min(360px, calc(100vw - 56px));
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(11, 27, 44, .9), rgba(5, 13, 23, .74));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .panel-title { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .panel-tools { display: flex; align-items: center; gap: 10px; }
+    .language-switch { display: flex; padding: 2px; border: 1px solid var(--line); border-radius: 7px; background: rgba(4, 13, 23, .48); }
+    .language-switch button { min-width: 38px; padding: 4px 7px; border: 0; border-radius: 5px; color: var(--muted); background: transparent; font-size: 10px; }
+    .language-switch button[aria-pressed="true"] { color: #031018; background: var(--cyan); }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 15px var(--green); }
+    .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 16px; }
+    .metric {
+      padding: 12px;
+      border: 1px solid rgba(125, 185, 222, .12);
+      border-radius: 10px;
+      background: rgba(4, 13, 23, .42);
+    }
+    .metric-label { color: var(--muted); font-size: 11px; }
+    .metric-value { margin-top: 5px; color: var(--text); font-size: 20px; font-variant-numeric: tabular-nums; }
+
+    .rankings {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    .rankings-title { color: var(--muted); font-size: 11px; letter-spacing: .08em; }
+    .ranking-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 10px; }
+    .ranking-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; color: var(--text); font-size: 12px; font-weight: 600; }
+    .ranking-heading span:last-child { color: var(--muted); font-size: 9px; font-weight: 500; }
+    .ranking-list { max-height: 250px; margin: 0; padding: 0 5px 0 0; overflow-y: auto; overscroll-behavior: contain; list-style: none; scrollbar-color: rgba(93, 227, 255, .35) transparent; scrollbar-width: thin; }
+    .ranking-list::-webkit-scrollbar { width: 4px; }
+    .ranking-list::-webkit-scrollbar-track { background: transparent; }
+    .ranking-list::-webkit-scrollbar-thumb { border-radius: 4px; background: rgba(93, 227, 255, .3); }
+    .ranking-item { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; align-items: center; gap: 5px; min-height: 25px; border-bottom: 1px solid rgba(125, 185, 222, .08); font-size: 11px; }
+    .ranking-item:last-child { border-bottom: 0; }
+    .ranking-index { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .ranking-item:nth-child(-n+3) .ranking-index { color: var(--cyan); }
+    .ranking-city { overflow: hidden; color: rgba(231, 247, 255, .88); text-overflow: ellipsis; white-space: nowrap; }
+    .ranking-uv { color: var(--cyan); font-variant-numeric: tabular-nums; }
+
+    .legend {
+      left: 34px;
+      bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(5, 14, 24, .72);
+      color: var(--muted);
+      font-size: 11px;
+      backdrop-filter: blur(12px);
+    }
+    .legend-scale { display: flex; gap: 3px; }
+    .legend-scale span { width: 22px; height: 5px; border-radius: 4px; }
+    .legend-scale span:nth-child(1) { background: #14304a; }
+    .legend-scale span:nth-child(2) { background: #1a6384; }
+    .legend-scale span:nth-child(3) { background: #27b5cb; }
+    .legend-scale span:nth-child(4) { background: #7ae9ed; }
+
+    .status {
+      right: 28px;
+      bottom: 28px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .03em;
+    }
+    .status strong { color: var(--cyan); font-weight: 500; }
+    .tip {
+      position: absolute;
+      left: 50%;
+      bottom: 25px;
+      z-index: 4;
+      transform: translateX(-50%);
+      color: rgba(231, 247, 255, .62);
+      font-size: 11px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .map-tooltip {
+      position: absolute;
+      z-index: 6;
+      display: none;
+      min-width: 112px;
+      padding: 9px 11px;
+      border: 1px solid rgba(93, 227, 255, .38);
+      border-radius: 8px;
+      background: rgba(4, 14, 24, .94);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .34);
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.55;
+      pointer-events: none;
+      transform: translate(14px, -50%);
+      backdrop-filter: blur(10px);
+    }
+    .map-tooltip strong { color: var(--cyan); font-weight: 600; }
+
+    @media (max-width: 760px) {
+      .topbar { left: 18px; top: 18px; max-width: calc(100vw - 36px); }
+      .side-panel { top: auto; right: 18px; bottom: 64px; width: min(330px, calc(100vw - 36px)); padding: 14px; }
+      .ranking-list { max-height: 150px; }
+      .legend { left: 18px; bottom: 18px; }
+      .status { display: none; }
+      .tip { bottom: 20px; left: auto; right: 18px; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <main id="app" aria-label="BlogLoom 全球访客 3D 地球原型">
+    <div id="globe" aria-label="可旋转和缩放的全球访客地球"></div>
+    <div class="vignette" aria-hidden="true"></div>
+
+    <section class="topbar">
+      <div class="eyebrow">BlogLoom / Observatory</div>
+      <h1>Global Visitor Globe</h1>
+      <p class="subtitle">暗场启动，访客抵达的国家与城市会被逐步点亮。拖拽旋转地球，滚轮放大查看城市热点。</p>
+      <div class="top-actions">
+        <button id="rotateButton" type="button" aria-pressed="true">暂停旋转</button>
+        <button id="resetButton" type="button">复位视角</button>
+      </div>
+    </section>
+
+    <aside class="side-panel" aria-live="polite">
+      <div class="panel-heading">
+        <span class="panel-title">Visitor Pulse · 24h</span>
+        <div class="panel-tools">
+          <div class="language-switch" role="group" aria-label="城市名称语言">
+            <button id="languageZh" type="button" aria-pressed="true">中文</button>
+            <button id="languageEn" type="button" aria-pressed="false">EN</button>
+          </div>
+          <span class="live-dot" aria-label="静态演示数据"></span>
+        </div>
+      </div>
+      <div class="metric-grid">
+        <div class="metric"><div class="metric-label">全球 UV</div><div class="metric-value" id="totalUv">—</div></div>
+        <div class="metric"><div class="metric-label">全球 PV</div><div class="metric-value" id="totalPv">—</div></div>
+        <div class="metric"><div class="metric-label">点亮国家</div><div class="metric-value" id="countryCount">—</div></div>
+        <div class="metric"><div class="metric-label">城市热点</div><div class="metric-value" id="cityCount">—</div></div>
+      </div>
+      <div class="rankings">
+        <div class="rankings-title">热点城市排名 · UV</div>
+        <div class="ranking-grid">
+          <section aria-label="中国热点城市排名">
+            <div class="ranking-heading"><span>中国</span><span>TOP 20</span></div>
+            <ol class="ranking-list" id="chinaRanking"></ol>
+          </section>
+          <section aria-label="国外热点城市排名">
+            <div class="ranking-heading"><span>国外</span><span>TOP 20</span></div>
+            <ol class="ranking-list" id="globalRanking"></ol>
+          </section>
+        </div>
+      </div>
+    </aside>
+
+    <div class="legend" aria-label="访客热度图例">
+      <span>VISITOR INTENSITY</span>
+      <div class="legend-scale" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <span>LOW&nbsp;&nbsp;HIGH</span>
+    </div>
+    <div class="status" id="status"><strong>BOOTING</strong> · dark globe initializing</div>
+    <div class="tip">Static prototype · IP-based approximate locations</div>
+    <div class="map-tooltip" id="mapTooltip" role="tooltip"></div>
+  </main>
+
+  <script src="../../../../../../../blog-cms-ui/node_modules/echarts/dist/echarts.min.js"></script>
+  <script src="../../../../../../../blog-cms-ui/node_modules/echarts/map/js/china.js"></script>
+  <script src="../../../../../../../blog-cms-ui/node_modules/echarts/map/js/world.js"></script>
+  <script src="data/adm1-mvp.js"></script>
+  <script src="data/visitor-stats.js"></script>
+  <script>
+    (() => {
+      // 精简展示版固定使用 Canvas，仅保留页面实际渲染所需资源。
+      const rendererMode = 'canvas';
+      const visitorDataset = window.BLOGLOOM_VISITOR_DATA;
+      if (!visitorDataset) throw new Error('Local visitor dataset is unavailable');
+      const staticCities = visitorDataset.cities;
+      let currentLanguage = 'zh';
+      const cityNameEn = {
+        '北京市': 'Beijing', '上海市': 'Shanghai', '天津市': 'Tianjin', '重庆市': 'Chongqing',
+        '石家庄市': 'Shijiazhuang', '太原市': 'Taiyuan', '呼和浩特市': 'Hohhot', '沈阳市': 'Shenyang',
+        '大连市': 'Dalian', '长春市': 'Changchun', '哈尔滨市': 'Harbin', '南京市': 'Nanjing',
+        '苏州市': 'Suzhou', '杭州市': 'Hangzhou', '宁波市': 'Ningbo', '合肥市': 'Hefei',
+        '福州市': 'Fuzhou', '厦门市': 'Xiamen', '南昌市': 'Nanchang', '济南市': 'Jinan',
+        '青岛市': 'Qingdao', '郑州市': 'Zhengzhou', '武汉市': 'Wuhan', '长沙市': 'Changsha',
+        '广州市': 'Guangzhou', '深圳市': 'Shenzhen', '南宁市': 'Nanning', '海口市': 'Haikou',
+        '成都市': 'Chengdu', '贵阳市': 'Guiyang', '昆明市': 'Kunming', '拉萨市': 'Lhasa',
+        '西安市': "Xi'an", '兰州市': 'Lanzhou', '西宁市': 'Xining', '银川市': 'Yinchuan',
+        '乌鲁木齐市': 'Urumqi', '香港': 'Hong Kong', '澳门': 'Macao', '台北市': 'Taipei',
+        '新加坡': 'Singapore', '东京': 'Tokyo', '首尔': 'Seoul', '曼谷': 'Bangkok',
+        '雅加达': 'Jakarta', '德里': 'Delhi', '孟买': 'Mumbai', '迪拜': 'Dubai', '莫斯科': 'Moscow',
+        '伦敦': 'London', '巴黎': 'Paris', '柏林': 'Berlin', '开罗': 'Cairo', '内罗毕': 'Nairobi',
+        '约翰内斯堡': 'Johannesburg', '纽约': 'New York', '旧金山': 'San Francisco',
+        '多伦多': 'Toronto', '墨西哥城': 'Mexico City', '圣保罗': 'Sao Paulo',
+        '布宜诺斯艾利斯': 'Buenos Aires', '悉尼': 'Sydney', '墨尔本': 'Melbourne'
+      };
+      const countryNameEn = {
+        '中国': 'China', '俄罗斯': 'Russia', '美国': 'United States', '加拿大': 'Canada',
+        '巴西': 'Brazil', '澳大利亚': 'Australia', '印度': 'India', '阿根廷': 'Argentina',
+        '哈萨克斯坦': 'Kazakhstan', '蒙古国': 'Mongolia', '沙特阿拉伯': 'Saudi Arabia',
+        '墨西哥': 'Mexico', '印度尼西亚': 'Indonesia', '南非': 'South Africa',
+        '阿尔及利亚': 'Algeria', '刚果（金）': 'DR Congo', '新加坡': 'Singapore',
+        '日本': 'Japan', '韩国': 'South Korea', '泰国': 'Thailand', '阿联酋': 'UAE',
+        '英国': 'United Kingdom', '法国': 'France', '德国': 'Germany', '埃及': 'Egypt', '肯尼亚': 'Kenya'
+      };
+      const displayCityName = city => currentLanguage === 'en' ? (cityNameEn[city.city] || city.cityEn || city.city) : city.city;
+      const displayCountryName = name => currentLanguage === 'en' ? (countryNameEn[name] || name) : name;
+
+      // 地理名称层与访客统计层分离：没有访客的城市也可以被悬停识别。
+      const referenceCities = [
+        ['北京市', '中国', 39.910925, 116.413384], ['上海市', '中国', 31.235929, 121.480539],
+        ['天津市', '中国', 39.093668, 117.209523], ['重庆市', '中国', 29.568996, 106.558434],
+        ['石家庄市', '中国', 38.052097, 114.469022], ['太原市', '中国', 37.876989, 112.556391],
+        ['呼和浩特市', '中国', 40.848423, 111.755509], ['沈阳市', '中国', 41.683830, 123.471097],
+        ['大连市', '中国', 38.918954, 121.621631], ['长春市', '中国', 43.821954, 125.330602],
+        ['哈尔滨市', '中国', 45.808826, 126.541615], ['南京市', '中国', 32.064653, 118.802422],
+        ['苏州市', '中国', 31.303564, 120.592412], ['杭州市', '中国', 30.253083, 120.215512],
+        ['宁波市', '中国', 29.866033, 121.628572], ['合肥市', '中国', 31.826578, 117.233443],
+        ['福州市', '中国', 26.080429, 119.303470], ['厦门市', '中国', 24.485407, 118.096435],
+        ['南昌市', '中国', 28.689455, 115.864589], ['济南市', '中国', 36.656554, 117.126399],
+        ['青岛市', '中国', 36.072227, 120.389455], ['郑州市', '中国', 34.753439, 113.631419],
+        ['武汉市', '中国', 30.598467, 114.311582], ['长沙市', '中国', 28.234889, 112.945473],
+        ['广州市', '中国', 23.135336, 113.271431], ['深圳市', '中国', 22.548457, 114.064552],
+        ['南宁市', '中国', 22.822607, 108.373451], ['海口市', '中国', 20.044049, 110.325525],
+        ['成都市', '中国', 30.655822, 104.081534], ['贵阳市', '中国', 26.653325, 106.636577],
+        ['昆明市', '中国', 24.873998, 102.852448], ['拉萨市', '中国', 29.650040, 91.120824],
+        ['西安市', '中国', 34.347269, 108.946466], ['兰州市', '中国', 36.067235, 103.840521],
+        ['西宁市', '中国', 36.623385, 101.784450], ['银川市', '中国', 38.492460, 106.238494],
+        ['乌鲁木齐市', '中国', 43.830763, 87.624440], ['香港', '中国', 22.3193, 114.1694],
+        ['澳门', '中国', 22.1987, 113.5439], ['台北市', '中国', 25.0330, 121.5654],
+        ['新加坡', '新加坡', 1.3521, 103.8198], ['东京', '日本', 35.6762, 139.6503],
+        ['首尔', '韩国', 37.5665, 126.9780], ['曼谷', '泰国', 13.7563, 100.5018],
+        ['雅加达', '印度尼西亚', -6.2088, 106.8456], ['德里', '印度', 28.6139, 77.2090],
+        ['迪拜', '阿联酋', 25.2048, 55.2708], ['莫斯科', '俄罗斯', 55.7558, 37.6173],
+        ['伦敦', '英国', 51.5072, -0.1276], ['巴黎', '法国', 48.8566, 2.3522],
+        ['柏林', '德国', 52.5200, 13.4050], ['开罗', '埃及', 30.0444, 31.2357],
+        ['内罗毕', '肯尼亚', -1.2921, 36.8219], ['约翰内斯堡', '南非', -26.2041, 28.0473],
+        ['纽约', '美国', 40.7128, -74.0060], ['旧金山', '美国', 37.7749, -122.4194],
+        ['多伦多', '加拿大', 43.6532, -79.3832], ['墨西哥城', '墨西哥', 19.4326, -99.1332],
+        ['圣保罗', '巴西', -23.5505, -46.6333], ['布宜诺斯艾利斯', '阿根廷', -34.6037, -58.3816],
+        ['悉尼', '澳大利亚', -33.8688, 151.2093], ['墨尔本', '澳大利亚', -37.8136, 144.9631]
+      ].map(([city, country, lat, lng]) => ({ city, country, lat, lng }));
+      const visitorStatsByCity = new Map(staticCities.map(city => [city.city, city]));
+      const referenceCityNames = new Set(referenceCities.map(city => city.city));
+      staticCities.forEach(city => { if (!referenceCityNames.has(city.city)) referenceCities.push(city); });
+
+      const countryLabels = [
+        ['中国', 36, 103, 14], ['俄罗斯', 61, 90, 13], ['美国', 39, -99, 13],
+        ['加拿大', 57, -106, 12], ['巴西', -11, -53, 13], ['澳大利亚', -25, 134, 12],
+        ['印度', 22, 79, 13], ['阿根廷', -36, -64, 11], ['哈萨克斯坦', 48, 67, 11],
+        ['蒙古国', 46, 103, 11], ['沙特阿拉伯', 24, 45, 11], ['墨西哥', 23, -102, 11],
+        ['印度尼西亚', -3, 118, 10], ['南非', -30, 24, 11], ['阿尔及利亚', 28, 2, 10],
+        ['刚果（金）', -3, 23, 10]
+      ].map(([name, lat, lng, size]) => ({ name, lat, lng, size }));
+
+      const staticCountries = Object.fromEntries(visitorDataset.countries.map(country => [
+        country.mapId,
+        { name: country.country, uv: country.uv, pv: country.pv, center: [country.lat, country.lng] }
+      ]));
+      const blogLoomChinaMap = window.echarts && window.echarts.getMap ? window.echarts.getMap('china') : null;
+      const blogLoomChinaGeoJson = blogLoomChinaMap
+        ? decodeEchartsGeoJson(blogLoomChinaMap.geoJson || blogLoomChinaMap.geoJSON)
+        : null;
+      const blogLoomWorldMap = window.echarts && window.echarts.getMap ? window.echarts.getMap('world') : null;
+      const blogLoomWorldGeoJson = blogLoomWorldMap
+        ? decodeEchartsGeoJson(blogLoomWorldMap.geoJson || blogLoomWorldMap.geoJSON)
+        : null;
+      const blogLoomChinaFeatures = prepareGeoFeatures(blogLoomChinaGeoJson, 220);
+      const blogLoomWorldFeatures = prepareGeoFeatures(blogLoomWorldGeoJson, 120)
+        .filter(feature => feature.name !== 'China');
+      const globalAdm1ByCountry = window.BLOGLOOM_ADM1 || {};
+      const adm1StyleByCountry = {
+        USA: '#53c7ff', CAN: '#65d8c7', AUS: '#ffba72', BRA: '#72df91', FRA: '#9caeff',
+        DEU: '#79c8ff', IND: '#ff9d72', JPN: '#e593ff', GBR: '#a6b9ff', SGP: '#72f0de'
+      };
+      const countryCodeByMapName = {
+        Australia: '036',
+        Brazil: '076',
+        Canada: '124',
+        China: '156',
+        France: '250',
+        Germany: '276',
+        Egypt: '818',
+        India: '356',
+        Indonesia: '360',
+        Japan: '392',
+        Korea: '410',
+        Mexico: '484',
+        Russia: '643',
+        Singapore: '702',
+        'South Africa': '710',
+        'South Korea': '410',
+        Thailand: '764',
+        'United Arab Emirates': '784',
+        'United Kingdom': '826',
+        'United States': '840'
+      };
+
+      function decodeEchartsGeoJson(geoJson) {
+        if (!geoJson || !geoJson.UTF8Encoding) return geoJson;
+        const encodeScale = geoJson.UTF8Scale || 1024;
+        geoJson.features.forEach(feature => {
+          const geometry = feature.geometry;
+          if (!geometry) return;
+          const coordinates = geometry.coordinates;
+          const encodeOffsets = geometry.encodeOffsets;
+          for (let index = 0; index < coordinates.length; index += 1) {
+            if (geometry.type === 'Polygon') {
+              coordinates[index] = decodeEchartsRing(coordinates[index], encodeOffsets[index], encodeScale);
+            } else if (geometry.type === 'MultiPolygon') {
+              for (let ringIndex = 0; ringIndex < coordinates[index].length; ringIndex += 1) {
+                coordinates[index][ringIndex] = decodeEchartsRing(
+                  coordinates[index][ringIndex],
+                  encodeOffsets[index][ringIndex],
+                  encodeScale
+                );
+              }
+            }
+          }
+        });
+        geoJson.UTF8Encoding = false;
+        return geoJson;
+      }
+
+      function decodeEchartsRing(encodedRing, encodeOffsets, encodeScale) {
+        const decodedRing = [];
+        let previousX = encodeOffsets[0];
+        let previousY = encodeOffsets[1];
+        for (let index = 0; index < encodedRing.length; index += 2) {
+          let x = encodedRing.charCodeAt(index) - 64;
+          let y = encodedRing.charCodeAt(index + 1) - 64;
+          x = (x >> 1) ^ (-(x & 1));
+          y = (y >> 1) ^ (-(y & 1));
+          x += previousX;
+          y += previousY;
+          previousX = x;
+          previousY = y;
+          decodedRing.push([x / encodeScale, y / encodeScale]);
+        }
+        return decodedRing;
+      }
+
+      function prepareGeoFeatures(geoJson, maxPointsPerRing) {
+        if (!geoJson || !Array.isArray(geoJson.features)) return [];
+        return geoJson.features.map(feature => {
+          const geometry = feature.geometry;
+          if (!geometry) return null;
+          const polygons = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
+          const rings = [];
+          polygons.forEach(polygon => {
+            polygon.forEach(ring => rings.push(sampleRing(ring, maxPointsPerRing)));
+          });
+          return {
+            name: feature.properties && feature.properties.name,
+            rings
+          };
+        }).filter(Boolean);
+      }
+
+      function sampleRing(ring, maxPoints) {
+        if (!Array.isArray(ring) || ring.length <= maxPoints) return ring || [];
+        const step = Math.ceil(ring.length / maxPoints);
+        const sampled = [];
+        for (let index = 0; index < ring.length; index += step) sampled.push(ring[index]);
+        if (sampled[sampled.length - 1] !== ring[ring.length - 1]) sampled.push(ring[ring.length - 1]);
+        return sampled;
+      }
+
+      const maxUv = Math.max(...staticCities.map(item => item.uv));
+      const totalUv = visitorDataset.summary.uv;
+      const totalPv = visitorDataset.summary.pv;
+      const $ = id => document.getElementById(id);
+      const status = (tone, text) => { $('status').innerHTML = '<strong>' + tone + '</strong> · ' + text; };
+
+      $('totalUv').textContent = totalUv.toLocaleString();
+      $('totalPv').textContent = totalPv.toLocaleString();
+      $('countryCount').textContent = visitorDataset.summary.countryCount;
+      $('cityCount').textContent = visitorDataset.summary.cityCount;
+
+      function renderRanking(targetId, cities) {
+        $(targetId).innerHTML = cities
+          .slice()
+          .sort((a, b) => b.uv - a.uv)
+          .slice(0, 20)
+          .map((city, index) => '<li class="ranking-item">' +
+            '<span class="ranking-index">' + (index + 1) + '</span>' +
+            '<span class="ranking-city">' + displayCityName(city) + '</span>' +
+            '<span class="ranking-uv">' + city.uv.toLocaleString() + '</span>' +
+          '</li>')
+          .join('');
+      }
+
+      function renderAllRankings() {
+        renderRanking('chinaRanking', staticCities.filter(city => city.country === '中国'));
+        renderRanking('globalRanking', staticCities.filter(city => city.country !== '中国'));
+      }
+
+      function setLanguage(language) {
+        currentLanguage = language;
+        document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
+        $('languageZh').setAttribute('aria-pressed', String(language === 'zh'));
+        $('languageEn').setAttribute('aria-pressed', String(language === 'en'));
+        renderAllRankings();
+        $('mapTooltip').style.display = 'none';
+      }
+
+      $('languageZh').addEventListener('click', () => setLanguage('zh'));
+      $('languageEn').addEventListener('click', () => setLanguage('en'));
+      renderAllRankings();
+
+      const container = $('globe');
+      if (rendererMode === 'canvas' || !window.Globe) {
+        try {
+          mountFallbackGlobe();
+        } catch (error) {
+          console.error(error);
+          status('ERROR', 'local canvas globe failed');
+        }
+        return;
+      }
+
+      const world = Globe()(container)
+        .backgroundColor('rgba(0,0,0,0)')
+        .globeImageUrl('assets/textures/earth-night.jpg')
+        .bumpImageUrl('assets/textures/earth-topology.png')
+        .backgroundImageUrl('assets/textures/night-sky.png')
+        .showAtmosphere(true)
+        .atmosphereColor('#3fdcff')
+        .atmosphereAltitude(0.12)
+        .polygonAltitude(d => d.__lit ? 0.012 + Math.min((d.__uv || 0) / maxUv, 1) * 0.075 : 0.004)
+        .polygonCapColor(d => d.__lit ? heatColor(d.__uv || 0, 0.76) : 'rgba(9, 25, 41, 0.55)')
+        .polygonSideColor(() => 'rgba(22, 87, 113, 0.20)')
+        .polygonStrokeColor(() => 'rgba(106, 202, 224, 0.28)')
+        .polygonsTransitionDuration(850)
+        .pointLat(d => d.lat)
+        .pointLng(d => d.lng)
+        .pointAltitude(d => 0.02 + Math.min(d.uv / maxUv, 1) * 0.12)
+        .pointRadius(d => 0.22 + Math.min(d.uv / maxUv, 1) * 0.45)
+        .pointColor(d => d.rank <= 3 ? '#b8fbff' : '#48cfe6')
+        .pointLabel(d => '<strong>' + d.city + '</strong><br/>访客数：' + d.uv.toLocaleString())
+        .pointResolution(12)
+        .pointsMerge(false)
+        .pointsTransitionDuration(1000)
+        .ringLat(d => d.lat)
+        .ringLng(d => d.lng)
+        .ringColor(d => d.rank <= 3 ? '#8ffaff' : '#3aaec9')
+        .ringMaxRadius(d => 1.6 + Math.min(d.uv / maxUv, 1) * 2.4)
+        .ringPropagationSpeed(1.1)
+        .ringRepeatPeriod(1200)
+        .labelLat(d => d.lat)
+        .labelLng(d => d.lng)
+        .labelText(d => d.city)
+        .labelSize(d => d.rank <= 3 ? 1.25 : 0.85)
+        .labelDotRadius(d => d.rank <= 3 ? 0.45 : 0.25)
+        .labelColor(() => 'rgba(218, 250, 255, 0.92)')
+        .labelResolution(2)
+        .onPointClick(selectCity)
+        .onPolygonClick(selectCountry);
+
+      function heatColor(uv, alpha) {
+        const ratio = Math.min(uv / maxUv, 1);
+        const r = Math.round(18 + ratio * 62);
+        const g = Math.round(81 + ratio * 155);
+        const b = Math.round(114 + ratio * 125);
+        return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+      }
+
+      function mountFallbackGlobe() {
+        const canvas = document.createElement('canvas');
+        canvas.setAttribute('aria-label', '本地 Canvas 3D 风格全球访客地球');
+        container.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        const state = { yaw: -1.83, pitch: 0.25, zoom: 1, autoRotate: true, drag: false, moved: false, x: 0, y: 0 };
+        let revealedCountries = 0;
+        let revealedCities = 0;
+        let animationFrame = 0;
+        const projectionFrame = { centerX: 0, centerY: 0, radius: 1, yawCos: 1, yawSin: 0, pitchCos: 1, pitchSin: 0 };
+        const land = [
+          [[72, -168], [70, -140], [60, -130], [53, -125], [48, -123], [42, -118], [30, -110], [18, -100], [8, -84], [10, -76], [25, -80], [35, -75], [45, -65], [55, -60], [65, -75], [72, -100]],
+          [[12, -82], [4, -78], [-8, -76], [-18, -70], [-32, -62], [-50, -68], [-55, -58], [-35, -52], [-10, -40], [4, -48]],
+          [[72, -10], [70, 10], [62, 28], [55, 38], [45, 30], [38, 20], [30, 30], [18, 28], [5, 15], [-5, 18], [-20, 28], [-34, 18], [-35, 2], [-20, -5], [-5, 8], [10, 0], [20, -12], [35, -10], [48, -4], [60, -15]],
+          [[72, 40], [68, 70], [62, 95], [58, 125], [48, 145], [35, 140], [22, 126], [8, 118], [5, 105], [18, 98], [25, 80], [35, 62], [45, 50], [58, 45]],
+          [[-12, 112], [-20, 125], [-30, 138], [-38, 145], [-42, 150], [-34, 154], [-22, 146], [-12, 132]]
+        ];
+
+        function resizeCanvas() {
+          const ratio = Math.min(window.devicePixelRatio || 1, 1);
+          canvas.width = Math.max(1, Math.floor(container.clientWidth * ratio));
+          canvas.height = Math.max(1, Math.floor(container.clientHeight * ratio));
+          canvas.style.width = container.clientWidth + 'px';
+          canvas.style.height = container.clientHeight + 'px';
+          ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        }
+
+        function updateProjectionFrame(width, height) {
+          projectionFrame.centerX = width / 2;
+          projectionFrame.centerY = height / 2;
+          projectionFrame.radius = Math.min(width, height) * 0.295 * state.zoom;
+          projectionFrame.yawCos = Math.cos(state.yaw);
+          projectionFrame.yawSin = Math.sin(state.yaw);
+          projectionFrame.pitchCos = Math.cos(state.pitch);
+          projectionFrame.pitchSin = Math.sin(state.pitch);
+        }
+
+        function projectUnit(unit) {
+          const x = unit[0] * projectionFrame.yawCos + unit[2] * projectionFrame.yawSin;
+          const z = unit[2] * projectionFrame.yawCos - unit[0] * projectionFrame.yawSin;
+          const rotatedY = unit[1] * projectionFrame.pitchCos - z * projectionFrame.pitchSin;
+          const rotatedZ = unit[1] * projectionFrame.pitchSin + z * projectionFrame.pitchCos;
+          return {
+            x: projectionFrame.centerX + x * projectionFrame.radius,
+            y: projectionFrame.centerY - rotatedY * projectionFrame.radius,
+            z: rotatedZ,
+            radius: projectionFrame.radius
+          };
+        }
+
+        function project(lat, lng) {
+          const latitude = lat * Math.PI / 180;
+          const longitude = lng * Math.PI / 180;
+          const cosLat = Math.cos(latitude);
+          return projectUnit([cosLat * Math.sin(longitude), Math.sin(latitude), cosLat * Math.cos(longitude)]);
+        }
+
+        function projectCoordinate(coordinate) {
+          if (!coordinate._sphere) {
+            const latitude = Number(coordinate[1]) * Math.PI / 180;
+            const longitude = Number(coordinate[0]) * Math.PI / 180;
+            const cosLat = Math.cos(latitude);
+            coordinate._sphere = [cosLat * Math.sin(longitude), Math.sin(latitude), cosLat * Math.cos(longitude)];
+          }
+          return projectUnit(coordinate._sphere);
+        }
+
+        function draw() {
+          const width = container.clientWidth;
+          const height = container.clientHeight;
+          updateProjectionFrame(width, height);
+          ctx.clearRect(0, 0, width, height);
+          const centerX = width / 2;
+          const centerY = height / 2;
+          const radius = Math.min(width, height) * 0.295 * state.zoom;
+
+          const glow = ctx.createRadialGradient(centerX - radius * .32, centerY - radius * .38, radius * .05, centerX, centerY, radius * 1.16);
+          glow.addColorStop(0, 'rgba(38, 112, 153, .26)');
+          glow.addColorStop(.56, 'rgba(12, 48, 76, .18)');
+          glow.addColorStop(1, 'rgba(2, 8, 16, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius * 1.28, 0, Math.PI * 2);
+          ctx.fill();
+
+          const globeGradient = ctx.createRadialGradient(centerX - radius * .35, centerY - radius * .38, radius * .08, centerX, centerY, radius);
+          globeGradient.addColorStop(0, '#183d57');
+          globeGradient.addColorStop(.58, '#0a1a2a');
+          globeGradient.addColorStop(1, '#02070d');
+          ctx.fillStyle = globeGradient;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.clip();
+          drawGrid(width, height, centerX, centerY, radius);
+          if (blogLoomWorldFeatures.length) drawWorldMap();
+          else drawLand();
+          drawGlobalAdm1();
+          drawChinaMap();
+          drawCountryLabels();
+          drawCountryLights();
+          drawCityPoints();
+          ctx.restore();
+
+          ctx.strokeStyle = 'rgba(103, 213, 235, .32)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.stroke();
+
+          if (state.autoRotate && !state.drag) state.yaw += 0.0024;
+          animationFrame = window.requestAnimationFrame(draw);
+        }
+
+        function drawGrid(width, height, centerX, centerY, radius) {
+          ctx.strokeStyle = 'rgba(102, 193, 220, .13)';
+          ctx.lineWidth = 0.7;
+          for (let lat = -60; lat <= 60; lat += 30) {
+            ctx.beginPath();
+            for (let lng = -180; lng <= 180; lng += 7) {
+              const point = project(lat, lng);
+              if (point.z <= 0) continue;
+              if (lng === -180) ctx.moveTo(point.x, point.y); else ctx.lineTo(point.x, point.y);
+            }
+            ctx.stroke();
+          }
+          for (let lng = -150; lng <= 180; lng += 30) {
+            ctx.beginPath();
+            for (let lat = -90; lat <= 90; lat += 7) {
+              const point = project(lat, lng);
+              if (point.z <= 0) continue;
+              if (lat === -90) ctx.moveTo(point.x, point.y); else ctx.lineTo(point.x, point.y);
+            }
+            ctx.stroke();
+          }
+        }
+
+        function drawLand() {
+          land.forEach(shape => {
+            ctx.beginPath();
+            let drawing = false;
+            shape.forEach(([lat, lng]) => {
+              const point = project(lat, lng);
+              if (point.z <= 0) { drawing = false; return; }
+              if (!drawing) { ctx.moveTo(point.x, point.y); drawing = true; }
+              else ctx.lineTo(point.x, point.y);
+            });
+            ctx.strokeStyle = 'rgba(81, 164, 185, .34)';
+            ctx.fillStyle = 'rgba(18, 71, 91, .22)';
+            ctx.lineWidth = 1;
+            ctx.fill();
+            ctx.stroke();
+          });
+        }
+
+        function traceFeaturePath(features) {
+          features.forEach(feature => {
+            feature.rings.forEach(ring => {
+              let drawing = false;
+              ring.forEach(coordinate => {
+                const point = projectCoordinate(coordinate);
+                if (point.z <= 0) { drawing = false; return; }
+                if (!drawing) { ctx.moveTo(point.x, point.y); drawing = true; }
+                else ctx.lineTo(point.x, point.y);
+              });
+              if (drawing) ctx.closePath();
+            });
+          });
+        }
+
+        function drawWorldMap() {
+          ctx.beginPath();
+          traceFeaturePath(blogLoomWorldFeatures);
+          ctx.fillStyle = 'rgba(12, 42, 62, .30)';
+          ctx.fill('evenodd');
+          ctx.strokeStyle = 'rgba(66, 138, 166, .42)';
+          ctx.lineWidth = .65;
+          ctx.stroke();
+
+          const revealedCodes = new Set(Object.keys(staticCountries).slice(0, revealedCountries));
+          blogLoomWorldFeatures.forEach(feature => {
+            const code = countryCodeByMapName[feature.name];
+            if (!code || !revealedCodes.has(code)) return;
+            ctx.beginPath();
+            traceFeaturePath([feature]);
+            const intensity = Math.min(staticCountries[code].uv / maxUv, 1);
+            ctx.fillStyle = heatColor(staticCountries[code].uv, .22 + intensity * .42);
+            ctx.fill('evenodd');
+            ctx.strokeStyle = 'rgba(87, 206, 228, .68)';
+            ctx.lineWidth = .9;
+            ctx.stroke();
+          });
+        }
+
+        function drawGlobalAdm1() {
+          if (state.zoom < .82) return;
+          const labelCandidates = [];
+          Object.entries(globalAdm1ByCountry).forEach(([countryCode, regions]) => {
+            ctx.beginPath();
+            regions.forEach(region => {
+              region.rings.forEach(ring => {
+                let drawing = false;
+                ring.forEach(coordinate => {
+                  const point = projectCoordinate(coordinate);
+                  if (point.z <= 0) { drawing = false; return; }
+                  if (!drawing) { ctx.moveTo(point.x, point.y); drawing = true; }
+                  else ctx.lineTo(point.x, point.y);
+                });
+              });
+              if (state.zoom >= 1.45 && !state.autoRotate && !state.drag && region.center) {
+                const point = project(region.center[1], region.center[0]);
+                if (point.z > .28) labelCandidates.push({ name: region.name, point });
+              }
+            });
+            const baseColor = adm1StyleByCountry[countryCode] || '#4daecd';
+            const alpha = Math.min(.78, .34 + Math.max(0, state.zoom - 1) * .38);
+            ctx.strokeStyle = baseColor + Math.round(alpha * 255).toString(16).padStart(2, '0');
+            ctx.lineWidth = state.zoom >= 1.45 ? .9 : .58;
+            ctx.stroke();
+          });
+
+          if (!labelCandidates.length) return;
+          const occupied = [];
+          ctx.font = '500 10px Inter, "PingFang SC", system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          labelCandidates.forEach(item => {
+            const width = ctx.measureText(item.name).width;
+            const box = { left: item.point.x - width / 2 - 3, right: item.point.x + width / 2 + 3, top: item.point.y - 10, bottom: item.point.y + 3 };
+            if (occupied.some(other => box.left < other.right && box.right > other.left && box.top < other.bottom && box.bottom > other.top)) return;
+            occupied.push(box);
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = 'rgba(1, 8, 15, .88)';
+            ctx.strokeText(item.name, item.point.x, item.point.y);
+            ctx.fillStyle = 'rgba(177, 220, 232, .82)';
+            ctx.fillText(item.name, item.point.x, item.point.y);
+          });
+          ctx.textAlign = 'start';
+        }
+
+        function drawChinaMap() {
+          if (!blogLoomChinaFeatures.length) return;
+          ctx.beginPath();
+          traceFeaturePath(blogLoomChinaFeatures);
+          const chinaIsRevealed = revealedCountries >= 4;
+          ctx.fillStyle = chinaIsRevealed ? 'rgba(23, 0, 141, .76)' : 'rgba(13, 0, 89, .66)';
+          ctx.fill('evenodd');
+          ctx.strokeStyle = '#389dff';
+          ctx.lineWidth = .78;
+          ctx.stroke();
+
+        }
+
+        function drawCountryLabels() {
+          const occupied = [];
+          countryLabels.forEach(country => {
+            const point = project(country.lat, country.lng);
+            if (point.z < .16) return;
+            const label = displayCountryName(country.name);
+            ctx.font = '600 ' + country.size + 'px Inter, "PingFang SC", system-ui, sans-serif';
+            const width = ctx.measureText(label).width;
+            const box = { left: point.x - width / 2 - 3, right: point.x + width / 2 + 3, top: point.y - country.size, bottom: point.y + 4 };
+            if (occupied.some(item => box.left < item.right && box.right > item.left && box.top < item.bottom && box.bottom > item.top)) return;
+            occupied.push(box);
+            ctx.textAlign = 'center';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = 'rgba(1, 7, 13, .88)';
+            ctx.strokeText(label, point.x, point.y);
+            ctx.fillStyle = country.name === '中国' ? '#f2fbff' : 'rgba(190, 224, 234, .88)';
+            ctx.fillText(label, point.x, point.y);
+          });
+          ctx.textAlign = 'start';
+        }
+
+        function drawCountryLights() {
+          Object.values(staticCountries).slice(0, revealedCountries).forEach(country => {
+            const point = project(country.center[0], country.center[1]);
+            if (point.z <= 0) return;
+            const intensity = Math.min(country.uv / maxUv, 1);
+            const light = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, 18 + intensity * 20);
+            light.addColorStop(0, 'rgba(125, 246, 255, .86)');
+            light.addColorStop(.2, 'rgba(52, 204, 223, .34)');
+            light.addColorStop(1, 'rgba(30, 146, 181, 0)');
+            ctx.fillStyle = light;
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, 18 + intensity * 20, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+
+        function drawCityPoints() {
+          staticCities.slice(0, revealedCities).forEach(city => {
+            const point = project(city.lat, city.lng);
+            if (point.z <= 0) return;
+            const intensity = Math.min(city.uv / maxUv, 1);
+            const pulse = 1 + Math.sin(Date.now() / 500 + city.rank) * .14;
+            const pointRadius = (3 + intensity * 5) * pulse;
+            ctx.fillStyle = city.rank <= 3 ? '#c5fbff' : '#54d9e8';
+            ctx.shadowBlur = 18;
+            ctx.shadowColor = '#55ddec';
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, pointRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            if (city.rank <= 5) {
+              ctx.strokeStyle = 'rgba(105, 236, 245, .45)';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.arc(point.x, point.y, pointRadius * 2.5 + (Date.now() / 90 % 18), 0, Math.PI * 2);
+              ctx.stroke();
+            }
+            if (city.rank <= 5 && point.z > .25) {
+              ctx.fillStyle = 'rgba(218, 250, 255, .9)';
+              ctx.font = '11px Inter, system-ui, sans-serif';
+              ctx.fillText(displayCityName(city), point.x + 9, point.y - 8);
+            }
+          });
+        }
+
+        function pointerDown(event) {
+          state.drag = true;
+          state.moved = false;
+          state.x = event.clientX;
+          state.y = event.clientY;
+          canvas.setPointerCapture(event.pointerId);
+        }
+
+        function pointerMove(event) {
+          if (!state.drag) {
+            updateCityTooltip(event);
+            return;
+          }
+          hideCityTooltip();
+          const dx = event.clientX - state.x;
+          const dy = event.clientY - state.y;
+          if (Math.abs(dx) + Math.abs(dy) > 3) state.moved = true;
+          state.yaw += dx * 0.008;
+          state.pitch = Math.max(-1.1, Math.min(1.1, state.pitch + dy * 0.006));
+          state.x = event.clientX;
+          state.y = event.clientY;
+        }
+
+        function pointerUp(event) {
+          state.drag = false;
+          if (!state.moved) {
+            const bounds = canvas.getBoundingClientRect();
+            const x = event.clientX - bounds.left;
+            const y = event.clientY - bounds.top;
+            const nearest = nearestCityAt(x, y, 30);
+            if (nearest) selectCity(nearest);
+          }
+        }
+
+        function nearestCityAt(x, y, threshold) {
+          let nearest = null;
+          let nearestDistance = threshold;
+          referenceCities.forEach(city => {
+            const point = project(city.lat, city.lng);
+            const distance = Math.hypot(point.x - x, point.y - y);
+            if (point.z > 0 && distance < nearestDistance) {
+              nearest = city;
+              nearestDistance = distance;
+            }
+          });
+          return nearest;
+        }
+
+        function updateCityTooltip(event) {
+          const bounds = canvas.getBoundingClientRect();
+          const x = event.clientX - bounds.left;
+          const y = event.clientY - bounds.top;
+          const city = nearestCityAt(x, y, 28);
+          const tooltip = $('mapTooltip');
+          if (!city) {
+            hideCityTooltip();
+            return;
+          }
+          const stats = visitorStatsByCity.get(city.city);
+          tooltip.innerHTML = '<strong>' + displayCityName(city) + '</strong><br/>' + (stats
+            ? (currentLanguage === 'en' ? 'Visitors: ' : '访客数：') + stats.uv.toLocaleString()
+            : (currentLanguage === 'en' ? 'No visitor statistics' : '暂无访客统计'));
+          tooltip.style.left = event.clientX + 'px';
+          tooltip.style.top = event.clientY + 'px';
+          tooltip.style.display = 'block';
+          canvas.style.cursor = 'pointer';
+        }
+
+        function hideCityTooltip() {
+          $('mapTooltip').style.display = 'none';
+          canvas.style.cursor = state.drag ? 'grabbing' : 'grab';
+        }
+
+        function selectCity(city) {
+          state.yaw = city.lng * Math.PI / 180 * -1 + .18;
+          state.pitch = city.lat * Math.PI / 180 * .25;
+          state.zoom = 1.55;
+          status('FOCUS', displayCityName(city) + ' selected');
+        }
+
+        canvas.addEventListener('pointerdown', pointerDown);
+        canvas.addEventListener('pointermove', pointerMove);
+        canvas.addEventListener('pointerup', pointerUp);
+        canvas.addEventListener('pointercancel', () => { state.drag = false; });
+        canvas.addEventListener('pointerleave', hideCityTooltip);
+        canvas.addEventListener('wheel', event => {
+          event.preventDefault();
+          state.zoom = Math.max(.72, Math.min(2.25, state.zoom - event.deltaY * .001));
+        }, { passive: false });
+
+        $('rotateButton').addEventListener('click', event => {
+          state.autoRotate = !state.autoRotate;
+          event.currentTarget.setAttribute('aria-pressed', String(state.autoRotate));
+          event.currentTarget.textContent = state.autoRotate ? '暂停旋转' : '继续旋转';
+        });
+        $('resetButton').addEventListener('click', () => {
+          state.yaw = -1.83;
+          state.pitch = .25;
+          state.zoom = 1;
+          status('READY', 'local canvas globe restored');
+        });
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        status('LIGHTING', 'local canvas globe · loading visitor regions');
+        const countryTimer = window.setInterval(() => {
+          revealedCountries += 1;
+          if (revealedCountries >= Object.keys(staticCountries).length) window.clearInterval(countryTimer);
+        }, 180);
+        window.setTimeout(() => {
+          const cityTimer = window.setInterval(() => {
+            revealedCities += 1;
+            if (revealedCities >= staticCities.length) {
+              window.clearInterval(cityTimer);
+              status('READY', 'drag to rotate · scroll to zoom · click a city');
+            }
+          }, 130);
+        }, 850);
+        draw();
+      }
+
+      function resize() {
+        world.width(container.clientWidth).height(container.clientHeight);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const controls = world.controls();
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.28;
+      controls.enableZoom = true;
+      controls.minDistance = 125;
+      controls.maxDistance = 520;
+      controls.enablePan = false;
+
+      let selected = null;
+      let polygons = [];
+
+      function selectCity(city) {
+        selected = city;
+        world.pointOfView({ lat: city.lat, lng: city.lng, altitude: 0.72 }, 900);
+        status('FOCUS', city.city + ' selected');
+      }
+
+      function selectCountry(country) {
+        const stat = staticCountries[String(country.id).padStart(3, '0')];
+        if (!stat) return;
+        world.pointOfView({ lat: stat.center[0], lng: stat.center[1], altitude: 1.1 }, 850);
+        status('FOCUS', stat.name + ' selected');
+      }
+
+      $('rotateButton').addEventListener('click', event => {
+        controls.autoRotate = !controls.autoRotate;
+        event.currentTarget.setAttribute('aria-pressed', String(controls.autoRotate));
+        event.currentTarget.textContent = controls.autoRotate ? '暂停旋转' : '继续旋转';
+      });
+
+      $('resetButton').addEventListener('click', () => {
+        world.pointOfView({ lat: 35, lng: 105, altitude: 2.2 }, 900);
+        status('READY', 'global view restored');
+      });
+
+      async function loadWorld() {
+        status('BOOTING', 'dark globe initializing');
+        try {
+          const topology = window.BLOGLOOM_WORLD_ATLAS;
+          if (!topology) throw new Error('Local world-atlas data is unavailable');
+          polygons = topojson.feature(topology, topology.objects.countries).features;
+          polygons.forEach(feature => {
+            const key = String(feature.id).padStart(3, '0');
+            feature.__uv = staticCountries[key] ? staticCountries[key].uv : 0;
+            feature.__lit = false;
+          });
+          world.polygonsData(polygons);
+          await revealCountries();
+        } catch (error) {
+          status('FALLBACK', 'country boundaries unavailable · city layer remains active');
+        }
+
+        await revealCities();
+        world.pointOfView({ lat: 35, lng: 105, altitude: 2.2 }, 1200);
+        status('READY', 'drag to rotate · scroll to zoom · click a city');
+      }
+
+      function revealCountries() {
+        const lit = polygons.filter(feature => feature.__uv > 0).sort((a, b) => b.__uv - a.__uv);
+        return new Promise(resolve => {
+          let index = 0;
+          const step = () => {
+            if (index >= lit.length) return resolve();
+            lit[index].__lit = true;
+            world.polygonsData(polygons);
+            status('LIGHTING', 'revealing ' + (index + 1) + ' / ' + lit.length + ' visitor regions');
+            index += 1;
+            window.setTimeout(step, 120);
+          };
+          step();
+        });
+      }
+
+      function revealCities() {
+        return new Promise(resolve => {
+          let index = 0;
+          const points = [];
+          const rings = [];
+          const labels = [];
+          const step = () => {
+            if (index >= staticCities.length) {
+              world.pointsData(points).ringsData(rings).labelsData(labels);
+              return resolve();
+            }
+            const city = staticCities[index];
+            points.push(city);
+            if (city.rank <= 5) rings.push(city);
+            if (city.rank <= 8) labels.push(city);
+            world.pointsData(points).ringsData(rings).labelsData(labels);
+            index += 1;
+            window.setTimeout(step, 105);
+          };
+          step();
+        });
+      }
+
+      loadWorld();
+    })();
+  </script>
+</body>
+</html>
