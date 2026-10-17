@@ -6,7 +6,7 @@ description: 第一阶段核心改造：公开页面服务端直出、robots / s
 # 搜索引擎SEO优化调研学习02、第一阶段核心改造、服务端直出与站点级文件
 
 > 系列文章：
-> - 上篇：[搜索引擎SEO优化调研学习01、文章页优化、站点变现与数据监测](./搜索引擎SEO优化调研学习01、文章页优化、站点变现与数据监测.md)
+> - 上篇：[搜索引擎SEO优化调研学习01、文章页优化、站点变现与数据监测](/v1/zh/blogs/seo/01-article-page-monetization)
 > - 本篇：**02、第一阶段核心改造、服务端直出与站点级文件**（BlogLoom 落地篇）
 
 > **本篇定位：** 上篇（01）是"教科书 + 拆解篇"，回答了**"SEO 是什么、别人怎么做、数据在哪看"**；本篇（02）是"落地篇"，把 01 讲到的能力**收敛到 BlogLoom 第一阶段的最小改造范围**，给出可执行的功能需求与工程实现方案。因此，建议先读 01 建立全局认知，再读 02 动手改造；本篇结尾也专门列出与 01 的章节对应关系。
@@ -27,10 +27,10 @@ description: 第一阶段核心改造：公开页面服务端直出、robots / s
 
 BlogLoom 是我做的一套开源博客平台：
 
-+ 开源地址：<https://github.com/changluya/BlogLoom>
++ 开源地址：[https://github.com/changluya/BlogLoom](https://github.com/changluya/BlogLoom)
 + 技术栈：Spring Boot 2.2.7 + MyBatis + Vue 2.6 + Vite
 + 定位：给个人开发者 / 内容创作者自己搭博客用，也方便二次开发
-+ 线上站点：<https://blog.changlu.cloud/>
++ 线上站点：[https://blog.changlu.cloud/](https://blog.changlu.cloud/)
 
 它由三块组成：
 

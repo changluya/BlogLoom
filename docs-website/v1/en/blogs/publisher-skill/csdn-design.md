@@ -1,6 +1,6 @@
 ---
 title: "BlogLoom Publisher Skill 02: CSDN Channel Design and Implementation"
-description: Starting from "publish local Markdown to CSDN with one sentence": login detection, title/body writing, per-item publish dialog configuration, deletion and flow self-test.
+description: "Starting from \"publish local Markdown to CSDN with one sentence\": login detection, title/body writing, per-item publish dialog configuration, deletion and flow self-test."
 ---
 
 # 1. Background: why a dedicated CSDN publishing skill

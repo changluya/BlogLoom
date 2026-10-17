@@ -1,6 +1,6 @@
 ---
 title: "BlogLoom Skill Design and Implementation"
-description: Distilling local Markdown import, update and query into an AI-agent-callable skill package: three-layer separation, unified CLI contract, tool inventory and usage.
+description: "Distilling local Markdown import, update and query into an AI-agent-callable skill package: three-layer separation, unified CLI contract, tool inventory and usage."
 ---
 
 # BlogLoom Skill Design and Implementation

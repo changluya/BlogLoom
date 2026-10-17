@@ -1,6 +1,6 @@
 ---
 title: "BlogLoom Publisher Skill: WeChat Official Account (gzh) Design and Implementation"
-description: Starting from "the WeChat editor doesn't understand Markdown": styling conversion, login detection, editor deep-linking, publish configuration and state judgment.
+description: "Starting from \"the WeChat editor doesn't understand Markdown\": styling conversion, login detection, editor deep-linking, publish configuration and state judgment."
 ---
 
 # 1. Background

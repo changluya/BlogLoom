@@ -1,6 +1,6 @@
 ---
 title: "BlogLoom SEO 02: Why SPA Blogs Need Server-Side Rendering and Site-Level Files"
-description: Phase-one core overhaul: server-side rendering of public pages, robots / sitemap / rss site-level files, indexing control and structured data.
+description: "Phase-one core overhaul: server-side rendering of public pages, robots / sitemap / rss site-level files, indexing control and structured data."
 ---
 
 # SEO Research 02: Phase-One Core Overhaul, Server-Side Rendering and Site-Level Files
@@ -27,10 +27,10 @@ The goal of this article: **roughly sort out the core functional requirements to
 
 BlogLoom is an open-source blog platform I built:
 
-+ Open source: <https://github.com/changluya/BlogLoom>
++ Open source: [https://github.com/changluya/BlogLoom](https://github.com/changluya/BlogLoom)
 + Stack: Spring Boot 2.2.7 + MyBatis + Vue 2.6 + Vite
 + Positioning: for individual developers / content creators to self-host a blog, and easy to extend
-+ Live site: <https://blog.changlu.cloud/>
++ Live site: [https://blog.changlu.cloud/](https://blog.changlu.cloud/)
 
 It consists of three parts:
 
