@@ -1,6 +1,6 @@
 ---
 title: "BlogLoom SEO 01: Article Page Optimization, Monetization and Data Monitoring"
-description: From article-page SEO and site monetization to data monitoring: why server-side rendering matters, how to prepare, and how to evaluate results.
+description: "From article-page SEO and site monetization to data monitoring: why server-side rendering matters, how to prepare, and how to evaluate results."
 ---
 
 # 1. Understanding search engine optimization
