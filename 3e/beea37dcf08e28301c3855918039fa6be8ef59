@@ -1,0 +1,37 @@
+docs-website/v1/en/blogs/seo/03-adsense-guide.md
+  s_62a4b10f453eca::t_26eb7bee2aee2e 3
+docs-website/v1/en/blogs/seo/01-article-page-monetization.md
+  s_62a4b10f453eca::t_26eb7bee2aee2e 3
+docs-website/v1/zh/blogs/seo/02-ssr-and-site-files.md
+  s_62a4b10f453eca::t_01b3326694ec9c 9
+  s_62a4b10f453eca::t_5d0d1f7083e707 30,33
+docs-website/v1/en/blogs/publisher-skill/gzh-design.md
+  s_62a4b10f453eca::t_26eb7bee2aee2e 3
+docs-website/v1/en/blogs/roadmap-blog-column-plan.md
+  s_62a4b10f453eca::t_26eb7bee2aee2e 3
+docs-website/v1/zh/blogs/seo/01-article-page-monetization.md
+  s_62a4b10f453eca::t_5d0d1f7083e707 1296,1310
+docs-website/v1/en/blogs/blogloom-skill/01-skill-design.md
+  s_62a4b10f453eca::t_26eb7bee2aee2e 3
+docs-website/v1/en/blogs/publisher-skill/csdn-design.md
+  s_62a4b10f453eca::t_26eb7bee2aee2e 3
+docs-website/v1/en/blogs/seo/02-ssr-and-site-files.md
+  s_62a4b10f453eca::t_26eb7bee2aee2e 3
+  s_62a4b10f453eca::t_5d0d1f7083e707 30,33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3ebeea37dcf08e28301c3855918039fa6be8ef59",
+  "prompts": {},
+  "sessions": {
+    "s_62a4b10f453eca": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eb7061988ffeJYbGS2eJsfhzTm",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
