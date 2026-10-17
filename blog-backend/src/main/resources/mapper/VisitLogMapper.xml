@@ -9,10 +9,13 @@
         <result property="method" column="method"/>
         <result property="param" column="param"/>
         <result property="behavior" column="behavior"/>
+		<result property="pageView" column="is_page_view"/>
         <result property="content" column="content"/>
         <result property="remark" column="remark"/>
         <result property="ip" column="ip"/>
         <result property="ipSource" column="ip_source"/>
+		<result property="geoId" column="geo_id"/>
+		<result property="geoStatus" column="geo_status"/>
         <result property="os" column="os"/>
         <result property="browser" column="browser"/>
         <result property="times" column="times"/>
@@ -47,8 +50,8 @@
 
     <!--添加日志-->
     <insert id="saveVisitLog" parameterType="com.changlu.blogloom.entity.VisitLog" useGeneratedKeys="true" keyProperty="id">
-        insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent)
-        values (#{uuid}, #{uri}, #{method}, #{param}, #{behavior}, #{content}, #{remark}, #{ip}, #{ipSource}, #{os}, #{browser}, #{times}, #{createTime}, #{userAgent})
+        insert into visit_log (uuid, uri, method, param, behavior, is_page_view, content, remark, ip, ip_source, geo_id, geo_status, os, browser, times, create_time, user_agent)
+        values (#{uuid}, #{uri}, #{method}, #{param}, #{behavior}, #{pageView}, #{content}, #{remark}, #{ip}, #{ipSource}, #{geoId}, #{geoStatus}, #{os}, #{browser}, #{times}, #{createTime}, #{userAgent})
     </insert>
 
     <!--删除日志-->

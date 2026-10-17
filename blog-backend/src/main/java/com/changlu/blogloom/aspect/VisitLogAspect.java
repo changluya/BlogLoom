@@ -162,6 +162,7 @@ public class VisitLogAspect {
 		VisitLogRemark visitLogRemark = judgeBehavior(visitLogger.value(), requestParams, result);
 		VisitLog log = new VisitLog(identification, uri, method, visitLogger.value().getBehavior(),
 				visitLogRemark.getContent(), visitLogRemark.getRemark(), ip, times, userAgent);
+		log.setPageView(visitLogger.value().isPageView());
 		log.setParam(StringUtils.substring(JacksonUtils.writeValueAsString(requestParams), 0, 2000));
 		return log;
 	}

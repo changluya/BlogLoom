@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.changlu.blogloom.module.visitormap.mapper.GlobalVisitorMapMapper">
+
+	<sql id="periodFilter">
+		log.is_page_view = 1
+		<if test="start != null">
+			AND log.create_time &gt;= #{start,jdbcType=TIMESTAMP}
+		</if>
+		<if test="end != null">
+			AND log.create_time &lt; #{end,jdbcType=TIMESTAMP}
+		</if>
+	</sql>
+
+	<select id="getSummary" resultType="com.changlu.blogloom.module.visitormap.domain.GlobalVisitorMapVO$Summary">
+		SELECT COUNT(*) AS pv,
+		       COUNT(DISTINCT log.uuid) AS uv,
+		       COUNT(DISTINCT CASE WHEN geo.country_code IS NOT NULL THEN geo.country_code END) AS country_count,
+		       COUNT(DISTINCT CASE WHEN geo.geo_level = 2 THEN geo.id END) AS city_count
+		FROM visit_log log
+		LEFT JOIN visitor_geo geo ON geo.id = log.geo_id
+		WHERE <include refid="periodFilter"/>
+	</select>
+
+	<select id="getCountries" resultType="com.changlu.blogloom.module.visitormap.domain.GlobalVisitorMapVO$Country">
+		SELECT geo.country_code,
+		       COUNT(*) AS pv,
+		       COUNT(DISTINCT log.uuid) AS uv
+		FROM visit_log log
+		JOIN visitor_geo geo ON geo.id = log.geo_id
+		WHERE <include refid="periodFilter"/>
+		GROUP BY geo.country_code
+		ORDER BY uv DESC, pv DESC
+	</select>
+
+	<select id="getCities" resultType="com.changlu.blogloom.module.visitormap.domain.GlobalVisitorMapVO$City">
+		SELECT geo.geo_key,
+		       geo.city_name_zh,
+		       geo.city_name_en,
+		       geo.region_name,
+		       geo.country_code,
+		       geo.latitude AS lat,
+		       geo.longitude AS lng,
+		       COUNT(*) AS pv,
+		       COUNT(DISTINCT log.uuid) AS uv
+		FROM visit_log log
+		JOIN visitor_geo geo ON geo.id = log.geo_id AND geo.geo_level = 2
+		WHERE <include refid="periodFilter"/>
+		GROUP BY geo.id, geo.geo_key, geo.city_name_zh, geo.city_name_en, geo.region_name, geo.country_code, geo.latitude, geo.longitude
+		ORDER BY uv DESC, pv DESC
+	</select>
+
+	<select id="countResolvedCityPv" resultType="long">
+		SELECT COUNT(*)
+		FROM visit_log log
+		JOIN visitor_geo geo ON geo.id = log.geo_id AND geo.geo_level = 2
+		WHERE <include refid="periodFilter"/>
+	</select>
+
+	<select id="countCountryOnlyPv" resultType="long">
+		SELECT COUNT(*)
+		FROM visit_log log
+		JOIN visitor_geo geo ON geo.id = log.geo_id AND geo.geo_level = 1
+		WHERE <include refid="periodFilter"/>
+	</select>
+
+	<select id="countUnknownPv" resultType="long">
+		SELECT COUNT(*)
+		FROM visit_log log
+		LEFT JOIN visitor_geo geo ON geo.id = log.geo_id
+		WHERE <include refid="periodFilter"/>
+		  AND (log.geo_status != 1 OR geo.id IS NULL)
+	</select>
+</mapper>

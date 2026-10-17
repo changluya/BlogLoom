@@ -21,17 +21,31 @@ const routes = [
 		hidden: true
 	},
 	{
-		path: '/',
+		path: '/dashboard',
+		name: 'Dashboard',
 		component: Layout,
-		redirect: '/dashboard',
+		redirect: '/dashboard/overview',
+		alwaysShow: true,
+		meta: {title: 'Dashboard', icon: 'el-icon-odometer'},
 		children: [
 			{
-				path: 'dashboard',
-				name: 'Dashboard',
+				path: 'overview',
+				name: 'DashboardOverview',
 				component: () => import('@/views/dashboard'),
-				meta: {title: 'Dashboard', icon: 'el-icon-odometer'}
+				meta: {title: '数据概览', icon: 'el-icon-data-analysis'}
+			},
+			{
+				path: 'global-visitor-map',
+				name: 'GlobalVisitorMap',
+				component: () => import('@/views/dashboard/global-visitor-map'),
+				meta: {title: '全球访客地图', icon: 'el-icon-map-location'}
 			}
 		]
+	},
+	{
+		path: '/',
+		redirect: '/dashboard/overview',
+		hidden: true
 	},
 	{
 		path: '/blog',

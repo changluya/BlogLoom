@@ -30,6 +30,18 @@ LOCAL_UPGRADE_CONFIG=/path/to/deploy.conf ./bin/local/upgrate-sql.sh --dry-run
 
 `sql/local/` 是本机执行记录，已加入 `.gitignore`。不同版本的增量 SQL 也不能使用相同文件名。
 
+## 全球访客地图本地模拟数据
+
+先通过 `upgrate-sql.sh` 执行全球访客地图增量脚本，再将可重复执行的模拟访问写入本地数据库：
+
+```bash
+MYSQL_PWD='<数据库密码>' mysql \
+  -h 127.0.0.1 -P 3306 -u root blogloom \
+  < bin/local/sql/global-visitor-map-mock.sql
+```
+
+该脚本只删除并重建 `remark='[GLOBAL_VISITOR_MAP_LOCAL_MOCK]'` 的测试记录，包含城市级、国家级、未知地域和非 PV 交互，用于验证全球访客地图数据库聚合接口。不要在正式数据库执行。
+
 ---
 
 # ip2region 数据库同步
