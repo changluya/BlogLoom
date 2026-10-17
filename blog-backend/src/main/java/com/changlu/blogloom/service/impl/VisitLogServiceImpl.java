@@ -25,6 +25,8 @@ public class VisitLogServiceImpl implements VisitLogService {
 	VisitLogMapper visitLogMapper;
 	@Autowired
 	UserAgentUtils userAgentUtils;
+	@Autowired
+	IpAddressUtils ipAddressUtils;
 
 	@Override
 	public List<VisitLog> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate) {
@@ -39,7 +41,7 @@ public class VisitLogServiceImpl implements VisitLogService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveVisitLog(VisitLog log) {
-		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
+		String ipSource = ipAddressUtils.getCityInfo(log.getIp());
 		UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
 		log.setIpSource(ipSource);
 		log.setOs(userAgentDTO.getOs());
