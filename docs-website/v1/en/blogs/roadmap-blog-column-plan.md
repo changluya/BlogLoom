@@ -1,6 +1,6 @@
 ---
 title: "BlogLoom Future Blog Column Plan"
-description: A content-roadmap of blog column topics: system architecture, content domain, SEO, Skill and other series plotted across phases.
+description: "A content-roadmap of blog column topics: system architecture, content domain, SEO, Skill and other series plotted across phases."
 ---
 
 # BlogLoom Future Blog Column Plan

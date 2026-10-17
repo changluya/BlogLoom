@@ -1293,7 +1293,7 @@ Umami、百度统计可以承担网站访问分析，但 **Google 的搜索收�
 
 BlogLoom 是我做的一套**开源博客平台**：
 
-+ 开源地址：<https://github.com/changluya/BlogLoom>
++ 开源地址：[https://github.com/changluya/BlogLoom](https://github.com/changluya/BlogLoom)
 + 技术栈：Spring Boot 2.2.7 + MyBatis + Vue 2.6 + Vite
 + 定位：给个人开发者 / 内容创作者自己搭博客用，也方便二次开发
 
@@ -1307,7 +1307,7 @@ BlogLoom 是我做的一套**开源博客平台**：
 
 功能其实已经挺全了：Markdown 写作、分类标签专栏、评论、站点配置、访问统计、Docker 一键部署……**唯独"搜索引擎收录"这块，几乎是空白。**
 
-> 顺便说一句：我自己的博客 <https://blog.changlu.cloud/> 就跑在 BlogLoom 上。下文的"实测结果"，都是直接访问这个线上站得到的。
+> 顺便说一句：我自己的博客 [https://blog.changlu.cloud/](https://blog.changlu.cloud/) 就跑在 BlogLoom 上。下文的"实测结果"，都是直接访问这个线上站得到的。
 
 ### 实测一下：现在爬虫来了，能看到啥？
 

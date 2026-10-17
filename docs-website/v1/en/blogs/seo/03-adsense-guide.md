@@ -1,6 +1,6 @@
 ---
 title: "BlogLoom SEO 03: Google AdSense Integration Guide"
-description: From publisher ID to auto/manual ad slots and ads.txt: how Google AdSense is integrated and configured in BlogLoom.
+description: "From publisher ID to auto/manual ad slots and ads.txt: how Google AdSense is integrated and configured in BlogLoom."
 ---
 
 # Google AdSense Integration and Configuration Guide
