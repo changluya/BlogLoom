@@ -1,0 +1,45 @@
+docker/Dockerfile
+  s_62a4b10f453eca::t_c503567bf932f3 33-34
+docker/scripts/deploy.sh
+  s_62a4b10f453eca::t_c503567bf932f3 12
+docker/standalone/docker-compose.yml
+  s_62a4b10f453eca::t_8a3d8b6b01a124 31
+CHANGELOG.md
+  s_62a4b10f453eca::t_92df9766af4789 8,27-29,48-49
+docker/scripts/push.sh
+  s_62a4b10f453eca::t_c503567bf932f3 20,57
+docker/standalone/README.md
+  s_62a4b10f453eca::t_8a3d8b6b01a124 54
+README.md
+  s_62a4b10f453eca::t_b2de3a1702e3ae 50,59
+  s_62a4b10f453eca::t_e7ed26b0f4e7f8 68
+README.zh-CN.md
+  s_62a4b10f453eca::t_b2de3a1702e3ae 94,103
+docker/快捷.md
+  s_62a4b10f453eca::t_8a3d8b6b01a124 6
+docker/scripts/package.sh
+  s_62a4b10f453eca::t_c503567bf932f3 12,37,39
+docker/docker-compose.yml
+  s_62a4b10f453eca::t_c503567bf932f3 64
+docker/.env.example
+  s_62a4b10f453eca::t_b8823d8c4269c2 10
+docker/README.md
+  s_62a4b10f453eca::t_23c07df43b81f9 210
+  s_62a4b10f453eca::t_8a3d8b6b01a124 155,160-161,175,212,244
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a429195874434678ce84c5a1c7c9afd79ec0fe0",
+  "prompts": {},
+  "sessions": {
+    "s_62a4b10f453eca": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eb7061988ffeJYbGS2eJsfhzTm",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
