@@ -1,0 +1,27 @@
+blog-cms-ui/src/views/dashboard/global-visitor-map/index.vue
+  s_7ff48feedc359c::t_f3ab56d0cb5f1f 64-66
+  s_7ff48feedc359c::t_48be9ddaec171e 96,101-102,109-110
+  s_7ff48feedc359c::t_4c4b3f0d1be37b 193
+  s_7ff48feedc359c::t_1e5ebb24bbbabe 148
+  s_7ff48feedc359c::t_c1cfc817044311 260-265,268-270
+  s_7ff48feedc359c::t_6909e7f3ed7f83 162-176
+  s_7ff48feedc359c::t_c46ea7f355b4ed 229-240,389
+  s_7ff48feedc359c::t_05023de3541110 450
+  s_7ff48feedc359c::t_ddb5eb004110f6 362-372,380-388
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "08be91583398faebb06fdcf03cd4ce991643edba",
+  "prompts": {},
+  "sessions": {
+    "s_7ff48feedc359c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eb39c6151ffe6ePVjQxA8i4CpE",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
