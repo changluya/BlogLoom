@@ -1,0 +1,108 @@
+blog-backend/src/test/java/com/changlu/blogloom/mapper/VisitorGeoMapperRegionTest.java
+  s_e55abc3ce4b22b::t_7b14a1870e3ebd 1-56
+blog-cms-ui/package.json
+  s_e55abc3ce4b22b::t_3d4368c7e3b553 16
+sql/increment/1.0/20261019100000_v1.0.x.sql
+  s_e55abc3ce4b22b::t_2e08b99187b591 1-265
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/domain/GlobalVisitorMapVO.java
+  s_e9b36b7e4c8103::t_160dc70fa332fc 14-49,56,58,60,62,70,72,74,76,78,80,82,84,86,95,97,99,108,110,112,114,123,125,127,136,138,141,144,146,148,150,152,154
+blog-cms-ui/src/components/VisitorGlobe/renderer.js
+  s_e55abc3ce4b22b::t_50f344747414b5 69-109,111,115,118,121,123-137
+  s_e55abc3ce4b22b::t_dd26c4122e7d90 155-159
+  s_e55abc3ce4b22b::t_bf05c9e15e1bfe 149-150
+  s_e55abc3ce4b22b::t_17f8a1ad5fab22 754-760,762-770
+  s_e55abc3ce4b22b::t_d0436925566b63 410,784,831
+  s_e55abc3ce4b22b::t_1623d09bcec749 365-401,413
+  s_e55abc3ce4b22b::t_40153ebf02a337 776-777
+  s_e55abc3ce4b22b::t_65f19e0f667341 34,36-37,41-68,138-148,151-154
+  s_e55abc3ce4b22b::t_2e644ac5ce8941 795-796,798-802,806
+  s_e55abc3ce4b22b::t_31f0aa5da65597 110,112-114,116-117,119-120,122
+  s_e55abc3ce4b22b::t_03156c2e64d707 402-405
+  s_e55abc3ce4b22b::t_dbbed4be759783 30-33
+  s_e55abc3ce4b22b::t_3a494b6b8659b8 573,575-576,578-587
+  s_e55abc3ce4b22b::t_c09b222008bda0 274-295,299-301,313,315
+  s_e55abc3ce4b22b::t_802c535de75ed7 805
+  s_e55abc3ce4b22b::t_ae469fc7d8784d 38-40
+  s_e55abc3ce4b22b::t_5eaf8b915f8db6 815-816
+  s_e55abc3ce4b22b::t_9c4ff1600bbcae 853
+  s_e55abc3ce4b22b::t_9a74ee77bfb3fb 296-298
+  s_e55abc3ce4b22b::t_2bb96a840e7466 5
+  s_e55abc3ce4b22b::t_c3aa557d6e99c7 574
+  s_e55abc3ce4b22b::t_7beae7c306173b 761
+  s_e55abc3ce4b22b::t_1326a2af2d0b75 786,797,803-804,807-811
+  s_e55abc3ce4b22b::t_cc1492a29dd501 35
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/VisitLogServiceImpl.java
+  s_e55abc3ce4b22b::t_bf61900e4d81fb 69,74
+blog-backend/src/test/java/com/changlu/blogloom/service/impl/VisitLogServiceImplGeoTest.java
+  s_e55abc3ce4b22b::t_66ff1cddf9be7d 45,57
+blog-cms-ui/src/components/VisitorGlobe/data/adm1-extended.js
+  s_e55abc3ce4b22b::t_d5e8f661ac5f81 2
+  s_e55abc3ce4b22b::t_1406f5df1c8634 1
+docs/工程化开发模块设计思路产物/backend/核心迭代功能设计/后台功能/访客地图/访客地图二期：海外城市字典扩充与海外行政区悬停高亮设计.md
+  s_e55abc3ce4b22b::t_7f594d6b0f5f1a 1-342,392-394,397-512,514-523,525-527,551,554,556,558-599,601-605,607-608,610-611,614,616-617,648-649,651,657,665,667-671,674-677,698-726,728,730-776,780-781,783-788
+  s_e55abc3ce4b22b::t_344693272a3d25 543-544,546
+  s_e55abc3ce4b22b::t_546b75f53610cd 778
+  s_e55abc3ce4b22b::t_80d4bf35f38c6d 600,606,609,612-613,615,618-621,624,627,630,633-647,650,652-656,658-664,666,672-673,678-688
+  s_e55abc3ce4b22b::t_a3a2c1b24bcbc4 343-391,395-396
+  s_e55abc3ce4b22b::t_6b813acbb2fe76 513,689-697
+  s_e55abc3ce4b22b::t_bd75719e930fa9 524,528-542,545,547-550,552-553,555,557
+  s_e55abc3ce4b22b::t_11a8d68ad63eaa 622-623,625-626,628-629,631-632
+  s_e55abc3ce4b22b::t_00d236709baf0b 727,729,777,779,782
+blog-cms-ui/scripts/build-adm1-data.js
+  s_e55abc3ce4b22b::t_bf38212f952a00 1-6,9-11,14-22,36,38-41,43-59,66,68-162,164,166-180,182-187,189-198
+  s_e55abc3ce4b22b::t_6a46c16e5de5ce 60-65,67
+  s_e55abc3ce4b22b::t_29e4e3d5987fa3 37
+  s_e55abc3ce4b22b::t_8f9bbdcd0a48ae 42,188
+  s_e55abc3ce4b22b::t_631744d33479cf 181
+  s_e55abc3ce4b22b::t_19554fbf0b163b 23-35
+  s_e55abc3ce4b22b::t_74eaef089934eb 7-8,12-13
+  s_e55abc3ce4b22b::t_297a93f9bff9f5 163,165
+blog-cms-ui/src/views/dashboard/global-visitor-map/index.vue
+  s_e55abc3ce4b22b::t_fc04a02aa8d682 128-129,133,138-141
+  s_e55abc3ce4b22b::t_5a127a3f7a7c16 142
+blog-backend/src/main/java/com/changlu/blogloom/mapper/VisitorGeoMapper.java
+  s_e55abc3ce4b22b::t_11b546d8a103cd 10-11
+blog-cms-ui/src/views/log/VisitLog.vue
+  s_790946f087e8ec::t_d9d568794eadcd 49-57
+  s_790946f087e8ec::t_a40f3de7be14d2 151-172
+blog-backend/src/main/resources/mapper/VisitorGeoMapper.xml
+  s_e55abc3ce4b22b::t_680f3f5e54d648 12-16
+blog-cms-ui/.gitignore
+  s_e55abc3ce4b22b::t_85abff6f764786 23-25
+blog-backend/src/main/java/com/changlu/blogloom/module/visitormap/provider/DatabaseGlobalVisitorMapProvider.java
+  s_e9b36b7e4c8103::t_e4577db233071b 26,32,35,40,50-51
+docs/工程化开发模块设计思路产物/backend/产品功能设计分享/BlogLoom产品系列01、之个人站点平台如何做一个全球的访客地图功能实现呢？.md
+  s_e9b36b7e4c8103::t_59dc5941f9d54e 1-1618
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a5a252338e5ca132b9b7accd59e6f4c66581412f",
+  "prompts": {},
+  "sessions": {
+    "s_790946f087e8ec": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eafec59b2ffeNk9BPib0d5Ri1q",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_e55abc3ce4b22b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eaffd20deffe41F2Xlx4wAepa7",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    },
+    "s_e9b36b7e4c8103": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eb0aef93cffeHwaVmWsiypuYVn",
+        "model": "deepseek-v4.1-flash"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
