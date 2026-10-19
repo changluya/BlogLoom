@@ -61,6 +61,9 @@
 				<el-select v-model="periodType" size="mini" class="range-select" @change="handlePeriodChange">
 					<el-option v-for="option in periodOptions" :key="option.value" :label="option.label" :value="option.value" />
 				</el-select>
+				<el-select v-model="rankMode" size="mini" class="rank-select">
+					<el-option v-for="option in rankModeOptions" :key="option.value" :label="option.label" :value="option.value" />
+				</el-select>
 				<template v-if="periodType === 'custom'">
 					<el-date-picker
 						v-model="customStart"
@@ -90,21 +93,21 @@
 				</div>
 			</div>
 			<section class="rankings">
-				<div class="rankings-title">{{ language === 'zh' ? '热点城市排名 · UV' : 'HOT CITIES · UV' }}</div>
+				<div class="rankings-title">{{ rankingsTitle }}</div>
 				<div class="ranking-columns">
 					<section class="ranking-section">
 						<div class="ranking-heading"><span>{{ language === 'zh' ? '中国' : 'CHINA' }}</span><small>TOP 20</small></div>
 						<ol>
-							<li v-for="(city, index) in chinaRanking" :key="city.cityCode || city.city">
-								<em>{{ index + 1 }}</em><span :title="displayCityName(city)">{{ displayCityName(city) }}</span><strong>{{ formatNumber(city.uv) }}</strong>
+							<li v-for="(item, index) in chinaRanking" :key="item.key">
+								<em>{{ index + 1 }}</em><span :title="item.name">{{ item.name }}</span><strong>{{ formatNumber(item.uv) }}</strong>
 							</li>
 						</ol>
 					</section>
 					<section class="ranking-section">
 						<div class="ranking-heading"><span>{{ language === 'zh' ? '国外' : 'OVERSEAS' }}</span><small>TOP 20</small></div>
 						<ol>
-							<li v-for="(city, index) in overseasRanking" :key="city.cityCode || city.city">
-								<em>{{ index + 1 }}</em><span :title="displayCityName(city)">{{ displayCityName(city) }}</span><strong>{{ formatNumber(city.uv) }}</strong>
+							<li v-for="(item, index) in overseasRanking" :key="item.key">
+								<em>{{ index + 1 }}</em><span :title="item.name">{{ item.name }}</span><strong>{{ formatNumber(item.uv) }}</strong>
 							</li>
 						</ol>
 					</section>
@@ -122,14 +125,20 @@
 
 		<div v-if="hover" class="map-tooltip" :style="tooltipStyle">
 			<strong v-if="hover.city">{{ displayCityName(hover.city) }}</strong>
-			<strong v-else>{{ displayProvinceName(hover.province) }}</strong>
+			<strong v-else-if="hover.province">{{ displayProvinceName(hover.province) }}</strong>
+			<strong v-else-if="hover.region">{{ hover.region }}</strong>
 			<span v-if="hover.city">
 				{{ language === 'zh' ? '访客数' : 'Visitors' }}：{{ formatNumber(hover.stats.uv) }}
 			</span>
-			<span v-else>
+			<span v-else-if="hover.provinceStats">
 				{{ language === 'zh'
 					? `访客城市 ${hover.provinceStats.cityCount} 个 · 最高 UV ${formatNumber(hover.provinceStats.maxUv)}`
 					: `${hover.provinceStats.cityCount} cities · max UV ${formatNumber(hover.provinceStats.maxUv)}` }}
+			</span>
+			<span v-else-if="hover.regionStats">
+				{{ language === 'zh'
+					? `访客城市 ${hover.regionStats.cityCount} 个 · 最高 UV ${formatNumber(hover.regionStats.maxUv)}`
+					: `${hover.regionStats.cityCount} cities · max UV ${formatNumber(hover.regionStats.maxUv)}` }}
 			</span>
 		</div>
 	</main>
@@ -142,6 +151,7 @@
 	import {getGlobalVisitorMap} from '@/api/visitorMap'
 
 	const REFRESH_INTERVAL = 10000
+	const countryNameFormatters = {}
 	const MUNICIPALITIES = ['北京', '天津', '上海', '重庆', '香港', '澳门']
 	const AUTONOMOUS_REGIONS = ['内蒙古', '广西', '西藏', '宁夏', '新疆']
 	const PROVINCE_NAME_EN = {
@@ -153,6 +163,21 @@
 		甘肃: 'Gansu', 青海: 'Qinghai', 台湾: 'Taiwan', 内蒙古: 'Inner Mongolia',
 		广西: 'Guangxi', 西藏: 'Tibet', 宁夏: 'Ningxia', 新疆: 'Xinjiang',
 		香港: 'Hong Kong', 澳门: 'Macao'
+	}
+
+	function getCountryNameFormatter(language) {
+		const locale = language === 'en' ? 'en' : 'zh-CN'
+		if (Object.prototype.hasOwnProperty.call(countryNameFormatters, locale)) return countryNameFormatters[locale]
+		let formatter = null
+		try {
+			if (typeof Intl !== 'undefined' && typeof Intl.DisplayNames === 'function') {
+				formatter = new Intl.DisplayNames([locale], {type: 'region'})
+			}
+		} catch (error) {
+			formatter = null
+		}
+		countryNameFormatters[locale] = formatter
+		return formatter
 	}
 
 	export default {
@@ -171,6 +196,7 @@
 				lastUpdatedAt: null,
 				refreshTimer: null,
 				periodType: 'all',
+				rankMode: 'country',
 				customStart: null,
 				customEnd: null
 			}
@@ -206,6 +232,18 @@
 					custom: 'CUSTOM'
 				}[this.periodType] || 'ALL'
 			},
+			rankModeOptions() {
+				const zh = this.language === 'zh'
+				return [
+					{value: 'city', label: zh ? '城市' : 'City'},
+					{value: 'country', label: zh ? '国家' : 'Country'}
+				]
+			},
+			rankingsTitle() {
+				const zh = this.language === 'zh'
+				if (this.rankMode === 'country') return zh ? '热点国家排名 · UV' : 'HOT COUNTRIES · UV'
+				return zh ? '热点城市排名 · UV' : 'HOT CITIES · UV'
+			},
 			dataNote() {
 				const base = this.language === 'zh'
 					? '光点大小随访客量 · IP 定位为近似位置'
@@ -225,10 +263,17 @@
 				]
 			},
 			chinaRanking() {
-				return this.dataset ? this.ranking(this.dataset.cities.filter(city => city.countryCode === 'CN')) : []
+				if (!this.dataset) return []
+				if (this.rankMode === 'country') {
+					const china = (this.dataset.countries || []).find(item => item.countryCode === 'CN')
+					return [{key: 'CN', name: this.displayCountryName('CN'), uv: china ? china.uv : 0}]
+				}
+				return this.rankingItems(this.dataset.cities.filter(city => city.countryCode === 'CN'))
 			},
 			overseasRanking() {
-				return this.dataset ? this.ranking(this.dataset.cities.filter(city => city.countryCode !== 'CN')) : []
+				if (!this.dataset) return []
+				const list = this.rankMode === 'country' ? (this.dataset.countries || []) : this.dataset.cities
+				return this.rankingItems(list.filter(item => item.countryCode !== 'CN'))
 			},
 			tooltipStyle() {
 				return {left: `${this.hover.x + 14}px`, top: `${this.hover.y - 35}px`}
@@ -320,14 +365,33 @@
 					}))
 				}
 			},
-			ranking(cities) {
-				return cities.slice().sort((left, right) => right.uv - left.uv).slice(0, 20)
+			rankingItems(list) {
+				const byCountry = this.rankMode === 'country'
+				return list
+					.slice()
+					.sort((left, right) => (Number(right.uv) || 0) - (Number(left.uv) || 0))
+					.slice(0, 20)
+					.map(item => ({
+						key: byCountry ? item.countryCode : (item.cityCode || item.city),
+						name: byCountry ? this.displayCountryName(item.countryCode) : this.displayCityName(item),
+						uv: item.uv
+					}))
 			},
 			formatNumber(value) {
 				return Number(value || 0).toLocaleString()
 			},
 			displayCityName(city) {
 				return getCityDisplayName(city, this.language)
+			},
+			displayCountryName(countryCode) {
+				if (!countryCode) return ''
+				const formatter = getCountryNameFormatter(this.language)
+				if (!formatter) return countryCode
+				try {
+					return formatter.of(countryCode) || countryCode
+				} catch (error) {
+					return countryCode
+				}
 			},
 			displayProvinceName(name) {
 				if (!name) return ''
@@ -389,6 +453,7 @@
 		.panel-actions { display: flex; align-items: center; gap: 7px; }
 		.range-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; }
 		.range-select { width: 96px; }
+		.rank-select { width: 84px; }
 		.range-date { flex: 1 1 96px; min-width: 0; }
 		.range-sep { color: var(--muted); font-size: 11px; }
 		.range-bar .el-input__inner { height: 28px; line-height: 28px; border-color: var(--line); background: rgba(4, 13, 23, .6); color: var(--text); font-size: 11px; }
