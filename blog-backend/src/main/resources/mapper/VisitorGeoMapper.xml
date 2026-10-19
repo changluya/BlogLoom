@@ -9,6 +9,11 @@
 		<if test="countryCode != null and countryCode != ''">
 		  AND country_code = #{countryCode}
 		</if>
+		ORDER BY
+		<if test="regionName != null and regionName != ''">
+		  CASE WHEN region_name = #{regionName} THEN 0 ELSE 1 END,
+		</if>
+		  id
 		LIMIT 1
 	</select>
 

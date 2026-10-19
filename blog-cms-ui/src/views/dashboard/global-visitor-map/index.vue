@@ -125,14 +125,20 @@
 
 		<div v-if="hover" class="map-tooltip" :style="tooltipStyle">
 			<strong v-if="hover.city">{{ displayCityName(hover.city) }}</strong>
-			<strong v-else>{{ displayProvinceName(hover.province) }}</strong>
+			<strong v-else-if="hover.province">{{ displayProvinceName(hover.province) }}</strong>
+			<strong v-else-if="hover.region">{{ hover.region }}</strong>
 			<span v-if="hover.city">
 				{{ language === 'zh' ? '访客数' : 'Visitors' }}：{{ formatNumber(hover.stats.uv) }}
 			</span>
-			<span v-else>
+			<span v-else-if="hover.provinceStats">
 				{{ language === 'zh'
 					? `访客城市 ${hover.provinceStats.cityCount} 个 · 最高 UV ${formatNumber(hover.provinceStats.maxUv)}`
 					: `${hover.provinceStats.cityCount} cities · max UV ${formatNumber(hover.provinceStats.maxUv)}` }}
+			</span>
+			<span v-else-if="hover.regionStats">
+				{{ language === 'zh'
+					? `访客城市 ${hover.regionStats.cityCount} 个 · 最高 UV ${formatNumber(hover.regionStats.maxUv)}`
+					: `${hover.regionStats.cityCount} cities · max UV ${formatNumber(hover.regionStats.maxUv)}` }}
 			</span>
 		</div>
 	</main>

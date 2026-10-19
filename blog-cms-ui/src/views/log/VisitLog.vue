@@ -46,7 +46,15 @@
 			<el-table-column label="访问行为" prop="behavior"></el-table-column>
 			<el-table-column label="访问内容" prop="content" show-overflow-tooltip></el-table-column>
 			<el-table-column label="IP" prop="ip"></el-table-column>
-			<el-table-column label="IP来源" prop="ipSource" show-overflow-tooltip></el-table-column>
+			<el-table-column label="IP来源" prop="ipSource">
+				<template v-slot="scope">
+					<el-tooltip placement="top" effect="dark" :enterable="true" :open-delay="200"
+					            popper-class="copyable-tooltip">
+						<div slot="content" class="copyable-tooltip__content">{{ scope.row.ipSource }}</div>
+						<span class="cell-ellipsis">{{ scope.row.ipSource }}</span>
+					</el-tooltip>
+				</template>
+			</el-table-column>
 			<el-table-column label="操作系统" prop="os" show-overflow-tooltip></el-table-column>
 			<el-table-column label="浏览器" prop="browser" show-overflow-tooltip></el-table-column>
 			<el-table-column label="访问时间" width="170">
@@ -139,5 +147,27 @@
 <style scoped>
 	.el-form--inline .el-form-item {
 		margin-bottom: 0;
+	}
+
+	.cell-ellipsis {
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+</style>
+
+<style>
+	.copyable-tooltip {
+		max-width: 360px;
+		line-height: 1.5;
+		word-break: break-all;
+		user-select: text;
+		cursor: text;
+	}
+
+	.copyable-tooltip__content {
+		user-select: text;
+		-webkit-user-select: text;
 	}
 </style>

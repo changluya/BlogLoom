@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface VisitorGeoMapper {
-	Long findCityGeoId(@Param("cityName") String cityName, @Param("countryCode") String countryCode);
+	Long findCityGeoId(@Param("cityName") String cityName, @Param("countryCode") String countryCode,
+					   @Param("regionName") String regionName);
 
 	Long findCountryGeoId(@Param("countryCode") String countryCode);
 }
