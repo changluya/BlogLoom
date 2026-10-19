@@ -13,6 +13,7 @@
     "build:dev": "vite build --mode development",
     "build:test": "vite build --mode test",
     "build:prod": "vite build --mode production",
+    "build:adm1": "node scripts/build-adm1-data.js",
     "preview": "vite preview"
   },
   "dependencies": {

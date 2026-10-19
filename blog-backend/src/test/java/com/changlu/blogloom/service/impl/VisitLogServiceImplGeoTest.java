@@ -42,7 +42,7 @@ class VisitLogServiceImplGeoTest {
 	@Test
 	void shouldResolveCityAndPersistLocatedStatus() {
 		when(ipAddressUtils.getCityInfo("1.0.1.1")).thenReturn("中国|广东省|深圳市|电信|CN");
-		when(visitorGeoMapper.findCityGeoId("深圳市", "CN")).thenReturn(3L);
+		when(visitorGeoMapper.findCityGeoId("深圳市", "CN", "广东省")).thenReturn(3L);
 
 		service.saveVisitLog(log("1.0.1.1"));
 
@@ -54,7 +54,7 @@ class VisitLogServiceImplGeoTest {
 	@Test
 	void shouldFallBackToCountryWhenCityIsUnknown() {
 		when(ipAddressUtils.getCityInfo("8.8.8.8")).thenReturn("United States|California|Unknown||US");
-		when(visitorGeoMapper.findCityGeoId("Unknown", "US")).thenReturn(null);
+		when(visitorGeoMapper.findCityGeoId("Unknown", "US", "California")).thenReturn(null);
 		when(visitorGeoMapper.findCountryGeoId("US")).thenReturn(9L);
 
 		service.saveVisitLog(log("8.8.8.8"));

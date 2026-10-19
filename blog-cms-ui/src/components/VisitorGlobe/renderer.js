@@ -2,6 +2,7 @@ import echarts from 'echarts'
 import 'echarts/map/js/china'
 import 'echarts/map/js/world'
 import './data/adm1-mvp'
+import './data/adm1-extended'
 import chinaCityCoordinates from '@/util/city2coord.json'
 
 const COUNTRY_LABELS = [
@@ -26,7 +27,136 @@ const COUNTRY_CODE_BY_MAP_NAME = {
 const ADM1_COLORS = {
 	USA: '#53c7ff', CAN: '#65d8c7', AUS: '#ffba72', BRA: '#72df91',
 	FRA: '#9caeff', DEU: '#79c8ff', IND: '#ff9d72', JPN: '#e593ff',
-	GBR: '#a6b9ff', SGP: '#72f0de'
+	GBR: '#a6b9ff', SGP: '#72f0de',
+	NLD: '#7fd3ff', ESP: '#ffc978', ITA: '#8be0c4', KOR: '#c6a4ff',
+	CHE: '#8fb6ff', SWE: '#74e0e0', ARE: '#ffd28a', TUR: '#ff9fa8',
+	POL: '#a5d6ff', CZE: '#9fe6b8'
+}
+
+const ADM1_COUNTRY_CODE = {
+	USA: 'US', CAN: 'CA', AUS: 'AU', BRA: 'BR', FRA: 'FR',
+	DEU: 'DE', IND: 'IN', JPN: 'JP', GBR: 'GB', SGP: 'SG',
+	NLD: 'NL', ESP: 'ES', ITA: 'IT', KOR: 'KR', CHE: 'CH',
+	SWE: 'SE', ARE: 'AE', TUR: 'TR', POL: 'PL', CZE: 'CZ'
+}
+
+const COUNTRY_ISO3 = Object.fromEntries(
+	Object.entries(ADM1_COUNTRY_CODE).map(([iso3, code]) => [code, iso3])
+)
+
+const REGION_NAME_ALIASES = {
+	USA: {
+		'washington dc': 'district of columbia',
+		'washington d c': 'district of columbia'
+	},
+	DEU: {
+		bavaria: 'bayern',
+		hesse: 'hessen',
+		'north rhine westphalia': 'nordrhein westfalen',
+		'lower saxony': 'niedersachsen',
+		'rhineland palatinate': 'rheinland pfalz',
+		saxony: 'sachsen',
+		'saxony anhalt': 'sachsen anhalt',
+		thuringia: 'thuringen',
+		'mecklenburg western pomerania': 'mecklenburg vorpommern'
+	},
+	FRA: {
+		'rhone alpes': 'auvergne rhone alpes'
+	},
+	BRA: {
+		'rio de janeiro': 'rio de jeneiro',
+		'rio grande do norte': 'rio granda do norte'
+	},
+	NLD: {
+		'north holland': 'noord-holland',
+		'south holland': 'zuid-holland'
+	},
+	ESP: {
+		madrid: 'comunidad de madrid',
+		catalonia: 'cataluna/catalunya',
+		valencia: 'comunitat valenciana',
+		andalusia: 'andalucia',
+		'balearic islands': 'illes balears',
+		'basque country': 'pais vasco/euskadi',
+		'castille and leon': 'castilla y leon',
+		'castille la mancha': 'castilla-la mancha',
+		'murcia': 'region de murcia',
+		'asturias': 'principado de asturias',
+		'navarra': 'comunidad foral de navarra'
+	},
+	ITA: {
+		lombardy: 'lombardia',
+		piedmont: 'piemonte',
+		sicily: 'sicilia',
+		tuscany: 'toscana',
+		'aosta valley': 'valle d aosta/vallee d aoste',
+		'the marches': 'marche'
+	},
+	KOR: {
+		'gyeonggi do': 'gyeonggi',
+		'gangwon do': 'gangwon',
+		'jeju do': 'jeju'
+	},
+	CHE: {
+		geneva: 'geneve',
+		'basel city': 'basel-stadt',
+		'basel stadt': 'basel-stadt',
+		lucerne: 'luzern'
+	},
+	SWE: {
+		stockholm: 'stockholms lan',
+		skane: 'skane lan',
+		uppsala: 'uppsala lan',
+		'vastra gotaland': 'vastra gotalands lan',
+		'vaestra goetaland': 'vastra gotalands lan',
+		vastmanland: 'vastmanlands lan',
+		gavleborg: 'gavleborgs lan',
+		jonkoping: 'jonkopings lan',
+		'joenkoeping': 'jonkopings lan',
+		norrbotten: 'norrbottens lan',
+		orebro: 'orebro lan',
+		'oerebro': 'orebro lan',
+		dalarna: 'dalarnas lan',
+		vasternorrland: 'vasternorrlands lan',
+		'vaesternorrland': 'vasternorrlands lan',
+		gotland: 'gotlands lan'
+	},
+	POL: {
+		mazovia: 'masovian',
+		pomerania: 'pomeranian',
+		'silesia': 'silesian',
+		'lower silesia': 'lower silesian',
+		'west pomerania': 'west pomeranian',
+		'warmia masuria': 'warmian masurian'
+	},
+	CZE: {
+		prague: 'hlavni mesto praha',
+		'central bohemia': 'stredocesky kraj',
+		'south moravian': 'jihomoravsky kraj',
+		'plzen region': 'plzensky kraj',
+		'ustecky kraj': 'ustecky kraj'
+	}
+}
+
+function normalizeRegionName(name) {
+	const text = String(name || '')
+	const plain = typeof text.normalize === 'function'
+		? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+		: text
+	return plain
+		.toLowerCase()
+		.replace(/^state of\s+/, '')
+		.replace(/\b(prefecture|province|state|region|governorate|department|county|voivodeship|municipality|kraj|lan)\b/g, '')
+		.replace(/\bdistrict\b(?!\s+of\b)/g, '')
+		.replace(/[^a-z0-9]+/g, '')
+}
+
+function normalizeAliasKey(name) {
+	const text = String(name || '')
+	const plain = typeof text.normalize === 'function'
+		? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+		: text
+	return plain.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
 }
 
 const CITY_RADIUS_MIN = 2.6
@@ -141,6 +271,34 @@ export function createVisitorGlobe(container, dataset, options = {}) {
 			return {...feature, bbox: [minLng, minLat, maxLng, maxLat]}
 		})
 	const adm1ByCountry = window.BLOGLOOM_ADM1 || {}
+	const adm1Regions = []
+	const adm1RegionKeys = new Set()
+	Object.entries(adm1ByCountry).forEach(([iso3, regions]) => {
+		const countryCode = ADM1_COUNTRY_CODE[iso3]
+		if (!countryCode || !Array.isArray(regions)) return
+		regions.forEach(region => {
+			let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity
+			region.rings.forEach(ring => ring.forEach(coordinate => {
+				const lng = Number(coordinate[0]), lat = Number(coordinate[1])
+				if (lng < minLng) minLng = lng
+				if (lng > maxLng) maxLng = lng
+				if (lat < minLat) minLat = lat
+				if (lat > maxLat) maxLat = lat
+			}))
+			const key = `${iso3}|${normalizeRegionName(region.name)}`
+			adm1RegionKeys.add(key)
+			adm1Regions.push({
+				countryCode,
+				countryIso3: iso3,
+				name: region.name,
+				key,
+				rings: region.rings,
+				bbox: [minLng, minLat, maxLng, maxLat],
+				centerLat: (minLat + maxLat) / 2,
+				centerLng: (minLng + maxLng) / 2
+			})
+		})
+	})
 	let cities = []
 	let countriesByCode = {}
 	let cityStats = new Map()
@@ -152,7 +310,9 @@ export function createVisitorGlobe(container, dataset, options = {}) {
 	let lastFrameTime = 0
 	let destroyed = false
 	let provinceStats = new Map()
+	let adm1Stats = new Map()
 	let hoveredProvince = null
+	let hoveredRegionKey = null
 	const timers = []
 
 	function normalizeProvinceName(name) {
@@ -202,13 +362,55 @@ export function createVisitorGlobe(container, dataset, options = {}) {
 		return stats
 	}
 
+	function adm1RegionByPoint(lat, lng, countryCode) {
+		const latitude = Number(lat), longitude = Number(lng)
+		for (let index = 0; index < adm1Regions.length; index += 1) {
+			const region = adm1Regions[index]
+			if (countryCode && region.countryCode !== countryCode) continue
+			const bbox = region.bbox
+			if (longitude < bbox[0] || longitude > bbox[2] || latitude < bbox[1] || latitude > bbox[3]) continue
+			for (let ringIndex = 0; ringIndex < region.rings.length; ringIndex += 1) {
+				if (pointInRing(longitude, latitude, region.rings[ringIndex])) return region
+			}
+		}
+		return null
+	}
+
+	function buildAdm1Stats(list) {
+		const stats = new Map()
+		list.forEach(city => {
+			const iso3 = COUNTRY_ISO3[city.countryCode]
+			if (!iso3) return
+			const aliases = REGION_NAME_ALIASES[iso3] || {}
+			const rawKey = normalizeAliasKey(city.regionName)
+			const alias = aliases[rawKey]
+			let key = `${iso3}|${normalizeRegionName(alias || city.regionName)}`
+			if (!adm1RegionKeys.has(key)) {
+				const region = adm1RegionByPoint(city.lat, city.lng, city.countryCode)
+				if (!region) return
+				key = region.key
+			}
+			const item = stats.get(key) || {cityCount: 0, maxUv: 0, pv: 0}
+			item.cityCount += 1
+			item.maxUv = Math.max(item.maxUv, Number(city.uv) || 0)
+			item.pv += Number(city.pv) || 0
+			stats.set(key, item)
+		})
+		return stats
+	}
+
+	function cityKey(city) {
+		return city.geoKey || city.city || city.cityNameZh || city.cityEn || ''
+	}
+
 	function applyDataset(source, revealAll = true) {
 		const nextCities = (source && source.cities) || []
 		cities = nextCities
 		countriesByCode = Object.fromEntries(((source && source.countries) || []).map(item => [item.countryCode, item]))
-		cityStats = new Map(nextCities.map(city => [city.city, city]))
+		cityStats = new Map(nextCities.map(city => [cityKey(city), city]))
 		maxUv = Math.max(1, ...nextCities.map(cityVolume))
 		provinceStats = buildProvinceStats(nextCities)
+		adm1Stats = buildAdm1Stats(nextCities)
 		const knownNames = new Set(Object.keys(chinaCityCoordinates))
 		referenceCities = Object.entries(chinaCityCoordinates).map(([city, coordinate]) => ({
 			city, country: '中国', countryCode: 'CN', lng: Number(coordinate[0]), lat: Number(coordinate[1])
@@ -368,21 +570,21 @@ export function createVisitorGlobe(container, dataset, options = {}) {
 
 	function drawAdm1() {
 		if (state.zoom < 0.82 || state.dragging) return
-		Object.entries(adm1ByCountry).forEach(([countryCode, regions]) => {
+		adm1Regions.forEach(region => {
+			if (project(region.centerLat, region.centerLng).z <= 0) return
+			const stats = adm1Stats.get(region.key)
+			const hovered = hoveredRegionKey === region.key
 			context.beginPath()
-			regions.forEach(region => region.rings.forEach(ring => {
-				let drawing = false
-				ring.forEach(coordinate => {
-					const point = projectCoordinate(coordinate)
-					if (point.z <= 0) { drawing = false; return }
-					if (!drawing) context.moveTo(point.x, point.y)
-					else context.lineTo(point.x, point.y)
-					drawing = true
-				})
-			}))
-			context.strokeStyle = ADM1_COLORS[countryCode] || '#4daecd'
-			context.globalAlpha = Math.min(0.78, 0.32 + Math.max(0, state.zoom - 1) * 0.4)
-			context.lineWidth = state.zoom > 1.4 ? 0.9 : 0.55
+			traceFeatures([region])
+			if (stats) {
+				context.fillStyle = heatColor(stats.maxUv, hovered ? 0.72 : 0.4)
+			} else {
+				context.fillStyle = hovered ? 'rgba(44, 68, 170, .62)' : 'rgba(16, 44, 74, .14)'
+			}
+			context.fill('evenodd')
+			context.strokeStyle = hovered ? '#8df2ff' : (ADM1_COLORS[region.countryIso3] || '#4daecd')
+			context.globalAlpha = hovered ? 0.95 : Math.min(0.78, 0.32 + Math.max(0, state.zoom - 1) * 0.4)
+			context.lineWidth = hovered ? 1.3 : (state.zoom > 1.4 ? 0.9 : 0.55)
 			context.stroke()
 			context.globalAlpha = 1
 		})
@@ -549,19 +751,39 @@ export function createVisitorGlobe(container, dataset, options = {}) {
 		return ''
 	}
 
+	function adm1RegionAt(clientX, clientY) {
+		if (state.zoom < 0.82) return null
+		const bounds = canvas.getBoundingClientRect()
+		const point = unprojectPoint(clientX - bounds.left, clientY - bounds.top)
+		if (!point) return null
+		for (let index = 0; index < adm1Regions.length; index += 1) {
+			const region = adm1Regions[index]
+			if (project(region.centerLat, region.centerLng).z < -0.2) continue
+			const bbox = region.bbox
+			if (point.lng < bbox[0] || point.lng > bbox[2] || point.lat < bbox[1] || point.lat > bbox[3]) continue
+			for (let ringIndex = 0; ringIndex < region.rings.length; ringIndex += 1) {
+				if (pointInRing(point.lng, point.lat, region.rings[ringIndex])) return region
+			}
+		}
+		return null
+	}
+
 	function pointerDown(event) {
 		state.dragging = true
 		state.moved = false
 		state.pointerX = event.clientX
 		state.pointerY = event.clientY
+		hoveredProvince = null
+		hoveredRegionKey = null
 		canvas.setPointerCapture(event.pointerId)
 	}
 
 	function pointerMove(event) {
 		if (!state.dragging) {
 			const city = nearestCity(event.clientX, event.clientY)
-			const cityStat = city ? cityStats.get(city.city) : null
+			const cityStat = city ? cityStats.get(cityKey(city)) : null
 			if (city && cityStat) {
+				hoveredRegionKey = null
 				hoveredProvince = city.countryCode === 'CN'
 					? (normalizeProvinceName(city.regionName) || provinceByPoint(city.lat, city.lng))
 					: null
@@ -570,14 +792,28 @@ export function createVisitorGlobe(container, dataset, options = {}) {
 				return
 			}
 			const province = provinceAt(event.clientX, event.clientY)
-			hoveredProvince = province || null
-			const stat = province ? provinceStats.get(normalizeProvinceName(province)) : null
-			canvas.style.cursor = stat ? 'pointer' : 'grab'
-			notifyHover(stat
-				? {province, provinceStats: stat, x: event.clientX, y: event.clientY}
+			if (province) {
+				hoveredProvince = province
+				hoveredRegionKey = null
+				const stat = provinceStats.get(normalizeProvinceName(province))
+				canvas.style.cursor = stat ? 'pointer' : 'grab'
+				notifyHover(stat
+					? {province, provinceStats: stat, x: event.clientX, y: event.clientY}
+					: null)
+				return
+			}
+			hoveredProvince = null
+			const region = adm1RegionAt(event.clientX, event.clientY)
+			hoveredRegionKey = region ? region.key : null
+			const regionStats = region ? adm1Stats.get(region.key) : null
+			canvas.style.cursor = regionStats ? 'pointer' : 'grab'
+			notifyHover(regionStats
+				? {region: region.name, regionStats, x: event.clientX, y: event.clientY}
 				: null)
 			return
 		}
+		hoveredProvince = null
+		hoveredRegionKey = null
 		notifyHover(null)
 		const dx = event.clientX - state.pointerX
 		const dy = event.clientY - state.pointerY
@@ -592,7 +828,7 @@ export function createVisitorGlobe(container, dataset, options = {}) {
 		state.dragging = false
 		if (state.moved) return
 		const city = nearestCity(event.clientX, event.clientY, 32)
-		if (!city || !cityStats.get(city.city)) return
+		if (!city || !cityStats.get(cityKey(city))) return
 		state.yaw = city.lng * Math.PI / 180 * -1 + 0.18
 		state.pitch = city.lat * Math.PI / 180 * 0.25
 		state.zoom = 1.55
@@ -614,6 +850,7 @@ export function createVisitorGlobe(container, dataset, options = {}) {
 	canvas.addEventListener('pointercancel', pointerUp)
 	canvas.addEventListener('pointerleave', () => {
 		hoveredProvince = null
+		hoveredRegionKey = null
 		notifyHover(null)
 	})
 	canvas.addEventListener('wheel', wheel, {passive: false})

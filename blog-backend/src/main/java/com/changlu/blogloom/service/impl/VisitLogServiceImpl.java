@@ -66,11 +66,12 @@ public class VisitLogServiceImpl implements VisitLogService {
 			return;
 		}
 		String[] fields = ipSource.split("\\|", -1);
+		String region = fields.length > 1 ? fields[1].trim() : "";
 		String city = fields.length > 2 ? fields[2].trim() : "";
 		String countryCode = fields.length > 4 ? fields[4].trim().toUpperCase(Locale.ROOT) : "";
 		Long geoId = null;
 		if (!city.isEmpty()) {
-			geoId = visitorGeoMapper.findCityGeoId(city, countryCode);
+			geoId = visitorGeoMapper.findCityGeoId(city, countryCode, region);
 		}
 		if (geoId == null && countryCode.length() == 2) {
 			geoId = visitorGeoMapper.findCountryGeoId(countryCode);

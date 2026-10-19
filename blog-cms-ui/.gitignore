@@ -20,3 +20,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# ADM1 构建缓存（scripts/build-adm1-data.js 下载的原始 GeoJSON）
+.cache/
