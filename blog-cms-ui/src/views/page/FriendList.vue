@@ -68,8 +68,15 @@
 				<el-form-item label="网站" prop="website">
 					<el-input v-model="addForm.website"></el-input>
 				</el-form-item>
-				<el-form-item label="头像URL" prop="avatar">
-					<el-input v-model="addForm.avatar"></el-input>
+				<el-form-item label="头像" prop="avatar">
+					<div class="avatar-editor">
+						<ImageUpload :value="addAvatarPreview || addForm.avatar" round @change="selectAddAvatar"/>
+						<div class="avatar-url">
+							<el-input v-model="addForm.avatar" :disabled="Boolean(addAvatarFile)" placeholder="也可直接填写图片链接"></el-input>
+							<div class="upload-tip">点击左侧头像上传，或直接填写图片链接；支持 jpg、jpeg、png、gif、webp，最大 5MB</div>
+							<el-button v-if="addAvatarFile" type="text" @click="clearAddAvatar">改用图片链接</el-button>
+						</div>
+					</div>
 				</el-form-item>
 				<el-form-item label="是否公开" prop="published">
 					<el-switch v-model="addForm.published"></el-switch>
@@ -95,8 +102,14 @@
 				<el-form-item label="网站" prop="website">
 					<el-input v-model="editForm.website"></el-input>
 				</el-form-item>
-				<el-form-item label="头像URL" prop="avatar">
-					<el-input v-model="editForm.avatar"></el-input>
+				<el-form-item label="头像" prop="avatar">
+					<div class="avatar-editor">
+						<ImageUpload :value="editForm.avatar" round :loading="avatarUploading" @change="uploadAvatar"/>
+						<div class="avatar-url">
+							<el-input v-model="editForm.avatar" placeholder="也可直接填写图片链接"></el-input>
+							<div class="upload-tip">点击左侧头像上传，或直接填写图片链接；支持 jpg、jpeg、png、gif、webp，最大 5MB</div>
+						</div>
+					</div>
 				</el-form-item>
 				<el-form-item label="是否公开" prop="published">
 					<el-switch v-model="editForm.published"></el-switch>
@@ -114,13 +127,14 @@
 <script>
 	import Breadcrumb from "@/components/Breadcrumb";
 	import {
-		getFriendsByQuery, updatePublished, saveFriend, updateFriend,
-		deleteFriendById, getFriendInfo, updateContent, updateCommentEnabled
+		getFriendsByQuery, updatePublished, saveFriend, saveFriendWithAvatar, updateFriend,
+		deleteFriendById, getFriendInfo, updateContent, updateCommentEnabled, uploadFriendAvatar
 	} from "@/api/friend";
+	import ImageUpload from "@/components/ImageUpload";
 
 	export default {
 		name: "FriendList",
-		components: {Breadcrumb},
+		components: {Breadcrumb, ImageUpload},
 		data() {
 			return {
 				infoForm: {
@@ -135,6 +149,9 @@
 				total: 0,
 				addDialogVisible: false,
 				editDialogVisible: false,
+				avatarUploading: false,
+				addAvatarFile: null,
+				addAvatarPreview: '',
 				addForm: {
 					nickname: '',
 					description: '',
@@ -153,7 +170,10 @@
 					nickname: [{required: true, message: '请输入昵称', trigger: 'blur'}],
 					description: [{required: true, message: '请输入描述', trigger: 'blur'}],
 					website: [{required: true, message: '请输入网站', trigger: 'blur'}],
-					avatar: [{required: true, message: '请输入头像URL', trigger: 'blur'}],
+					avatar: [{validator: (rule, value, callback) => {
+						if (value || this.addAvatarFile) callback()
+						else callback(new Error('请上传头像或填写头像图片链接'))
+					}, trigger: 'blur'}],
 				}
 			}
 		},
@@ -207,17 +227,47 @@
 				this.editForm = {...row}
 				this.editDialogVisible = true
 			},
+			async uploadAvatar(file) {
+				if (!this.editForm.id) return
+				this.avatarUploading = true
+				try {
+					const res = await uploadFriendAvatar(this.editForm.id, file)
+					this.editForm.avatar = res.data.url
+					this.$refs.editFormRef.clearValidate('avatar')
+					this.msgSuccess(res.msg)
+				} finally {
+					this.avatarUploading = false
+				}
+			},
 			addDialogClosed() {
+				this.clearAddAvatar()
 				this.$refs.addFormRef.resetFields()
+			},
+			selectAddAvatar(file) {
+				this.clearAddAvatar()
+				this.addAvatarFile = file
+				this.addAvatarPreview = URL.createObjectURL(file)
+				this.$refs.addFormRef.clearValidate('avatar')
+			},
+			clearAddAvatar() {
+				if (this.addAvatarPreview) URL.revokeObjectURL(this.addAvatarPreview)
+				this.addAvatarFile = null
+				this.addAvatarPreview = ''
 			},
 			editDialogClosed() {
 				this.editForm = {}
 				this.$refs.editFormRef.resetFields()
 			},
 			saveFriend() {
+				if (!this.addAvatarFile && !this.addForm.avatar.trim()) {
+					return this.$message.error('请上传头像或填写头像图片链接')
+				}
 				this.$refs.addFormRef.validate(valid => {
 					if (valid) {
-						saveFriend(this.addForm).then(res => {
+						const request = this.addAvatarFile
+							? saveFriendWithAvatar({...this.addForm, avatar: ''}, this.addAvatarFile)
+							: saveFriend(this.addForm)
+						request.then(res => {
 							this.getFriendList()
 							this.msgSuccess(res.msg)
 							this.addDialogVisible = false
@@ -251,5 +301,22 @@
 
 	.el-form--inline .el-form-item {
 		margin-bottom: 0;
+	}
+
+	.avatar-editor {
+		display: flex;
+		align-items: flex-start;
+		gap: 14px;
+	}
+
+	.avatar-url {
+		flex: 1;
+	}
+
+	.upload-tip {
+		margin-top: 6px;
+		color: #909399;
+		font-size: 12px;
+		line-height: 1.5;
 	}
 </style>

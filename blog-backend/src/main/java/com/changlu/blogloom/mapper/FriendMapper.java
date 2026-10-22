@@ -16,6 +16,8 @@ import java.util.List;
 public interface FriendMapper {
 	List<Friend> getFriendList();
 
+	Friend getFriendById(Long id);
+
 	List<com.changlu.blogloom.model.vo.Friend> getFriendVOList();
 
 	int updateFriendPublishedById(Long id, Boolean published);

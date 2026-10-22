@@ -45,10 +45,12 @@
 					</div>
 					<el-form label-position="right" label-width="120px" size="small" class="channel-form">
 						<el-form-item label="accessKeyId">
-							<el-input v-model="form.uploadChannelAliyun.accessKeyId" placeholder="阿里云访问密钥 ID"></el-input>
+							<el-input v-model="form.uploadChannelAliyun.accessKeyId" type="password" show-password
+							          autocomplete="new-password" placeholder="阿里云访问密钥 ID"></el-input>
 						</el-form-item>
 						<el-form-item label="accessKeySecret">
-							<el-input v-model="form.uploadChannelAliyun.accessKeySecret" placeholder="阿里云访问密钥 Secret"></el-input>
+							<el-input v-model="form.uploadChannelAliyun.accessKeySecret" type="password" show-password
+							          autocomplete="new-password" placeholder="阿里云访问密钥 Secret"></el-input>
 						</el-form-item>
 						<el-form-item label="bucket">
 							<el-input v-model="form.uploadChannelAliyun.bucket" placeholder="OSS Bucket 名称"></el-input>

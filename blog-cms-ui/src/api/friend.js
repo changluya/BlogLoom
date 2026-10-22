@@ -31,6 +31,13 @@ export function saveFriend(form) {
 	})
 }
 
+export function saveFriendWithAvatar(form, file) {
+	const data = new FormData()
+	data.append('friend', new Blob([JSON.stringify(form)], {type: 'application/json'}))
+	data.append('file', file)
+	return axios({url: 'friend', method: 'POST', data})
+}
+
 export function updateFriend(form) {
 	return axios({
 		url: 'friend',
@@ -38,6 +45,16 @@ export function updateFriend(form) {
 		data: {
 			...form
 		}
+	})
+}
+
+export function uploadFriendAvatar(id, file) {
+	const data = new FormData()
+	data.append('file', file)
+	return axios({
+		url: `friend/${id}/avatar`,
+		method: 'POST',
+		data
 	})
 }
 

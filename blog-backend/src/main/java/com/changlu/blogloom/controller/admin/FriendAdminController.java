@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
 import com.changlu.blogloom.annotation.OperationLogger;
 import com.changlu.blogloom.entity.Friend;
 import com.changlu.blogloom.model.vo.Result;
@@ -66,10 +70,16 @@ public class FriendAdminController {
 	 * @return
 	 */
 	@OperationLogger("添加友链")
-	@PostMapping("/friend")
+	@PostMapping(value = "/friend", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Result saveFriend(@RequestBody Friend friend) {
-		friendService.saveFriend(friend);
-		return Result.ok("添加成功");
+		return Result.ok("添加成功", friendService.saveFriend(friend));
+	}
+
+	@OperationLogger("添加友链并上传头像")
+	@PostMapping(value = "/friend", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public Result saveFriendWithAvatar(@RequestPart("friend") Friend friend,
+	                                   @RequestPart("file") MultipartFile file) {
+		return Result.ok("添加成功", friendService.saveFriend(friend, file));
 	}
 
 	/**
@@ -83,6 +93,15 @@ public class FriendAdminController {
 	public Result updateFriend(@RequestBody com.changlu.blogloom.model.dto.Friend friend) {
 		friendService.updateFriend(friend);
 		return Result.ok("修改成功");
+	}
+
+	/**
+	 * 上传友链头像，返回的 URL 由友链编辑表单在保存时提交。
+	 */
+	@OperationLogger("上传友链头像")
+	@PostMapping(value = "/friend/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public Result uploadAvatar(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+		return Result.ok("上传成功", friendService.uploadAvatar(id, file));
 	}
 
 	/**

@@ -24,6 +24,7 @@ BlogLoom 基于 [Naccl/NBlog](https://github.com/Naccl/NBlog) 二次开发，原
 | 博客编辑器正文/描述/封面资源 | `POST /admin/blog/resources` | `LocalResourceStorageService` | `${user.dir.upload}/tmp` → 保存时归档 `blogs/{blogId}` |
 | 站点设置图片（头像、赞赏码等） | `POST /admin/siteSettings/{id}/image` | `SiteImageStorageService` | `${user.dir.upload}/site` |
 | 专栏封面 | `POST /admin/column/{id}/cover` | `ColumnCoverStorageService` | `${user.dir.upload}/blogColumn/{columnId}` |
+| 友链编辑—头像（也可直接填写图片链接） | `POST /admin/friend/{friendId}/avatar` | `FriendAvatarStorageService` 使用当前图床渠道 | `friend/{friendId}` |
 | 评论 QQ 头像 | 评论保存时触发 | `QQInfoUtils` → `UploadUtils` → `LocalChannel` | `${user.dir.upload}` |
 
 ### 1.3 目前是否为默认上传本地

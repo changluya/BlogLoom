@@ -17,6 +17,10 @@
         select id, nickname, description, website, avatar, is_published, views, create_time from friend
     </select>
 
+    <select id="getFriendById" resultMap="friend">
+        select id, nickname, description, website, avatar, is_published, views, create_time from friend where id=#{id}
+    </select>
+
     <resultMap id="friendVO" type="com.changlu.blogloom.model.vo.Friend">
         <result property="nickname" column="nickname"/>
         <result property="description" column="description"/>

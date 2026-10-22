@@ -2,8 +2,10 @@ package com.changlu.blogloom.service;
 
 import com.changlu.blogloom.entity.Friend;
 import com.changlu.blogloom.model.vo.FriendInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface FriendService {
 	List<Friend> getFriendList();
@@ -12,9 +14,13 @@ public interface FriendService {
 
 	void updateFriendPublishedById(Long friendId, Boolean published);
 
-	void saveFriend(Friend friend);
+	Friend saveFriend(Friend friend);
+
+	Friend saveFriend(Friend friend, MultipartFile avatar);
 
 	void updateFriend(com.changlu.blogloom.model.dto.Friend friend);
+
+	Map<String, String> uploadAvatar(Long friendId, MultipartFile file);
 
 	void deleteFriend(Long id);
 
