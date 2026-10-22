@@ -1,0 +1,51 @@
+blog-backend/src/test/java/com/changlu/blogloom/service/FriendAvatarStorageServiceTest.java
+  s_481653c1e70844::t_a969d1af0a2b89 1-49
+blog-cms-ui/src/views/page/FriendList.vue
+  s_481653c1e70844::t_30755f78805feb 173,175-176
+  s_481653c1e70844::t_b103469b76f1da 105-112,131,133,137,152,230-241,305-322
+  s_481653c1e70844::t_2c48469226e675 174
+  s_481653c1e70844::t_610bb5e177b480 71-79,130,153-154,243,246-256,262-264,267-270
+blog-backend/src/main/java/com/changlu/blogloom/service/FriendAvatarStorageService.java
+  s_481653c1e70844::t_b103469b76f1da 1-56
+blog-backend/src/main/java/com/changlu/blogloom/service/FriendService.java
+  s_481653c1e70844::t_b103469b76f1da 5,8,23
+  s_481653c1e70844::t_610bb5e177b480 17-19
+  s_481653c1e70844::t_45088ba5c72b49 24
+blog-backend/src/main/java/com/changlu/blogloom/service/impl/FriendServiceImpl.java
+  s_481653c1e70844::t_610bb5e177b480 61,67-86,101,106
+  s_481653c1e70844::t_a969d1af0a2b89 9,100
+  s_481653c1e70844::t_b103469b76f1da 15-16,22-23,35-36,97-99,102-105
+  s_481653c1e70844::t_ac7824400d545b 107
+blog-backend/src/main/java/com/changlu/blogloom/controller/admin/FriendAdminController.java
+  s_481653c1e70844::t_30755f78805feb 73
+  s_481653c1e70844::t_b103469b76f1da 14,16-17,98-104
+  s_481653c1e70844::t_610bb5e177b480 15,75-82,105
+  s_481653c1e70844::t_dd180aa4fa994f 106
+docs/工程化开发模块设计思路产物/backend/相关核心设计思路备份/图床/BlogLoom-图床历史支持情况与配置管理.md
+  s_481653c1e70844::t_a969d1af0a2b89 27
+blog-backend/src/main/resources/mapper/FriendMapper.xml
+  s_481653c1e70844::t_b103469b76f1da 20-23
+blog-backend/src/main/java/com/changlu/blogloom/mapper/FriendMapper.java
+  s_481653c1e70844::t_b103469b76f1da 19-20
+blog-cms-ui/src/api/friend.js
+  s_481653c1e70844::t_610bb5e177b480 34-40
+  s_481653c1e70844::t_b103469b76f1da 51-60,96
+blog-cms-ui/src/views/imageHost/ImageHostSetting.vue
+  s_481653c1e70844::t_4975dde55803ec 48-49,52-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "62b3be7c734d92ec6be239047019026a926a7338",
+  "prompts": {},
+  "sessions": {
+    "s_481653c1e70844": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1630f-3168-7441-8836-72ef01d0a005",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
