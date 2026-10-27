@@ -1,0 +1,20 @@
+docs/prd/核心功能业务逻辑/前台核心逻辑设计/前端后端接口BaseURL同源部署与Docker打包复刻SOP.md
+  s_eeed8f8fc0ae70::t_b909986d915d0e 201,203-218,257-411
+  s_eeed8f8fc0ae70::t_9ae56e88db8bdc 1-200,202,219-256,412-990
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "985f81c170b78ce83b1ee84d7f5ee33f046b93af",
+  "prompts": {},
+  "sessions": {
+    "s_eeed8f8fc0ae70": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17af9-095b-7343-a42e-5e6a29ce949b",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "changlu <939974883@qq.com>"
+    }
+  }
+}
